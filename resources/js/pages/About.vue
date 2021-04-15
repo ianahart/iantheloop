@@ -1,0 +1,42 @@
+<template>
+  <div class="about">
+    <h1>About Page</h1>
+  </div>
+</template>
+
+
+<script>
+
+  export default {
+
+    name: 'About',
+
+    components: {
+
+    },
+
+    props: {
+
+    },
+
+    data () {
+
+      return {
+
+      }
+    },
+
+    created () {
+
+    },
+
+    mounted () {
+
+    },
+
+    methods: {
+
+    },
+  }
+
+</script>
