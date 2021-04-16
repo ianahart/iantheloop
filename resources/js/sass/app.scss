@@ -1,6 +1,2 @@
-$primary: grey;
-$header: blue;
-#app {
-    color: $header;
-      background: $primary;
-}
+@import "./general/_variables.scss";
+@import "./general/_base.scss";

@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\General\HomeController;
+use App\Http\Controllers\General\AboutController;
+use App\Http\Controllers\SpaController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/about', function () {
-    return view('welcome');
-});
+/*
+ *
+ * General Routes
+ *
+*/
+
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/about', [AboutController::class, 'index']);
+
+
+/*
+ *
+ * Redirect all requests to Vue Router
+ *
+*/
+Route::get('/{vue_capture?}', [SpaController::class, 'index'])
+  ->where('vue_capture', '[\/\w\.-]*');

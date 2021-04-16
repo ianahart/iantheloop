@@ -1,20 +1,23 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+/*
+MODULES
+*/
+
+import auth from './modules/auth.js';
+import hamburgerMenu from './modules/hamburgerMenu.js';
+import navigation from './modules/navigation.js';
+
 Vue.use(Vuex);
 
-const store = new Vuex.Store(
+export default new Vuex.Store(
   {
-    state: {
-
-    },
-
-    mutations: {
-
-    },
-
-    actions: {
-
+    modules: {
+      auth,
+      navigation,
+      hamburgerMenu,
     },
   }
 );
+
