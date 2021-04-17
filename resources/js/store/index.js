@@ -8,6 +8,7 @@ MODULES
 import auth from './modules/auth.js';
 import hamburgerMenu from './modules/hamburgerMenu.js';
 import navigation from './modules/navigation.js';
+import createAccount from './modules/createAccount.js';
 
 Vue.use(Vuex);
 
@@ -17,6 +18,11 @@ export default new Vuex.Store(
       auth,
       navigation,
       hamburgerMenu,
+      createAccount,
+
+
+
+
     },
   }
 );

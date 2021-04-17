@@ -10,10 +10,18 @@ const path = require('path');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.js('resources/js/app.js', 'public/js').vue({ extractStyles: 'public/css/app.css' })
+.sass('resources/js/sass', 'public/css')
+.options(
+    {
+       processCssUrls: false
+    }
+  )
 
-mix.js('resources/js/app.js', 'public/js').vue()
-.sass('resources/js/sass/app.scss', 'public/css')
-.copy("resources/js/assets", "public/images/" );
+.copy("resources/js/assets", "public/images/" )
+
+mix.copyDirectory('resources/js/sass', 'public/css');
+
 
 
 
