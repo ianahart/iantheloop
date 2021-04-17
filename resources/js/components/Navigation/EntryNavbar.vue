@@ -80,7 +80,7 @@ IMPORTS
 
   .entry__navbar {
     position: relative;
-    height: 100%;
+    // height: 100%;
 
   }
 

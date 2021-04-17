@@ -77,7 +77,7 @@ IMPORTS
 
   .navbar__parent {
 
-    height: 100%;
+      height: 100px;
   }
 
 </style>

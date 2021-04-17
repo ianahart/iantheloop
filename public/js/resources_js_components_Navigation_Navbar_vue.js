@@ -565,7 +565,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/*\nIMPORTS\n*/\nhtml,\nbody {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\nbody {\n  line-height: 1.5;\n  font-family: Arial, Helvetica, sans-serif;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  text-transform: uppercase;\n  letter-spacing: 0.1rem;\n}\nh1,\nh2 {\n  font-size: 2.25rem;\n}\n.entry__navbar {\n  position: relative;\n  height: 100%;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/*\nIMPORTS\n*/\nhtml,\nbody {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\nbody {\n  line-height: 1.5;\n  font-family: Arial, Helvetica, sans-serif;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  text-transform: uppercase;\n  letter-spacing: 0.1rem;\n}\nh1,\nh2 {\n  font-size: 2.25rem;\n}\n.entry__navbar {\n  position: relative;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -637,7 +637,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/*\nIMPORTS\n*/\nhtml,\nbody {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\nbody {\n  line-height: 1.5;\n  font-family: Arial, Helvetica, sans-serif;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  text-transform: uppercase;\n  letter-spacing: 0.1rem;\n}\nh1,\nh2 {\n  font-size: 2.25rem;\n}\n.navbar__parent {\n  height: 100%;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/*\nIMPORTS\n*/\nhtml,\nbody {\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n}\nbody {\n  line-height: 1.5;\n  font-family: Arial, Helvetica, sans-serif;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  text-transform: uppercase;\n  letter-spacing: 0.1rem;\n}\nh1,\nh2 {\n  font-size: 2.25rem;\n}\n.navbar__parent {\n  height: 100px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

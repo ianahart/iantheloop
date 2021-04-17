@@ -1,8 +1,11 @@
 <template>
-    <div class="app__container">
-        <Navbar />
-        <router-view></router-view>
+<div class="app__container">
+    <div class="app__content">
+      <Navbar />
+      <router-view></router-view>
     </div>
+    <Footer />
+</div>
 </template>
 
 <script>
@@ -15,18 +18,26 @@ export default {
     name: "App",
 
     components: {
-        Navbar: () => import("./components/Navigation/Navbar.vue")
+        Navbar: () => import("./components/Navigation/Navbar.vue"),
+        Footer: () => import('./components/Footer.vue'),
     }
 };
 </script>
 
 <style lang="scss">
-    #app {
+
+    #app, html
+     {
         height: 100%;
     }
 
+    .app__content {
+        flex: 1;
+
+    }
     .app__container {
-        height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
     }
-
 </style>

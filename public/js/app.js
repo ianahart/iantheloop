@@ -1853,6 +1853,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /*
 SASS
@@ -1863,6 +1866,9 @@ SASS
   components: {
     Navbar: function Navbar() {
       return __webpack_require__.e(/*! import() */ "resources_js_components_Navigation_Navbar_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/Navigation/Navbar.vue */ "./resources/js/components/Navigation/Navbar.vue"));
+    },
+    Footer: function Footer() {
+      return __webpack_require__.e(/*! import() */ "resources_js_components_Footer_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/Footer.vue */ "./resources/js/components/Footer.vue"));
     }
   }
 });
@@ -2163,7 +2169,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#app {\n  height: 100%;\n}\n.app__container {\n  height: 100%;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "#app, html {\n  height: 100%;\n}\n.app__content {\n  flex: 1;\n}\n.app__container {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -19775,7 +19781,16 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "app__container" },
-    [_c("Navbar"), _vm._v(" "), _c("router-view")],
+    [
+      _c(
+        "div",
+        { staticClass: "app__content" },
+        [_c("Navbar"), _vm._v(" "), _c("router-view")],
+        1
+      ),
+      _vm._v(" "),
+      _c("Footer")
+    ],
     1
   )
 }
@@ -36720,7 +36735,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_Home_vue":1,"resources_js_pages_CreateAccount_vue":1,"resources_js_pages_About_vue":1,"resources_js_pages_Login_vue":1,"resources_js_components_Navigation_Navbar_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_Home_vue":1,"resources_js_pages_CreateAccount_vue":1,"resources_js_pages_About_vue":1,"resources_js_pages_Login_vue":1,"resources_js_components_Navigation_Navbar_vue":1,"resources_js_components_Footer_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
