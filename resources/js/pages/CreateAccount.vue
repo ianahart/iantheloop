@@ -177,11 +177,13 @@ IMPORTS
   .create__account__container {
     width: 448px;
     margin: 0rem auto auto 15rem;
+
+    box-sizing: border-box;
   }
 
   .create__account__form {
     box-sizing: border-box;
-    height: 600px;
+    height: 800px;
     margin: 0 auto;
     margin-bottom: 3rem;
     display: flex;

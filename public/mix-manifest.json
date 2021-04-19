@@ -3,5 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/images/create_account.svg": "/images/create_account.svg",
     "/images/looped.png": "/images/looped.png",
-    "/images/test.jpg": "/images/test.jpg"
+    "/images/test.jpg": "/images/test.jpg",
+    "/images/hide_password.svg": "/images/hide_password.svg",
+    "/images/show_password.svg": "/images/show_password.svg"
 }

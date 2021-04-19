@@ -164,6 +164,20 @@ forms
 IMPORTS
 */
 /*
+forms
+*/
+.password__icon__container svg {
+  height: 25px;
+  color: #cccccc;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+/*
+IMPORTS
+*/
+/*
 IMPORTS
 */
 /*
@@ -208,6 +222,15 @@ forms
   border-radius: 8px;
   border: 1px solid #e3e2e2;
   height: 35px;
+}
+.password__icon__outer__container {
+  position: relative;
+}
+.password__instructions {
+  color: #929292;
+  font-weight: 100;
+  font-style: italic;
+  font-size: 0.8rem;
 }
 /*
 IMPORTS
@@ -381,10 +404,11 @@ forms
 .create__account__container {
   width: 448px;
   margin: 0rem auto auto 15rem;
+  box-sizing: border-box;
 }
 .create__account__form {
   box-sizing: border-box;
-  height: 600px;
+  height: 800px;
   margin: 0 auto;
   margin-bottom: 3rem;
   display: flex;

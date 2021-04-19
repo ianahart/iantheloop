@@ -15,6 +15,7 @@ const initialState = () => {
     isSubmitted: false,
     isChecked: false,
     checkboxError: '',
+    isPasswordShowing: false,
   }
 }
 
@@ -56,25 +57,6 @@ const createAccount = {
 
   mutations: {
 
-    UPDATE_FIELD: (state, payload) => {
-
-      state
-      .form
-      .find(
-        (oldField) => {
-
-          if (oldField.field === payload.field) {
-
-              oldField.value = payload.newValue;
-
-              oldField.error = payload.error;
-
-              state.hasErrors = oldField.error.length ? true : false;
-          }
-        }
-      );
-    },
-
     CHECKBOX_ERROR: (state, payload) => {
 
       state.checkboxError = payload;
@@ -103,6 +85,41 @@ const createAccount = {
 
     SUBMIT_FORM: (state) => {
 
+    },
+    UPDATE_FIELD: (state, payload) => {
+
+      state
+      .form
+      .find(
+        (oldField) => {
+
+          if (oldField.field === payload.field) {
+
+              oldField.value = payload.newValue;
+
+              oldField.error = payload.error;
+
+              state.hasErrors = oldField.error.length ? true : false;
+          }
+        }
+      );
+    },
+
+    TOGGLE_PASSWORD_VISIBILITY: (state) => {
+
+      state.isPasswordShowing = !state.isPasswordShowing;
+
+      state.form
+      .forEach(
+          (oldField) => {
+
+            const createPasswordShowing = oldField.field === 'createPassword' && state.isPasswordShowing;
+
+            const confirmPasswordShowing =  oldField.field === 'confirmPassword' && state.isPasswordShowing;
+
+            oldField.type = createPasswordShowing || confirmPasswordShowing ? 'text' : 'password';
+          }
+       );
     },
   },
 

@@ -3,12 +3,41 @@
     <label>
       {{ label }}:
     </label>
-    <input @change="updateFieldValue" :type="type" :value="value" />
-    <p class="forms__input__error" v-if="error">{{ error }}</p>
+    <div class="password__icon__outer__container">
+      <PasswordIcon v-if="field === 'createPassword'">
+        <input
+          @change="updateFieldValue"
+          :type="isPasswordShowing ? 'text' : 'password'"
+          :value="value"
+        />
+        <p class="forms__input__error" v-if="error">{{ error }}</p>
+      </PasswordIcon>
+    </div>
+    <input
+      @change="updateFieldValue"
+      :type="type"
+      :value="value"
+    />
+    <p
+      v-if="field === 'createPassword'"
+      class="password__instructions"
+      >
+        Password must include one uppercase letter one number, and one special character.
+    </p>
+    <p
+      class="forms__input__error"
+      v-if="error"
+      >
+      {{ error }}
+    </p>
   </div>
 </template>
 
 <script>
+
+  import { mapState } from 'vuex';
+
+  import PasswordIcon from '../../Icons/PasswordIcon.vue';
 
   export default {
 
@@ -25,6 +54,7 @@
 
     components: {
 
+      PasswordIcon,
     },
 
     data () {
@@ -40,6 +70,15 @@
 
     mounted () {
 
+    },
+
+    computed: {
+
+      ...mapState('createAccount',
+        [
+          'isPasswordShowing'
+        ]
+      ),
     },
 
     methods: {
@@ -67,6 +106,15 @@ IMPORTS
 */
   @import '../../../../sass/forms/_inputs.scss';
 
+  .password__icon__outer__container{
+    position: relative;
+  }
 
+  .password__instructions {
+    color: lighten(gray, 7);
+    font-weight: 100;
+    font-style: italic;
+    font-size: 0.8rem;
+  }
 
 </style>

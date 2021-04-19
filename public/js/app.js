@@ -2121,7 +2121,8 @@ var initialState = function initialState() {
     hasErrors: false,
     isSubmitted: false,
     isChecked: false,
-    checkboxError: ''
+    checkboxError: '',
+    isPasswordShowing: false
   };
 };
 
@@ -2141,15 +2142,6 @@ var createAccount = {
     }
   },
   mutations: {
-    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
-      state.form.find(function (oldField) {
-        if (oldField.field === payload.field) {
-          oldField.value = payload.newValue;
-          oldField.error = payload.error;
-          state.hasErrors = oldField.error.length ? true : false;
-        }
-      });
-    },
     CHECKBOX_ERROR: function CHECKBOX_ERROR(state, payload) {
       state.checkboxError = payload;
     },
@@ -2164,7 +2156,24 @@ var createAccount = {
       Object.assign(state, initialState());
     },
     SET_ERRORS: function SET_ERRORS(state) {},
-    SUBMIT_FORM: function SUBMIT_FORM(state) {}
+    SUBMIT_FORM: function SUBMIT_FORM(state) {},
+    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
+      state.form.find(function (oldField) {
+        if (oldField.field === payload.field) {
+          oldField.value = payload.newValue;
+          oldField.error = payload.error;
+          state.hasErrors = oldField.error.length ? true : false;
+        }
+      });
+    },
+    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(state) {
+      state.isPasswordShowing = !state.isPasswordShowing;
+      state.form.forEach(function (oldField) {
+        var createPasswordShowing = oldField.field === 'createPassword' && state.isPasswordShowing;
+        var confirmPasswordShowing = oldField.field === 'confirmPassword' && state.isPasswordShowing;
+        oldField.type = createPasswordShowing || confirmPasswordShowing ? 'text' : 'password';
+      });
+    }
   },
   actions: {
     SUBMIT_FORM: function SUBMIT_FORM(context) {
