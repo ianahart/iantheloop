@@ -1,3 +1,6 @@
+/*
+forms
+*/
 html,
 body {
   width: 100%;
@@ -17,7 +20,6 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
   letter-spacing: 0.1rem;
 }
 
@@ -28,16 +30,25 @@ h2 {
 #app, html {
   height: 100%;
 }
+body {
+  min-height: 100;
+}
 .app__content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .app__container {
   display: flex;
   flex-direction: column;
+  min-height: 100%;
   height: 100%;
 }
 /*
 IMPORTS
+*/
+/*
+forms
 */
 html,
 body {
@@ -56,7 +67,247 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+h1,
+h2 {
+  font-size: 2.25rem;
+}
+.create__account__header {
+  margin-top: 6rem;
+}
+.create__account__header h1 {
+  color: #31326f;
+  font-weight: 500;
+  margin-bottom: 0;
+  font-size: 3rem;
+}
+.create__account__user {
+  display: flex;
+  align-items: center;
+  width: 200px;
+  margin-right: auto;
+  text-align: left;
+}
+.create__account__user p {
+  color: #426f6f;
+  margin: 0;
+  margin-right: 0.5rem;
+}
+.create__account__user a {
+  font-weight: bold;
+  color: #31326f;
+  text-decoration: none;
+}
+@media (max-width: 600px) {
+.create__account__header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 1.5rem;
+}
+.create__account__user {
+    margin: 0;
+    justify-content: space-between;
+}
+}
+/*
+IMPORTS
+*/
+/*
+IMPORTS
+*/
+/*
+forms
+*/
+.forms__input__field {
+  border: 1px solid #ffc93c;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+/*
+IMPORTS
+*/
+/*
+IMPORTS
+*/
+/*
+forms
+*/
+.forms__input__field {
+  border: 1px solid #ffc93c;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+/*
+IMPORTS
+*/
+/*
+forms
+*/
+.create__account__checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.create__account__checkbox p {
+  font-size: 0.7rem;
+  color: #ff0033;
+}
+.create__account__checkbox div {
+  margin-left: 0.5rem;
+}
+.create__account__checkbox div span {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #4e5760;
+}
+.create__account__checkbox a {
+  font-size: 0.8rem;
+  color: #31326f;
+  text-decoration: none;
+  font-weight: bold;
+}
+.create__account__checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #4e5760;
+  border-radius: 5px;
+  font-size: 0.7rem;
+}
+.create__account__checkbox input:checked ~ .checkmark {
+  background-color: #4e5760;
+  border: none;
+  border-radius: 5px;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.create__account__checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+.create__account__checkbox .checkmark:after {
+  left: 7px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+/*
+IMPORTS
+*/
+/*
+forms
+*/
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  line-height: 1.5;
+  font-family: Arial, Helvetica, sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   letter-spacing: 0.1rem;
 }
 h1,
@@ -67,18 +318,119 @@ h2 {
 /*
 IMPORTS
 */
-.test {
+/*
+forms
+*/
+.forms__input__field {
   border: 1px solid #ffc93c;
 }
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+.button__md {
+  border-radius: 8px;
+  height: 35px;
+  border: none;
+  width: 150px;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+}
+.button__md:hover {
+  opacity: 0.7;
+}
 .create__account {
-  background-image: url("/assets/looped.png");
+  box-sizing: border-box;
+  background-image: url(/images/create_account.svg?9f6e67670f04a06f8230fdcce69542e3);
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
+}
+.create__account__container {
+  width: 448px;
+  margin: 0rem auto auto 15rem;
+}
+.create__account__form {
+  box-sizing: border-box;
+  height: 600px;
+  margin: 0 auto;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding: 1rem;
+}
+.create__account__form button {
+  background-color: #31326f;
+  color: #fff;
+}
+.create__account__input__container_md {
+  display: flex;
+  justify-content: space-between;
+}
+.create__account__button__container {
+  margin: 2rem auto;
+  display: flex;
+  justify-content: center;
+}
+.create__account__input__container_lg {
+  width: 100%;
+}
+@media (max-width: 600px) {
+.create__account__container {
+    box-sizing: border-box;
+    width: 95%;
+    margin: 0 auto;
+}
+.create__account__input__container_md {
+    flex-direction: column;
+    width: 100%;
+}
+.create__account__input__container_md input {
+    width: 100%;
+}
+.create__account__form {
+    justify-content: center;
+    align-items: center;
+}
 }
 /*
   IMPORTS
+*/
+/*
+forms
 */
 html,
 body {
@@ -97,7 +449,6 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
   letter-spacing: 0.1rem;
 }
 h1,
@@ -112,6 +463,9 @@ h2 {
 /*
   IMPORTS
 */
+/*
+forms
+*/
 html,
 body {
   width: 100%;
@@ -129,7 +483,6 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
   letter-spacing: 0.1rem;
 }
 h1,
@@ -148,32 +501,8 @@ h2 {
 /*
   IMPORTS
 */
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-body {
-  line-height: 1.5;
-  font-family: Arial, Helvetica, sans-serif;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-}
-h1,
-h2 {
-  font-size: 2.25rem;
-}
 /*
-IMPORTS
+forms
 */
 html,
 body {
@@ -192,7 +521,35 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+h1,
+h2 {
+  font-size: 2.25rem;
+}
+/*
+IMPORTS
+*/
+/*
+forms
+*/
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  line-height: 1.5;
+  font-family: Arial, Helvetica, sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   letter-spacing: 0.1rem;
 }
 h1,
@@ -205,6 +562,7 @@ h2 {
   justify-content: space-evenly;
   align-items: center;
   padding: 0.1rem 0.7rem;
+  height: 100%;
 }
 .navbar__entry__desktop p {
   margin: 1rem auto;
@@ -250,37 +608,8 @@ h2 {
 /*
   IMPORTS
 */
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-body {
-  line-height: 1.5;
-  font-family: Arial, Helvetica, sans-serif;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-}
-h1,
-h2 {
-  font-size: 2.25rem;
-}
-.close__icon {
-  width: 24px;
-  cursor: pointer;
-  color: #fcfcfc;
-}
 /*
-IMPORTS
+forms
 */
 html,
 body {
@@ -299,7 +628,40 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+h1,
+h2 {
+  font-size: 2.25rem;
+}
+.close__icon {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+/*
+IMPORTS
+*/
+/*
+forms
+*/
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  line-height: 1.5;
+  font-family: Arial, Helvetica, sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   letter-spacing: 0.1rem;
 }
 h1,
@@ -360,6 +722,9 @@ h2 {
 /*
 IMPORTS
 */
+/*
+forms
+*/
 html,
 body {
   width: 100%;
@@ -377,7 +742,6 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
   letter-spacing: 0.1rem;
 }
 h1,
@@ -386,9 +750,13 @@ h2 {
 }
 .entry__navbar {
   position: relative;
+  height: 100%;
 }
 /*
 IMPORTS
+*/
+/*
+forms
 */
 html,
 body {
@@ -407,7 +775,6 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
   letter-spacing: 0.1rem;
 }
 h1,
@@ -417,6 +784,9 @@ h2 {
 /*
 IMPORTS
 */
+/*
+forms
+*/
 html,
 body {
   width: 100%;
@@ -434,7 +804,6 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
   letter-spacing: 0.1rem;
 }
 h1,
@@ -442,10 +811,13 @@ h2 {
   font-size: 2.25rem;
 }
 .navbar__parent {
-  height: 100px;
+  height: 55px;
 }
 /*
 IMPORTS
+*/
+/*
+forms
 */
 html,
 body {
@@ -464,7 +836,6 @@ h3,
 h4,
 h5,
 h6 {
-  text-transform: uppercase;
   letter-spacing: 0.1rem;
 }
 h1,
@@ -483,10 +854,10 @@ h2 {
   font-size: 0.8rem;
 }
 .footer p:first-of-type {
-  color: #ffc93c;
+  color: #fff;
 }
 .footer a {
-  color: #ffc93c;
+  color: #fff;
   font-size: 0.8rem;
   display: block;
   margin-bottom: 0.5rem;

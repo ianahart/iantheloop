@@ -81,7 +81,7 @@
 /*
   IMPORTS
 */
-  @import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_base.scss';
 
+   @import '../../../sass/general/_variables.scss';
+  @import '../../../sass/general/_base.scss';
 </style>

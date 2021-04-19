@@ -72,12 +72,12 @@
 /*
 IMPORTS
 */
-  @import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_base.scss';
+   @import '../../../sass/general/_variables.scss';
+  @import '../../../sass/general/_base.scss';
 
   .navbar__parent {
 
-      height: 100px;
+      height: 55px;
   }
 
 </style>

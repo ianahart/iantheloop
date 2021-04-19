@@ -10,7 +10,7 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "axios": "^0.21",
+        "axios": "^0.21.1",
         "laravel-mix": "^6.0.16",
         "lodash": "^4.17.19",
         "postcss": "^8.2.10",
@@ -23,8 +23,5 @@
         "vue-template-compiler": "^2.6.12",
         "vuex": "^3.6.2",
         "webpack": "^5.33.2"
-    },
-    "dependencies": {
-        "typeface-open-sans": "^1.1.13"
     }
 }

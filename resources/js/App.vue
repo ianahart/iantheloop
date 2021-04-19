@@ -12,7 +12,7 @@
 /*
 SASS
 */
-import "./sass/app.scss";
+import '../sass/app.scss';
 
 export default {
     name: "App",
@@ -31,13 +31,20 @@ export default {
         height: 100%;
     }
 
+    body {
+        min-height: 100;
+    }
+
     .app__content {
         flex: 1;
-
+        display: flex;
+        flex-direction: column;
     }
     .app__container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        height: 100%;
+
     }
 </style>

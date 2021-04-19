@@ -1,0 +1,53 @@
+/*
+IMPORTS
+*/
+
+@import "../general/_variables.scss";
+
+.forms__input__field {
+    border: 1px solid $themeGold;
+}
+
+.forms__input__error {
+    font-size: 0.85rem;
+    color: $error;
+}
+
+.forms__input__field_md {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+
+    label {
+        color: lighten($mainInputLabel, 10);
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+
+    input {
+        border: none;
+        border-radius: 8px;
+        border: 1px solid $mainInputBorder;
+        height: 35px;
+        width: 199px;
+    }
+}
+
+.forms__input__field_lg {
+    display: flex;
+    margin: 1.5rem 0;
+    flex-direction: column;
+
+    label {
+        color: lighten($mainInputLabel, 10);
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+
+    input {
+        border: none;
+        border-radius: 8px;
+        border: 1px solid $mainInputBorder;
+        height: 35px;
+    }
+}

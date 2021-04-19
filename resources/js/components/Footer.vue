@@ -47,9 +47,8 @@
 <style lang="scss">
 /*
 IMPORTS
-*/
-  @import '../sass/general/_variables.scss';
-  @import '../sass/general/_base.scss';
+*/@import '../../sass/general/_variables.scss';
+  @import '../../sass/general/_base.scss';
 
   .footer {
     background-color: lighten(#191919, 10);
@@ -62,12 +61,12 @@ IMPORTS
       color: $primaryWhite;
       font-size: 0.8rem;
       &:first-of-type {
-        color: $themeGold;
+        color: #fff;
       }
     }
 
     a {
-      color: $themeGold;
+      color: #fff;
       font-size: 0.8rem;
       display: block;
       margin-bottom: 0.5rem;

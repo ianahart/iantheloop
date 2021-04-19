@@ -1,7 +1,6 @@
 <template>
   <div class="company__logo">
-    <img :src="require('../../assets/looped.png').default"
-    alt="company logo">
+      <img :src="require('../../../assets/looped.png').default" alt="a poligonal vector" />
   </div>
 </template>
 
@@ -48,8 +47,8 @@
 /*
   IMPORTS
 */
-  @import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_base.scss';
+  @import '../../../sass/general/_variables.scss';
+  @import '../../../sass/general/_base.scss';
 
   .company__logo {
     display :flex;

@@ -86,8 +86,8 @@
 /*
 IMPORTS
 */
-  @import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_base.scss';
+  @import '../../../sass/general/_variables.scss';
+  @import '../../../sass/general/_base.scss';
 
 
   .navbar__entry__desktop {
@@ -97,6 +97,7 @@ IMPORTS
     justify-content: space-evenly;
     align-items: center;
     padding: 0.1rem 0.7rem;
+    height: 100%;
 
     p {
       margin: 1rem auto;

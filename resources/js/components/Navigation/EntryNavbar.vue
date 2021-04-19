@@ -75,12 +75,12 @@
 /*
 IMPORTS
 */
-  @import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_base.scss';
+   @import '../../../sass/general/_variables.scss';
+   @import '../../../sass/general/_base.scss';
 
   .entry__navbar {
     position: relative;
-    // height: 100%;
+    height: 100%;
 
   }
 
