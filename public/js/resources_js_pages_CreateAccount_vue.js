@@ -195,6 +195,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -202,7 +215,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   props: {
     field: String,
     type: String,
-    error: String,
+    errors: Array,
     label: String,
     value: String,
     commitPath: String
@@ -211,7 +224,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     PasswordIcon: _Icons_PasswordIcon_vue__WEBPACK_IMPORTED_MODULE_0__.default
   },
   data: function data() {
-    return {};
+    return {
+      poop: 'hi'
+    };
   },
   created: function created() {},
   mounted: function mounted() {},
@@ -250,12 +265,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'InputFieldMd',
   props: {
     field: String,
     type: String,
-    error: String,
+    errors: Array,
     label: String,
     value: String,
     commitPath: String
@@ -290,11 +318,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _components_Register_Header_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Register/Header.vue */ "./resources/js/components/Register/Header.vue");
-/* harmony import */ var _components_forms_inputs_InputFieldMd_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/forms/inputs/InputFieldMd.vue */ "./resources/js/components/forms/inputs/InputFieldMd.vue");
-/* harmony import */ var _components_forms_inputs_InputFieldLg_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/forms/inputs/InputFieldLg.vue */ "./resources/js/components/forms/inputs/InputFieldLg.vue");
-/* harmony import */ var _components_forms_CheckBox_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/forms/CheckBox.vue */ "./resources/js/components/forms/CheckBox.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_Register_Header_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Register/Header.vue */ "./resources/js/components/Register/Header.vue");
+/* harmony import */ var _components_forms_inputs_InputFieldMd_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/forms/inputs/InputFieldMd.vue */ "./resources/js/components/forms/inputs/InputFieldMd.vue");
+/* harmony import */ var _components_forms_inputs_InputFieldLg_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/forms/inputs/InputFieldLg.vue */ "./resources/js/components/forms/inputs/InputFieldLg.vue");
+/* harmony import */ var _components_forms_CheckBox_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/forms/CheckBox.vue */ "./resources/js/components/forms/CheckBox.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -350,18 +386,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   name: 'CreateAccount',
   props: {},
   components: {
-    Header: _components_Register_Header_vue__WEBPACK_IMPORTED_MODULE_0__.default,
-    InputFieldMd: _components_forms_inputs_InputFieldMd_vue__WEBPACK_IMPORTED_MODULE_1__.default,
-    InputFieldLg: _components_forms_inputs_InputFieldLg_vue__WEBPACK_IMPORTED_MODULE_2__.default,
-    CheckBox: _components_forms_CheckBox_vue__WEBPACK_IMPORTED_MODULE_3__.default
+    Header: _components_Register_Header_vue__WEBPACK_IMPORTED_MODULE_1__.default,
+    InputFieldMd: _components_forms_inputs_InputFieldMd_vue__WEBPACK_IMPORTED_MODULE_2__.default,
+    InputFieldLg: _components_forms_inputs_InputFieldLg_vue__WEBPACK_IMPORTED_MODULE_3__.default,
+    CheckBox: _components_forms_CheckBox_vue__WEBPACK_IMPORTED_MODULE_4__.default
   },
   data: function data() {
     return {};
   },
   created: function created() {},
   mounted: function mounted() {},
-  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapState)('createAccount', ['form', 'hasErrors', 'isChecked'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('createAccount', ['mediumFields', 'largeFields'])),
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapMutations)('createAccount', ['CHECKBOX_ERROR'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('createAccount', ['SUBMIT_FORM'])), {}, {
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapState)('createAccount', ['form', 'hasErrors', 'isChecked', 'isSubmitted'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('createAccount', ['mediumFields', 'largeFields'])),
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapMutations)('createAccount', ['CHECKBOX_ERROR'])), (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('createAccount', ['SUBMIT_FORM'])), {}, {
     validateForm: function validateForm() {
       var _this = this;
 
@@ -381,17 +417,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$store.commit('createAccount/RESET_ERRORS');
     },
     submitForm: function submitForm() {
-      this.resetErrors();
-      this.validateForm();
+      var _this2 = this;
 
-      if (!this.isChecked) {
-        this.CHECKBOX_ERROR('Please accept the Privacy Policy to continue.');
-      }
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _this2.resetErrors();
 
-      if (!this.hasErrors && this.isChecked) {
-        console.log('SEND');
-        this.SUBMIT_FORM();
-      }
+                _this2.validateForm();
+
+                if (!_this2.isChecked) {
+                  _this2.CHECKBOX_ERROR('Please accept the Privacy Policy to continue.');
+                }
+
+                if (!(!_this2.hasErrors && _this2.isChecked)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                _context.next = 6;
+                return _this2.SUBMIT_FORM();
+
+              case 6:
+                if (_this2.isSubmitted) {
+                  _this2.$router.push({
+                    name: 'Login',
+                    query: {
+                      signup: 'success'
+                    }
+                  });
+                }
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   })
 });
@@ -1197,18 +1262,30 @@ var render = function() {
       "div",
       { staticClass: "password__icon__outer__container" },
       [
-        _vm.field === "createPassword"
+        _vm.field === "password"
           ? _c("PasswordIcon", [
               _c("input", {
-                attrs: { type: _vm.isPasswordShowing ? "text" : "password" },
+                attrs: {
+                  autocomplete: "new-password",
+                  name: "password",
+                  type: _vm.isPasswordShowing ? "text" : "password"
+                },
                 domProps: { value: _vm.value },
                 on: { change: _vm.updateFieldValue }
               }),
               _vm._v(" "),
-              _vm.error
-                ? _c("p", { staticClass: "forms__input__error" }, [
-                    _vm._v(_vm._s(_vm.error))
-                  ])
+              _vm.errors.length
+                ? _c(
+                    "div",
+                    _vm._l(_vm.errors, function(error, index) {
+                      return _c(
+                        "p",
+                        { key: index, staticClass: "forms__input__error" },
+                        [_vm._v("\n        " + _vm._s(error) + "\n      ")]
+                      )
+                    }),
+                    0
+                  )
                 : _vm._e()
             ])
           : _vm._e()
@@ -1222,18 +1299,24 @@ var render = function() {
       on: { change: _vm.updateFieldValue }
     }),
     _vm._v(" "),
-    _vm.field === "createPassword"
+    _vm.field === "password"
       ? _c("p", { staticClass: "password__instructions" }, [
           _vm._v(
-            "\n      Password must include one uppercase letter one number, and one special character.\n  "
+            "\n      Password must include one uppercase letter, one lowercase letter, one number, and one special character.\n  "
           )
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.error
-      ? _c("p", { staticClass: "forms__input__error" }, [
-          _vm._v("\n    " + _vm._s(_vm.error) + "\n  ")
-        ])
+    _vm.errors.length
+      ? _c(
+          "div",
+          _vm._l(_vm.errors, function(error, index) {
+            return _c("p", { key: index, staticClass: "forms__input__error" }, [
+              _vm._v("\n      " + _vm._s(error) + "\n    ")
+            ])
+          }),
+          0
+        )
       : _vm._e()
   ])
 }
@@ -1269,10 +1352,16 @@ var render = function() {
       on: { change: _vm.updateFieldValue }
     }),
     _vm._v(" "),
-    _vm.error
-      ? _c("p", { staticClass: "forms__input__error" }, [
-          _vm._v(_vm._s(_vm.error))
-        ])
+    _vm.errors.length
+      ? _c(
+          "div",
+          _vm._l(_vm.errors, function(error, index) {
+            return _c("p", { key: index, staticClass: "forms__input__error" }, [
+              _vm._v("\n      " + _vm._s(error) + "\n    ")
+            ])
+          }),
+          0
+        )
       : _vm._e()
   ])
 }
@@ -1327,7 +1416,7 @@ var render = function() {
                   attrs: {
                     field: inputField.field,
                     type: inputField.type,
-                    error: inputField.error,
+                    errors: inputField.errors,
                     label: inputField.label,
                     value: inputField.value,
                     commitPath: "createAccount/UPDATE_FIELD"
@@ -1346,7 +1435,7 @@ var render = function() {
                   attrs: {
                     field: inputField.field,
                     type: inputField.type,
-                    error: inputField.error,
+                    errors: inputField.errors,
                     label: inputField.label,
                     value: inputField.value,
                     commitPath: "createAccount/UPDATE_FIELD"

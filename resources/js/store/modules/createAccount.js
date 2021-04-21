@@ -5,17 +5,18 @@ const initialState = () => {
   return {
 
     form: [
-      {field: 'firstName', error: '', label: 'First Name', value: '',size: 'md', type: 'text'},
-      {field: 'lastName', error: '', label: 'Last Name', value: '', size: 'md', type: 'text'},
-      {field: 'email', error: '', label: 'Email', value: '', size: 'lg', type: 'text'},
-      {field: 'createPassword', error: '', label: 'Create Password', value: '', size: 'lg', type: 'password'},
-      {field: 'confirmPassword', error: '', label: 'Confirm Password', value: '', size: 'lg', type: 'password'},
+          {field: 'firstName', errors: [], label: 'First Name', value: '',size: 'md', type: 'text'},
+          {field: 'lastName', errors: [], label: 'Last Name', value: '', size: 'md', type: 'text'},
+          {field: 'email', errors: [], label: 'Email', value: '', size: 'lg', type: 'text'},
+          {field: 'password', errors: [], label: 'Create Password', value: '', size: 'lg', type: 'password'},
+          {field: 'password_confirmation', errors: [], label: 'Confirm Password', value: '', size: 'lg', type: 'password'},
     ],
     hasErrors: false,
     isSubmitted: false,
     isChecked: false,
     checkboxError: '',
     isPasswordShowing: false,
+    emailExistsError: '',
   }
 }
 
@@ -51,8 +52,31 @@ const createAccount = {
         return field.size === 'lg';
         }
       );
-    }
+    },
 
+    formData: (state) => {
+
+      const formValues = state.form
+        .map(
+          (field) => {
+
+          return { [field.field]: field.value };
+        }
+      );
+
+      return Object.assign({}, ...formValues);
+    },
+
+    getFieldNames: (state) => {
+
+      return state.form
+      .map(
+          (field) => {
+
+          return field.field;
+        }
+     );
+    },
   },
 
   mutations: {
@@ -72,20 +96,43 @@ const createAccount = {
       state.hasErrors =  false;
 
       state.checkboxError = '';
+
+      state.form
+      .forEach(
+          (field) => {
+
+          field.errors = [];
+        }
+      );
     },
 
-    RESET_MODULE: (state) => {
+    SET_VALIDATION_ERRORS: (state, payload) => {
 
-      Object.assign(state, initialState());
+      const newErrorFields = [];
+
+      for (let obj in payload.errors) {
+
+       const fieldName = obj.split('.')[1];
+
+       const newErrorField = {[fieldName]:  payload.errors[obj]};
+
+        newErrorFields.push(newErrorField);
+      }
+
+      newErrorFields.forEach((newErrorField, index) => {
+
+        const errorKey = Object.keys(newErrorField)[0];
+
+        state.form.forEach((oldField) => {
+
+            if (errorKey === oldField.field) {
+
+              oldField.errors.push(...newErrorFields[index][errorKey])
+            }
+        })
+      });
     },
 
-    SET_ERRORS: (state) => {
-
-    },
-
-    SUBMIT_FORM: (state) => {
-
-    },
     UPDATE_FIELD: (state, payload) => {
 
       state
@@ -97,9 +144,9 @@ const createAccount = {
 
               oldField.value = payload.newValue;
 
-              oldField.error = payload.error;
+              oldField.errors.push( payload.error);
 
-              state.hasErrors = oldField.error.length ? true : false;
+              state.hasErrors = oldField.errors.length ? true : false;
           }
         }
       );
@@ -113,47 +160,99 @@ const createAccount = {
       .forEach(
           (oldField) => {
 
-            const createPasswordShowing = oldField.field === 'createPassword' && state.isPasswordShowing;
+            const createPasswordShowing = oldField.field === 'password' && state.isPasswordShowing;
 
-            const confirmPasswordShowing =  oldField.field === 'confirmPassword' && state.isPasswordShowing;
+            const confirmPasswordShowing =  oldField.field === 'password_confirmation' && state.isPasswordShowing;
 
-            oldField.type = createPasswordShowing || confirmPasswordShowing ? 'text' : 'password';
+            if (
+                 oldField.field.includes('password') ||
+                 oldField.field.includes('password_confirmation')
+            ) {
+                 oldField.type = createPasswordShowing || confirmPasswordShowing ? 'text' : 'password';
+              }
           }
        );
+    },
+
+    SET_EMAIL_EXISTS_ERROR: (state, payload) => {
+
+      state.form
+      .forEach(
+        (oldField) => {
+
+        if (oldField.field === 'email') {
+
+          oldField.errors.push(payload);
+        }
+      });
+    },
+
+    SUBMIT_FORM: (state, payload) => {
+
+      state.isSubmitted = payload;
+    },
+
+    RESET_MODULE: (state) => {
+
+      Object.assign(state, initialState());
     },
   },
 
   actions: {
 
-    SUBMIT_FORM: (context) => {
+     async SUBMIT_FORM ({getters, state, commit }) {
 
-      console.log(context);
+      let response;
+
+        try {
+
+          const formData = getters.formData;
+
+          response = await axios(
+            {
+              method: 'POST',
+              url: '/api/register',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              data: {
+
+                formData,
+              }
+          }
+          );
+
+          if (response.status === 201) {
+
+            commit('SUBMIT_FORM', response.data.isSubmitted);
+          }
+
+        } catch(e) {
+
+            const { errors } = e.response.data;
+
+            if (e.response.status === 422) {
+
+              commit('SET_VALIDATION_ERRORS',
+                {
+                  errors,
+                  fields: getters.getFieldNames
+                }
+              );
+            }
+
+            if (e.response.status === 409) {
+
+              commit('SET_EMAIL_EXISTS_ERROR', errors);
+            }
+
+        }
     }
-
   }
-
 };
 
 
 export default createAccount;
 
 
-// validate form on submit
-
-  // if errors map them to inputs
-
-  // set global error: true
-
-// if no errors
-
-// reset global error : false
-
-  // if global error: false
-
-   //dispatch axios request to server
-//-----------------------------
-    // get response back if 422
-
-    // if errors map errors
-
-    //reset global error: true,

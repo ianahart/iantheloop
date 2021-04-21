@@ -4,13 +4,23 @@
       {{ label }}:
     </label>
     <div class="password__icon__outer__container">
-      <PasswordIcon v-if="field === 'createPassword'">
+      <PasswordIcon v-if="field === 'password'">
         <input
+          autocomplete="new-password"
+          name="password"
           @change="updateFieldValue"
           :type="isPasswordShowing ? 'text' : 'password'"
           :value="value"
         />
-        <p class="forms__input__error" v-if="error">{{ error }}</p>
+      <div v-if="errors.length">
+        <p
+          class="forms__input__error"
+          v-for="(error, index) in errors"
+          :key="index"
+        >
+          {{ error }}
+        </p>
+    </div>
       </PasswordIcon>
     </div>
     <input
@@ -19,17 +29,20 @@
       :value="value"
     />
     <p
-      v-if="field === 'createPassword'"
+      v-if="field === 'password'"
       class="password__instructions"
       >
-        Password must include one uppercase letter one number, and one special character.
+        Password must include one uppercase letter, one lowercase letter, one number, and one special character.
     </p>
-    <p
-      class="forms__input__error"
-      v-if="error"
+    <div v-if="errors.length">
+      <p
+        class="forms__input__error"
+        v-for="(error, index) in errors"
+        :key="index"
       >
-      {{ error }}
-    </p>
+        {{ error }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -46,7 +59,7 @@
     props: {
       field: String,
       type: String,
-      error: String,
+      errors: Array,
       label: String,
       value: String,
       commitPath: String,
@@ -60,7 +73,7 @@
     data () {
 
       return {
-
+        poop: 'hi',
       }
     },
 

@@ -7,6 +7,8 @@
 
 <script>
 
+  import { mapMutations } from 'vuex';
+
   export default {
 
     name: 'Login',
@@ -28,14 +30,31 @@
 
     created () {
 
+      if(this.$route.query.signup) {
+
+          this.clearRegistration();
+      }
     },
 
     mounted () {
-
+      console.log(this.$route);
     },
 
     methods: {
 
+      ...mapMutations('createAccount',
+        [
+          'RESET_MODULE',
+        ]
+      ),
+
+      clearRegistration() {
+
+        if (this.$route.query.signup) {
+
+            this.RESET_MODULE();
+        }
+      },
     },
   }
 

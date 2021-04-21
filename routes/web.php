@@ -24,14 +24,12 @@ use App\Http\Controllers\SpaController;
  *
 */
 
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/about', [AboutController::class, 'index']);
-
 
 /*
  *
  * Redirect all requests to Vue Router
  *
 */
+
 Route::get('/{vue_capture?}', [SpaController::class, 'index'])
   ->where('vue_capture', '[\/\w\.-]*');

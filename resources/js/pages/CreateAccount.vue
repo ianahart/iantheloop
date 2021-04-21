@@ -8,7 +8,7 @@
             v-for="(inputField, index) in mediumFields" :key="index"
             :field="inputField.field"
             :type="inputField.type"
-            :error="inputField.error"
+            :errors="inputField.errors"
             :label="inputField.label"
             :value="inputField.value"
             :commitPath="'createAccount/UPDATE_FIELD'"
@@ -19,7 +19,7 @@
             v-for="(inputField, index) in largeFields" :key="index"
             :field="inputField.field"
             :type="inputField.type"
-            :error="inputField.error"
+            :errors="inputField.errors"
             :label="inputField.label"
             :value="inputField.value"
             :commitPath="'createAccount/UPDATE_FIELD'"
@@ -85,6 +85,7 @@
           'form',
           'hasErrors',
           'isChecked',
+          'isSubmitted'
         ]
       ),
 
@@ -126,12 +127,14 @@
         );
       },
 
+
+
       resetErrors() {
 
         this.$store.commit('createAccount/RESET_ERRORS');
       },
 
-      submitForm() {
+      async submitForm() {
 
         this.resetErrors();
 
@@ -144,11 +147,14 @@
 
         if (!this.hasErrors && this.isChecked) {
 
-            console.log('SEND');
-            this.SUBMIT_FORM();
+          await this.SUBMIT_FORM();
+
+          if (this.isSubmitted) {
+
+            this.$router.push({ name: 'Login' , query: {signup: 'success'} });
+          }
         }
       },
-
     },
   };
 

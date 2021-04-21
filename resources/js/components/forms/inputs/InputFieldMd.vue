@@ -3,8 +3,21 @@
     <label>
       {{ label }}:
     </label>
-    <input @change="updateFieldValue" :type="type" :value="value" />
-    <p class="forms__input__error" v-if="error">{{ error }}</p>
+    <input
+      @change="updateFieldValue"
+      :type="type"
+      :value="value"
+
+    />
+    <div v-if="errors.length">
+      <p
+        class="forms__input__error"
+        v-for="(error, index) in errors"
+        :key="index"
+      >
+        {{ error }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -17,7 +30,7 @@
     props: {
       field: String,
       type: String,
-      error: String,
+      errors: Array,
       label: String,
       value: String,
       commitPath: String,
