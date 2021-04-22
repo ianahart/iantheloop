@@ -5,7 +5,7 @@ const auth = {
 
   state: {
 
-    isLoggedIn: false,
+
   },
 
   getters: {

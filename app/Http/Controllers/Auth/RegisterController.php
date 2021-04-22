@@ -36,7 +36,7 @@ class RegisterController extends Controller
         $userData = array_shift($validated);
 
         $exists = User::where('email', $userData['email'])->first();
-        error_log(print_r($exists, true));
+
         if ($exists) {
 
             return response()->json(
@@ -47,17 +47,6 @@ class RegisterController extends Controller
             );
         }
 
-
-
-        // $user = new User();
-
-        // $user->full_name = strtolower($userData['firstName']) . ' ' . strtolower($userData['lastName']);
-        // $user->first_name = strtolower($userData['firstName']);
-        // $user->last_name = strtolower($userData['lastName']);
-        // $user->email = strtolower($userData['email']);
-        // $user->password = Hash::make($userData['password']);
-        $dood = 'POSDFPSDOFPSDFOSDPFOSDPFSDOFPSDFOSD';
-        error_log(print_r($dood, true));
         $user = User::create(
             [
                 'first_name' => strtolower($userData['firstName']) . ' ' . strtolower($userData['lastName']),
@@ -67,7 +56,6 @@ class RegisterController extends Controller
                 'password' => Hash::make($userData['password']),
             ]
         );
-
 
         if ($isValidated) {
 

@@ -1,12 +1,10 @@
 <template>
-  <div class="company__logo">
-      <img :src="require('../../../assets/looped.png').default" alt="a poligonal vector" />
+  <div class="logo">
+      <img :src="require('../../../assets/looped_logo.png').default" alt="lines connected by dots" />
   </div>
 </template>
 
 <script>
-
-
 
   export default {
 
@@ -44,22 +42,17 @@
 
 <style lang="scss">
 
-/*
-  IMPORTS
-*/
-  @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
-
-  .company__logo {
-    display :flex;
-    flex-direction: column;
+  .logo {
+    width: 100px;
+    height: 100px;
+    display: flex;
     justify-content: center;
 
     img {
-      width: 75px;
-      height: 60px;
+      height: 100px;
+      width: 100px;
+      display: block;
     }
-
   }
 
 </style>

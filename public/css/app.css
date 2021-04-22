@@ -1,5 +1,21 @@
+@import url(https://fonts.googleapis.com/css2?family=Secular+One&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Secular+One&display=swap);
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -47,8 +63,22 @@ body {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -77,10 +107,12 @@ h2 {
   margin-top: 6rem;
 }
 .create__account__header h1 {
-  color: #31326f;
+  font-size: 3rem;
   font-weight: 500;
   margin-bottom: 0;
-  font-size: 3rem;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: -3px;
+  color: #31326f;
 }
 .create__account__user {
   display: flex;
@@ -117,8 +149,22 @@ IMPORTS
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 .forms__input__field {
   border: 1px solid #ffc93c;
@@ -160,11 +206,93 @@ forms
   border: 1px solid #e3e2e2;
   height: 35px;
 }
+.logo {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+}
+.logo img {
+  height: 100px;
+  width: 100px;
+  display: block;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.login__header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.login__header h1 {
+  font-size: 3rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: -3px;
+  color: #31326f;
+}
+.login__signup__link {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.login__signup__link div:last-of-type {
+  display: flex;
+  align-items: center;
+}
+.login__signup__link p {
+  margin-bottom: 0;
+  margin-top: 0;
+  margin-right: 0.2rem;
+  font-size: 0.8rem;
+}
+.login__signup__link p:first-of-type {
+  font-weight: bold;
+  color: #31326f;
+}
+.login__signup__link a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #31326f;
+  font-size: 0.8rem;
+  color: #77d2c2;
+}
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 .password__icon__container svg {
   height: 25px;
@@ -180,8 +308,22 @@ IMPORTS
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 .forms__input__field {
   border: 1px solid #ffc93c;
@@ -235,8 +377,22 @@ forms
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 .create__account__checkbox {
   display: block;
@@ -311,8 +467,22 @@ forms
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -341,8 +511,22 @@ h2 {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 .forms__input__field {
   border: 1px solid #ffc93c;
@@ -408,7 +592,7 @@ forms
 }
 .create__account__form {
   box-sizing: border-box;
-  height: 800px;
+  height: 900px;
   margin: 0 auto;
   margin-bottom: 3rem;
   display: flex;
@@ -451,10 +635,147 @@ forms
 }
 }
 /*
-  IMPORTS
+IMPORTS
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
 */
 /*
-forms
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.forms__input__field {
+  border: 1px solid #ffc93c;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.login__container {
+  box-sizing: border-box;
+  background-image: url(/images/login.svg?48fb210686984e79e462ac43d1dafe10);
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+}
+.login__form__container {
+  width: 448px;
+  margin-bottom: 3rem;
+  box-sizing: border-box;
+  margin-top: 6rem;
+}
+.login__form {
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  padding: 1rem;
+  background-color: #fcfcfc;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+.login__button__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem auto;
+}
+.login__button__container button {
+  border: none;
+  width: 150px;
+  color: #fcfcfc;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  background-color: #31326f;
+  text-transform: uppercase;
+  height: 35px;
+  border-radius: 8px;
+}
+.login__button__container button:hover {
+  opacity: 0.7;
+}
+/*
+  IMPORTS
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -487,8 +808,22 @@ h2 {
 /*
   IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -525,8 +860,22 @@ h2 {
 /*
   IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -554,8 +903,22 @@ h2 {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -632,8 +995,22 @@ h2 {
 /*
   IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -666,8 +1043,22 @@ h2 {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -746,8 +1137,22 @@ h2 {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -779,8 +1184,22 @@ h2 {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -808,8 +1227,22 @@ h2 {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {
@@ -840,8 +1273,22 @@ h2 {
 /*
 IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
 /*
-forms
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
 */
 html,
 body {

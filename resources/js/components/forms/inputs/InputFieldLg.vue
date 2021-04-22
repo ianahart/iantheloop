@@ -4,10 +4,10 @@
       {{ label }}:
     </label>
     <div class="password__icon__outer__container">
-      <PasswordIcon v-if="field === 'password'">
+      <PasswordIcon v-if="nameAttr === 'visiblepassword'">
         <input
           autocomplete="new-password"
-          name="password"
+          :name="nameAttr"
           @change="updateFieldValue"
           :type="isPasswordShowing ? 'text' : 'password'"
           :value="value"
@@ -27,9 +27,10 @@
       @change="updateFieldValue"
       :type="type"
       :value="value"
+      :name="nameAttr"
     />
     <p
-      v-if="field === 'password'"
+      v-if="nameAttr === 'visiblepassword'"
       class="password__instructions"
       >
         Password must include one uppercase letter, one lowercase letter, one number, and one special character.
@@ -62,7 +63,9 @@
       errors: Array,
       label: String,
       value: String,
+      nameAttr: String,
       commitPath: String,
+
     },
 
     components: {
@@ -73,7 +76,7 @@
     data () {
 
       return {
-        poop: 'hi',
+
       }
     },
 
@@ -95,6 +98,7 @@
     },
 
     methods: {
+
       updateFieldValue(e) {
 
         this
@@ -102,7 +106,7 @@
         .commit(this.commitPath,
           {
             field: this.field,
-            newValue: e.target.value,
+            value: e.target.value,
             error: '',
           }
         );

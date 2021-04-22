@@ -1,14 +1,29 @@
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
 $primaryBlack: rgba(25, 25, 25, 0.85);
 $primaryGray: #f2f2f2;
 $primaryWhite: #fcfcfc;
-$themeGold: #ffc93c;
+/*
+errors
+*/
 $error: #ff0033;
+/*
+
+themes
+*/
+$themeGold: #ffc93c;
 $themeLightGreen: #dbf6e9;
 $themeDarkGreen: #9ddfd3;
 $themeBlue: #31326f;
+$themeLightBlue: #484aa4;
 
 /*
-forms
+element-specific
 */
 $mainInputLabel: #4e5760;
 $mainInputBorder: #e3e2e2;

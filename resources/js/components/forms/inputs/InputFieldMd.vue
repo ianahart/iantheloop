@@ -7,6 +7,7 @@
       @change="updateFieldValue"
       :type="type"
       :value="value"
+      :name="nameAttr"
 
     />
     <div v-if="errors.length">
@@ -33,6 +34,7 @@
       errors: Array,
       label: String,
       value: String,
+      nameAttr: String,
       commitPath: String,
     },
 
@@ -64,7 +66,7 @@
         .commit(this.commitPath,
           {
             field: this.field,
-            newValue: e.target.value,
+            value: e.target.value,
             error: '',
           }
         );

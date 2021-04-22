@@ -5,11 +5,11 @@ const initialState = () => {
   return {
 
     form: [
-          {field: 'firstName', errors: [], label: 'First Name', value: '',size: 'md', type: 'text'},
-          {field: 'lastName', errors: [], label: 'Last Name', value: '', size: 'md', type: 'text'},
-          {field: 'email', errors: [], label: 'Email', value: '', size: 'lg', type: 'text'},
-          {field: 'password', errors: [], label: 'Create Password', value: '', size: 'lg', type: 'password'},
-          {field: 'password_confirmation', errors: [], label: 'Confirm Password', value: '', size: 'lg', type: 'password'},
+          {field: 'firstName', errors: [], label: 'First Name', value: '',size: 'md', type: 'text', nameAttr: 'firstname'},
+          {field: 'lastName', errors: [], label: 'Last Name', value: '', size: 'md', type: 'text', nameAttr: 'lastname'},
+          {field: 'email', errors: [], label: 'Email', value: '', size: 'lg', type: 'text', nameAttr: 'email'},
+          {field: 'password', errors: [], label: 'Create Password', value: '', size: 'lg', type: 'password', nameAttr: 'visiblepassword'},
+          {field: 'password_confirmation', errors: [], label: 'Confirm Password', value: '', size: 'lg', type: 'password', nameAttr: 'confirmpassword'},
     ],
     hasErrors: false,
     isSubmitted: false,
@@ -142,7 +142,7 @@ const createAccount = {
 
           if (oldField.field === payload.field) {
 
-              oldField.value = payload.newValue;
+              oldField.value = payload.value;
 
               oldField.errors.push( payload.error);
 

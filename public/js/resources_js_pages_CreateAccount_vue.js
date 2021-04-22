@@ -208,6 +208,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -218,15 +219,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     errors: Array,
     label: String,
     value: String,
+    nameAttr: String,
     commitPath: String
   },
   components: {
     PasswordIcon: _Icons_PasswordIcon_vue__WEBPACK_IMPORTED_MODULE_0__.default
   },
   data: function data() {
-    return {
-      poop: 'hi'
-    };
+    return {};
   },
   created: function created() {},
   mounted: function mounted() {},
@@ -235,7 +235,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateFieldValue: function updateFieldValue(e) {
       this.$store.commit(this.commitPath, {
         field: this.field,
-        newValue: e.target.value,
+        value: e.target.value,
         error: ''
       });
     }
@@ -278,6 +278,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'InputFieldMd',
   props: {
@@ -286,6 +287,7 @@ __webpack_require__.r(__webpack_exports__);
     errors: Array,
     label: String,
     value: String,
+    nameAttr: String,
     commitPath: String
   },
   components: {},
@@ -298,7 +300,7 @@ __webpack_require__.r(__webpack_exports__);
     updateFieldValue: function updateFieldValue(e) {
       this.$store.commit(this.commitPath, {
         field: this.field,
-        newValue: e.target.value,
+        value: e.target.value,
         error: ''
       });
     }
@@ -377,6 +379,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -407,7 +411,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           _this.$store.commit('createAccount/UPDATE_FIELD', {
             field: field.field,
-            newValue: '',
+            value: '',
             error: error
           });
         }
@@ -1262,12 +1266,12 @@ var render = function() {
       "div",
       { staticClass: "password__icon__outer__container" },
       [
-        _vm.field === "password"
+        _vm.nameAttr === "visiblepassword"
           ? _c("PasswordIcon", [
               _c("input", {
                 attrs: {
                   autocomplete: "new-password",
-                  name: "password",
+                  name: _vm.nameAttr,
                   type: _vm.isPasswordShowing ? "text" : "password"
                 },
                 domProps: { value: _vm.value },
@@ -1294,12 +1298,12 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("input", {
-      attrs: { type: _vm.type },
+      attrs: { type: _vm.type, name: _vm.nameAttr },
       domProps: { value: _vm.value },
       on: { change: _vm.updateFieldValue }
     }),
     _vm._v(" "),
-    _vm.field === "password"
+    _vm.nameAttr === "visiblepassword"
       ? _c("p", { staticClass: "password__instructions" }, [
           _vm._v(
             "\n      Password must include one uppercase letter, one lowercase letter, one number, and one special character.\n  "
@@ -1347,7 +1351,7 @@ var render = function() {
     _c("label", [_vm._v("\n    " + _vm._s(_vm.label) + ":\n  ")]),
     _vm._v(" "),
     _c("input", {
-      attrs: { type: _vm.type },
+      attrs: { type: _vm.type, name: _vm.nameAttr },
       domProps: { value: _vm.value },
       on: { change: _vm.updateFieldValue }
     }),
@@ -1419,6 +1423,7 @@ var render = function() {
                     errors: inputField.errors,
                     label: inputField.label,
                     value: inputField.value,
+                    nameAttr: inputField.nameAttr,
                     commitPath: "createAccount/UPDATE_FIELD"
                   }
                 })
@@ -1438,6 +1443,7 @@ var render = function() {
                     errors: inputField.errors,
                     label: inputField.label,
                     value: inputField.value,
+                    nameAttr: inputField.nameAttr,
                     commitPath: "createAccount/UPDATE_FIELD"
                   }
                 })

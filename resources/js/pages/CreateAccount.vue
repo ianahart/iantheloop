@@ -11,6 +11,7 @@
             :errors="inputField.errors"
             :label="inputField.label"
             :value="inputField.value"
+            :nameAttr="inputField.nameAttr"
             :commitPath="'createAccount/UPDATE_FIELD'"
           />
         </div>
@@ -22,6 +23,7 @@
             :errors="inputField.errors"
             :label="inputField.label"
             :value="inputField.value"
+            :nameAttr="inputField.nameAttr"
             :commitPath="'createAccount/UPDATE_FIELD'"
           />
         </div>
@@ -121,7 +123,7 @@
 
               const error = `Please do not leave ${field.label} field empty`;
 
-              this.$store.commit('createAccount/UPDATE_FIELD', {field: field.field, newValue: '', error})
+              this.$store.commit('createAccount/UPDATE_FIELD', {field: field.field, value: '', error})
             }
           }
         );
@@ -189,7 +191,7 @@ IMPORTS
 
   .create__account__form {
     box-sizing: border-box;
-    height: 800px;
+    height: 900px;
     margin: 0 auto;
     margin-bottom: 3rem;
     display: flex;

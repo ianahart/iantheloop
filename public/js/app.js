@@ -2006,7 +2006,7 @@ var routes = [{
   path: '/login',
   name: 'Login',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ "resources_js_pages_Login_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../pages/Login.vue */ "./resources/js/pages/Login.vue"));
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_Login_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/Login.vue */ "./resources/js/pages/Login.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -2024,12 +2024,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/auth.js */ "./resources/js/store/modules/auth.js");
-/* harmony import */ var _modules_hamburgerMenu_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/hamburgerMenu.js */ "./resources/js/store/modules/hamburgerMenu.js");
-/* harmony import */ var _modules_navigation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/navigation.js */ "./resources/js/store/modules/navigation.js");
-/* harmony import */ var _modules_createAccount_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/createAccount.js */ "./resources/js/store/modules/createAccount.js");
+/* harmony import */ var _modules_user_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/user.js */ "./resources/js/store/modules/user.js");
+/* harmony import */ var _modules_login_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/login.js */ "./resources/js/store/modules/login.js");
+/* harmony import */ var _modules_navigation_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/navigation.js */ "./resources/js/store/modules/navigation.js");
+/* harmony import */ var _modules_hamburgerMenu_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/hamburgerMenu.js */ "./resources/js/store/modules/hamburgerMenu.js");
+/* harmony import */ var _modules_createAccount_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/createAccount.js */ "./resources/js/store/modules/createAccount.js");
 
 
 /*
@@ -2040,13 +2042,17 @@ MODULES
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vuex__WEBPACK_IMPORTED_MODULE_5__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_5__.default.Store({
+
+
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vuex__WEBPACK_IMPORTED_MODULE_7__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_7__.default.Store({
   modules: {
     auth: _modules_auth_js__WEBPACK_IMPORTED_MODULE_0__.default,
-    navigation: _modules_navigation_js__WEBPACK_IMPORTED_MODULE_2__.default,
-    hamburgerMenu: _modules_hamburgerMenu_js__WEBPACK_IMPORTED_MODULE_1__.default,
-    createAccount: _modules_createAccount_js__WEBPACK_IMPORTED_MODULE_3__.default
+    user: _modules_user_js__WEBPACK_IMPORTED_MODULE_1__.default,
+    login: _modules_login_js__WEBPACK_IMPORTED_MODULE_2__.default,
+    navigation: _modules_navigation_js__WEBPACK_IMPORTED_MODULE_3__.default,
+    hamburgerMenu: _modules_hamburgerMenu_js__WEBPACK_IMPORTED_MODULE_4__.default,
+    createAccount: _modules_createAccount_js__WEBPACK_IMPORTED_MODULE_5__.default
   }
 }));
 
@@ -2065,9 +2071,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var auth = {
   namespaced: true,
-  state: {
-    isLoggedIn: false
-  },
+  state: {},
   getters: {},
   mutations: {},
   actions: {}
@@ -2121,35 +2125,40 @@ var initialState = function initialState() {
       label: 'First Name',
       value: '',
       size: 'md',
-      type: 'text'
+      type: 'text',
+      nameAttr: 'firstname'
     }, {
       field: 'lastName',
       errors: [],
       label: 'Last Name',
       value: '',
       size: 'md',
-      type: 'text'
+      type: 'text',
+      nameAttr: 'lastname'
     }, {
       field: 'email',
       errors: [],
       label: 'Email',
       value: '',
       size: 'lg',
-      type: 'text'
+      type: 'text',
+      nameAttr: 'email'
     }, {
       field: 'password',
       errors: [],
       label: 'Create Password',
       value: '',
       size: 'lg',
-      type: 'password'
+      type: 'password',
+      nameAttr: 'visiblepassword'
     }, {
       field: 'password_confirmation',
       errors: [],
       label: 'Confirm Password',
       value: '',
       size: 'lg',
-      type: 'password'
+      type: 'password',
+      nameAttr: 'confirmpassword'
     }],
     hasErrors: false,
     isSubmitted: false,
@@ -2225,7 +2234,7 @@ var createAccount = {
     UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
       state.form.find(function (oldField) {
         if (oldField.field === payload.field) {
-          oldField.value = payload.newValue;
+          oldField.value = payload.value;
           oldField.errors.push(payload.error);
           state.hasErrors = oldField.errors.length ? true : false;
         }
@@ -2358,6 +2367,173 @@ var hamburgerMenu = {
 
 /***/ }),
 
+/***/ "./resources/js/store/modules/login.js":
+/*!*********************************************!*\
+  !*** ./resources/js/store/modules/login.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var initialState = function initialState() {
+  return {
+    form: [{
+      field: 'email',
+      errors: [],
+      label: 'Your Email',
+      value: '',
+      size: 'lg',
+      type: 'text',
+      nameAttr: 'email'
+    }, {
+      field: 'password',
+      errors: [],
+      label: 'Your Password',
+      value: '',
+      size: 'lg',
+      type: 'password',
+      nameAttr: 'password'
+    }],
+    formSubmitted: false,
+    hasErrors: false,
+    JWTToken: ''
+  };
+};
+
+var login = {
+  namespaced: true,
+  state: initialState(),
+  getters: {
+    formData: function formData(state) {
+      var data = state.form.map(function (_ref) {
+        var field = _ref.field,
+            value = _ref.value;
+        return _defineProperty({}, field, value);
+      });
+      return Object.assign.apply(Object, [{}].concat(_toConsumableArray(data)));
+    }
+  },
+  mutations: {
+    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
+      state.form.find(function (oldField) {
+        if (oldField.field === payload.field) {
+          oldField.value = payload.value;
+          oldField.errors.push(payload.error);
+          state.hasErrors = oldField.errors.length ? true : false;
+        }
+      });
+    },
+    RESET_LOGIN_MODULE: function RESET_LOGIN_MODULE(state) {
+      Object.assign(state, initialState());
+    },
+    CLEAR_ERROR_MSGS: function CLEAR_ERROR_MSGS(state) {
+      state.hasErrors = false;
+      state.form.forEach(function (field) {
+        field.errors = [];
+      });
+    },
+    SUBMIT_FORM: function SUBMIT_FORM(state, payload) {
+      console.log(payload);
+      state.formSubmitted = payload.formSubmitted;
+      state.JWTToken = JSON.parse(payload.jwt);
+    },
+    SET_ERRORS: function SET_ERRORS(state, payload) {
+      state.formSubmitted = payload.formSubmitted;
+      var keys = Object.keys(payload);
+      state.form.forEach(function (field) {
+        if (keys.includes(field.field)) {
+          field.errors.push(payload[field.field]['errors']);
+        }
+      });
+    }
+  },
+  actions: {
+    SUBMIT_FORM: function SUBMIT_FORM(_ref3) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var getters, state, commit, response, form;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                getters = _ref3.getters, state = _ref3.state, commit = _ref3.commit;
+                _context.prev = 1;
+                form = getters.formData;
+                _context.next = 5;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default()({
+                  method: 'POST',
+                  url: '/api/login',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  data: {
+                    form: form
+                  }
+                });
+
+              case 5:
+                response = _context.sent;
+                console.log(response);
+
+                if (response.status === 200) {
+                  commit('SUBMIT_FORM', response.data);
+                }
+
+                _context.next = 14;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](1);
+                console.log(_context.t0.response);
+
+                if (_context.t0.response.status === 400) {
+                  commit('SET_ERRORS', _context.t0.response.data);
+                }
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[1, 10]]);
+      }))();
+    }
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (login);
+
+/***/ }),
+
 /***/ "./resources/js/store/modules/navigation.js":
 /*!**************************************************!*\
   !*** ./resources/js/store/modules/navigation.js ***!
@@ -2407,6 +2583,37 @@ var navigation = {
   actions: {}
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (navigation);
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/user.js":
+/*!********************************************!*\
+  !*** ./resources/js/store/modules/user.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var initialState = function initialState() {
+  return {// state
+  };
+};
+
+var user = {
+  namespaced: true,
+  state: initialState(),
+  getters: {},
+  mutations: {
+    RESET_USER_MODULE: function RESET_USER_MODULE(state) {
+      Object.assign(state, initialState());
+    }
+  },
+  actions: {}
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (user);
 
 /***/ }),
 

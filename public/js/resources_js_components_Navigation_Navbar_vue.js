@@ -87,10 +87,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -105,7 +105,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'Logo',
+  name: 'LogoName',
   props: {},
   components: {},
   data: function data() {
@@ -225,7 +225,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _Icons_HamburgerIcon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Icons/HamburgerIcon */ "./resources/js/components/Icons/HamburgerIcon.vue");
-/* harmony import */ var _Icons_Logo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Icons/Logo */ "./resources/js/components/Icons/Logo.vue");
+/* harmony import */ var _Icons_LogoName__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Icons/LogoName */ "./resources/js/components/Icons/LogoName.vue");
 /* harmony import */ var _NavigationLinks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./NavigationLinks */ "./resources/js/components/Navigation/NavigationLinks.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -261,7 +261,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   props: {},
   components: {
     HamburgerIcon: _Icons_HamburgerIcon__WEBPACK_IMPORTED_MODULE_0__.default,
-    Logo: _Icons_Logo__WEBPACK_IMPORTED_MODULE_1__.default,
+    LogoName: _Icons_LogoName__WEBPACK_IMPORTED_MODULE_1__.default,
     NavigationLinks: _NavigationLinks__WEBPACK_IMPORTED_MODULE_2__.default
   },
   data: function data() {
@@ -288,7 +288,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Icons_HamburgerIcon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Icons/HamburgerIcon */ "./resources/js/components/Icons/HamburgerIcon.vue");
-/* harmony import */ var _Icons_Logo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Icons/Logo */ "./resources/js/components/Icons/Logo.vue");
+/* harmony import */ var _Icons_LogoName__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Icons/LogoName */ "./resources/js/components/Icons/LogoName.vue");
 /* harmony import */ var _Icons_CloseIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Icons/CloseIcon */ "./resources/js/components/Icons/CloseIcon.vue");
 /* harmony import */ var _NavigationLinks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./NavigationLinks */ "./resources/js/components/Navigation/NavigationLinks.vue");
 //
@@ -316,7 +316,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     HamburgerIcon: _Icons_HamburgerIcon__WEBPACK_IMPORTED_MODULE_0__.default,
     CloseIcon: _Icons_CloseIcon__WEBPACK_IMPORTED_MODULE_2__.default,
-    Logo: _Icons_Logo__WEBPACK_IMPORTED_MODULE_1__.default,
+    LogoName: _Icons_LogoName__WEBPACK_IMPORTED_MODULE_1__.default,
     NavigationLinks: _NavigationLinks__WEBPACK_IMPORTED_MODULE_3__.default
   },
   data: function data() {
@@ -451,10 +451,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./resources/assets/looped.png":
-/*!*************************************!*\
-  !*** ./resources/assets/looped.png ***!
-  \*************************************/
+/***/ "./resources/assets/looped_logo_name.png":
+/*!***********************************************!*\
+  !*** ./resources/assets/looped_logo_name.png ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -462,7 +462,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/looped.png?e58b45d5b5613a1f86412b71193a4d2d");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/looped_logo_name.png?e58b45d5b5613a1f86412b71193a4d2d");
 
 /***/ }),
 
@@ -492,10 +492,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=style&index=0&lang=scss&":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=style&index=0&lang=scss& ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=style&index=0&lang=scss&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=style&index=0&lang=scss& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -665,10 +665,10 @@ component.options.__file = "resources/js/components/Icons/HamburgerIcon.vue"
 
 /***/ }),
 
-/***/ "./resources/js/components/Icons/Logo.vue":
-/*!************************************************!*\
-  !*** ./resources/js/components/Icons/Logo.vue ***!
-  \************************************************/
+/***/ "./resources/js/components/Icons/LogoName.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/Icons/LogoName.vue ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -676,9 +676,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Logo_vue_vue_type_template_id_2ed2f44b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Logo.vue?vue&type=template&id=2ed2f44b& */ "./resources/js/components/Icons/Logo.vue?vue&type=template&id=2ed2f44b&");
-/* harmony import */ var _Logo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Logo.vue?vue&type=script&lang=js& */ "./resources/js/components/Icons/Logo.vue?vue&type=script&lang=js&");
-/* harmony import */ var _Logo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Logo.vue?vue&type=style&index=0&lang=scss& */ "./resources/js/components/Icons/Logo.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _LogoName_vue_vue_type_template_id_ffe6f814___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LogoName.vue?vue&type=template&id=ffe6f814& */ "./resources/js/components/Icons/LogoName.vue?vue&type=template&id=ffe6f814&");
+/* harmony import */ var _LogoName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LogoName.vue?vue&type=script&lang=js& */ "./resources/js/components/Icons/LogoName.vue?vue&type=script&lang=js&");
+/* harmony import */ var _LogoName_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LogoName.vue?vue&type=style&index=0&lang=scss& */ "./resources/js/components/Icons/LogoName.vue?vue&type=style&index=0&lang=scss&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -689,9 +689,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
-  _Logo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _Logo_vue_vue_type_template_id_2ed2f44b___WEBPACK_IMPORTED_MODULE_0__.render,
-  _Logo_vue_vue_type_template_id_2ed2f44b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _LogoName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _LogoName_vue_vue_type_template_id_ffe6f814___WEBPACK_IMPORTED_MODULE_0__.render,
+  _LogoName_vue_vue_type_template_id_ffe6f814___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -701,7 +701,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Icons/Logo.vue"
+component.options.__file = "resources/js/components/Icons/LogoName.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -984,10 +984,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Icons/Logo.vue?vue&type=script&lang=js&":
-/*!*************************************************************************!*\
-  !*** ./resources/js/components/Icons/Logo.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************/
+/***/ "./resources/js/components/Icons/LogoName.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/Icons/LogoName.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -995,8 +995,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Logo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Logo.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Logo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogoName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LogoName.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogoName_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -1122,15 +1122,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Icons/Logo.vue?vue&type=style&index=0&lang=scss&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/components/Icons/Logo.vue?vue&type=style&index=0&lang=scss& ***!
-  \**********************************************************************************/
+/***/ "./resources/js/components/Icons/LogoName.vue?vue&type=style&index=0&lang=scss&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Icons/LogoName.vue?vue&type=style&index=0&lang=scss& ***!
+  \**************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_clonedRuleSet_12_0_rules_0_use_0_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Logo_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Logo.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=style&index=0&lang=scss&");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_clonedRuleSet_12_0_rules_0_use_0_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_LogoName_vue_vue_type_style_index_0_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LogoName.vue?vue&type=style&index=0&lang=scss& */ "./node_modules/mini-css-extract-plugin/dist/loader.js??clonedRuleSet-12[0].rules[0].use[0]!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=style&index=0&lang=scss&");
 
 
 /***/ }),
@@ -1247,19 +1247,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Icons/Logo.vue?vue&type=template&id=2ed2f44b&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/Icons/Logo.vue?vue&type=template&id=2ed2f44b& ***!
-  \*******************************************************************************/
+/***/ "./resources/js/components/Icons/LogoName.vue?vue&type=template&id=ffe6f814&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/Icons/LogoName.vue?vue&type=template&id=ffe6f814& ***!
+  \***********************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Logo_vue_vue_type_template_id_2ed2f44b___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Logo_vue_vue_type_template_id_2ed2f44b___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LogoName_vue_vue_type_template_id_ffe6f814___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LogoName_vue_vue_type_template_id_ffe6f814___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Logo_vue_vue_type_template_id_2ed2f44b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Logo.vue?vue&type=template&id=2ed2f44b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=template&id=2ed2f44b&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LogoName_vue_vue_type_template_id_ffe6f814___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LogoName.vue?vue&type=template&id=ffe6f814& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=template&id=ffe6f814&");
 
 
 /***/ }),
@@ -1462,10 +1462,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=template&id=2ed2f44b&":
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/Logo.vue?vue&type=template&id=2ed2f44b& ***!
-  \**********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=template&id=ffe6f814&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Icons/LogoName.vue?vue&type=template&id=ffe6f814& ***!
+  \**************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1481,7 +1481,7 @@ var render = function() {
   return _c("div", { staticClass: "company__logo" }, [
     _c("img", {
       attrs: {
-        src: __webpack_require__(/*! ../../../assets/looped.png */ "./resources/assets/looped.png").default,
+        src: __webpack_require__(/*! ../../../assets/looped_logo_name.png */ "./resources/assets/looped_logo_name.png").default,
         alt: "a poligonal vector"
       }
     })
@@ -1587,7 +1587,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "logo__container" },
-        [_c("Logo"), _vm._v(" "), _c("HamburgerIcon")],
+        [_c("LogoName"), _vm._v(" "), _c("HamburgerIcon")],
         1
       ),
       _vm._v(" "),
@@ -1636,7 +1636,7 @@ var render = function() {
           "div",
           { staticClass: "navigation__links_container" },
           [
-            _c("Logo"),
+            _c("LogoName"),
             _vm._v(" "),
             _c("NavigationLinks", {
               attrs: { rootStyle: "entry__nav__links__mobile" }

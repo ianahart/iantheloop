@@ -51,15 +51,19 @@ IMPORTS
 */
 
  @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
+ @import '../../../sass/general/_base.scss';
+ @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+
 
 .create__account__header {
   margin-top: 6rem;
   h1 {
-    color: $themeBlue;
-    font-weight: 500;
-    margin-bottom: 0;
-    font-size: 3rem;
+     font-size: 3rem;
+     font-weight: 500;
+     margin-bottom: 0;
+     font-family: 'Secular One', sans-serif;
+     letter-spacing: -3px;
+     color: $themeBlue;
   }
 }
 

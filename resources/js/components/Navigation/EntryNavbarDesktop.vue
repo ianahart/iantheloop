@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar__entry__desktop">
     <div class="logo__container">
-      <Logo />
+      <LogoName />
       <HamburgerIcon />
     </div>
     <p
@@ -22,7 +22,7 @@
   import { mapState } from 'vuex';
 
   import HamburgerIcon from '../Icons/HamburgerIcon';
-  import Logo from '../Icons/Logo';
+  import LogoName from '../Icons/LogoName';
   import NavigationLinks from './NavigationLinks';
 
   export default {
@@ -36,7 +36,7 @@
     components: {
 
       HamburgerIcon,
-      Logo,
+      LogoName,
       NavigationLinks,
     },
 

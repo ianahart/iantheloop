@@ -3,7 +3,7 @@
     <nav class="navbar__entry__mobile">
       <CloseIcon />
       <div class="navigation__links_container">
-        <Logo />
+        <LogoName />
         <NavigationLinks
           rootStyle="entry__nav__links__mobile"
         />
@@ -16,7 +16,7 @@
 <script>
 
   import HamburgerIcon from '../Icons/HamburgerIcon'
-  import Logo from '../Icons/Logo';
+  import LogoName from '../Icons/LogoName';
   import CloseIcon from '../Icons/CloseIcon';
   import NavigationLinks from './NavigationLinks';
 
@@ -32,7 +32,7 @@
 
       HamburgerIcon,
       CloseIcon,
-      Logo,
+      LogoName,
       NavigationLinks,
     },
 
