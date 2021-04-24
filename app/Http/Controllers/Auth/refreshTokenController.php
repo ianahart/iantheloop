@@ -39,12 +39,16 @@ class refreshTokenController extends Controller
 
 
             try {
+                $TLL = 60;
+
+                JWTAuth::factory()->setTTL($TLL);
+
                 $refreshToken = JWTAuth::refresh(JWTAuth::getToken());
 
                 $user = JWTAuth::setToken($refreshToken)->toUser();
 
 
-                $accessToken = $this->respondWithRefreshToken($refreshToken);
+                $accessToken = $this->respondWithRefreshToken($refreshToken, $TLL);
 
 
                 return response()->json(
@@ -66,10 +70,8 @@ class refreshTokenController extends Controller
         }
     }
 
-    protected function respondWithRefreshToken($token)
+    protected function respondWithRefreshToken($token, $TLL)
     {
-
-        $TLL = time() + 60;
 
         return json_encode(
             [
@@ -77,7 +79,7 @@ class refreshTokenController extends Controller
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'iat' => time(),
-                'exp' =>  $TLL,
+                'exp' =>  time() + $TLL,
                 'user_id' => JWTAuth::user()->id,
             ]
         );

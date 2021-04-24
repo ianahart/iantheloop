@@ -7,9 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Tymon\JWTAuth\Facades\JWTFactory;
 
 class LoginController extends Controller
 {
@@ -19,8 +18,10 @@ class LoginController extends Controller
      * @return JsonResponse
      */
 
+
     public function store(Request $request)
     {
+
         $email = $request->form['email'];
         $password = $request->form['password'];
 
@@ -30,9 +31,15 @@ class LoginController extends Controller
 
             if (Hash::check($password, $user->password)) {
 
-                $payload = Auth::attempt($request->form);
+                $TLL =  60;
 
-                $jwt = $this->createNewToken($payload);
+                JWTAuth::factory()->setTTL($TLL);
+
+                $payload = JWTAuth::attempt($request->form);
+
+                $jwt = $this->createNewToken($payload, $TLL);
+
+                $this->updateAuthStatus($jwt);
 
                 return response()->json(
                     [
@@ -74,19 +81,38 @@ class LoginController extends Controller
         }
     }
 
-    protected function createNewToken($payload)
+    /*
+     * update authentication column
+     * @param String
+     * @return void
+     */
+
+    private function updateAuthStatus(string $token)
     {
 
-        // $TLL = time() + 60 * 60 * 60 * 24;
-        $TLL = time() + 60;
+        $contents = json_decode($token, true);
+
+        User::where('id', '=', $contents['user_id'])
+            ->update(['is_logged_in' => true]);
+    }
+
+    /*
+     * create new token with payload
+     * @param String
+     * @return string
+     */
+
+    protected function createNewToken(string $payload, int $TLL)
+    {
+
         return json_encode(
             [
                 'iss' => 'jwt-auth',
                 'access_token' => $payload,
                 'token_type' => 'bearer',
                 'iat' => time(),
-                'exp' =>  $TLL,
-                'user_id' => Auth::user()->id,
+                'exp' => time() + $TLL,
+                'user_id' => JWTAuth::user()->id,
             ]
         );
     }

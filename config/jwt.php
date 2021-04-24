@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of jwt-auth.
+     * This file is part of jwt-auth.
  *
  * (c) Sean Tymon <tymon148@gmail.com>
  *
@@ -102,7 +102,7 @@ return [
     */
     /**USE 1 FOR TESTING*/
     // 'ttl' => env('JWT_TTL', 1),
-    'ttl' => env('JWT_TTL', 1),
+    'ttl' => env('JWT_TTL', 60),
     /*
     |--------------------------------------------------------------------------
     | Refresh time to live
@@ -119,7 +119,6 @@ return [
     | systems in place to revoke the token if necessary.
     |
     */
-
     'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
 
 

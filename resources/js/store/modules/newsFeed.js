@@ -51,7 +51,7 @@ const newsFeed = {
             },
           }
         );
-          console.log('NEWSFEED:', response);
+
           commit('GET_NAMES', response.data);
 
       } catch (e) {

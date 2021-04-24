@@ -54,6 +54,7 @@ class RegisterController extends Controller
                 'full_name' => strtolower($userData['lastName']),
                 'email' => strtolower($userData['email']),
                 'password' => Hash::make($userData['password']),
+                'is_logged_in' => false,
             ]
         );
 
