@@ -89,6 +89,13 @@
         ],
       ),
 
+      ...mapMutations('user',
+          [
+
+            'SET_AUTH_STATUS'
+          ]
+        ),
+
       ...mapActions('login',
         [
           'SUBMIT_FORM',
@@ -128,6 +135,8 @@
         }
 
         if (this.formSubmitted) {
+
+          this.SET_AUTH_STATUS(true);
 
           this.$router.push({ name: 'Home' });
         }

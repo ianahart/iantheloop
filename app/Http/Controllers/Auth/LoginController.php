@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
+
 
 class LoginController extends Controller
 {
+    /*
+     * Login user and return a token
+     * @param Request $request
+     * @return JsonResponse
+     */
 
     public function store(Request $request)
     {
@@ -25,10 +30,9 @@ class LoginController extends Controller
 
             if (Hash::check($password, $user->password)) {
 
-                $token = Auth::attempt($request->form);
+                $payload = Auth::attempt($request->form);
 
-
-                $jwt = $this->createNewToken($token);
+                $jwt = $this->createNewToken($payload);
 
                 return response()->json(
                     [
@@ -70,18 +74,19 @@ class LoginController extends Controller
         }
     }
 
-    protected function createNewToken($token)
+    protected function createNewToken($payload)
     {
 
-        $TLL = time() + 60 * 60 * 60 * 24;
-
+        // $TLL = time() + 60 * 60 * 60 * 24;
+        $TLL = time() + 60;
         return json_encode(
             [
-                'access_token' => $token,
+                'iss' => 'jwt-auth',
+                'access_token' => $payload,
                 'token_type' => 'bearer',
                 'iat' => time(),
                 'exp' =>  $TLL,
-                'user' => Auth::user(),
+                'user_id' => Auth::user()->id,
             ]
         );
     }

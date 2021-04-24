@@ -85,6 +85,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -404,7 +405,15 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "home-page" },
-    [_c("h1", [_vm._v("HOME PAGE")]), _vm._v(" "), _c("NoAuthHome")],
+    [
+      _c("h1", [_vm._v("HOME PAGE")]),
+      _vm._v(" "),
+      _c("NoAuthHome"),
+      _vm._v(" "),
+      _c("router-link", { attrs: { to: { name: "NewsFeed" } } }, [
+        _vm._v("News feed")
+      ])
+    ],
     1
   )
 }

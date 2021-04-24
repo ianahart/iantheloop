@@ -3,6 +3,7 @@
     <h1>HOME PAGE</h1>
     <!-- <AuthHome /> -->
     <NoAuthHome />
+    <router-link :to="{name: 'NewsFeed'}">News feed</router-link>
   </div>
 </template>
 

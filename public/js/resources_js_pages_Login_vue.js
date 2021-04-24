@@ -306,7 +306,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {},
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)('login', ['form', 'hasErrors', 'formSubmitted'])),
-  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('createAccount', ['RESET_MODULE'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('login', ['UPDATE_FIELD', 'CLEAR_ERROR_MSGS'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('login', ['SUBMIT_FORM'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('createAccount', ['RESET_MODULE'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('login', ['UPDATE_FIELD', 'CLEAR_ERROR_MSGS'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('user', ['SET_AUTH_STATUS'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('login', ['SUBMIT_FORM'])), {}, {
     clearRegistration: function clearRegistration() {
       if (this.$route.query.signup) {
         this.RESET_MODULE();
@@ -352,6 +352,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
               case 5:
                 if (_this2.formSubmitted) {
+                  _this2.SET_AUTH_STATUS(true);
+
                   _this2.$router.push({
                     name: 'Home'
                   });

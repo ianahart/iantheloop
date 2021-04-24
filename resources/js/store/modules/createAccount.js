@@ -211,7 +211,7 @@ const createAccount = {
           response = await axios(
             {
               method: 'POST',
-              url: '/api/register',
+              url: '/api/auth/register',
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -246,7 +246,6 @@ const createAccount = {
 
               commit('SET_EMAIL_EXISTS_ERROR', errors);
             }
-
         }
     }
   }

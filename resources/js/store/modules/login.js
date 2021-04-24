@@ -10,7 +10,6 @@ const initialState = () => {
     ],
     formSubmitted: false,
     hasErrors: false,
-    JWTToken: '',
   };
 };
 
@@ -72,11 +71,7 @@ const login = {
 
     SUBMIT_FORM: (state, payload) => {
 
-      console.log(payload);
-
       state.formSubmitted = payload.formSubmitted;
-
-      state.JWTToken = JSON.parse(payload.jwt);
     },
 
     SET_ERRORS: (state, payload) => {
@@ -106,7 +101,7 @@ const login = {
         response = await axios(
           {
             method: 'POST',
-            url: '/api/login',
+            url: '/api/auth/login',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -117,10 +112,11 @@ const login = {
             },
           }
         );
-          console.log(response);
+
         if (response.status === 200) {
 
           commit('SUBMIT_FORM', response.data);
+          commit('user/SET_TOKEN', response.data.jwt, { root: true });
         }
 
       } catch (e) {

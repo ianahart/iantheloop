@@ -11,6 +11,7 @@ import login from './modules/login.js';
 import navigation from './modules/navigation.js';
 import hamburgerMenu from './modules/hamburgerMenu.js';
 import createAccount from './modules/createAccount.js';
+import newsFeed from './modules/newsFeed.js';
 
 Vue.use(Vuex);
 
@@ -23,6 +24,7 @@ export default new Vuex.Store(
       navigation,
       hamburgerMenu,
       createAccount,
+      newsFeed,
     },
   }
 );

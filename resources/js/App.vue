@@ -15,12 +15,19 @@ SASS
 import '../sass/app.scss';
 
 export default {
+
+
+
     name: "App",
 
     components: {
         Navbar: () => import("./components/Navigation/Navbar.vue"),
         Footer: () => import('./components/Footer.vue'),
-    }
+    },
+
+    mounted() {
+
+    },
 };
 </script>
 
