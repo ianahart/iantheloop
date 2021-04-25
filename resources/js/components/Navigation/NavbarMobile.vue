@@ -1,11 +1,16 @@
 <template>
   <transition name="fade" appear>
-    <nav class="navbar__entry__mobile">
+    <nav class="navbar__mobile">
       <CloseIcon />
       <div class="navigation__links_container">
         <LogoName />
         <NavigationLinks
-          rootStyle="entry__nav__links__mobile"
+          v-if="!isLoggedIn"
+          rootStyle="nav__links__mobile"
+        />
+        <AuthNavigationLinks
+          v-if="isLoggedIn"
+          rootStyle="nav__links__mobile"
         />
       </div>
     </nav>
@@ -15,14 +20,17 @@
 
 <script>
 
+  import { mapGetters } from 'vuex';
+
   import HamburgerIcon from '../Icons/HamburgerIcon'
   import LogoName from '../Icons/LogoName';
   import CloseIcon from '../Icons/CloseIcon';
   import NavigationLinks from './NavigationLinks';
+  import AuthNavigationLinks from './AuthNavigationLinks';
 
   export default {
 
-    name: 'EntryNavbarMobile',
+    name: 'NavbarMobile',
 
     props: {
 
@@ -34,6 +42,7 @@
       CloseIcon,
       LogoName,
       NavigationLinks,
+      AuthNavigationLinks,
     },
 
     data () {
@@ -53,6 +62,15 @@
 
     beforeDestroy () {
 
+    },
+
+    computed: {
+
+      ...mapGetters('user',
+          [
+            'isLoggedIn',
+          ]
+      )
     },
 
     methods: {
@@ -77,13 +95,12 @@ IMPORTS
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-  .navbar__entry__mobile {
+  .navbar__mobile {
     background-color: $primaryBlack;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 300px;
     z-index: 10;
     box-shadow: 0px 0px 9px 3px rgba(41,41,41,.25);
 
@@ -96,7 +113,7 @@ IMPORTS
     }
     }
 
-    .entry__nav__links__mobile {
+    .nav__links__mobile {
       display: flex;
       flex-direction: column;
       align-items: center;

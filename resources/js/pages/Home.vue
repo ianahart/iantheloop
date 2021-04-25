@@ -1,16 +1,13 @@
 <template>
-  <div class="home-page">
+  <div class="home__container">
     <h1>HOME PAGE</h1>
-    <!-- <AuthHome /> -->
-    <NoAuthHome />
     <router-link :to="{name: 'NewsFeed'}">News feed</router-link>
   </div>
 </template>
 
 <script>
 
-  import AuthHome from '../components/Home/AuthHome.vue';
-  import NoAuthHome from '../components/Home/NoAuthHome.vue';
+
 
   export default {
 
@@ -18,8 +15,6 @@
 
     components: {
 
-      AuthHome,
-      NoAuthHome,
     },
 
     props: {
@@ -40,3 +35,19 @@
   }
 
 </script>
+
+<style lang="scss">
+
+  @import '../../sass/general/_variables.scss';
+
+
+  .home__container {
+    box-sizing: border-box;
+    background-image: url('../../assets/home_bg.svg');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+  }
+</style>

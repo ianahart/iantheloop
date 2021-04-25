@@ -7,6 +7,8 @@
 
 <script>
 
+
+
   export default {
 
     name: 'About',
@@ -31,6 +33,15 @@
     },
 
     mounted () {
+
+    },
+
+    watch: {
+
+    },
+
+    computed: {
+
 
     },
 

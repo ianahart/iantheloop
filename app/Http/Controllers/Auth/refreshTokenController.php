@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use JTWAuth;
+use Namshi\JOSE\JWT;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -22,7 +23,6 @@ class refreshTokenController extends Controller
     {
 
         try {
-
 
             if (!$authenticated = JWTAuth::parseToken()->authenticate()) {
 
@@ -70,8 +70,12 @@ class refreshTokenController extends Controller
         }
     }
 
+
+
     protected function respondWithRefreshToken($token, $TLL)
     {
+
+        error_log(print_r(JWTAuth::user(), true));
 
         return json_encode(
             [
@@ -81,6 +85,7 @@ class refreshTokenController extends Controller
                 'iat' => time(),
                 'exp' =>  time() + $TLL,
                 'user_id' => JWTAuth::user()->id,
+                'name' => JWTAuth::user()->full_name,
             ]
         );
     }

@@ -24,6 +24,14 @@ const user = {
       }
     },
 
+    userName (state) {
+
+      if (state.jwtToken) {
+
+        return JSON.parse(state.jwtToken).name;
+      }
+    },
+
     isLoggedIn (state) {
 
       return !!state.jwtToken;

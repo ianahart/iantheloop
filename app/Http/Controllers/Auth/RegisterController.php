@@ -49,9 +49,9 @@ class RegisterController extends Controller
 
         $user = User::create(
             [
-                'first_name' => strtolower($userData['firstName']) . ' ' . strtolower($userData['lastName']),
-                'last_name' => strtolower($userData['firstName']),
-                'full_name' => strtolower($userData['lastName']),
+                'full_name' => strtolower($userData['firstName']) . ' ' . strtolower($userData['lastName']),
+                'first_name' => strtolower($userData['firstName']),
+                'last_name' => strtolower($userData['lastName']),
                 'email' => strtolower($userData['email']),
                 'password' => Hash::make($userData['password']),
                 'is_logged_in' => false,

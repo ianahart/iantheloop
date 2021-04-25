@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar__entry__desktop">
+  <nav class="navbar__desktop">
     <div class="logo__container">
       <LogoName />
       <HamburgerIcon />
@@ -10,8 +10,12 @@
     &nbsp;
    </p>
     <NavigationLinks
-      v-if="!isMenuIconVisible"
-      rootStyle="entry__nav__links__desktop"
+      v-if="!isMenuIconVisible && !isLoggedIn"
+      rootStyle="nav__links__desktop"
+    />
+    <AuthNavigationLinks
+      v-if="!isMenuIconVisible && isLoggedIn"
+      rootStyle="nav__links__desktop"
     />
   </nav>
 </template>
@@ -19,15 +23,16 @@
 
 <script>
 
-  import { mapState } from 'vuex';
+  import { mapState, mapGetters } from 'vuex';
 
   import HamburgerIcon from '../Icons/HamburgerIcon';
   import LogoName from '../Icons/LogoName';
   import NavigationLinks from './NavigationLinks';
+  import AuthNavigationLinks from './AuthNavigationLinks';
 
   export default {
 
-    name: 'EntryNavbarDesktop',
+    name: 'NavbarDesktop',
 
     props: {
 
@@ -38,6 +43,7 @@
       HamburgerIcon,
       LogoName,
       NavigationLinks,
+      AuthNavigationLinks,
     },
 
     data () {
@@ -60,6 +66,12 @@
     },
 
     computed: {
+
+      ...mapGetters('user',
+          [
+            'isLoggedIn',
+          ]
+      ),
 
       ...mapState('navigation',
         [
@@ -90,19 +102,18 @@ IMPORTS
   @import '../../../sass/general/_base.scss';
 
 
-  .navbar__entry__desktop {
+  .navbar__desktop {
 
     background-color: $primaryBlack;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     padding: 0.1rem 0.7rem;
-    height: 100%;
 
-    p {
-      margin: 1rem auto;
-      text-align: center;
-    }
+      p {
+        margin: 1rem auto;
+        text-align: center;
+      }
     }
 
     .logo__container {
@@ -110,22 +121,18 @@ IMPORTS
       justify-content: space-between;
     }
 
-  .entry__nav__links__desktop {
+  .nav__links__desktop {
       display: flex;
       justify-content: center;
+      align-items: center;
       padding: 0;
       width: 80%;
-      height: 25px;
       margin-bottom: 0;
 
     li {
       margin: 0 0.5rem;
       list-style-type: none;
-      transition: all 0.25s ease-in-out;
-      &:hover {
-        border-bottom: 3px solid $themeGold;
 
-      }
       &:first-of-type {
         margin-right: auto;
       }
@@ -139,6 +146,14 @@ IMPORTS
       font-weight: 100;
       text-decoration: none;
       text-transform: uppercase;
+      transition: all 0.25s ease-in-out;
+      &:hover {
+        border-bottom: 3px solid $themeGold;
+
+      }
+      &:first-of-type {
+        margin-right: auto;
+      }
     }
   }
 

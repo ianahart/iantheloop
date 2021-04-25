@@ -37,7 +37,7 @@ class LoginController extends Controller
 
                 $payload = JWTAuth::attempt($request->form);
 
-                $jwt = $this->createNewToken($payload, $TLL);
+                $jwt = $this->createNewToken($payload, $TLL, $user);
 
                 $this->updateAuthStatus($jwt);
 
@@ -93,16 +93,22 @@ class LoginController extends Controller
         $contents = json_decode($token, true);
 
         User::where('id', '=', $contents['user_id'])
-            ->update(['is_logged_in' => true]);
+            ->update(
+                [
+                    'is_logged_in' => true
+                ]
+            );
     }
 
     /*
      * create new token with payload
      * @param String
+     * @param int
+     * @param object
      * @return string
      */
 
-    protected function createNewToken(string $payload, int $TLL)
+    protected function createNewToken(string $payload, int $TLL, object $user)
     {
 
         return json_encode(
@@ -113,6 +119,7 @@ class LoginController extends Controller
                 'iat' => time(),
                 'exp' => time() + $TLL,
                 'user_id' => JWTAuth::user()->id,
+                'name' => $user->full_name,
             ]
         );
     }

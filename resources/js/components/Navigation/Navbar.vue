@@ -1,14 +1,20 @@
 <template>
     <div class="navbar__parent">
-      <EntryNavbar />
-      <!-- <AuthNavbar /> -->
+     <NavbarDesktop
+      v-if="!isMenuVisible"
+    />
+    <NavbarMobile
+      v-if="isMenuVisible"
+    />
     </div>
 </template>
 
 <script>
 
-  import EntryNavbar from './EntryNavbar.vue';
-  import AuthNavbar from './AuthNavbar.vue';
+
+  import { mapState, mapMutations } from 'vuex';
+  import NavbarDesktop from './NavbarDesktop';
+  import NavbarMobile from './NavbarMobile';
 
   export default {
 
@@ -20,8 +26,8 @@
 
     components: {
 
-      EntryNavbar,
-      AuthNavbar,
+      NavbarDesktop,
+      NavbarMobile,
     },
 
     data () {
@@ -38,7 +44,6 @@
 
     mounted () {
 
-
       window.addEventListener('resize', this.onResize);
     },
 
@@ -46,14 +51,30 @@
 
       window.removeEventListener('resize', this.onResize);
     },
+    computed: {
 
+        ...mapState('hamburgerMenu',
+          [
+            'isMenuIconVisible',
+            'isMenuVisible'
+          ]
+        ),
+    },
     methods: {
+
+        ...mapMutations('profileDropdown',
+          [
+            'CLOSE_PROFILE_DROPDOWN'
+          ]
+        ),
 
       onResize () {
 
         if (window.innerWidth <= 600) {
 
           this.$store.commit('hamburgerMenu/SHOW_MENU_ICON', true);
+
+          this.CLOSE_PROFILE_DROPDOWN(false);
         }
 
         if (window.innerWidth >= 600) {
@@ -61,6 +82,8 @@
           this.$store.commit('hamburgerMenu/HIDE_MENU_ICON', false);
 
           this.$store.commit('hamburgerMenu/HIDE_MENU', false);
+
+
         }
       }
     },
@@ -73,11 +96,7 @@
 IMPORTS
 */
    @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
+   @import '../../../sass/general/_base.scss';
 
-  .navbar__parent {
-
-      height: 55px;
-  }
 
 </style>

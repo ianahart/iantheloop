@@ -2,6 +2,9 @@
 <div class="app__container">
     <div class="app__content">
       <Navbar />
+      <ProfileDropdown
+        v-if="isProfileDropdownOpen"
+      />
       <router-view></router-view>
     </div>
     <Footer />
@@ -14,6 +17,8 @@ SASS
 */
 import '../sass/app.scss';
 
+import { mapState } from 'vuex';
+
 export default {
 
 
@@ -21,11 +26,26 @@ export default {
     name: "App",
 
     components: {
+
         Navbar: () => import("./components/Navigation/Navbar.vue"),
+        ProfileDropdown: () => import('./components/Dropdowns/ProfileDropdown.vue'),
         Footer: () => import('./components/Footer.vue'),
     },
 
     mounted() {
+
+    },
+
+    computed: {
+
+        ...mapState('profileDropdown',
+            [
+                'isProfileDropdownOpen'
+            ]
+          ),
+    },
+
+    methods: {
 
     },
 };
@@ -46,6 +66,7 @@ export default {
         flex: 1;
         display: flex;
         flex-direction: column;
+        position: relative;
     }
     .app__container {
         display: flex;

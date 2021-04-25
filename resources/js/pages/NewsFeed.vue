@@ -3,13 +3,13 @@
     <h1>News feed</h1>
     <p>friend's posts go here</p>
     <p v-for="(name, index) in names" :key="index">{{ name }}</p>
-    <button @click="logout">logout</button>
+
   </div>
 </template>
 
 <script>
 
-  import { mapState, mapActions } from 'vuex';
+  import { mapState, mapActions, mapMutations } from 'vuex';
 
   export default {
 
@@ -49,14 +49,10 @@
 
     methods: {
 
+
       ...mapActions('newsFeed',
         [
           'GET_NAMES',
-        ]
-      ),
-      ...mapActions('user',
-        [
-          'LOGOUT'
         ]
       ),
 
@@ -67,14 +63,7 @@
 
 
 
-        // move logout later
 
-      async logout() {
-
-        await this.LOGOUT();
-
-        this.$router.push({ name: 'Login' });
-      },
     },
   }
 
