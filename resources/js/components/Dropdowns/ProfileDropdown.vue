@@ -9,9 +9,11 @@
     <div class="profile__dropdown__links">
       <ul>
         <li>
-          <div @click="logout" class="profile__dropdown__link">
-            <SignoutIcon />
-            <span>Log Out</span>
+          <div class="profile__dropdown__section">
+            <div @click="logout" class="profile__dropdown__link">
+              <SignoutIcon />
+              <span>Log Out</span>
+            </div>
           </div>
         </li>
       </ul>
@@ -150,6 +152,11 @@
     li {
       list-style-type: none;
     }
+  }
+
+  .profile__dropdown__section {
+
+    border-top: 1px solid darken(#838383, 5);
   }
 
   .profile__dropdown__link {

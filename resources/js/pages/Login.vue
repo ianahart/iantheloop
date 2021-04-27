@@ -16,7 +16,8 @@
           :commitPath="'login/UPDATE_FIELD'"
         />
         <div class="login__button__container">
-          <button>Login Now</button>
+          <button class="button__md">Login Now</button>
+          <router-link class="forgot__password__link" :to="{name: 'ForgotPassword'}">Forgot password?</router-link>
         </div>
       </form>
     </div>
@@ -85,7 +86,8 @@
       ...mapMutations('login',
         [
           'UPDATE_FIELD',
-          'CLEAR_ERROR_MSGS'
+          'CLEAR_ERROR_MSGS',
+          'RESET_LOGIN_MODULE'
         ],
       ),
 
@@ -137,7 +139,7 @@
         if (this.formSubmitted) {
 
           this.SET_AUTH_STATUS(true);
-
+          this.RESET_LOGIN_MODULE();
           this.$router.push({ name: 'Home' });
         }
       },
@@ -150,6 +152,7 @@
 
   @import '../../sass/forms/_inputs.scss';
   @import '../../sass/general/_variables.scss';
+  @import '../../sass/general/_buttons.scss';
 
 
   .login__container {
@@ -189,19 +192,17 @@
 
    button {
 
-     border: none;
      width: 150px;
-     color: $primaryWhite;
-     cursor: pointer;
-     transition: all 0.5s ease-in-out;
-     background-color: $themeBlue;
-     text-transform: uppercase;
-     height: 35px;
-     border-radius: 8px;
+   }
+ }
 
-     &:hover {
-       opacity: 0.7;
-     }
+ .forgot__password__link {
+   font-size: 0.8rem;
+   text-decoration: none;
+   color: darken($themeDarkGreen, 20);
+
+   &:hover {
+     opacity: 0.7;
    }
  }
 

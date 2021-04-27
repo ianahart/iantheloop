@@ -12,8 +12,12 @@ return [
     | and used as needed; however, this mailer will be used by default.
     |
     */
+    // ORIGINAL
+    // 'default' => env('MAIL_MAILER', 'smtp'),
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER', 'mailgun'),
+
+
 
     /*
     |--------------------------------------------------------------------------

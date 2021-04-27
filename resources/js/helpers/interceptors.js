@@ -6,6 +6,9 @@ const UNAUTHORIZED_URLS = [
 
   '/api/auth/login',
   '/api/auth/token/refresh',
+  '/api/auth/recovery',
+  '/api/auth/reset-password/',
+  '/api/auth/reset-password/create',
 ];
 
 export default function setup(store) {
@@ -70,13 +73,17 @@ export default function setup(store) {
 
         originalRequest._retry = true;
 
-        await store.dispatch("user/REFRESH_TOKEN");
+        if (!originalRequest.url.includes('/api/auth/reset-password')) {
 
-        const token = store.getters['user/getToken'];
+          await store.dispatch("user/REFRESH_TOKEN");
 
-        originalRequest.headers.Authorization = `Bearer ${token}`;
+          const token = store.getters['user/getToken'];
+
+          originalRequest.headers.Authorization = `Bearer ${token}`;
 
             return axios(originalRequest);
+        }
+
       }
       return Promise.reject(error);
     }

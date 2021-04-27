@@ -2,8 +2,10 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/images/create_account.svg": "/images/create_account.svg",
+    "/images/forgot_password_bg.svg": "/images/forgot_password_bg.svg",
+    "/images/home_bg.svg": "/images/home_bg.svg",
     "/images/login.svg": "/images/login.svg",
     "/images/looped_logo.png": "/images/looped_logo.png",
     "/images/looped_logo_name.png": "/images/looped_logo_name.png",
-    "/images/home_bg.svg": "/images/home_bg.svg"
+    "/images/reset_password_bg.svg": "/images/reset_password_bg.svg"
 }

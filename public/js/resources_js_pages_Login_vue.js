@@ -73,12 +73,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {},
   mounted: function mounted() {},
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)('createAccount', ['isPasswordShowing'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapMutations)('createAccount', ['TOGGLE_PASSWORD_VISIBILITY'])), {}, {
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(['isPasswordShowing'])),
+  methods: {
     togglePasswordVisibility: function togglePasswordVisibility() {
-      this.TOGGLE_PASSWORD_VISIBILITY();
+      this.$store.commit('CHANGE_PASSWORD_ICON');
+      this.directCorrectToggle();
+    },
+    directCorrectToggle: function directCorrectToggle() {
+      switch (this.$route.name) {
+        case 'ResetPassword':
+          this.$store.dispatch('passwordRecovery/TOGGLE_PASSWORD_VISIBILITY');
+          break;
+
+        case 'CreateAccount':
+          this.$store.dispatch('createAccount/TOGGLE_PASSWORD_VISIBILITY');
+          break;
+      }
     }
-  })
+  }
 });
 
 /***/ }),
@@ -209,7 +221,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     label: String,
     value: String,
     nameAttr: String,
-    commitPath: String
+    commitPath: String,
+    form: String
   },
   components: {
     PasswordIcon: _Icons_PasswordIcon_vue__WEBPACK_IMPORTED_MODULE_0__.default
@@ -225,7 +238,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$store.commit(this.commitPath, {
         field: this.field,
         value: e.target.value,
-        error: ''
+        error: '',
+        form: this.form
       });
     }
   }
@@ -286,6 +300,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 
@@ -306,7 +321,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {},
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)('login', ['form', 'hasErrors', 'formSubmitted'])),
-  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('createAccount', ['RESET_MODULE'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('login', ['UPDATE_FIELD', 'CLEAR_ERROR_MSGS'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('user', ['SET_AUTH_STATUS'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('login', ['SUBMIT_FORM'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('createAccount', ['RESET_MODULE'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('login', ['UPDATE_FIELD', 'CLEAR_ERROR_MSGS', 'RESET_LOGIN_MODULE'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('user', ['SET_AUTH_STATUS'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('login', ['SUBMIT_FORM'])), {}, {
     clearRegistration: function clearRegistration() {
       if (this.$route.query.signup) {
         this.RESET_MODULE();
@@ -353,6 +368,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 5:
                 if (_this2.formSubmitted) {
                   _this2.SET_AUTH_STATUS(true);
+
+                  _this2.RESET_LOGIN_MODULE();
 
                   _this2.$router.push({
                     name: 'Home'
@@ -1127,7 +1144,7 @@ var render = function() {
     _vm.nameAttr === "visiblepassword"
       ? _c("p", { staticClass: "password__instructions" }, [
           _vm._v(
-            "\n      Password must include one uppercase letter, one lowercase letter, one number, and one special character.\n  "
+            "\n      *Password must include one uppercase letter, one lowercase letter, one number, and one special character.\n  "
           )
         ])
       : _vm._e(),
@@ -1199,23 +1216,32 @@ var render = function() {
             })
           }),
           _vm._v(" "),
-          _vm._m(0)
+          _c(
+            "div",
+            { staticClass: "login__button__container" },
+            [
+              _c("button", { staticClass: "button__md" }, [
+                _vm._v("Login Now")
+              ]),
+              _vm._v(" "),
+              _c(
+                "router-link",
+                {
+                  staticClass: "forgot__password__link",
+                  attrs: { to: { name: "ForgotPassword" } }
+                },
+                [_vm._v("Forgot password?")]
+              )
+            ],
+            1
+          )
         ],
         2
       )
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "login__button__container" }, [
-      _c("button", [_vm._v("Login Now")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

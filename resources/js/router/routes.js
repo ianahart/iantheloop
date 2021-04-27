@@ -34,6 +34,16 @@ const routes = [
       requiresAuth: true,
     }
   },
+  {
+    path: '/recovery/create',
+    name: 'ForgotPassword',
+    component: () => import('../pages/ForgotPassword.vue'),
+  },
+  {
+    path: '/reset-password/create',
+    name: 'ResetPassword',
+    component: () => import ('../pages/ResetPassword.vue'),
+  },
 
 ];
 

@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\General\NewsFeedController;
 use App\Http\Controllers\Auth\refreshTokenController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,8 @@ use App\Http\Controllers\Auth\refreshTokenController;
 Route::post('/auth/register', [RegisterController::class, 'store']);
 Route::post('/auth/login', [LoginController::class, 'store']);
 Route::post('/auth/token/refresh', [refreshTokenController::class, 'store']);
+Route::post('/auth/recovery', [ForgotPasswordController::class, 'store']);
+Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 
 
 /*

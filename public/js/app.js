@@ -1993,7 +1993,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var UNAUTHORIZED_URLS = ['/api/auth/login', '/api/auth/token/refresh'];
+var UNAUTHORIZED_URLS = ['/api/auth/login', '/api/auth/token/refresh', '/api/auth/recovery', '/api/auth/reset-password/', '/api/auth/reset-password/create'];
 function setup(store) {
   /**
    *
@@ -2043,23 +2043,29 @@ function setup(store) {
 
             case 7:
               if (!(error.response.status === 401 && !originalRequest._retry)) {
-                _context.next = 14;
+                _context.next = 15;
                 break;
               }
 
               originalRequest._retry = true;
-              _context.next = 11;
+
+              if (originalRequest.url.includes('/api/auth/reset-password')) {
+                _context.next = 15;
+                break;
+              }
+
+              _context.next = 12;
               return store.dispatch("user/REFRESH_TOKEN");
 
-            case 11:
+            case 12:
               token = store.getters['user/getToken'];
               originalRequest.headers.Authorization = "Bearer ".concat(token);
               return _context.abrupt("return", axios__WEBPACK_IMPORTED_MODULE_1___default()(originalRequest));
 
-            case 14:
+            case 15:
               return _context.abrupt("return", Promise.reject(error));
 
-            case 15:
+            case 16:
             case "end":
               return _context.stop();
           }
@@ -2071,6 +2077,59 @@ function setup(store) {
       return _ref.apply(this, arguments);
     };
   }());
+}
+
+/***/ }),
+
+/***/ "./resources/js/helpers/moduleHelpers.js":
+/*!***********************************************!*\
+  !*** ./resources/js/helpers/moduleHelpers.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "updateVisibility": () => (/* binding */ updateVisibility),
+/* harmony export */   "configureFormData": () => (/* binding */ configureFormData)
+/* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function updateVisibility(state, form, isPasswordShowing) {
+  return state[form].map(function (oldField) {
+    var createPasswordShowing = oldField.field === 'password' && isPasswordShowing;
+    var confirmPasswordShowing = oldField.field === 'password_confirmation' && isPasswordShowing;
+
+    if (oldField.field.includes('password') || oldField.field.includes('password_confirmation')) {
+      oldField.type = createPasswordShowing || confirmPasswordShowing ? 'text' : 'password';
+      return oldField;
+    }
+
+    return oldField;
+  });
+}
+function configureFormData(state, form) {
+  var data = state[form].map(function (_ref) {
+    var _ref2;
+
+    var field = _ref.field,
+        value = _ref.value,
+        errors = _ref.errors;
+    return _ref2 = {}, _defineProperty(_ref2, field, value), _defineProperty(_ref2, "errors", errors), _ref2;
+  });
+  return Object.assign.apply(Object, [{}].concat(_toConsumableArray(data)));
 }
 
 /***/ }),
@@ -2181,6 +2240,18 @@ var routes = [{
   meta: {
     requiresAuth: true
   }
+}, {
+  path: '/recovery/create',
+  name: 'ForgotPassword',
+  component: function component() {
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_ForgotPassword_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ForgotPassword.vue */ "./resources/js/pages/ForgotPassword.vue"));
+  }
+}, {
+  path: '/reset-password/create',
+  name: 'ResetPassword',
+  component: function component() {
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_ResetPassword_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ResetPassword.vue */ "./resources/js/pages/ResetPassword.vue"));
+  }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
 
@@ -2197,8 +2268,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_user_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/user.js */ "./resources/js/store/modules/user.js");
 /* harmony import */ var _modules_login_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/login.js */ "./resources/js/store/modules/login.js");
 /* harmony import */ var _modules_navigation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/navigation.js */ "./resources/js/store/modules/navigation.js");
@@ -2206,6 +2277,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_createAccount_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/createAccount.js */ "./resources/js/store/modules/createAccount.js");
 /* harmony import */ var _modules_newsFeed_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/newsFeed.js */ "./resources/js/store/modules/newsFeed.js");
 /* harmony import */ var _modules_profileDropdown_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/profileDropdown.js */ "./resources/js/store/modules/profileDropdown.js");
+/* harmony import */ var _modules_passwordRecovery_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/passwordRecovery.js */ "./resources/js/store/modules/passwordRecovery.js");
 
 
 /*
@@ -2219,8 +2291,17 @@ MODULES
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_7__.default.use(vuex__WEBPACK_IMPORTED_MODULE_8__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_8__.default.Store({
+
+vue__WEBPACK_IMPORTED_MODULE_8__.default.use(vuex__WEBPACK_IMPORTED_MODULE_9__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_9__.default.Store({
+  state: {
+    isPasswordShowing: false
+  },
+  mutations: {
+    CHANGE_PASSWORD_ICON: function CHANGE_PASSWORD_ICON(state) {
+      state.isPasswordShowing = !state.isPasswordShowing;
+    }
+  },
   modules: {
     user: _modules_user_js__WEBPACK_IMPORTED_MODULE_0__.default,
     login: _modules_login_js__WEBPACK_IMPORTED_MODULE_1__.default,
@@ -2228,7 +2309,8 @@ vue__WEBPACK_IMPORTED_MODULE_7__.default.use(vuex__WEBPACK_IMPORTED_MODULE_8__.d
     hamburgerMenu: _modules_hamburgerMenu_js__WEBPACK_IMPORTED_MODULE_3__.default,
     createAccount: _modules_createAccount_js__WEBPACK_IMPORTED_MODULE_4__.default,
     newsFeed: _modules_newsFeed_js__WEBPACK_IMPORTED_MODULE_5__.default,
-    profileDropdown: _modules_profileDropdown_js__WEBPACK_IMPORTED_MODULE_6__.default
+    profileDropdown: _modules_profileDropdown_js__WEBPACK_IMPORTED_MODULE_6__.default,
+    passwordRecovery: _modules_passwordRecovery_js__WEBPACK_IMPORTED_MODULE_7__.default
   }
 }));
 
@@ -2249,6 +2331,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _helpers_moduleHelpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers/moduleHelpers */ "./resources/js/helpers/moduleHelpers.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2268,6 +2351,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -2318,7 +2402,7 @@ var initialState = function initialState() {
     isSubmitted: false,
     isChecked: false,
     checkboxError: '',
-    isPasswordShowing: false,
+    // isPasswordShowing: false,
     emailExistsError: ''
   };
 };
@@ -2350,6 +2434,9 @@ var createAccount = {
     }
   },
   mutations: {
+    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(state, payload) {
+      state.resetForm = (0,_helpers_moduleHelpers__WEBPACK_IMPORTED_MODULE_2__.updateVisibility)(state, 'form', payload.isPasswordShowing);
+    },
     CHECKBOX_ERROR: function CHECKBOX_ERROR(state, payload) {
       state.checkboxError = payload;
     },
@@ -2394,17 +2481,6 @@ var createAccount = {
         }
       });
     },
-    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(state) {
-      state.isPasswordShowing = !state.isPasswordShowing;
-      state.form.forEach(function (oldField) {
-        var createPasswordShowing = oldField.field === 'password' && state.isPasswordShowing;
-        var confirmPasswordShowing = oldField.field === 'password_confirmation' && state.isPasswordShowing;
-
-        if (oldField.field.includes('password') || oldField.field.includes('password_confirmation')) {
-          oldField.type = createPasswordShowing || confirmPasswordShowing ? 'text' : 'password';
-        }
-      });
-    },
     SET_EMAIL_EXISTS_ERROR: function SET_EMAIL_EXISTS_ERROR(state, payload) {
       state.form.forEach(function (oldField) {
         if (oldField.field === 'email') {
@@ -2420,14 +2496,19 @@ var createAccount = {
     }
   },
   actions: {
-    SUBMIT_FORM: function SUBMIT_FORM(_ref2) {
+    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(_ref2) {
+      var rootState = _ref2.rootState,
+          commit = _ref2.commit;
+      commit('TOGGLE_PASSWORD_VISIBILITY', rootState);
+    },
+    SUBMIT_FORM: function SUBMIT_FORM(_ref3) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var getters, state, commit, response, formData, errors;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                getters = _ref2.getters, state = _ref2.state, commit = _ref2.commit;
+                getters = _ref3.getters, state = _ref3.state, commit = _ref3.commit;
                 _context.prev = 1;
                 formData = getters.formData;
                 _context.next = 5;
@@ -2622,6 +2703,7 @@ var login = {
       var keys = Object.keys(payload);
       state.form.forEach(function (field) {
         if (keys.includes(field.field)) {
+          console.log(field.errors);
           field.errors.push(payload[field.field]['errors']);
         }
       });
@@ -2813,6 +2895,259 @@ var newsFeed = {
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (newsFeed);
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/passwordRecovery.js":
+/*!********************************************************!*\
+  !*** ./resources/js/store/modules/passwordRecovery.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers/moduleHelpers.js */ "./resources/js/helpers/moduleHelpers.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+var initialState = function initialState() {
+  return {
+    hasErrors: false,
+    globalResetError: '',
+    messageSent: '',
+    formSubmitted: false,
+    resetToken: '',
+    forgotForm: [{
+      field: 'email',
+      errors: [],
+      label: 'Your Email',
+      value: '',
+      size: 'lg',
+      type: 'text',
+      nameAttr: 'email'
+    }],
+    resetForm: [{
+      field: 'password',
+      errors: [],
+      label: 'New Password',
+      value: '',
+      size: 'lg',
+      type: 'password',
+      nameAttr: 'visiblepassword'
+    }, {
+      field: 'password_confirmation',
+      errors: [],
+      label: 'Confirm Password',
+      value: '',
+      size: 'lg',
+      type: 'password',
+      nameAttr: 'confirm'
+    }]
+  };
+};
+
+var passwordRecovery = {
+  namespaced: true,
+  state: initialState(),
+  getters: {
+    forgetFormData: function forgetFormData(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__.configureFormData)(state, 'forgotForm');
+    },
+    resetFormData: function resetFormData(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__.configureFormData)(state, 'resetForm');
+    }
+  },
+  mutations: {
+    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(state, payload) {
+      state.resetForm = (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__.updateVisibility)(state, 'resetForm', payload.isPasswordShowing);
+    },
+    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
+      state[payload.form].find(function (oldField) {
+        if (oldField.field === payload.field) {
+          oldField.value = payload.value;
+          oldField.errors.push(payload.error);
+          state.hasErrors = oldField.errors.length ? true : false;
+        }
+      });
+    },
+    CLEAR_ERROR_MSGS: function CLEAR_ERROR_MSGS(state) {
+      state.globalResetError = '';
+      state.hasErrors = false;
+      state.resetForm.forEach(function (field) {
+        field.errors = [];
+      });
+      state.forgotForm.forEach(function (field) {
+        field.errors = [];
+      });
+    },
+    SUBMIT_FORM: function SUBMIT_FORM(state, payload) {
+      state.formSubmitted = payload.formSubmitted;
+    },
+    SET_ERRORS: function SET_ERRORS(state, payload) {
+      state.formSubmitted = payload.formSubmitted;
+      state[payload.form].forEach(function (field) {
+        var keys = Object.keys(payload.errors);
+
+        if (keys.includes(field.field)) {
+          var _field$errors;
+
+          (_field$errors = field.errors).push.apply(_field$errors, _toConsumableArray(payload.errors[field.field]));
+        }
+      });
+    },
+    MESSAGE_SENT: function MESSAGE_SENT(state) {
+      state.messageSent = 'Email Sent';
+    },
+    GET_RESET_TOKEN: function GET_RESET_TOKEN(state, payload) {
+      state.resetToken = payload;
+    },
+    RESET_MODULE: function RESET_MODULE(state) {
+      Object.assign(state, initialState());
+    },
+    SET_EXPIRED_MSG: function SET_EXPIRED_MSG(state, payload) {
+      state.globalResetError = payload;
+    }
+  },
+  actions: {
+    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(_ref) {
+      var rootState = _ref.rootState,
+          commit = _ref.commit;
+      commit('TOGGLE_PASSWORD_VISIBILITY', rootState);
+    },
+    SEND_EMAIL: function SEND_EMAIL(_ref2) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var commit, getters, response, formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                commit = _ref2.commit, getters = _ref2.getters;
+                _context.prev = 1;
+                formData = getters.forgetFormData;
+                _context.next = 5;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default()({
+                  method: 'POST',
+                  url: '/api/auth/recovery/',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  data: {
+                    formData: formData,
+                    formName: 'forgotForm'
+                  }
+                });
+
+              case 5:
+                response = _context.sent;
+
+                if (response.status === 200) {
+                  commit('SUBMIT_FORM', response.data);
+                  commit('MESSAGE_SENT');
+                }
+
+                _context.next = 12;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](1);
+
+                if (_context.t0.response.status === 422 || _context.t0.response.status === 404) {
+                  commit('SET_ERRORS', _context.t0.response.data);
+                }
+
+              case 12:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[1, 9]]);
+      }))();
+    },
+    RESET_PASSWORD: function RESET_PASSWORD(_ref3) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var state, commit, getters, response, formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                state = _ref3.state, commit = _ref3.commit, getters = _ref3.getters;
+                _context2.prev = 1;
+                formData = getters.resetFormData;
+                _context2.next = 5;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default()({
+                  method: 'POST',
+                  url: '/api/auth/reset-password/',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  data: {
+                    formData: formData,
+                    formName: 'resetForm',
+                    resetToken: state.resetToken
+                  }
+                });
+
+              case 5:
+                response = _context2.sent;
+
+                if (response.status === 200) {
+                  commit('SUBMIT_FORM', response.data);
+                }
+
+                _context2.next = 13;
+                break;
+
+              case 9:
+                _context2.prev = 9;
+                _context2.t0 = _context2["catch"](1);
+
+                if (_context2.t0.response.status === 422) {
+                  commit('SET_ERRORS', _context2.t0.response.data);
+                }
+
+                if (_context2.t0.response.status < 422) {
+                  commit('SET_EXPIRED_MSG', _context2.t0.response.data.error);
+                }
+
+              case 13:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[1, 9]]);
+      }))();
+    }
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (passwordRecovery);
 
 /***/ }),
 
@@ -37970,7 +38305,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_Home_vue":1,"resources_js_pages_CreateAccount_vue":1,"resources_js_pages_About_vue":1,"resources_js_pages_Login_vue":1,"resources_js_pages_NewsFeed_vue":1,"resources_js_components_Navigation_Navbar_vue":1,"resources_js_components_Dropdowns_ProfileDropdown_vue":1,"resources_js_components_Footer_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_Home_vue":1,"resources_js_pages_CreateAccount_vue":1,"resources_js_pages_About_vue":1,"resources_js_pages_Login_vue":1,"resources_js_pages_NewsFeed_vue":1,"resources_js_pages_ForgotPassword_vue":1,"resources_js_pages_ResetPassword_vue":1,"resources_js_components_Navigation_Navbar_vue":1,"resources_js_components_Dropdowns_ProfileDropdown_vue":1,"resources_js_components_Footer_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

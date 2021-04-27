@@ -42,12 +42,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {},
   mounted: function mounted() {},
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)('createAccount', ['isPasswordShowing'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapMutations)('createAccount', ['TOGGLE_PASSWORD_VISIBILITY'])), {}, {
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)(['isPasswordShowing'])),
+  methods: {
     togglePasswordVisibility: function togglePasswordVisibility() {
-      this.TOGGLE_PASSWORD_VISIBILITY();
+      this.$store.commit('CHANGE_PASSWORD_ICON');
+      this.directCorrectToggle();
+    },
+    directCorrectToggle: function directCorrectToggle() {
+      switch (this.$route.name) {
+        case 'ResetPassword':
+          this.$store.dispatch('passwordRecovery/TOGGLE_PASSWORD_VISIBILITY');
+          break;
+
+        case 'CreateAccount':
+          this.$store.dispatch('createAccount/TOGGLE_PASSWORD_VISIBILITY');
+          break;
+      }
     }
-  })
+  }
 });
 
 /***/ }),
@@ -220,7 +232,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     label: String,
     value: String,
     nameAttr: String,
-    commitPath: String
+    commitPath: String,
+    form: String
   },
   components: {
     PasswordIcon: _Icons_PasswordIcon_vue__WEBPACK_IMPORTED_MODULE_0__.default
@@ -236,7 +249,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$store.commit(this.commitPath, {
         field: this.field,
         value: e.target.value,
-        error: ''
+        error: '',
+        form: this.form
       });
     }
   }
@@ -1306,7 +1320,7 @@ var render = function() {
     _vm.nameAttr === "visiblepassword"
       ? _c("p", { staticClass: "password__instructions" }, [
           _vm._v(
-            "\n      Password must include one uppercase letter, one lowercase letter, one number, and one special character.\n  "
+            "\n      *Password must include one uppercase letter, one lowercase letter, one number, and one special character.\n  "
           )
         ])
       : _vm._e(),

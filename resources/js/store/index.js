@@ -13,11 +13,29 @@ import hamburgerMenu from './modules/hamburgerMenu.js';
 import createAccount from './modules/createAccount.js';
 import newsFeed from './modules/newsFeed.js';
 import profileDropdown from './modules/profileDropdown.js';
+import passwordRecovery from './modules/passwordRecovery.js';
+
 
 Vue.use(Vuex);
 
 export default new Vuex.Store(
   {
+
+    state: {
+
+      isPasswordShowing: false,
+    },
+
+    mutations: {
+
+      CHANGE_PASSWORD_ICON: (state) => {
+
+        state.isPasswordShowing = !state.isPasswordShowing;
+      },
+    },
+
+
+
     modules: {
       user,
       login,
@@ -26,6 +44,7 @@ export default new Vuex.Store(
       createAccount,
       newsFeed,
       profileDropdown,
+      passwordRecovery,
     },
   }
 );

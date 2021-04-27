@@ -14,7 +14,7 @@
 
 <script>
 
-  import { mapMutations, mapState } from 'vuex';
+  import { mapState } from 'vuex';
 
   export default {
 
@@ -45,24 +45,34 @@
 
     computed: {
 
-      ...mapState('createAccount',
+      ...mapState(
         [
           'isPasswordShowing'
         ]
       ),
+
     },
 
     methods: {
 
-      ...mapMutations('createAccount',
-        [
-          'TOGGLE_PASSWORD_VISIBILITY'
-        ]
-      ),
-
       togglePasswordVisibility () {
 
-        this.TOGGLE_PASSWORD_VISIBILITY();
+        this.$store.commit('CHANGE_PASSWORD_ICON')
+
+        this.directCorrectToggle();
+      },
+
+      directCorrectToggle() {
+
+        switch(this.$route.name) {
+
+          case 'ResetPassword':
+            this.$store.dispatch('passwordRecovery/TOGGLE_PASSWORD_VISIBILITY');
+            break;
+          case 'CreateAccount':
+            this.$store.dispatch('createAccount/TOGGLE_PASSWORD_VISIBILITY');
+            break;
+        }
       },
     },
   };

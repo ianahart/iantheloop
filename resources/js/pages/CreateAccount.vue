@@ -217,6 +217,10 @@ IMPORTS
     margin: 2rem auto;
     display:flex;
     justify-content: center;
+
+    button {
+      width: 120px;
+    }
   }
 
   .create__account__input__container_lg {

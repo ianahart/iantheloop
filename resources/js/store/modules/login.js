@@ -83,8 +83,9 @@ const login = {
       state.form.forEach((field) => {
 
         if (keys.includes(field.field)) {
-
+          console.log(field.errors);
           field.errors.push(payload[field.field]['errors']);
+
         }
       });
     },

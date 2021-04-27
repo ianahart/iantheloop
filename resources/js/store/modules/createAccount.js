@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { updateVisibility } from '../../helpers/moduleHelpers';
 
 const initialState = () => {
 
@@ -15,7 +16,7 @@ const initialState = () => {
     isSubmitted: false,
     isChecked: false,
     checkboxError: '',
-    isPasswordShowing: false,
+    // isPasswordShowing: false,
     emailExistsError: '',
   }
 }
@@ -80,6 +81,11 @@ const createAccount = {
   },
 
   mutations: {
+
+    TOGGLE_PASSWORD_VISIBILITY: (state, payload) => {
+
+      state.resetForm = updateVisibility(state, 'form', payload.isPasswordShowing);
+    },
 
     CHECKBOX_ERROR: (state, payload) => {
 
@@ -152,27 +158,6 @@ const createAccount = {
       );
     },
 
-    TOGGLE_PASSWORD_VISIBILITY: (state) => {
-
-      state.isPasswordShowing = !state.isPasswordShowing;
-
-      state.form
-      .forEach(
-          (oldField) => {
-
-            const createPasswordShowing = oldField.field === 'password' && state.isPasswordShowing;
-
-            const confirmPasswordShowing =  oldField.field === 'password_confirmation' && state.isPasswordShowing;
-
-            if (
-                 oldField.field.includes('password') ||
-                 oldField.field.includes('password_confirmation')
-            ) {
-                 oldField.type = createPasswordShowing || confirmPasswordShowing ? 'text' : 'password';
-              }
-          }
-       );
-    },
 
     SET_EMAIL_EXISTS_ERROR: (state, payload) => {
 
@@ -199,6 +184,13 @@ const createAccount = {
   },
 
   actions: {
+
+
+
+      TOGGLE_PASSWORD_VISIBILITY ({ rootState, commit }) {
+
+      commit('TOGGLE_PASSWORD_VISIBILITY', rootState);
+    },
 
      async SUBMIT_FORM ({getters, state, commit }) {
 

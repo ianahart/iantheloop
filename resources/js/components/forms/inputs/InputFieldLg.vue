@@ -33,7 +33,7 @@
       v-if="nameAttr === 'visiblepassword'"
       class="password__instructions"
       >
-        Password must include one uppercase letter, one lowercase letter, one number, and one special character.
+        *Password must include one uppercase letter, one lowercase letter, one number, and one special character.
     </p>
     <div v-if="errors.length">
       <p
@@ -65,6 +65,7 @@
       value: String,
       nameAttr: String,
       commitPath: String,
+      form: String,
 
     },
 
@@ -108,6 +109,7 @@
             field: this.field,
             value: e.target.value,
             error: '',
+            form: this.form,
           }
         );
       }
