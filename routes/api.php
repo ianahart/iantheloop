@@ -10,6 +10,7 @@ use App\Http\Controllers\General\NewsFeedController;
 use App\Http\Controllers\Auth\refreshTokenController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\General\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 */
 
 Route::get('/auth/newsfeed', [NewsFeedController::class, 'index'])->middleware('auth:api');
+Route::post('/auth/profile', [ProfileController::class, 'store'])->middleware('auth:api');
 Route::post('/auth/logout', [LogoutController::class, 'store'])->middleware(('auth:api'));
 
 // Route::middleware('auth:api')->get('/newsfeed', function (Request $request) {

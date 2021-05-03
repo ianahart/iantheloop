@@ -239,7 +239,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         field: this.field,
         value: e.target.value,
         error: '',
-        form: this.form
+        form: this.form ? this.form : null
       });
     }
   }
@@ -320,6 +320,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {},
+  beforeDestroy: function beforeDestroy() {
+    this.RESET_LOGIN_MODULE();
+  },
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapState)('login', ['form', 'hasErrors', 'formSubmitted'])),
   methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('createAccount', ['RESET_MODULE'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('login', ['UPDATE_FIELD', 'CLEAR_ERROR_MSGS', 'RESET_LOGIN_MODULE'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapMutations)('user', ['SET_AUTH_STATUS'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('login', ['SUBMIT_FORM'])), {}, {
     clearRegistration: function clearRegistration() {
@@ -400,7 +403,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/looped_logo.png?8645e1128c42f53c0b56517c3d65add0");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/looped_logo.png?9edb7542e893089a0f55eb4f82fbc18e");
 
 /***/ }),
 

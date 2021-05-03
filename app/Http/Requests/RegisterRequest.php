@@ -46,7 +46,6 @@ class RegisterRequest extends FormRequest
             'formData.firstName.max' => 'First name cannot exceed 40 characters',
             'formData.firstName.regex' => 'First name can only include letters and spaces',
 
-
             'formData.lastName.required' => 'Last name is required',
             'formData.lastName.min' => 'Last name must be at least 2 characters',
             'formData.lastName.max' => 'Last name cannot exceed 80 characters',

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { updateVisibility } from '../../helpers/moduleHelpers';
+import { updateVisibility, inputChange, getFormData } from '../../helpers/moduleHelpers';
 
 const initialState = () => {
 
@@ -57,15 +57,7 @@ const createAccount = {
 
     formData: (state) => {
 
-      const formValues = state.form
-        .map(
-          (field) => {
-
-          return { [field.field]: field.value };
-        }
-      );
-
-      return Object.assign({}, ...formValues);
+     return getFormData(state);
     },
 
     getFieldNames: (state) => {
@@ -141,21 +133,8 @@ const createAccount = {
 
     UPDATE_FIELD: (state, payload) => {
 
-      state
-      .form
-      .find(
-        (oldField) => {
+      inputChange(state, payload);
 
-          if (oldField.field === payload.field) {
-
-              oldField.value = payload.value;
-
-              oldField.errors.push( payload.error);
-
-              state.hasErrors = oldField.errors.length ? true : false;
-          }
-        }
-      );
     },
 
 
@@ -225,6 +204,8 @@ const createAccount = {
             const { errors } = e.response.data;
 
             if (e.response.status === 422) {
+
+              // console.log(e.response.data.errors);
 
               commit('SET_VALIDATION_ERRORS',
                 {

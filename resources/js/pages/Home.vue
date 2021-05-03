@@ -1,53 +1,37 @@
 <template>
-  <div class="home__container">
-    <h1>HOME PAGE</h1>
-    <router-link :to="{name: 'NewsFeed'}">News feed</router-link>
-  </div>
+    <div class="home__container">
+        <h1>HOME PAGE</h1>
+        <router-link :to="{ name: 'NewsFeed' }">News feed</router-link>
+    </div>
 </template>
 
 <script>
+export default {
+    name: "Home",
 
+    components: {},
 
+    props: {},
 
-  export default {
+    created() {},
 
-    name: 'Home',
+    mounted() {},
 
-    components: {
-
-    },
-
-    props: {
-
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    methods: {
-
-    },
-  }
-
+    methods: {}
+};
 </script>
 
 <style lang="scss">
+@import "../../sass/general/_variables.scss";
 
-  @import '../../sass/general/_variables.scss';
-
-
-  .home__container {
+.home__container {
     box-sizing: border-box;
-    background-image: url('../../assets/home_bg.svg');
+    background-image: url("../../assets/home_bg.png");
     width: 100%;
     height: 100%;
     background-size: cover;
+    background-position: center;
     display: flex;
     justify-content: center;
-  }
+}
 </style>

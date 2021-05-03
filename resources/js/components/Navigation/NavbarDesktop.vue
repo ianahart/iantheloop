@@ -1,8 +1,12 @@
 <template>
-  <nav class="navbar__desktop">
+  <nav :class="`navbar__desktop ${navBGC}`">
     <div class="logo__container">
-      <LogoName />
-      <HamburgerIcon />
+      <LogoName
+        :theme="isLoggedIn ? 'dark' : 'light'"
+      />
+      <HamburgerIcon
+      :className="isMenuIconVisible && isLoggedIn ? 'hamburger__menu__icon_dark':'hamburger__menu__icon_light'"
+      />
     </div>
     <p
       v-if="isMenuIconVisible"
@@ -83,6 +87,11 @@
           'isMenuIconVisible'
         ]
       ),
+
+      navBGC () {
+
+        return this.isLoggedIn ? 'logged_in_nav ' : 'default_nav';
+      }
     },
 
     methods: {
@@ -101,10 +110,26 @@ IMPORTS
   @import '../../../sass/general/_variables.scss';
   @import '../../../sass/general/_base.scss';
 
+  .logged_in_nav {
+    background-color: transparent;
+
+    a {
+      color: $primaryBlack
+    }
+  }
+
+  .default_nav {
+    background-color: $primaryBlack;
+
+    a {
+      color: $primaryWhite;
+    }
+  }
+
 
   .navbar__desktop {
 
-    background-color: $primaryBlack;
+    // background-color: $primaryBlack;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -140,15 +165,14 @@ IMPORTS
 
     a {
       font-size: 0.85rem;
-      color: $primaryWhite;
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-family: 'Secular One', sans-serif;
       letter-spacing: 0.1rem;
       font-weight: 100;
       text-decoration: none;
       text-transform: uppercase;
       transition: all 0.25s ease-in-out;
       &:hover {
-        border-bottom: 3px solid $themeGold;
+        border-bottom: 3px solid $themePink;
 
       }
       &:first-of-type {

@@ -2,10 +2,14 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/images/create_account.svg": "/images/create_account.svg",
+    "/images/create_profile_bg.svg": "/images/create_profile_bg.svg",
     "/images/forgot_password_bg.svg": "/images/forgot_password_bg.svg",
-    "/images/home_bg.svg": "/images/home_bg.svg",
+    "/images/home_bg.png": "/images/home_bg.png",
     "/images/login.svg": "/images/login.svg",
     "/images/looped_logo.png": "/images/looped_logo.png",
     "/images/looped_logo_name.png": "/images/looped_logo_name.png",
-    "/images/reset_password_bg.svg": "/images/reset_password_bg.svg"
+    "/images/not_found.jpg": "/images/not_found.jpg",
+    "/images/reset_password_bg.svg": "/images/reset_password_bg.svg",
+    "/images/looped_logo_name_dark.png": "/images/looped_logo_name_dark.png",
+    "/images/looped_logo_name_light.png": "/images/looped_logo_name_light.png"
 }

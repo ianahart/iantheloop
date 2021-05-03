@@ -82,10 +82,11 @@ element-specific
 */
 .home__container {
   box-sizing: border-box;
-  background-image: url(/images/home_bg.svg?36b7089da05c5e36f8a998ed64c31924);
+  background-image: url(/images/home_bg.png?65312ca1578fea42ea181f581b5c2567);
   width: 100%;
   height: 100%;
   background-size: cover;
+  background-position: center;
   display: flex;
   justify-content: center;
 }
@@ -172,69 +173,6 @@ h2 {
     justify-content: space-between;
 }
 }
-/*
-IMPORTS
-*/
-/*
-IMPORTS
-*/
-/*-----------------------------
-      COLORS
-/*-----------------------------
-
-/*
-primaries
-*/
-/*
-errors
-*/
-/*
-
-themes
-*/
-/*
-element-specific
-*/
-.forms__input__field {
-  border: 1px solid #ffc93c;
-}
-.forms__input__error {
-  font-size: 0.85rem;
-  color: #ff0033;
-}
-.forms__input__field_md {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-}
-.forms__input__field_md label {
-  color: #65717c;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-.forms__input__field_md input {
-  border: none;
-  border-radius: 8px;
-  border: 1px solid #e3e2e2;
-  height: 35px;
-  width: 199px;
-}
-.forms__input__field_lg {
-  display: flex;
-  margin: 1.5rem 0;
-  flex-direction: column;
-}
-.forms__input__field_lg label {
-  color: #65717c;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-.forms__input__field_lg input {
-  border: none;
-  border-radius: 8px;
-  border: 1px solid #e3e2e2;
-  height: 35px;
-}
 .logo {
   width: 100px;
   height: 100px;
@@ -303,6 +241,587 @@ element-specific
   font-size: 0.8rem;
   color: #77d2c2;
 }
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.create_profile_sidebar__icon {
+  margin-right: 0.7rem;
+  display: inline-block;
+}
+.create_profile_sidebar__icon svg {
+  display: inline-block;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  color: #3b3b44;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.create_profile_sidebar__section {
+  cursor: pointer;
+  text-align: center;
+  margin: 0.2rem auto;
+}
+.create_profile_sidebar__section h3 {
+  color: #3b3b44;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: inline-block;
+  text-align: left;
+  font-weight: 200;
+  width: 170px;
+  font-size: 1rem;
+}
+.sidebar_current__form {
+  background-color: #484aa4;
+}
+.sidebar_current__form h3 {
+  color: #fff;
+}
+.sidebar_current__form svg {
+  color: #fff;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.create_profile_sidebar__container {
+  background-color: #fff;
+  box-sizing: border-box;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  min-width: 320px;
+  grid-row: 1/5;
+}
+.create_profile_sidebar__container header {
+  margin: 0.5rem auto;
+  color: #cccccc;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 1.4rem;
+  padding: 1rem;
+}
+.create_profile_sidebar__container header h4 {
+  color: #3b3b44;
+}
+@media (max-width: 1090px) {
+.create_profile_sidebar__container {
+    grid-row: auto;
+}
+}
+/*
+IMPORTS
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*Inputs*/
+.forms__input__field {
+  border: 1px solid #fb4d70;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+
+/*Select*/
+.custom-select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+  background-color: #484aa4;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+/*
+IMPORTS
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*Inputs*/
+.forms__input__field {
+  border: 1px solid #fb4d70;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+
+/*Select*/
+.custom-select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+  background-color: #484aa4;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
 /*
 IMPORTS
 */
@@ -334,9 +853,6 @@ element-specific
 /*
 IMPORTS
 */
-/*
-IMPORTS
-*/
 /*-----------------------------
       COLORS
 /*-----------------------------
@@ -354,8 +870,9 @@ themes
 /*
 element-specific
 */
+/*Inputs*/
 .forms__input__field {
-  border: 1px solid #ffc93c;
+  border: 1px solid #fb4d70;
 }
 .forms__input__error {
   font-size: 0.85rem;
@@ -378,10 +895,29 @@ element-specific
   height: 35px;
   width: 199px;
 }
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
 .forms__input__field_lg {
   display: flex;
   margin: 1.5rem 0;
   flex-direction: column;
+  width: 100%;
+  max-width: 400px;
 }
 .forms__input__field_lg label {
   color: #65717c;
@@ -393,6 +929,162 @@ element-specific
   border-radius: 8px;
   border: 1px solid #e3e2e2;
   height: 35px;
+}
+
+/*Select*/
+.custom-select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+  background-color: #484aa4;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
 }
 .password__icon__outer__container {
   position: relative;
@@ -537,9 +1229,6 @@ h2 {
   font-size: 2.25rem;
 }
 
-/*
-IMPORTS
-*/
 /*-----------------------------
       COLORS
 /*-----------------------------
@@ -557,8 +1246,9 @@ themes
 /*
 element-specific
 */
+/*Inputs*/
 .forms__input__field {
-  border: 1px solid #ffc93c;
+  border: 1px solid #fb4d70;
 }
 .forms__input__error {
   font-size: 0.85rem;
@@ -581,10 +1271,29 @@ element-specific
   height: 35px;
   width: 199px;
 }
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
 .forms__input__field_lg {
   display: flex;
   margin: 1.5rem 0;
   flex-direction: column;
+  width: 100%;
+  max-width: 400px;
 }
 .forms__input__field_lg label {
   color: #65717c;
@@ -596,6 +1305,162 @@ element-specific
   border-radius: 8px;
   border: 1px solid #e3e2e2;
   height: 35px;
+}
+
+/*Select*/
+.custom-select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+  background-color: #484aa4;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
 }
 .button__md {
   border: none;
@@ -609,6 +1474,21 @@ element-specific
   margin-bottom: 1rem;
 }
 .button__md:hover {
+  opacity: 0.7;
+}
+.button__lg {
+  border: none;
+  color: #fcfcfc;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  background-color: #31326f;
+  text-transform: uppercase;
+  height: 35px;
+  width: 220px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.button__lg:hover {
   opacity: 0.7;
 }
 .create__account {
@@ -669,9 +1549,6 @@ element-specific
     align-items: center;
 }
 }
-/*
-IMPORTS
-*/
 /*-----------------------------
       COLORS
 /*-----------------------------
@@ -689,8 +1566,9 @@ themes
 /*
 element-specific
 */
+/*Inputs*/
 .forms__input__field {
-  border: 1px solid #ffc93c;
+  border: 1px solid #fb4d70;
 }
 .forms__input__error {
   font-size: 0.85rem;
@@ -713,10 +1591,29 @@ element-specific
   height: 35px;
   width: 199px;
 }
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
 .forms__input__field_lg {
   display: flex;
   margin: 1.5rem 0;
   flex-direction: column;
+  width: 100%;
+  max-width: 400px;
 }
 .forms__input__field_lg label {
   color: #65717c;
@@ -728,6 +1625,162 @@ element-specific
   border-radius: 8px;
   border: 1px solid #e3e2e2;
   height: 35px;
+}
+
+/*Select*/
+.custom-select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+  background-color: #484aa4;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
 }
 
 /*-----------------------------
@@ -759,6 +1812,21 @@ element-specific
   margin-bottom: 1rem;
 }
 .button__md:hover {
+  opacity: 0.7;
+}
+.button__lg {
+  border: none;
+  color: #fcfcfc;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  background-color: #31326f;
+  text-transform: uppercase;
+  height: 35px;
+  width: 220px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.button__lg:hover {
   opacity: 0.7;
 }
 .login__container {
@@ -832,6 +1900,21 @@ element-specific
   margin-bottom: 1rem;
 }
 .button__md:hover {
+  opacity: 0.7;
+}
+.button__lg {
+  border: none;
+  color: #fcfcfc;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  background-color: #31326f;
+  text-transform: uppercase;
+  height: 35px;
+  width: 220px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.button__lg:hover {
   opacity: 0.7;
 }
 .forgot__password__container {
@@ -916,6 +1999,21 @@ element-specific
 .button__md:hover {
   opacity: 0.7;
 }
+.button__lg {
+  border: none;
+  color: #fcfcfc;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  background-color: #31326f;
+  text-transform: uppercase;
+  height: 35px;
+  width: 220px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.button__lg:hover {
+  opacity: 0.7;
+}
 .reset__password__container {
   box-sizing: border-box;
   background-image: url(/images/reset_password_bg.svg?3fa1b89626ff706fecce7e113ab8c9af);
@@ -974,9 +2072,1348 @@ element-specific
   text-align: center;
   font-size: 0.9rem;
 }
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.form__select_sm__container {
+  position: relative;
+}
+.form__select_sm__container p {
+  margin-top: 0.1rem;
+  position: absolute;
+}
+.form__select_sm {
+  color: #4e5760;
+  font-weight: bold;
+  background: linear-gradient(45deg, transparent 50%, #484aa4 50%), linear-gradient(135deg, #484aa4 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
+  background-position: calc(100% - 21px) calc(1em + 2px), calc(100% - 16px) calc(1em + 2px), 100% 0;
+  background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
+  background-repeat: no-repeat;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  border-radius: 8px;
+  padding: 0.5em 3.5em 0.5em 1em;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.form__select_md__container {
+  position: relative;
+}
+.form__select_md__container p {
+  margin-top: 0.1rem;
+  position: absolute;
+}
+.form__select_md {
+  color: #4e5760;
+  font-weight: bold;
+  background: linear-gradient(45deg, transparent 50%, #484aa4 50%), linear-gradient(135deg, #484aa4 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
+  background-position: calc(100% - 21px) calc(1em + 2px), calc(100% - 16px) calc(1em + 2px), 100% 0;
+  background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
+  background-repeat: no-repeat;
+  width: 170px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  border-radius: 8px;
+  padding: 0.5em 3.5em 0.5em 1em;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.chevron__icon {
+  height: 15px;
+  width: 15px;
+  color: #484aa4;
+  padding: 0 0.4rem;
+  pointer-events: none;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.add_url_link__container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25 ease-out;
+}
+.add_url_link__container:hover {
+  opacity: 0.8;
+}
+.add_url_link__container p {
+  margin-left: 0.2rem;
+  color: #4e5760;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.urllinks-enter-active,
+.urllinks-leave-active {
+  transition: all 0.3s ease;
+}
+.urllinks-enter,
+.urllinks-leave-to {
+  opacity: 0;
+  transform: translateX(130px);
+}
+.forms__input__field_link svg {
+  height: 25px;
+  width: 25px;
+  color: #5e6974;
+  cursor: pointer;
+}
+.forms__input__field_link input {
+  width: 75%;
+  border: none;
+  border-bottom: 2px solid #e3e2e2;
+  outline: none;
+  margin: 0.5rem 0;
+}
+.forms__input__field_link input:focus {
+  border-bottom: 2px solid #484aa4;
+}
+@media (max-width: 600px) {
+.forms__input__field_link input {
+    width: 100%;
+}
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.general_details_form__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+.general_details_form__row input:first-of-type {
+  margin-right: 1rem;
+}
+.general_details_form__row select {
+  margin-top: 1rem;
+}
+.general_details_urls__container {
+  margin-top: 1.2rem;
+}
+.general_details_urls__heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.general_details_urls__heading h4 {
+  padding: 0;
+  color: #4e5760;
+  letter-spacing: 0;
+  margin-left: 0.2rem;
+}
+.max_urls {
+  text-align: center;
+  color: #ff0033;
+  font-size: 0.85rem;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*Inputs*/
+.forms__input__field {
+  border: 1px solid #fb4d70;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+
+/*Select*/
+.custom-select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+  background-color: #484aa4;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+.text-area__container {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  height: 150px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.text-area__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.text_area_max_length {
+  font-size: 0.8rem;
+  color: gray;
+  font-style: italic;
+  margin-bottom: 3px;
+}
+.text_area_max_length span {
+  color: #484aa4;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*Inputs*/
+.forms__input__field {
+  border: 1px solid #fb4d70;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+
+/*Select*/
+.custom-select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+  background-color: #484aa4;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.add_interest_container button {
+  color: #3b3b44;
+  border: none;
+  margin-left: 0.3rem;
+  background-color: #e5e5e5;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  height: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);
+}
+.add_interest_container button:hover {
+  background-color: #bfbfbf;
+}
+.add_interest_container input {
+  border: none;
+  border: 1px solid #e3e2e2;
+  height: 30px;
+  border-radius: 8px;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.about_details_interest__container {
+  background-color: #f2f2f2;
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+  min-height: 30px;
+  height: auto;
+  width: 115px;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+.about_details_interest__container p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #4e5760;
+  width: 100%;
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.about_details_interest__container span {
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #474752;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.1rem;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid #474752;
+  position: absolute;
+  top: -2px;
+  left: -1px;
+  transition: all 0.3s ease-out;
+}
+.about_details_interest__container span:hover {
+  background-color: #e5e5e5;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.about_details_interests__container {
+  display: flex;
+  flex-wrap: wrap;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.about_detals_form__row {
+  margin: 2rem 0;
+}
+.about_details_interests {
+  box-sizing: border-box;
+  margin-top: 2rem;
+  border: 1px solid #e3e2e2;
+  padding: 0.7rem;
+  border-radius: 8px;
+  max-width: 420px;
+  min-height: 150px;
+  height: auto;
+}
+.interest_limit {
+  color: #ffcc00;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.create_profile_viewer__container {
+  grid-column: 2/5;
+  grid-row: 1/4;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  max-width: 700px;
+  min-width: 400px;
+}
+.create_profile_viewer__container h1 {
+  margin: 0;
+}
+.create_profile_viewer__container h3 {
+  box-sizing: border-box;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  height: auto;
+  color: #59646e;
+  letter-spacing: 0.15px;
+}
+.create_profile_viewer__content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  padding: 1rem;
+  height: 100%;
+  width: 100%;
+}
+@media (max-width: 1090px) {
+.create_profile_viewer__container {
+    grid-row: auto;
+    grid-column: auto;
+}
+}
+@media (max-width: 862px) {
+.create_profile_viewer__container {
+    grid-column: 1;
+}
+}
+@media (max-width: 600px) {
+.create_profile_viewer__container {
+    min-width: 100%;
+}
+.create_profile_viewer__content {
+    min-width: 100%;
+}
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.create_profile_triggers__container {
+  grid-row: 1/2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.create_profile_triggers__container .create_profile_triggers__flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.create_profile_triggers__container .create_profile_triggers__flex button {
+  text-transform: capitalize;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+}
+.create_profile_triggers__container .create_profile_triggers__flex button:last-of-type {
+  background-color: #f2f2f2;
+  color: #3b3b44;
+}
+@media (max-width: 1204px) {
+.create_profile_triggers__container {
+    grid-row: auto;
+    grid-column: 2;
+}
+}
+@media (max-width: 862px) {
+.create_profile_triggers__container {
+    grid-column: 1;
+    grid-row: 5;
+    margin: 0 auto;
+}
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.create_profile__container {
+  background-image: url(/images/create_profile_bg.svg?47460f0b6b1c2fb30cb365fbc6a35c04);
+  background-size: center;
+  height: 100%;
+  box-sizing: border-box;
+  width: 100%;
+}
+.create_profile__grid {
+  width: 90%;
+  height: 100%;
+  box-sizing: border-box;
+  margin: auto;
+  padding: 2.3rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 2fr 1fr 1fr;
+  gap: 4rem;
+}
+@media (max-width: 1204px) {
+.create_profile__grid {
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr;
+}
+}
+@media (max-width: 862px) {
+.create_profile__grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    padding: 0;
+    padding-top: 2.3rem;
+}
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.not_found__container {
+  background-color: #f2f2f2;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.not_found__content {
+  background-color: #fff;
+  box-sizing: border-box;
+  height: 90%;
+  width: 90%;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.not_found__content h1, .not_found__content h3, .not_found__content p {
+  color: #474752;
+}
+.not_found__content h1 {
+  font-size: 5rem;
+}
+.not_found__content h3 {
+  width: 75%;
+}
+.not_found__links {
+  display: flex;
+  align-items: center;
+}
+.not_found__links a, .not_found__links p {
+  display: block;
+  margin: 0.5rem;
+  color: #ff0033;
+}
+.not_found__links p {
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+.not_found__content {
+    flex-direction: column;
+}
+.not_found__content img {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.not_found__content h3, .not_found__content h1, .not_found__content p {
+    text-align: center;
+}
+.not_found__content h3 {
+    margin: 0 auto;
+}
+.not_found__links {
+    justify-content: center;
+}
+}
 /*
   IMPORTS
 */
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+
 /*-----------------------------
       COLORS
 /*-----------------------------
@@ -1016,11 +3453,6 @@ h6 {
 h1,
 h2 {
   font-size: 2.25rem;
-}
-.hamburger__menu {
-  width: 24px;
-  cursor: pointer;
-  color: #fcfcfc;
 }
 /*
   IMPORTS
@@ -1173,11 +3605,44 @@ themes
 /*
 element-specific
 */
-.messages__icon {
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
   height: 25px;
   width: 25px;
   color: #fcfcfc;
   cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
 }
 /*-----------------------------
       COLORS
@@ -1196,11 +3661,44 @@ themes
 /*
 element-specific
 */
-.notifications__icon {
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
   height: 25px;
   width: 25px;
   color: #fcfcfc;
   cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
 }
 /*
   IMPORTS
@@ -1288,8 +3786,19 @@ h1,
 h2 {
   font-size: 2.25rem;
 }
-.navbar__desktop {
+.logged_in_nav {
+  background-color: transparent;
+}
+.logged_in_nav a {
+  color: #3b3b44;
+}
+.default_nav {
   background-color: #3b3b44;
+}
+.default_nav a {
+  color: #fcfcfc;
+}
+.navbar__desktop {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1320,8 +3829,7 @@ h2 {
 }
 .nav__links__desktop a {
   font-size: 0.85rem;
-  color: #fcfcfc;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Secular One", sans-serif;
   letter-spacing: 0.1rem;
   font-weight: 100;
   text-decoration: none;
@@ -1329,7 +3837,7 @@ h2 {
   transition: all 0.25s ease-in-out;
 }
 .nav__links__desktop a:hover {
-  border-bottom: 3px solid #ffc93c;
+  border-bottom: 3px solid #fb4d70;
 }
 .nav__links__desktop a:first-of-type {
   margin-right: auto;
@@ -1464,12 +3972,12 @@ h2 {
   transition: all 0.25s ease-in-out;
 }
 .nav__links__mobile li:hover {
-  border-bottom: 3px solid #ffc93c;
+  border-bottom: 3px solid #fb4d70;
 }
 .nav__links__mobile a {
   font-size: 0.85rem;
   color: #fcfcfc;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Secular One", sans-serif;
   letter-spacing: 0.1rem;
   font-weight: 100;
   text-decoration: none;
@@ -1563,6 +4071,89 @@ themes
 /*
 element-specific
 */
+.create_profile__icon {
+  width: 25px;
+  height: 25px;
+  color: #fcfcfc;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.friends__icon {
+  width: 25px;
+  height: 25px;
+  color: #fcfcfc;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.search__icon {
+  width: 25px;
+  height: 25px;
+  color: #fcfcfc;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
 .profile__dropdown {
   height: 600px;
   border-radius: 8px;
@@ -1611,12 +4202,16 @@ element-specific
 .profile__dropdown__link:hover {
   background-color: rgba(105, 105, 105, 0.5);
 }
-.profile__dropdown__link span {
+.profile__dropdown__link a {
+  text-decoration: none;
+}
+.profile__dropdown__link span, .profile__dropdown__link a {
   color: #fcfcfc;
   font-size: 0.85rem;
 }
 @media (max-width: 600px) {
 .profile__dropdown {
+    height: auto;
     right: calc(300px - 190px);
     top: 300px;
 }

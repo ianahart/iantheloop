@@ -70,7 +70,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'HamburgerIcon',
-  props: {},
+  props: {
+    className: String
+  },
   components: {},
   data: function data() {
     return {};
@@ -106,7 +108,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'LogoName',
-  props: {},
+  props: {
+    theme: String
+  },
   components: {},
   data: function data() {
     return {};
@@ -139,6 +143,10 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
 //
 //
 //
@@ -222,7 +230,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'MessagesIcon',
-  props: {},
+  props: {
+    className: String
+  },
   components: {},
   data: function data() {
     return {};
@@ -259,7 +269,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'NotificationsIcon',
-  props: {},
+  props: {
+    className: String
+  },
   components: {},
   data: function data() {
     return {};
@@ -440,6 +452,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -460,7 +476,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   created: function created() {},
   mounted: function mounted() {},
   beforeDestroy: function beforeDestroy() {},
-  computed: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('user', ['isLoggedIn'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapState)('navigation', ['navigationLinks'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapState)('hamburgerMenu', ['isMenuIconVisible'])),
+  computed: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('user', ['isLoggedIn'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapState)('navigation', ['navigationLinks'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapState)('hamburgerMenu', ['isMenuIconVisible'])), {}, {
+    navBGC: function navBGC() {
+      return this.isLoggedIn ? 'logged_in_nav ' : 'default_nav';
+    }
+  }),
   methods: {}
 });
 
@@ -489,6 +509,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -601,10 +623,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./resources/assets/looped_logo_name.png":
-/*!***********************************************!*\
-  !*** ./resources/assets/looped_logo_name.png ***!
-  \***********************************************/
+/***/ "./resources/assets/looped_logo_name_dark.png":
+/*!****************************************************!*\
+  !*** ./resources/assets/looped_logo_name_dark.png ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -612,7 +634,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/looped_logo_name.png?e58b45d5b5613a1f86412b71193a4d2d");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/looped_logo_name_dark.png?47ee844e1092ba8d9bfde154773f6f17");
+
+/***/ }),
+
+/***/ "./resources/assets/looped_logo_name_light.png":
+/*!*****************************************************!*\
+  !*** ./resources/assets/looped_logo_name_light.png ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/looped_logo_name_light.png?1ef361fc1d513e428123fe5bd6f23fb9");
 
 /***/ }),
 
@@ -1783,7 +1820,7 @@ var render = function() {
     ? _c(
         "svg",
         {
-          staticClass: "h-6 w-6 hamburger__menu",
+          class: "h-6 w-6 " + _vm.className,
           attrs: {
             xmlns: "http://www.w3.org/2000/svg",
             fill: "none",
@@ -1831,7 +1868,8 @@ var render = function() {
   return _c("div", { staticClass: "company__logo" }, [
     _c("img", {
       attrs: {
-        src: __webpack_require__(/*! ../../../assets/looped_logo_name.png */ "./resources/assets/looped_logo_name.png").default,
+        src: __webpack_require__("./resources/assets sync recursive ^\\.\\/looped_logo_name_.*\\.png$")("./looped_logo_name_" + _vm.theme + ".png")
+          .default,
         alt: "a poligonal vector"
       }
     })
@@ -1890,9 +1928,33 @@ var render = function() {
         )
       }),
       _vm._v(" "),
-      _c("li", [_c("MessagesIcon")], 1),
+      _c(
+        "li",
+        [
+          _c("MessagesIcon", {
+            attrs: {
+              className: !_vm.isMenuVisible
+                ? "messages__icon_dark"
+                : "messages__icon_light"
+            }
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("li", [_c("NotificationsIcon")], 1),
+      _c(
+        "li",
+        [
+          _c("NotificationsIcon", {
+            attrs: {
+              className: !_vm.isMenuVisible
+                ? "notifications__icon_dark"
+                : "notifications__icon_light"
+            }
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("li", [_c("ProfileIcon")], 1)
     ],
@@ -1925,7 +1987,7 @@ var render = function() {
   return _c(
     "svg",
     {
-      staticClass: "h-6 w-6 messages__icon",
+      class: "h-6 w-6 " + _vm.className,
       attrs: {
         xmlns: "http://www.w3.org/2000/svg",
         fill: "none",
@@ -1973,7 +2035,7 @@ var render = function() {
   return _c(
     "svg",
     {
-      staticClass: "h-6 w-6 notifications__icon",
+      class: "h-6 w-6 " + _vm.className,
       attrs: {
         xmlns: "http://www.w3.org/2000/svg",
         fill: "none",
@@ -2112,12 +2174,25 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "nav",
-    { staticClass: "navbar__desktop" },
+    { class: "navbar__desktop " + _vm.navBGC },
     [
       _c(
         "div",
         { staticClass: "logo__container" },
-        [_c("LogoName"), _vm._v(" "), _c("HamburgerIcon")],
+        [
+          _c("LogoName", {
+            attrs: { theme: _vm.isLoggedIn ? "dark" : "light" }
+          }),
+          _vm._v(" "),
+          _c("HamburgerIcon", {
+            attrs: {
+              className:
+                _vm.isMenuIconVisible && _vm.isLoggedIn
+                  ? "hamburger__menu__icon_dark"
+                  : "hamburger__menu__icon_light"
+            }
+          })
+        ],
         1
       ),
       _vm._v(" "),
@@ -2170,7 +2245,7 @@ var render = function() {
           "div",
           { staticClass: "navigation__links_container" },
           [
-            _c("LogoName"),
+            _c("LogoName", { attrs: { theme: "light" } }),
             _vm._v(" "),
             !_vm.isLoggedIn
               ? _c("NavigationLinks", {
@@ -2245,6 +2320,39 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "./resources/assets sync recursive ^\\.\\/looped_logo_name_.*\\.png$":
+/*!***************************************************************!*\
+  !*** ./resources/assets/ sync ^\.\/looped_logo_name_.*\.png$ ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var map = {
+	"./looped_logo_name_dark.png": "./resources/assets/looped_logo_name_dark.png",
+	"./looped_logo_name_light.png": "./resources/assets/looped_logo_name_light.png"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./resources/assets sync recursive ^\\.\\/looped_logo_name_.*\\.png$";
 
 /***/ })
 

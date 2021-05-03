@@ -13,3 +13,20 @@
         opacity: 0.7;
     }
 }
+
+.button__lg {
+    border: none;
+    color: $primaryWhite;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    background-color: $themeBlue;
+    text-transform: uppercase;
+    height: 35px;
+    width: 220px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}

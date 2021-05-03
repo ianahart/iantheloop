@@ -14,6 +14,9 @@ import createAccount from './modules/createAccount.js';
 import newsFeed from './modules/newsFeed.js';
 import profileDropdown from './modules/profileDropdown.js';
 import passwordRecovery from './modules/passwordRecovery.js';
+import createProfile from './modules/createProfile/createProfile.js';
+import generalDetails from './modules/createProfile/generalDetails.js';
+import aboutDetails from './modules/createProfile/aboutDetails.js';
 
 
 Vue.use(Vuex);
@@ -45,6 +48,9 @@ export default new Vuex.Store(
       newsFeed,
       profileDropdown,
       passwordRecovery,
+      createProfile,
+      generalDetails,
+      aboutDetails,
     },
   }
 );

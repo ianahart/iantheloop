@@ -64,6 +64,11 @@
 
     },
 
+    beforeDestroy() {
+
+      this.RESET_LOGIN_MODULE();
+    },
+
     computed: {
 
       ...mapState('login',

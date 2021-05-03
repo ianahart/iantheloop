@@ -1,6 +1,6 @@
 <template>
   <div class="company__logo">
-      <img :src="require('../../../assets/looped_logo_name.png').default" alt="a poligonal vector" />
+      <img :src="require(`../../../assets/looped_logo_name_${theme}.png`).default" alt="a poligonal vector" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@
     name: 'LogoName',
 
     props: {
-
+      theme: String,
     },
 
     components: {

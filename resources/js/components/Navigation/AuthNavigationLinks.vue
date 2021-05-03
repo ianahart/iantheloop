@@ -13,10 +13,14 @@
       </router-link>
     </li>
     <li>
-      <MessagesIcon />
+      <MessagesIcon
+        :className="!isMenuVisible ? 'messages__icon_dark' : 'messages__icon_light'"
+      />
     </li>
     <li>
-      <NotificationsIcon />
+      <NotificationsIcon
+        :className="!isMenuVisible ? 'notifications__icon_dark' : 'notifications__icon_light'"
+      />
     </li>
     <li>
       <!-- If user has profile pic show <img> of user profile pic -->

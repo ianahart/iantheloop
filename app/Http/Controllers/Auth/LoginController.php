@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Namshi\JOSE\JWT;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
 
@@ -117,8 +118,9 @@ class LoginController extends Controller
                 'access_token' => $payload,
                 'token_type' => 'bearer',
                 'iat' => time(),
-                'exp' => time() + $TLL,
+                'exp' => time() + $TLL * 60,
                 'user_id' => JWTAuth::user()->id,
+                'profile_created' => JWTAuth::user()->profile_created,
                 'name' => $user->full_name,
             ]
         );

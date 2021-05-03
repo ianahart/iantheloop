@@ -1,6 +1,8 @@
 
 import axios from 'axios';
 
+import { inputChange, getFormData } from '../../helpers/moduleHelpers.js';
+
 const initialState = () => {
 
   return {
@@ -24,12 +26,7 @@ const login = {
 
     formData: (state) => {
 
-      const data =  state.form.map(({ field, value }) => {
-
-        return {[field]: value};
-      })
-
-      return Object.assign({}, ...data);
+      return getFormData(state);
     }
   },
 
@@ -37,20 +34,7 @@ const login = {
 
     UPDATE_FIELD: (state, payload) => {
 
-      state
-      .form
-      .find((oldField) => {
-
-          if (oldField.field === payload.field) {
-
-              oldField.value = payload.value;
-
-              oldField.errors.push( payload.error);
-
-              state.hasErrors = oldField.errors.length ? true : false;
-          }
-        }
-      );
+      inputChange(state, payload);
     },
 
     RESET_LOGIN_MODULE: (state) => {

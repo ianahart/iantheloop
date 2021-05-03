@@ -26,6 +26,23 @@ const routes = [
       hideForAuth: true,
     },
   },
+    {
+    path: '/recovery/create',
+    name: 'ForgotPassword',
+    component: () => import('../pages/ForgotPassword.vue'),
+    meta: {
+      hideForAuth: true,
+    },
+  },
+  {
+    path: '/reset-password/create',
+    name: 'ResetPassword',
+    component: () => import ('../pages/ResetPassword.vue'),
+    meta: {
+      hideForAuth: true,
+    },
+  },
+
   {
     path: '/newsfeed',
     name: 'NewsFeed',
@@ -35,14 +52,35 @@ const routes = [
     }
   },
   {
-    path: '/recovery/create',
-    name: 'ForgotPassword',
-    component: () => import('../pages/ForgotPassword.vue'),
+    path: '/profile/create',
+    name: 'CreateProfile',
+    component: () => import('../pages/CreateProfile.vue'),
+    meta: {
+      requiresAuth: true,
+    }
   },
   {
-    path: '/reset-password/create',
-    name: 'ResetPassword',
-    component: () => import ('../pages/ResetPassword.vue'),
+    path: '/friends',
+    name: 'Friends',
+    component: () => import('../pages/Friends.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/find-friends',
+    name: 'FindFriends',
+    component: () => import('../pages/FindFriends.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+
+  // Always have NotFound as bottom route
+  {
+    path: '*',
+    name: 'NotFound',
+    component: () => import ('../pages/NotFound.vue'),
   },
 
 ];

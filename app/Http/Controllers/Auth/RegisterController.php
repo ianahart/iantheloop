@@ -24,6 +24,7 @@ class RegisterController extends Controller
 
     public function store(RegisterRequest $request)
     {
+
         $isValidated = false;
 
         $validated = $request->validated();

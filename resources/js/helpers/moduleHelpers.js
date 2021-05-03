@@ -21,6 +21,20 @@ export function updateVisibility (state, form, isPasswordShowing) {
        );
 }
 
+
+// for single form
+export function getFormData (state) {
+
+     const data =  state.form.map(({ field, value }) => {
+
+        return {[field]: value};
+      })
+
+     return Object.assign({}, ...data);
+
+}
+
+// for module with more than one form
 export function configureFormData(state, form) {
 
      const data =  state[form].map(({ field, value, errors }) => {
@@ -34,4 +48,25 @@ export function configureFormData(state, form) {
       return Object.assign({}, ...data);
 }
 
+export function inputChange(state, payload) {
 
+          const form = payload.form !== null ? state[payload.form] : state.form;
+
+          form.find((oldField) => {
+
+               if (oldField.field === payload.field) {
+
+                    oldField.value = payload.value;
+
+                    oldField.errors.push( payload.error);
+
+                    state.hasErrors = oldField.errors.length ? true : false;
+               }
+          }
+     );
+}
+
+export function pluckField (state, target) {
+
+     return state.form.find((field) => field.field === target);
+}

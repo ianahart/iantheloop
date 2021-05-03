@@ -39,7 +39,7 @@ class refreshTokenController extends Controller
 
 
             try {
-                $TLL = 60;
+                $TLL = 20160;
 
                 JWTAuth::factory()->setTTL($TLL);
 
@@ -75,16 +75,15 @@ class refreshTokenController extends Controller
     protected function respondWithRefreshToken($token, $TLL)
     {
 
-        error_log(print_r(JWTAuth::user(), true));
-
         return json_encode(
             [
                 'iss' => 'jwt-auth',
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'iat' => time(),
-                'exp' =>  time() + $TLL,
+                'exp' => time() + $TLL * 60,
                 'user_id' => JWTAuth::user()->id,
+                'profile_created' => JWTAuth::user()->profile_created,
                 'name' => JWTAuth::user()->full_name,
             ]
         );

@@ -10,6 +10,31 @@
       <ul>
         <li>
           <div class="profile__dropdown__section">
+            <div v-if="!getProfileStatus" class="profile__dropdown__link">
+              <CreateProfileIcon />
+              <DropDownLink
+                name="CreateProfile"
+                linkText="Create Profile"
+              />
+            </div>
+            <div v-if="getProfileStatus" class="profile__dropdown__link">
+                <SearchIcon />
+                <DropDownLink
+                  name="FindFriends"
+                  linkText="Find Friends"
+                />
+             </div>
+              <div v-if="getProfileStatus" class="profile__dropdown__link">
+                <FriendsIcon />
+                <DropDownLink
+                  name="Friends"
+                  linkText="Friends"
+                />
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="profile__dropdown__section">
             <div @click="logout" class="profile__dropdown__link">
               <SignoutIcon />
               <span>Log Out</span>
@@ -28,8 +53,12 @@
 
   import ProfileIcon from '../Navigation/LinkIcons/ProfileIcon.vue';
   import SignoutIcon from '../../components/Icons/SignoutIcon.vue';
+  import CreateProfileIcon from '../../components/Icons/CreateProfileIcon.vue';
+  import FriendsIcon from '../../components/Icons/FriendsIcon.vue';
+  import SearchIcon from '../../components/Icons/SearchIcon.vue';
+  import DropDownLink from '../../components/Dropdowns/DropDownLink.vue';
 
-  import { mapMutations, getters, mapGetters, mapActions } from 'vuex';
+  import { mapMutations, mapGetters, mapActions } from 'vuex';
 
   export default {
 
@@ -43,6 +72,10 @@
 
       ProfileIcon,
       SignoutIcon,
+      CreateProfileIcon,
+      FriendsIcon,
+      SearchIcon,
+      DropDownLink,
     },
 
     data () {
@@ -60,11 +93,20 @@
 
     },
 
+    watch:{
+
+      '$route' () {
+
+        this.closeDropdown();
+      },
+    },
+
     computed: {
 
       ...mapGetters('user',
         [
-          'userName'
+          'userName',
+          'getProfileStatus'
         ]
       ),
     },
@@ -171,7 +213,11 @@
       background-color: rgba(105,105,105,0.5);
     }
 
-    span {
+    a {
+      text-decoration: none;
+    }
+
+    span, a {
       color: $primaryWhite;
       font-size: 0.85rem;
     }
@@ -179,7 +225,7 @@
 
   @media(max-width: 600px) {
     .profile__dropdown {
-
+      height: auto;
       right: calc(300px - 190px);
       top: 300px;
     }

@@ -250,7 +250,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         field: this.field,
         value: e.target.value,
         error: '',
-        form: this.form
+        form: this.form ? this.form : null
       });
     }
   }
@@ -315,7 +315,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.commit(this.commitPath, {
         field: this.field,
         value: e.target.value,
-        error: ''
+        error: '',
+        form: this.form ? this.form : null
       });
     }
   }

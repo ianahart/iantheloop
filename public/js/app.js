@@ -2091,7 +2091,10 @@ function setup(store) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "updateVisibility": () => (/* binding */ updateVisibility),
-/* harmony export */   "configureFormData": () => (/* binding */ configureFormData)
+/* harmony export */   "getFormData": () => (/* binding */ getFormData),
+/* harmony export */   "configureFormData": () => (/* binding */ configureFormData),
+/* harmony export */   "inputChange": () => (/* binding */ inputChange),
+/* harmony export */   "pluckField": () => (/* binding */ pluckField)
 /* harmony export */ });
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -2119,17 +2122,42 @@ function updateVisibility(state, form, isPasswordShowing) {
 
     return oldField;
   });
-}
-function configureFormData(state, form) {
-  var data = state[form].map(function (_ref) {
-    var _ref2;
+} // for single form
 
+function getFormData(state) {
+  var data = state.form.map(function (_ref) {
     var field = _ref.field,
-        value = _ref.value,
-        errors = _ref.errors;
-    return _ref2 = {}, _defineProperty(_ref2, field, value), _defineProperty(_ref2, "errors", errors), _ref2;
+        value = _ref.value;
+    return _defineProperty({}, field, value);
   });
   return Object.assign.apply(Object, [{}].concat(_toConsumableArray(data)));
+} // for module with more than one form
+
+function configureFormData(state, form) {
+  var data = state[form].map(function (_ref3) {
+    var _ref4;
+
+    var field = _ref3.field,
+        value = _ref3.value,
+        errors = _ref3.errors;
+    return _ref4 = {}, _defineProperty(_ref4, field, value), _defineProperty(_ref4, "errors", errors), _ref4;
+  });
+  return Object.assign.apply(Object, [{}].concat(_toConsumableArray(data)));
+}
+function inputChange(state, payload) {
+  var form = payload.form !== null ? state[payload.form] : state.form;
+  form.find(function (oldField) {
+    if (oldField.field === payload.field) {
+      oldField.value = payload.value;
+      oldField.errors.push(payload.error);
+      state.hasErrors = oldField.errors.length ? true : false;
+    }
+  });
+}
+function pluckField(state, target) {
+  return state.form.find(function (field) {
+    return field.field === target;
+  });
 }
 
 /***/ }),
@@ -2232,6 +2260,24 @@ var routes = [{
     hideForAuth: true
   }
 }, {
+  path: '/recovery/create',
+  name: 'ForgotPassword',
+  component: function component() {
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_ForgotPassword_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ForgotPassword.vue */ "./resources/js/pages/ForgotPassword.vue"));
+  },
+  meta: {
+    hideForAuth: true
+  }
+}, {
+  path: '/reset-password/create',
+  name: 'ResetPassword',
+  component: function component() {
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_ResetPassword_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ResetPassword.vue */ "./resources/js/pages/ResetPassword.vue"));
+  },
+  meta: {
+    hideForAuth: true
+  }
+}, {
   path: '/newsfeed',
   name: 'NewsFeed',
   component: function component() {
@@ -2241,16 +2287,38 @@ var routes = [{
     requiresAuth: true
   }
 }, {
-  path: '/recovery/create',
-  name: 'ForgotPassword',
+  path: '/profile/create',
+  name: 'CreateProfile',
   component: function component() {
-    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_ForgotPassword_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ForgotPassword.vue */ "./resources/js/pages/ForgotPassword.vue"));
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_CreateProfile_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/CreateProfile.vue */ "./resources/js/pages/CreateProfile.vue"));
+  },
+  meta: {
+    requiresAuth: true
   }
 }, {
-  path: '/reset-password/create',
-  name: 'ResetPassword',
+  path: '/friends',
+  name: 'Friends',
   component: function component() {
-    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_ResetPassword_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/ResetPassword.vue */ "./resources/js/pages/ResetPassword.vue"));
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_Friends_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/Friends.vue */ "./resources/js/pages/Friends.vue"));
+  },
+  meta: {
+    requiresAuth: true
+  }
+}, {
+  path: '/find-friends',
+  name: 'FindFriends',
+  component: function component() {
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_FindFriends_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/FindFriends.vue */ "./resources/js/pages/FindFriends.vue"));
+  },
+  meta: {
+    requiresAuth: true
+  }
+}, // Always have NotFound as bottom route
+{
+  path: '*',
+  name: 'NotFound',
+  component: function component() {
+    return Promise.all(/*! import() */[__webpack_require__.e("css/app"), __webpack_require__.e("resources_js_pages_NotFound_vue")]).then(__webpack_require__.bind(__webpack_require__, /*! ../pages/NotFound.vue */ "./resources/js/pages/NotFound.vue"));
   }
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
@@ -2268,8 +2336,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_user_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/user.js */ "./resources/js/store/modules/user.js");
 /* harmony import */ var _modules_login_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/login.js */ "./resources/js/store/modules/login.js");
 /* harmony import */ var _modules_navigation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/navigation.js */ "./resources/js/store/modules/navigation.js");
@@ -2278,6 +2346,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_newsFeed_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/newsFeed.js */ "./resources/js/store/modules/newsFeed.js");
 /* harmony import */ var _modules_profileDropdown_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/profileDropdown.js */ "./resources/js/store/modules/profileDropdown.js");
 /* harmony import */ var _modules_passwordRecovery_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/passwordRecovery.js */ "./resources/js/store/modules/passwordRecovery.js");
+/* harmony import */ var _modules_createProfile_createProfile_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/createProfile/createProfile.js */ "./resources/js/store/modules/createProfile/createProfile.js");
+/* harmony import */ var _modules_createProfile_generalDetails_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/createProfile/generalDetails.js */ "./resources/js/store/modules/createProfile/generalDetails.js");
+/* harmony import */ var _modules_createProfile_aboutDetails_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/createProfile/aboutDetails.js */ "./resources/js/store/modules/createProfile/aboutDetails.js");
 
 
 /*
@@ -2292,8 +2363,11 @@ MODULES
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_8__.default.use(vuex__WEBPACK_IMPORTED_MODULE_9__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_9__.default.Store({
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_11__.default.use(vuex__WEBPACK_IMPORTED_MODULE_12__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_12__.default.Store({
   state: {
     isPasswordShowing: false
   },
@@ -2310,7 +2384,10 @@ vue__WEBPACK_IMPORTED_MODULE_8__.default.use(vuex__WEBPACK_IMPORTED_MODULE_9__.d
     createAccount: _modules_createAccount_js__WEBPACK_IMPORTED_MODULE_4__.default,
     newsFeed: _modules_newsFeed_js__WEBPACK_IMPORTED_MODULE_5__.default,
     profileDropdown: _modules_profileDropdown_js__WEBPACK_IMPORTED_MODULE_6__.default,
-    passwordRecovery: _modules_passwordRecovery_js__WEBPACK_IMPORTED_MODULE_7__.default
+    passwordRecovery: _modules_passwordRecovery_js__WEBPACK_IMPORTED_MODULE_7__.default,
+    createProfile: _modules_createProfile_createProfile_js__WEBPACK_IMPORTED_MODULE_8__.default,
+    generalDetails: _modules_createProfile_generalDetails_js__WEBPACK_IMPORTED_MODULE_9__.default,
+    aboutDetails: _modules_createProfile_aboutDetails_js__WEBPACK_IMPORTED_MODULE_10__.default
   }
 }));
 
@@ -2422,10 +2499,7 @@ var createAccount = {
       });
     },
     formData: function formData(state) {
-      var formValues = state.form.map(function (field) {
-        return _defineProperty({}, field.field, field.value);
-      });
-      return Object.assign.apply(Object, [{}].concat(_toConsumableArray(formValues)));
+      return (0,_helpers_moduleHelpers__WEBPACK_IMPORTED_MODULE_2__.getFormData)(state);
     },
     getFieldNames: function getFieldNames(state) {
       return state.form.map(function (field) {
@@ -2473,13 +2547,7 @@ var createAccount = {
       });
     },
     UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
-      state.form.find(function (oldField) {
-        if (oldField.field === payload.field) {
-          oldField.value = payload.value;
-          oldField.errors.push(payload.error);
-          state.hasErrors = oldField.errors.length ? true : false;
-        }
-      });
+      (0,_helpers_moduleHelpers__WEBPACK_IMPORTED_MODULE_2__.inputChange)(state, payload);
     },
     SET_EMAIL_EXISTS_ERROR: function SET_EMAIL_EXISTS_ERROR(state, payload) {
       state.form.forEach(function (oldField) {
@@ -2496,19 +2564,19 @@ var createAccount = {
     }
   },
   actions: {
-    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(_ref2) {
-      var rootState = _ref2.rootState,
-          commit = _ref2.commit;
+    TOGGLE_PASSWORD_VISIBILITY: function TOGGLE_PASSWORD_VISIBILITY(_ref) {
+      var rootState = _ref.rootState,
+          commit = _ref.commit;
       commit('TOGGLE_PASSWORD_VISIBILITY', rootState);
     },
-    SUBMIT_FORM: function SUBMIT_FORM(_ref3) {
+    SUBMIT_FORM: function SUBMIT_FORM(_ref2) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var getters, state, commit, response, formData, errors;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                getters = _ref3.getters, state = _ref3.state, commit = _ref3.commit;
+                getters = _ref2.getters, state = _ref2.state, commit = _ref2.commit;
                 _context.prev = 1;
                 formData = getters.formData;
                 _context.next = 5;
@@ -2540,6 +2608,7 @@ var createAccount = {
                 errors = _context.t0.response.data.errors;
 
                 if (_context.t0.response.status === 422) {
+                  // console.log(e.response.data.errors);
                   commit('SET_VALIDATION_ERRORS', {
                     errors: errors,
                     fields: getters.getFieldNames
@@ -2561,6 +2630,456 @@ var createAccount = {
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createAccount);
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/createProfile/aboutDetails.js":
+/*!******************************************************************!*\
+  !*** ./resources/js/store/modules/createProfile/aboutDetails.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/moduleHelpers.js */ "./resources/js/helpers/moduleHelpers.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+var initialState = function initialState() {
+  return {
+    form: [{
+      field: 'bio',
+      errors: [],
+      label: 'Bio',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'bio'
+    }, {
+      field: 'relationship',
+      errors: [],
+      label: 'Relationship Status',
+      value: '',
+      size: 'md',
+      type: 'radio',
+      nameAttr: 'relationship',
+      statuses: ['Single', 'In a relationship', 'Married', 'Divorced']
+    }, {
+      field: 'interests',
+      errors: [],
+      label: 'Interests',
+      value: '',
+      size: 'sm',
+      type: 'text',
+      nameAttr: 'interests',
+      interests: []
+    }],
+    interestsCounter: 0
+  };
+};
+
+var aboutDetails = {
+  namespaced: true,
+  state: initialState(),
+  getters: {
+    getAboutDetails: function getAboutDetails(state) {
+      var prop;
+      var data = state.form.map(function (_ref, index) {
+        var field = _ref.field,
+            value = _ref.value;
+        prop = value;
+
+        if (field === 'interests') {
+          prop = state.form[index].interests; // prop = state.form[index].interests.map((obj) => obj.name);
+        }
+
+        return _defineProperty({}, field, prop);
+      });
+      return Object.assign.apply(Object, [{}].concat(_toConsumableArray(data)));
+    },
+    getBio: function getBio(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'bio');
+    },
+    getRelationship: function getRelationship(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'relationship');
+    },
+    getInterests: function getInterests(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'interests');
+    }
+  },
+  mutations: {
+    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
+      (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.inputChange)(state, payload);
+    },
+    ADD_INTEREST: function ADD_INTEREST(state, payload) {
+      for (var i = 0; i < state.form.length; i++) {
+        if (state.form[i].field === 'interests') {
+          state.form[i].value = '';
+
+          if (state.form[i].interests.length < 5) {
+            state.interestsCounter++;
+            state.form[i].interests.push({
+              name: payload,
+              id: state.interestsCounter
+            });
+          }
+        }
+      }
+    },
+    REMOVE_INTEREST: function REMOVE_INTEREST(state, payload) {
+      var interests;
+
+      for (var i = 0; i < state.form.length; i++) {
+        if (state.form[i].field === 'interests') {
+          interests = state.form[i].interests;
+
+          for (var j = 0; j < interests.length; j++) {
+            if (interests[j].id === payload) {
+              interests.splice(interests.indexOf(interests[j]), 1);
+            }
+          }
+        }
+      }
+    },
+    INTEREST_INPUT_CHANGE: function INTEREST_INPUT_CHANGE(state, payload) {
+      for (var i = 0; i < state.form.length; i++) {
+        if (state.form[i].field === 'interests') {
+          state.form[i].value = payload;
+        }
+      }
+    },
+    RESET_MODULE: function RESET_MODULE(state) {
+      Object.assign(state, initialState());
+    },
+    CLEAR_ERROR_MSGS: function CLEAR_ERROR_MSGS(state) {
+      state.form.forEach(function (field) {
+        field.errors = [];
+      });
+    },
+    SET_ERRORS: function SET_ERRORS(state, payload) {
+      state.form.forEach(function (input, fIdx) {
+        payload.forEach(function (error, pIdx) {
+          var key = Object.keys(error);
+
+          if (input.field === key.toString()) {
+            var _state$form$fIdx$erro;
+
+            if (!(_state$form$fIdx$erro = state.form[fIdx].errors).includes.apply(_state$form$fIdx$erro, _toConsumableArray(payload[pIdx][input.field]))) {
+              var _state$form$fIdx$erro2;
+
+              (_state$form$fIdx$erro2 = state.form[fIdx].errors).push.apply(_state$form$fIdx$erro2, _toConsumableArray(payload[pIdx][input.field]));
+            }
+          }
+        });
+      });
+    }
+  },
+  actions: {}
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (aboutDetails);
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/createProfile/createProfile.js":
+/*!*******************************************************************!*\
+  !*** ./resources/js/store/modules/createProfile/createProfile.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+var initialState = function initialState() {
+  return {
+    currentForm: 'general details'
+  };
+};
+
+var createProfile = {
+  namespaced: true,
+  state: initialState(),
+  getters: {
+    getCurrentForm: function getCurrentForm(state) {
+      var currentForm = state.currentForm.split(' ').map(function (word) {
+        return word.slice(0, 1).toUpperCase() + word.slice(1);
+      });
+      return currentForm.join(' ');
+    }
+  },
+  mutations: {
+    SET_CURRENT_FORM: function SET_CURRENT_FORM(state, payload) {
+      state.currentForm = payload;
+    },
+    RESET_MODULE: function RESET_MODULE(state) {
+      Object.assign(state, initialState());
+    }
+  },
+  actions: {
+    CREATE_PROFILE: function CREATE_PROFILE(_ref) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var commit, getters, rootGetters, response, forms, fields, field, form, _form;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                commit = _ref.commit, getters = _ref.getters, rootGetters = _ref.rootGetters;
+                _context.prev = 1;
+                _context.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default()({
+                  url: '/api/auth/profile',
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                  },
+                  data: {
+                    generalDetails: rootGetters['generalDetails/getGeneralDetails'],
+                    aboutDetails: rootGetters['aboutDetails/getAboutDetails']
+                  }
+                });
+
+              case 4:
+                response = _context.sent;
+                console.log(response); // let stringifiedUser = localStorage.getItem('user');
+                // const parsedUser = JSON.parse(stringifiedUser);
+                // parsedUser.profile_created = response.data.profileCreated;
+                // commit('user/SET_TOKEN', JSON.stringify(parsedUser), { root: true });
+
+                _context.next = 15;
+                break;
+
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context["catch"](1);
+                forms = {
+                  aboutDetails: [],
+                  // customize: [],
+                  generalDetails: [] // workDetails: [],
+
+                };
+                fields = _context.t0.response.data.errors;
+
+                for (field in fields) {
+                  form = field.split('.')[0];
+
+                  if (Object.keys(forms).includes(form)) {
+                    forms[form].push(_defineProperty({}, field.split('.')[1], fields[field]));
+                  }
+                }
+
+                console.log('Create Profile Errors: ', _context.t0.response);
+                /**Test a single form**/
+                // commit('generalDetails/SET_ERRORS', forms.generalDetails, {root: true});
+
+                for (_form in forms) {
+                  commit("".concat(_form, "/SET_ERRORS"), forms[_form], {
+                    root: true
+                  });
+                }
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[1, 8]]);
+      }))();
+    }
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createProfile);
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/createProfile/generalDetails.js":
+/*!********************************************************************!*\
+  !*** ./resources/js/store/modules/createProfile/generalDetails.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/moduleHelpers.js */ "./resources/js/helpers/moduleHelpers.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+var initialState = function initialState() {
+  return {
+    form: [{
+      field: 'displayname',
+      errors: [],
+      label: 'Display Name',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'displayname'
+    }, {
+      field: 'town',
+      errors: [],
+      label: 'Town',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'town'
+    }, {
+      field: 'state',
+      errors: [],
+      label: 'State',
+      value: '',
+      size: 'sm',
+      type: 'text',
+      nameAttr: 'state'
+    }, {
+      field: 'country',
+      errors: [],
+      label: 'Country',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'country'
+    }, {
+      field: 'phone',
+      errors: [],
+      label: 'Phone',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'phone'
+    }],
+    generatedFieldsCounter: 0,
+    formSubmitted: false,
+    hasErrors: false
+  };
+};
+
+var generalDetails = {
+  namespaced: true,
+  state: initialState(),
+  getters: {
+    getGeneralDetails: function getGeneralDetails(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.getFormData)(state);
+    },
+    getDisplayName: function getDisplayName(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'displayname');
+    },
+    getTown: function getTown(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'town');
+    },
+    getState: function getState(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'state');
+    },
+    getCountry: function getCountry(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'country');
+    },
+    getPhone: function getPhone(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'phone');
+    },
+    getLinks: function getLinks(state) {
+      return state.form.filter(function (field) {
+        return field.field.includes('url-');
+      });
+    }
+  },
+  mutations: {
+    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
+      (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.inputChange)(state, payload);
+    },
+    ADD_FIELD: function ADD_FIELD(state, payload) {
+      state.generatedFieldsCounter++;
+      state.form.push({
+        field: "url-".concat(state.generatedFieldsCounter),
+        errors: [],
+        label: 'Link',
+        value: '',
+        size: 'lg',
+        type: 'text',
+        id: state.generatedFieldsCounter,
+        nameAttr: "url-".concat(state.generatedFieldsCounter)
+      });
+    },
+    REMOVE_LINK: function REMOVE_LINK(state, payload) {
+      state.form = state.form.filter(function (field) {
+        return field.id !== payload;
+      });
+    },
+    RESET_MODULE: function RESET_MODULE(state) {
+      Object.assign(state, initialState());
+    },
+    CLEAR_ERROR_MSGS: function CLEAR_ERROR_MSGS(state) {
+      state.form.forEach(function (field) {
+        field.errors = [];
+      });
+    },
+    SET_ERRORS: function SET_ERRORS(state, payload) {
+      state.form.forEach(function (input, fIdx) {
+        payload.forEach(function (error, pIdx) {
+          var key = Object.keys(error);
+
+          if (input.field === key.toString()) {
+            var _state$form$fIdx$erro;
+
+            (_state$form$fIdx$erro = state.form[fIdx].errors).push.apply(_state$form$fIdx$erro, _toConsumableArray(payload[pIdx][input.field]));
+          }
+        });
+      });
+    }
+  },
+  actions: {}
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (generalDetails);
 
 /***/ }),
 
@@ -2617,25 +3136,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers/moduleHelpers.js */ "./resources/js/helpers/moduleHelpers.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -2668,23 +3175,12 @@ var login = {
   state: initialState(),
   getters: {
     formData: function formData(state) {
-      var data = state.form.map(function (_ref) {
-        var field = _ref.field,
-            value = _ref.value;
-        return _defineProperty({}, field, value);
-      });
-      return Object.assign.apply(Object, [{}].concat(_toConsumableArray(data)));
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__.getFormData)(state);
     }
   },
   mutations: {
     UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
-      state.form.find(function (oldField) {
-        if (oldField.field === payload.field) {
-          oldField.value = payload.value;
-          oldField.errors.push(payload.error);
-          state.hasErrors = oldField.errors.length ? true : false;
-        }
-      });
+      (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__.inputChange)(state, payload);
     },
     RESET_LOGIN_MODULE: function RESET_LOGIN_MODULE(state) {
       Object.assign(state, initialState());
@@ -2710,14 +3206,14 @@ var login = {
     }
   },
   actions: {
-    SUBMIT_FORM: function SUBMIT_FORM(_ref3) {
+    SUBMIT_FORM: function SUBMIT_FORM(_ref) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var getters, state, commit, response, form;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                getters = _ref3.getters, state = _ref3.state, commit = _ref3.commit;
+                getters = _ref.getters, state = _ref.state, commit = _ref.commit;
                 _context.prev = 1;
                 form = getters.formData;
                 _context.next = 5;
@@ -2987,13 +3483,7 @@ var passwordRecovery = {
       state.resetForm = (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__.updateVisibility)(state, 'resetForm', payload.isPasswordShowing);
     },
     UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
-      state[payload.form].find(function (oldField) {
-        if (oldField.field === payload.field) {
-          oldField.value = payload.value;
-          oldField.errors.push(payload.error);
-          state.hasErrors = oldField.errors.length ? true : false;
-        }
-      });
+      (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_2__.inputChange)(state, payload);
     },
     CLEAR_ERROR_MSGS: function CLEAR_ERROR_MSGS(state) {
       state.globalResetError = '';
@@ -3229,6 +3719,11 @@ var user = {
     getToken: function getToken(state) {
       if (state.jwtToken) {
         return JSON.parse(state.jwtToken).access_token;
+      }
+    },
+    getProfileStatus: function getProfileStatus(state) {
+      if (state.jwtToken) {
+        return JSON.parse(state.jwtToken).profile_created;
       }
     },
     userName: function userName(state) {
@@ -38305,7 +38800,7 @@ var index = {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_pages_Home_vue":1,"resources_js_pages_CreateAccount_vue":1,"resources_js_pages_About_vue":1,"resources_js_pages_Login_vue":1,"resources_js_pages_NewsFeed_vue":1,"resources_js_pages_ForgotPassword_vue":1,"resources_js_pages_ResetPassword_vue":1,"resources_js_components_Navigation_Navbar_vue":1,"resources_js_components_Dropdowns_ProfileDropdown_vue":1,"resources_js_components_Footer_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_pages_Home_vue":1,"resources_js_pages_CreateAccount_vue":1,"resources_js_pages_About_vue":1,"resources_js_pages_Login_vue":1,"resources_js_pages_ForgotPassword_vue":1,"resources_js_pages_ResetPassword_vue":1,"resources_js_pages_NewsFeed_vue":1,"resources_js_pages_CreateProfile_vue":1,"resources_js_pages_Friends_vue":1,"resources_js_pages_FindFriends_vue":1,"resources_js_pages_NotFound_vue":1,"resources_js_components_Navigation_Navbar_vue":1,"resources_js_components_Dropdowns_ProfileDropdown_vue":1,"resources_js_components_Footer_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

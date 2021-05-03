@@ -59,7 +59,7 @@
 
     methods: {
 
-      updateFieldValue(e) {
+       updateFieldValue(e) {
 
         this
         .$store
@@ -68,9 +68,11 @@
             field: this.field,
             value: e.target.value,
             error: '',
+            form: this.form ? this.form : null,
           }
         );
-      },
+      }
+
     },
   };
 

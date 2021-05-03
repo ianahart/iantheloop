@@ -1,11 +1,8 @@
-/*
-IMPORTS
-*/
-
 @import "../general/_variables.scss";
 
+/*Inputs*/
 .forms__input__field {
-    border: 1px solid $themeGold;
+    border: 1px solid $themePink;
 }
 
 .forms__input__error {
@@ -33,10 +30,32 @@ IMPORTS
     }
 }
 
+.forms__input__field_sm {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+
+    label {
+        color: lighten($mainInputLabel, 10);
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+
+    input {
+        border: none;
+        border-radius: 8px;
+        border: 1px solid $mainInputBorder;
+        height: 35px;
+        width: 75px;
+    }
+}
+
 .forms__input__field_lg {
     display: flex;
     margin: 1.5rem 0;
     flex-direction: column;
+    width: 100%;
+    max-width: 400px;
 
     label {
         color: lighten($mainInputLabel, 10);
@@ -50,4 +69,173 @@ IMPORTS
         border: 1px solid $mainInputBorder;
         height: 35px;
     }
+}
+
+/*Select*/
+.custom-select_size__md {
+    width: 200px;
+}
+
+.custom-select_size__lg {
+    width: 300px;
+    max-width: 300px;
+}
+
+.custom_select__container {
+    height: 35px;
+    border-radius: 8px;
+    padding: 0 0.3rem;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    position: relative;
+
+    div {
+        &:first-of-type {
+            border: 1px solid $mainInputBorder;
+            border-radius: 8px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &:nth-child(2) {
+            box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            width: 100%;
+            position: absolute;
+            z-index: 10;
+            height: 400px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            right: 3%;
+            background-color: $primaryBlack;
+
+            &::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: darken($primaryBlack, 10);
+                border-radius: 8px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: $themeBlue;
+                border-radius: 20px;
+                border: 3px solid darken($primaryBlack, 10);
+            }
+
+            option {
+                width: 100%;
+                text-align: center;
+                color: #fff;
+                margin: 0.2rem 0;
+                transition: all 0.25s ease-out;
+                cursor: pointer;
+                padding: 0.2rem 0.2rem;
+                font-size: 0.8rem;
+
+                &:hover {
+                    background-color: $themeLightBlue;
+                }
+            }
+        }
+    }
+
+    p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: lighten($mainInputLabel, 10);
+        font-weight: bold;
+        font-size: 0.85rem;
+        pointer-events: none;
+    }
+}
+
+/*Textarea*/
+.textarea {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: 1px solid $mainInputBorder;
+    border-radius: 8px;
+    outline: none;
+    &:focus {
+        border: 2px solid $themeLightBlue;
+    }
+}
+
+/**Radio Btn**/
+.radio_input__container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    label {
+        color: lighten($mainInputLabel, 10);
+        font-weight: bold;
+        font-size: 0.85rem;
+    }
+}
+
+/* Hide the browser's default radio button */
+.radio_input__container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio_input__container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio_input__container input:checked ~ .checkmark {
+    background-color: $themeLightBlue;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio_input__container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio_input__container .checkmark:after {
+    top: 3px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
 }

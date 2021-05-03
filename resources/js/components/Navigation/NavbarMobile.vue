@@ -3,7 +3,9 @@
     <nav class="navbar__mobile">
       <CloseIcon />
       <div class="navigation__links_container">
-        <LogoName />
+        <LogoName
+          theme="light"
+        />
         <NavigationLinks
           v-if="!isLoggedIn"
           rootStyle="nav__links__mobile"
@@ -125,14 +127,14 @@ IMPORTS
       list-style-type: none;
       transition: all 0.25s ease-in-out;
       &:hover {
-        border-bottom: 3px solid $themeGold;
+        border-bottom: 3px solid $themePink;
       }
     }
 
     a {
       font-size: 0.85rem;
       color: $primaryWhite;
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      font-family: 'Secular One', sans-serif;
       letter-spacing: 0.1rem;
       font-weight: 100;
       text-decoration: none;

@@ -24,6 +24,14 @@ const user = {
       }
     },
 
+    getProfileStatus (state) {
+
+      if (state.jwtToken) {
+
+        return JSON.parse(state.jwtToken).profile_created;
+      }
+    },
+
     userName (state) {
 
       if (state.jwtToken) {

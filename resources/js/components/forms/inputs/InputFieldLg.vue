@@ -109,7 +109,7 @@
             field: this.field,
             value: e.target.value,
             error: '',
-            form: this.form,
+            form: this.form ? this.form : null,
           }
         );
       }

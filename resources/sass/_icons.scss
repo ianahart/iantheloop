@@ -1,0 +1,47 @@
+@import "./general/_variables.scss";
+
+.link_icon__md-dark {
+    height: 25px;
+    width: 25px;
+    color: $mainInputLabel;
+}
+
+.messages__icon_dark {
+    height: 25px;
+    width: 25px;
+    color: $primaryBlack;
+    cursor: pointer;
+}
+
+.messages__icon_light {
+    height: 25px;
+    width: 25px;
+    color: $primaryWhite;
+    cursor: pointer;
+}
+
+.notifications__icon_light {
+    height: 25px;
+    width: 25px;
+    color: $primaryWhite;
+    cursor: pointer;
+}
+
+.notifications__icon_dark {
+    height: 25px;
+    width: 25px;
+    color: $primaryBlack;
+    cursor: pointer;
+}
+
+.hamburger__menu__icon_dark {
+    width: 24px;
+    cursor: pointer;
+    color: $primaryBlack;
+}
+
+.hamburger__menu__icon_light {
+    width: 24px;
+    cursor: pointer;
+    color: $primaryWhite;
+}

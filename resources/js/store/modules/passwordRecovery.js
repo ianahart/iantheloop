@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { updateVisibility, configureFormData } from '../../helpers/moduleHelpers.js';
+import { updateVisibility, configureFormData, inputChange } from '../../helpers/moduleHelpers.js';
 
 const initialState = () => {
 
@@ -48,18 +48,8 @@ const passwordRecovery = {
 
     UPDATE_FIELD: (state, payload) => {
 
-      state[payload.form].find((oldField) => {
+       inputChange(state, payload);
 
-          if (oldField.field === payload.field) {
-
-              oldField.value = payload.value;
-
-              oldField.errors.push(payload.error);
-
-              state.hasErrors = oldField.errors.length ? true : false;
-          }
-        }
-      );
     },
 
 
