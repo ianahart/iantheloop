@@ -1,17 +1,25 @@
 
 import axios from "axios";
 
-import { getFormData, inputChange, pluckField } from '../../../helpers/moduleHelpers.js';
+import {
+        getFormData,
+        inputChange,
+        pluckField,
+        errorsPresent,
+
+      } from '../../../helpers/moduleHelpers.js';
 
 const initialState = () => {
 
   return {
        form: [
           {field: 'bio', errors: [], label: 'Bio', value: '',size: 'md', type: 'text', nameAttr: 'bio'},
-          {field: 'relationship', errors: [], label: 'Relationship Status', value: '',size: 'md', type: 'radio', nameAttr: 'relationship', statuses: ['Single','In a relationship', 'Married', 'Divorced']},
+          {field: 'relationship', errors: [], label: 'Relationship Status', value: '',size: 'md', type: 'radio', nameAttr: 'relationship', statuses: ['Single','In a relationship', 'Married', 'Divorced', 'N/A']},
           {field: 'interests', errors: [], label: 'Interests', value: '',size: 'sm', type: 'text', nameAttr: 'interests', interests: []},
     ],
     interestsCounter: 0,
+    errorsPresent: false,
+    formName: 'aboutDetails',
   }
 };
 
@@ -125,8 +133,11 @@ const aboutDetails = {
       state.form.forEach((field) => {
 
         field.errors = [];
-       }
+        }
       );
+
+      state.errorsPresent = false;
+
   },
     SET_ERRORS: (state, payload) => {
 
@@ -138,14 +149,19 @@ const aboutDetails = {
 
                 if (input.field === key.toString()) {
 
-
                     if (!state.form[fIdx].errors.includes(...payload[pIdx][input.field])) {
-state.form[fIdx].errors.push(...payload[pIdx][input.field]);
+
+                      state.form[fIdx].errors.push(...payload[pIdx][input.field]);
                     }
 
                 }
             });
         });
+
+        if(errorsPresent(state.form, state.formName)) {
+
+          state.errorsPresent = true;
+        }
     },
   },
 

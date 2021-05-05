@@ -104,8 +104,6 @@
   import InputFieldSm from '../../forms/inputs/InputFieldSm.vue';
   import InputFieldMd from '../../forms/inputs/InputFieldMd.vue';
   import InputFieldLg from '../../forms/inputs/InputFieldLg.vue';
-  import SelectSm from '../../forms/selects/SelectSm.vue';
-  import SelectMd from '../../forms/selects/SelectMd.vue';
   import CustomSelect from '../../forms/selects/CustomSelect.vue';
   import LinkIcon from '../../Icons/LinkIcon.vue';
   import AddUrlLink from '../AddUrlLink.vue';
@@ -127,8 +125,6 @@
       InputFieldSm,
       InputFieldMd,
       InputFieldLg,
-      SelectSm,
-      SelectMd,
       CustomSelect,
       LinkIcon,
       AddUrlLink,

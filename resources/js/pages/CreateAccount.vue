@@ -47,7 +47,7 @@
   import Header from '../components/Register/Header.vue';
   import InputFieldMd from '../components/forms/inputs/InputFieldMd.vue';
   import InputFieldLg from '../components/forms/inputs/InputFieldLg.vue';
-  import CheckBox from '../components/forms/CheckBox.vue';
+  import CheckBox from '../components/Register/CheckBox.vue';
 
   export default {
 

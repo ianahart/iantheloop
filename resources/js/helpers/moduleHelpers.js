@@ -70,3 +70,37 @@ export function pluckField (state, target) {
 
      return state.form.find((field) => field.field === target);
 }
+
+/**For Create Profile Forms**/
+function hasErrors (form) {
+
+     return form.some((field) => {
+
+         return field.errors.length > 0;
+     });
+}
+
+export function errorsPresent(form, name) {
+
+     let errors;
+
+     switch(name) {
+
+          case 'generalDetails':
+                errors = hasErrors(form);
+                break;
+
+          case 'aboutDetails':
+               errors = hasErrors(form);
+               break;
+
+          case 'identity':
+               hasErrors = false;
+               break;
+
+          default: ''
+     }
+
+     return errors;
+
+}

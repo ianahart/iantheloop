@@ -61,6 +61,7 @@
 
         this.$store.commit('generalDetails/CLEAR_ERROR_MSGS');
         this.$store.commit('aboutDetails/CLEAR_ERROR_MSGS');
+        this.$store.commit('workDetails/CLEAR_ERROR_MSGS');
 
 
 

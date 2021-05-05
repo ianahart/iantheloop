@@ -1,7 +1,7 @@
 <template>
   <label @change="handleCheckBox" class="create__account__checkbox">
     <input type="checkbox" :checked="isChecked ? 'checked': ''">
-    <span class="checkmark"></span>
+    <span class="checkmark_checkmark"></span>
     <div>
      <span> I agree to LoOped's
        <a :href="url">Privacy Policy</a>
@@ -116,7 +116,7 @@ IMPORTS
   width: 0;
 }
 
-.checkmark {
+.checkmark_checkmark {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -128,23 +128,23 @@ IMPORTS
   font-size: 0.7rem;
 }
 
-.create__account__checkbox input:checked ~ .checkmark {
+.create__account__checkbox input:checked ~ .checkmark_checkmark {
   background-color: $mainInputLabel;
   border: none;
   border-radius: 5px;
 }
 
-.checkmark:after {
+.checkmark_checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
 
-.create__account__checkbox input:checked ~ .checkmark:after {
+.create__account__checkbox input:checked ~ .checkmark_checkmark:after {
   display: block;
 }
 
-.create__account__checkbox .checkmark:after {
+.create__account__checkbox .checkmark_checkmark:after {
   left: 7px;
   top: 1px;
   width: 5px;

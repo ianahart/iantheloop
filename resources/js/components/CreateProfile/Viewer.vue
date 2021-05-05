@@ -8,6 +8,12 @@
       <AboutDetails
         v-if="getCurrentForm === 'About Details'"
       />
+      <Identity
+        v-if="getCurrentForm === 'Identity'"
+      />
+      <WorkDetails
+        v-if="getCurrentForm === 'Work Details'"
+      />
     </div>
   </div>
 </template>
@@ -16,8 +22,10 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
+  import Identity from './forms/Identity.vue';
   import GeneralDetails from './forms/GeneralDetails.vue';
   import AboutDetails from './forms/AboutDetails.vue';
+  import WorkDetails from './forms/WorkDetails.vue';
 
   export default {
 
@@ -29,8 +37,10 @@
 
     components: {
 
+      Identity,
       GeneralDetails,
       AboutDetails,
+      WorkDetails,
     },
 
     data () {

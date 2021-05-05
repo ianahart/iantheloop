@@ -3,6 +3,7 @@
     :class="`create_profile_sidebar__section ${currentForm === sectionTitle.toLowerCase() ? 'sidebar_current__form': ''}`"
     @click="selectForm(sectionTitle)"
    >
+     <span class="sidebar_section__error" v-if="errorsPresent">*</span>
      <SidebarIcon
         :path="path"
      />
@@ -24,6 +25,7 @@
 
       sectionTitle: String,
       path: String,
+      errorsPresent: Boolean,
     },
 
     components: {
@@ -104,6 +106,12 @@
     svg {
       color: #fff;
     }
+  }
+
+  .sidebar_section__error {
+    color: $error;
+    font-size: 1.2rem;
+    font-weight: bold;
   }
 
 </style>

@@ -1,7 +1,13 @@
 
 import axios from "axios";
 
-import { getFormData, inputChange, pluckField } from '../../../helpers/moduleHelpers.js';
+
+import {
+    getFormData,
+    inputChange,
+    pluckField,
+    errorsPresent
+  } from '../../../helpers/moduleHelpers.js';
 
 const initialState = () => {
 
@@ -16,7 +22,8 @@ const initialState = () => {
     ],
     generatedFieldsCounter: 0,
     formSubmitted: false,
-    hasErrors: false,
+    errorsPresent: false,
+    formName: 'generalDetails',
   }
 };
 
@@ -103,6 +110,8 @@ const generalDetails = {
 
   CLEAR_ERROR_MSGS: (state) => {
 
+      state.errorsPresent = false;
+
       state.form.forEach((field) => {
 
         field.errors = [];
@@ -110,7 +119,6 @@ const generalDetails = {
       );
   },
     SET_ERRORS: (state, payload) => {
-
 
       state.form.forEach((input, fIdx) => {
 
@@ -124,6 +132,11 @@ const generalDetails = {
                 }
             });
         });
+
+      if(errorsPresent(state.form, state.formName)) {
+
+        state.errorsPresent = true;
+      }
     },
   },
 

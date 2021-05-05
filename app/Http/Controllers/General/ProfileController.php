@@ -31,7 +31,7 @@ class ProfileController extends Controller
             if ($validated) {
 
                 //---- GET ALL FORM DATA
-                // error_log(print_r($request->all(), true));
+                error_log(print_r($request->all(), true));
 
 
                 return response()->json(['msg' => 'hi'], 200);

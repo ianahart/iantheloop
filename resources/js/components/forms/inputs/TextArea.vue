@@ -1,7 +1,7 @@
 <template>
   <div class="text-area__container">
     <label>{{ label }}:</label>
-    <p class="text_area_max_length"><span>*</span>Please keep your bio under {{ maxLength }} characters</p>
+    <p class="text_area_max_length"><span>*</span>Please keep it under {{ maxLength }} characters</p>
     <textarea
       class="textarea"
       :type="type"

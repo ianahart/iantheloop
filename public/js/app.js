@@ -2094,7 +2094,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getFormData": () => (/* binding */ getFormData),
 /* harmony export */   "configureFormData": () => (/* binding */ configureFormData),
 /* harmony export */   "inputChange": () => (/* binding */ inputChange),
-/* harmony export */   "pluckField": () => (/* binding */ pluckField)
+/* harmony export */   "pluckField": () => (/* binding */ pluckField),
+/* harmony export */   "errorsPresent": () => (/* binding */ errorsPresent)
 /* harmony export */ });
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -2158,6 +2159,36 @@ function pluckField(state, target) {
   return state.form.find(function (field) {
     return field.field === target;
   });
+}
+/**For Create Profile Forms**/
+
+function hasErrors(form) {
+  return form.some(function (field) {
+    return field.errors.length > 0;
+  });
+}
+
+function errorsPresent(form, name) {
+  var errors;
+
+  switch (name) {
+    case 'generalDetails':
+      errors = hasErrors(form);
+      break;
+
+    case 'aboutDetails':
+      errors = hasErrors(form);
+      break;
+
+    case 'identity':
+      hasErrors = false;
+      break;
+
+    default:
+      '';
+  }
+
+  return errors;
 }
 
 /***/ }),
@@ -2336,8 +2367,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_user_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/user.js */ "./resources/js/store/modules/user.js");
 /* harmony import */ var _modules_login_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/login.js */ "./resources/js/store/modules/login.js");
 /* harmony import */ var _modules_navigation_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/navigation.js */ "./resources/js/store/modules/navigation.js");
@@ -2349,6 +2380,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_createProfile_createProfile_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/createProfile/createProfile.js */ "./resources/js/store/modules/createProfile/createProfile.js");
 /* harmony import */ var _modules_createProfile_generalDetails_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/createProfile/generalDetails.js */ "./resources/js/store/modules/createProfile/generalDetails.js");
 /* harmony import */ var _modules_createProfile_aboutDetails_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/createProfile/aboutDetails.js */ "./resources/js/store/modules/createProfile/aboutDetails.js");
+/* harmony import */ var _modules_createProfile_identity_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./modules/createProfile/identity.js */ "./resources/js/store/modules/createProfile/identity.js");
+/* harmony import */ var _modules_createProfile_workDetails_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./modules/createProfile/workDetails.js */ "./resources/js/store/modules/createProfile/workDetails.js");
 
 
 /*
@@ -2366,8 +2399,10 @@ MODULES
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_11__.default.use(vuex__WEBPACK_IMPORTED_MODULE_12__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_12__.default.Store({
+
+
+vue__WEBPACK_IMPORTED_MODULE_13__.default.use(vuex__WEBPACK_IMPORTED_MODULE_14__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_14__.default.Store({
   state: {
     isPasswordShowing: false
   },
@@ -2387,7 +2422,9 @@ vue__WEBPACK_IMPORTED_MODULE_11__.default.use(vuex__WEBPACK_IMPORTED_MODULE_12__
     passwordRecovery: _modules_passwordRecovery_js__WEBPACK_IMPORTED_MODULE_7__.default,
     createProfile: _modules_createProfile_createProfile_js__WEBPACK_IMPORTED_MODULE_8__.default,
     generalDetails: _modules_createProfile_generalDetails_js__WEBPACK_IMPORTED_MODULE_9__.default,
-    aboutDetails: _modules_createProfile_aboutDetails_js__WEBPACK_IMPORTED_MODULE_10__.default
+    aboutDetails: _modules_createProfile_aboutDetails_js__WEBPACK_IMPORTED_MODULE_10__.default,
+    identity: _modules_createProfile_identity_js__WEBPACK_IMPORTED_MODULE_11__.default,
+    workDetails: _modules_createProfile_workDetails_js__WEBPACK_IMPORTED_MODULE_12__.default
   }
 }));
 
@@ -2682,7 +2719,7 @@ var initialState = function initialState() {
       size: 'md',
       type: 'radio',
       nameAttr: 'relationship',
-      statuses: ['Single', 'In a relationship', 'Married', 'Divorced']
+      statuses: ['Single', 'In a relationship', 'Married', 'Divorced', 'N/A']
     }, {
       field: 'interests',
       errors: [],
@@ -2693,7 +2730,9 @@ var initialState = function initialState() {
       nameAttr: 'interests',
       interests: []
     }],
-    interestsCounter: 0
+    interestsCounter: 0,
+    errorsPresent: false,
+    formName: 'aboutDetails'
   };
 };
 
@@ -2774,6 +2813,7 @@ var aboutDetails = {
       state.form.forEach(function (field) {
         field.errors = [];
       });
+      state.errorsPresent = false;
     },
     SET_ERRORS: function SET_ERRORS(state, payload) {
       state.form.forEach(function (input, fIdx) {
@@ -2791,6 +2831,10 @@ var aboutDetails = {
           }
         });
       });
+
+      if ((0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.errorsPresent)(state.form, state.formName)) {
+        state.errorsPresent = true;
+      }
     }
   },
   actions: {}
@@ -2826,7 +2870,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var initialState = function initialState() {
   return {
-    currentForm: 'general details'
+    currentForm: 'identity'
   };
 };
 
@@ -2869,8 +2913,11 @@ var createProfile = {
                     'Accept': 'application/json'
                   },
                   data: {
+                    identity: rootGetters['identity/getIdentity'],
                     generalDetails: rootGetters['generalDetails/getGeneralDetails'],
-                    aboutDetails: rootGetters['aboutDetails/getAboutDetails']
+                    aboutDetails: rootGetters['aboutDetails/getAboutDetails'],
+                    // customize: rootGetters['customize/getCustomize'],
+                    workDetails: rootGetters['workDetails/getWorkDetails']
                   }
                 });
 
@@ -2888,10 +2935,12 @@ var createProfile = {
                 _context.prev = 8;
                 _context.t0 = _context["catch"](1);
                 forms = {
+                  identity: [],
+                  //
                   aboutDetails: [],
                   // customize: [],
-                  generalDetails: [] // workDetails: [],
-
+                  generalDetails: [],
+                  workDetails: []
                 };
                 fields = _context.t0.response.data.errors;
 
@@ -3001,7 +3050,8 @@ var initialState = function initialState() {
     }],
     generatedFieldsCounter: 0,
     formSubmitted: false,
-    hasErrors: false
+    errorsPresent: false,
+    formName: 'generalDetails'
   };
 };
 
@@ -3059,6 +3109,7 @@ var generalDetails = {
       Object.assign(state, initialState());
     },
     CLEAR_ERROR_MSGS: function CLEAR_ERROR_MSGS(state) {
+      state.errorsPresent = false;
       state.form.forEach(function (field) {
         field.errors = [];
       });
@@ -3075,11 +3126,578 @@ var generalDetails = {
           }
         });
       });
+
+      if ((0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.errorsPresent)(state.form, state.formName)) {
+        state.errorsPresent = true;
+      }
     }
   },
   actions: {}
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (generalDetails);
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/createProfile/identity.js":
+/*!**************************************************************!*\
+  !*** ./resources/js/store/modules/createProfile/identity.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/moduleHelpers.js */ "./resources/js/helpers/moduleHelpers.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+var initialState = function initialState() {
+  return {
+    form: [{
+      field: 'gender',
+      errors: [],
+      label: 'Gender',
+      value: '',
+      size: '',
+      type: 'radio',
+      nameAttr: 'gender',
+      options: ['Male', 'Female', 'Trans', 'N/A']
+    }, {
+      field: 'birth_day',
+      errors: [],
+      label: 'Birth Day',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'birth_day'
+    }, {
+      field: 'birth_month',
+      errors: [],
+      label: 'Birth Month',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'birth_month'
+    }, {
+      field: 'birth_year',
+      errors: [],
+      label: 'Birth Year',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'birth_year'
+    }],
+    errorsPresent: false,
+    days: [{
+      name: '1',
+      abbrv: '1',
+      id: 1
+    }, {
+      name: '2',
+      abbrv: '2',
+      id: 2
+    }, {
+      name: '3',
+      abbrv: '3',
+      id: 3
+    }, {
+      name: '4',
+      abbrv: '4',
+      id: 4
+    }, {
+      name: '5',
+      abbrv: '5',
+      id: 5
+    }, {
+      name: '6',
+      abbrv: '6',
+      id: 6
+    }, {
+      name: '7',
+      abbrv: '7',
+      id: 7
+    }, {
+      name: '8',
+      abbrv: '8',
+      id: 8
+    }, {
+      name: '9',
+      abbrv: '9',
+      id: 9
+    }, {
+      name: '10',
+      abbrv: '10',
+      id: 10
+    }, {
+      name: '11',
+      abbrv: '11',
+      id: 11
+    }, {
+      name: '12',
+      abbrv: '12',
+      id: 12
+    }, {
+      name: '13',
+      abbrv: '13',
+      id: 13
+    }, {
+      name: '14',
+      abbrv: '14',
+      id: 14
+    }, {
+      name: '15',
+      abbrv: '15',
+      id: 15
+    }, {
+      name: '16',
+      abbrv: '16',
+      id: 16
+    }, {
+      name: '17',
+      abbrv: '17',
+      id: 17
+    }, {
+      name: '18',
+      abbrv: '18',
+      id: 18
+    }, {
+      name: '19',
+      abbrv: '19',
+      id: 19
+    }, {
+      name: '20',
+      abbrv: '20',
+      id: 20
+    }, {
+      name: '21',
+      abbrv: '21',
+      id: 21
+    }, {
+      name: '22',
+      abbrv: '22',
+      id: 22
+    }, {
+      name: '23',
+      abbrv: '23',
+      id: 23
+    }, {
+      name: '24',
+      abbrv: '24',
+      id: 24
+    }, {
+      name: '25',
+      abbrv: '25',
+      id: 25
+    }, {
+      name: '26',
+      abbrv: '26',
+      id: 26
+    }, {
+      name: '27',
+      abbrv: '27',
+      id: 27
+    }, {
+      name: '28',
+      abbrv: '28',
+      id: 28
+    }, {
+      name: '29',
+      abbrv: '29',
+      id: 29
+    }, {
+      name: '30',
+      abbrv: '30',
+      id: 30
+    }, {
+      name: '31',
+      abbrv: '31',
+      id: 31
+    }],
+    months: [{
+      name: 'Jan',
+      abbrv: 'Jan',
+      id: 1
+    }, {
+      name: 'Feb',
+      abbrv: 'Feb',
+      id: 2
+    }, {
+      name: 'Mar',
+      abbrv: 'Mar',
+      id: 3
+    }, {
+      name: 'Apr',
+      abbrv: 'Apr',
+      id: 4
+    }, {
+      name: 'May',
+      abbrv: 'May',
+      id: 5
+    }, {
+      name: 'Jun',
+      abbrv: 'Jun',
+      id: 6
+    }, {
+      name: 'Jul',
+      abbrv: 'Jul',
+      id: 7
+    }, {
+      name: 'Aug',
+      abbrv: 'Aug',
+      id: 8
+    }, {
+      name: 'Sep',
+      abbrv: 'Sep',
+      id: 9
+    }, {
+      name: 'Oct',
+      abbrv: 'Oct',
+      id: 10
+    }, {
+      name: 'Nov',
+      abbrv: 'Nov',
+      id: 11
+    }, {
+      name: 'Dec',
+      abbrv: 'Dec',
+      id: 12
+    }],
+    formName: 'identity'
+  };
+};
+
+var identity = {
+  namespaced: true,
+  state: initialState(),
+  getters: {
+    getIdentity: function getIdentity(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.getFormData)(state);
+    },
+    getDaysInMonth: function getDaysInMonth(state) {
+      var amount;
+
+      var _state$form$find = state.form.find(function (_ref) {
+        var field = _ref.field;
+        return field === 'birth_month';
+      }),
+          value = _state$form$find.value;
+
+      var daysInMonth = {
+        '31': ['Jan', 'Mar', 'May', 'Jul', 'Aug', 'Oct', 'Dec'],
+        '30': ['Nov', 'Sep', 'Jun', 'Apr'],
+        '28': ['Feb']
+      };
+
+      for (var prop in daysInMonth) {
+        if (daysInMonth[prop].includes(value)) {
+          amount = parseInt(prop);
+        }
+      }
+
+      return state.days.slice(0, amount);
+    },
+    getGender: function getGender(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'gender');
+    },
+    getBirthYear: function getBirthYear(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'birth_year');
+    },
+    getBirthDay: function getBirthDay(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'birth_day');
+    },
+    getBirthMonth: function getBirthMonth(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'birth_month');
+    }
+  },
+  mutations: {
+    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
+      if (payload.field === 'birth_month') {
+        var BirthDayField = state.form.find(function (_ref2) {
+          var field = _ref2.field;
+          return field === 'birth_day';
+        });
+        BirthDayField.value = '';
+      }
+
+      (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.inputChange)(state, payload);
+    },
+    SET_ERRORS: function SET_ERRORS(state, payload) {
+      if (payload.length === 0) {
+        return;
+      }
+
+      state.form.forEach(function (input, fIdx) {
+        payload.forEach(function (error, pIdx) {
+          var key = Object.keys(error);
+
+          if (input.field === key.toString()) {
+            var _state$form$fIdx$erro;
+
+            (_state$form$fIdx$erro = state.form[fIdx].errors).push.apply(_state$form$fIdx$erro, _toConsumableArray(payload[pIdx][input.field]));
+          }
+        });
+      });
+
+      if ((0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.errorsPresent)(state.form, state.formName)) {
+        state.errorsPresent = true;
+      }
+    }
+  },
+  actions: {}
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (identity);
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/createProfile/workDetails.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/store/modules/createProfile/workDetails.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../helpers/moduleHelpers.js */ "./resources/js/helpers/moduleHelpers.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+var initialState = function initialState() {
+  return {
+    form: [{
+      field: 'company',
+      errors: [],
+      label: 'Company',
+      value: '',
+      size: 'lg',
+      type: 'text',
+      nameAttr: 'company'
+    }, {
+      field: 'position',
+      errors: [],
+      label: 'Position',
+      value: '',
+      size: 'lg',
+      type: 'text',
+      nameAttr: 'position'
+    }, {
+      field: 'city',
+      errors: [],
+      label: 'City/Town',
+      value: '',
+      size: 'lg',
+      type: 'text',
+      nameAttr: 'city'
+    }, {
+      field: 'description',
+      errors: [],
+      label: 'Description',
+      value: '',
+      size: 'md',
+      type: 'text',
+      nameAttr: 'birth_year'
+    }, {
+      field: 'monthfrom',
+      errors: [],
+      label: 'Month',
+      value: '',
+      size: '',
+      type: 'text',
+      nameAttr: 'monthfrom'
+    }, {
+      field: 'yearfrom',
+      errors: [],
+      label: 'Year',
+      value: '',
+      size: '',
+      type: 'text',
+      nameAttr: 'yearfrom'
+    }, {
+      field: 'monthto',
+      errors: [],
+      label: 'Month',
+      value: '',
+      size: '',
+      type: 'text',
+      nameAttr: 'monthto'
+    }, {
+      field: 'yearto',
+      errors: [],
+      label: 'Year',
+      value: '',
+      size: '',
+      type: 'text',
+      nameAttr: 'yearto'
+    }],
+    months: [{
+      name: 'Jan',
+      abbrv: 'Jan',
+      id: 1
+    }, {
+      name: 'Feb',
+      abbrv: 'Feb',
+      id: 2
+    }, {
+      name: 'Mar',
+      abbrv: 'Mar',
+      id: 3
+    }, {
+      name: 'Apr',
+      abbrv: 'Apr',
+      id: 4
+    }, {
+      name: 'May',
+      abbrv: 'May',
+      id: 5
+    }, {
+      name: 'Jun',
+      abbrv: 'Jun',
+      id: 6
+    }, {
+      name: 'Jul',
+      abbrv: 'Jul',
+      id: 7
+    }, {
+      name: 'Aug',
+      abbrv: 'Aug',
+      id: 8
+    }, {
+      name: 'Sep',
+      abbrv: 'Sep',
+      id: 9
+    }, {
+      name: 'Oct',
+      abbrv: 'Oct',
+      id: 10
+    }, {
+      name: 'Nov',
+      abbrv: 'Nov',
+      id: 11
+    }, {
+      name: 'Dec',
+      abbrv: 'Dec',
+      id: 12
+    }],
+    errorsPresent: false,
+    formName: 'workDetails',
+    timePeriodChecked: false
+  };
+};
+
+var workDetails = {
+  namespaced: true,
+  state: initialState(),
+  getters: {
+    getWorkDetails: function getWorkDetails(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.getFormData)(state);
+    },
+    getCompany: function getCompany(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'company');
+    },
+    getPosition: function getPosition(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'position');
+    },
+    getCity: function getCity(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'city');
+    },
+    getDescription: function getDescription(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'description');
+    },
+    getMonthFrom: function getMonthFrom(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'monthfrom');
+    },
+    getYearFrom: function getYearFrom(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'yearfrom');
+    },
+    getMonthTo: function getMonthTo(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'monthto');
+    },
+    getYearTo: function getYearTo(state) {
+      return (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.pluckField)(state, 'yearto');
+    }
+  },
+  mutations: {
+    TOGGLE_CHECKBOX: function TOGGLE_CHECKBOX(state, payload) {
+      state.timePeriodChecked = !state.timePeriodChecked;
+
+      if (state.timePeriodChecked) {
+        var d = new Date();
+
+        var _state$months$find = state.months.find(function (month) {
+          return month.id === d.getMonth() + 1;
+        }),
+            abbrv = _state$months$find.abbrv;
+
+        state.form[state.form.length - 2].value = abbrv;
+        state.form[state.form.length - 1].value = d.getFullYear().toString();
+      }
+
+      if (!state.timePeriodChecked) {
+        state.form[state.form.length - 2].value = '';
+        state.form[state.form.length - 1].value = '';
+      }
+    },
+    UPDATE_FIELD: function UPDATE_FIELD(state, payload) {
+      (0,_helpers_moduleHelpers_js__WEBPACK_IMPORTED_MODULE_1__.inputChange)(state, payload);
+    },
+    CLEAR_ERROR_MSGS: function CLEAR_ERROR_MSGS(state) {
+      state.form.forEach(function (field) {
+        field.errors = [];
+      });
+      state.errorsPresent = false;
+    },
+    SET_ERRORS: function SET_ERRORS(state, payload) {
+      console.log(payload);
+      state.form.forEach(function (input, fIdx) {
+        payload.forEach(function (error, pIdx) {
+          var key = Object.keys(error);
+
+          if (input.field === key.toString()) {
+            var _state$form$fIdx$erro;
+
+            state.errorsPresent = true;
+
+            (_state$form$fIdx$erro = state.form[fIdx].errors).push.apply(_state$form$fIdx$erro, _toConsumableArray(payload[pIdx][input.field]));
+          }
+        });
+      });
+    }
+  },
+  actions: {}
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (workDetails);
 
 /***/ }),
 

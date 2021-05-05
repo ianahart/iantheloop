@@ -4,9 +4,15 @@
       <p>Profile Setup</p>
       <h4>{{ userName }}</h4>
     </header>
+    <SidebarSection
+      sectionTitle="Identity"
+      path="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+      :errorsPresent="this.$store.state.identity.errorsPresent"
+    />
    <SidebarSection
       sectionTitle="General Details"
       path="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      :errorsPresent="this.$store.state.generalDetails.errorsPresent"
     />
     <SidebarSection
       sectionTitle="Customize"
@@ -15,15 +21,19 @@
     <SidebarSection
       sectionTitle="About Details"
       path="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+      :errorsPresent="this.$store.state.aboutDetails.errorsPresent"
     />
     <SidebarSection
       sectionTitle="Work Details"
       path="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+      :errorsPresent="this.$store.state.workDetails.errorsPresent"
+
     />
     </div>
 </template>
 
 <script>
+
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 

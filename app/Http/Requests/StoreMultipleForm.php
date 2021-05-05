@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 use App\Http\Requests\GeneralDetailsRequest;
 use App\Http\Requests\AboutDetailsRequest;
+use App\Http\Requests\WorkDetailsRequest;
 
 
 class StoreMultipleForm extends FormRequest
@@ -34,6 +35,7 @@ class StoreMultipleForm extends FormRequest
             'generalDetails' =>
             GeneralDetailsRequest::class,
             'aboutDetails' => AboutDetailsRequest::class,
+            'workDetails' => WorkDetailsRequest::class,
 
         ];
         $rules = [];
@@ -62,6 +64,7 @@ class StoreMultipleForm extends FormRequest
             'generalDetails' =>
             GeneralDetailsRequest::class,
             'aboutDetails' => AboutDetailsRequest::class,
+            'workDetails' => WorkDetailsRequest::class,
 
         ];
 

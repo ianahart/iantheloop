@@ -8,7 +8,7 @@
           :name="nameAttr"
           :value="label.toLowerCase()"
         />
-          <span class="checkmark"></span>
+          <span class="radio"></span>
         {{ label }}
       </label>
     </div>

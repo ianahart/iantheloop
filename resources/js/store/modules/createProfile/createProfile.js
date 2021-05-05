@@ -4,7 +4,7 @@ const initialState = () => {
 
   return {
 
-    currentForm: 'general details',
+    currentForm: 'identity',
   }
 };
 
@@ -60,9 +60,11 @@ const createProfile = {
             },
 
             data: {
-
+              identity: rootGetters['identity/getIdentity'],
               generalDetails: rootGetters['generalDetails/getGeneralDetails'],
               aboutDetails:   rootGetters['aboutDetails/getAboutDetails'],
+              // customize: rootGetters['customize/getCustomize'],
+              workDetails: rootGetters['workDetails/getWorkDetails'],
               },
             }
         );
@@ -80,10 +82,11 @@ const createProfile = {
       } catch (e) {
 
         const forms = {
+          identity: [],        //
           aboutDetails:  [],
           // customize: [],
           generalDetails: [],
-          // workDetails: [],
+          workDetails: [],
         }
 
         const fields = e.response.data.errors;

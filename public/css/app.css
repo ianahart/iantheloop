@@ -309,6 +309,11 @@ element-specific
 .sidebar_current__form svg {
   color: #fff;
 }
+.sidebar_section__error {
+  color: #ff0033;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
 /*-----------------------------
       COLORS
 /*-----------------------------
@@ -348,6 +353,586 @@ element-specific
 @media (max-width: 1090px) {
 .create_profile_sidebar__container {
     grid-row: auto;
+}
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*Inputs*/
+.forms__input__field {
+  border: 1px solid #fb4d70;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+
+/*Select*/
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: calc(300px - 100%);
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin: 0 1rem;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.radio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border: 1px solid #4e5760;
+  border-radius: 50%;
+}
+.radio_input__container:hover input ~ .radio {
+  background-color: #ccc;
+}
+.radio_input__container input:checked ~ .radio {
+  background-color: #484aa4;
+}
+.radio:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.radio_input__container input:checked ~ .radio:after {
+  display: block;
+}
+.radio_input__container .radio:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.chevron__icon {
+  height: 15px;
+  width: 15px;
+  color: #484aa4;
+  padding: 0 0.4rem;
+  pointer-events: none;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
+  color: #4e5760;
+}
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
+}
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
+}
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.identity_form__row {
+  margin: 2rem 0;
+}
+.identity__radio_btns div {
+  display: flex;
+  align-items: center;
+}
+.identity_label__container {
+  display: flex;
+}
+.identity_label__container svg {
+  place-self: flex-end;
+}
+.identity_label__container p {
+  place-self: flex-end;
+  margin-bottom: 0rem;
+  margin-right: 0.4rem;
+  margin-top: 0;
+}
+.identity__label {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #4e5760;
+}
+.day__month__selects {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 600px) {
+.identity__radio_btns div:last-of-type {
+    display: block;
 }
 }
 /*
@@ -432,7 +1017,10 @@ element-specific
 }
 
 /*Select*/
-.custom-select_size__md {
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
   width: 200px;
 }
 .custom-select_size__lg {
@@ -462,7 +1050,7 @@ element-specific
   width: 100%;
   position: absolute;
   z-index: 10;
-  height: 400px;
+  height: calc(300px - 100%);
   overflow-x: hidden;
   overflow-y: auto;
   right: 3%;
@@ -509,6 +1097,7 @@ element-specific
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
   border: 1px solid #e3e2e2;
   border-radius: 8px;
   outline: none;
@@ -522,6 +1111,7 @@ element-specific
   display: block;
   position: relative;
   padding-left: 35px;
+  margin: 0 1rem;
   margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -534,8 +1124,6 @@ element-specific
   font-weight: bold;
   font-size: 0.85rem;
 }
-
-/* Hide the browser's default radio button */
 .radio_input__container input {
   position: absolute;
   opacity: 0;
@@ -543,42 +1131,31 @@ element-specific
   height: 0;
   width: 0;
 }
-
-/* Create a custom radio button */
-.checkmark {
+.radio {
   position: absolute;
   top: 0;
   left: 0;
   height: 15px;
   width: 15px;
   background-color: #eee;
+  border: 1px solid #4e5760;
   border-radius: 50%;
 }
-
-/* On mouse-over, add a grey background color */
-.radio_input__container:hover input ~ .checkmark {
+.radio_input__container:hover input ~ .radio {
   background-color: #ccc;
 }
-
-/* When the radio button is checked, add a blue background */
-.radio_input__container input:checked ~ .checkmark {
+.radio_input__container input:checked ~ .radio {
   background-color: #484aa4;
 }
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
+.radio:after {
   content: "";
   position: absolute;
   display: none;
 }
-
-/* Show the indicator (dot/circle) when checked */
-.radio_input__container input:checked ~ .checkmark:after {
+.radio_input__container input:checked ~ .radio:after {
   display: block;
 }
-
-/* Style the indicator (dot/circle) */
-.radio_input__container .checkmark:after {
+.radio_input__container .radio:after {
   top: 3px;
   left: 4px;
   width: 8px;
@@ -668,7 +1245,10 @@ element-specific
 }
 
 /*Select*/
-.custom-select_size__md {
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
   width: 200px;
 }
 .custom-select_size__lg {
@@ -698,7 +1278,7 @@ element-specific
   width: 100%;
   position: absolute;
   z-index: 10;
-  height: 400px;
+  height: calc(300px - 100%);
   overflow-x: hidden;
   overflow-y: auto;
   right: 3%;
@@ -745,6 +1325,7 @@ element-specific
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
   border: 1px solid #e3e2e2;
   border-radius: 8px;
   outline: none;
@@ -758,6 +1339,7 @@ element-specific
   display: block;
   position: relative;
   padding-left: 35px;
+  margin: 0 1rem;
   margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -770,8 +1352,6 @@ element-specific
   font-weight: bold;
   font-size: 0.85rem;
 }
-
-/* Hide the browser's default radio button */
 .radio_input__container input {
   position: absolute;
   opacity: 0;
@@ -779,42 +1359,31 @@ element-specific
   height: 0;
   width: 0;
 }
-
-/* Create a custom radio button */
-.checkmark {
+.radio {
   position: absolute;
   top: 0;
   left: 0;
   height: 15px;
   width: 15px;
   background-color: #eee;
+  border: 1px solid #4e5760;
   border-radius: 50%;
 }
-
-/* On mouse-over, add a grey background color */
-.radio_input__container:hover input ~ .checkmark {
+.radio_input__container:hover input ~ .radio {
   background-color: #ccc;
 }
-
-/* When the radio button is checked, add a blue background */
-.radio_input__container input:checked ~ .checkmark {
+.radio_input__container input:checked ~ .radio {
   background-color: #484aa4;
 }
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
+.radio:after {
   content: "";
   position: absolute;
   display: none;
 }
-
-/* Show the indicator (dot/circle) when checked */
-.radio_input__container input:checked ~ .checkmark:after {
+.radio_input__container input:checked ~ .radio:after {
   display: block;
 }
-
-/* Style the indicator (dot/circle) */
-.radio_input__container .checkmark:after {
+.radio_input__container .radio:after {
   top: 3px;
   left: 4px;
   width: 8px;
@@ -932,7 +1501,10 @@ element-specific
 }
 
 /*Select*/
-.custom-select_size__md {
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
   width: 200px;
 }
 .custom-select_size__lg {
@@ -962,7 +1534,7 @@ element-specific
   width: 100%;
   position: absolute;
   z-index: 10;
-  height: 400px;
+  height: calc(300px - 100%);
   overflow-x: hidden;
   overflow-y: auto;
   right: 3%;
@@ -1009,6 +1581,7 @@ element-specific
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
   border: 1px solid #e3e2e2;
   border-radius: 8px;
   outline: none;
@@ -1022,6 +1595,7 @@ element-specific
   display: block;
   position: relative;
   padding-left: 35px;
+  margin: 0 1rem;
   margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -1034,8 +1608,6 @@ element-specific
   font-weight: bold;
   font-size: 0.85rem;
 }
-
-/* Hide the browser's default radio button */
 .radio_input__container input {
   position: absolute;
   opacity: 0;
@@ -1043,42 +1615,31 @@ element-specific
   height: 0;
   width: 0;
 }
-
-/* Create a custom radio button */
-.checkmark {
+.radio {
   position: absolute;
   top: 0;
   left: 0;
   height: 15px;
   width: 15px;
   background-color: #eee;
+  border: 1px solid #4e5760;
   border-radius: 50%;
 }
-
-/* On mouse-over, add a grey background color */
-.radio_input__container:hover input ~ .checkmark {
+.radio_input__container:hover input ~ .radio {
   background-color: #ccc;
 }
-
-/* When the radio button is checked, add a blue background */
-.radio_input__container input:checked ~ .checkmark {
+.radio_input__container input:checked ~ .radio {
   background-color: #484aa4;
 }
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
+.radio:after {
   content: "";
   position: absolute;
   display: none;
 }
-
-/* Show the indicator (dot/circle) when checked */
-.radio_input__container input:checked ~ .checkmark:after {
+.radio_input__container input:checked ~ .radio:after {
   display: block;
 }
-
-/* Style the indicator (dot/circle) */
-.radio_input__container .checkmark:after {
+.radio_input__container .radio:after {
   top: 3px;
   left: 4px;
   width: 8px;
@@ -1152,7 +1713,7 @@ element-specific
   height: 0;
   width: 0;
 }
-.checkmark {
+.checkmark_checkmark {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -1163,20 +1724,20 @@ element-specific
   border-radius: 5px;
   font-size: 0.7rem;
 }
-.create__account__checkbox input:checked ~ .checkmark {
+.create__account__checkbox input:checked ~ .checkmark_checkmark {
   background-color: #4e5760;
   border: none;
   border-radius: 5px;
 }
-.checkmark:after {
+.checkmark_checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
-.create__account__checkbox input:checked ~ .checkmark:after {
+.create__account__checkbox input:checked ~ .checkmark_checkmark:after {
   display: block;
 }
-.create__account__checkbox .checkmark:after {
+.create__account__checkbox .checkmark_checkmark:after {
   left: 7px;
   top: 1px;
   width: 5px;
@@ -1308,7 +1869,10 @@ element-specific
 }
 
 /*Select*/
-.custom-select_size__md {
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
   width: 200px;
 }
 .custom-select_size__lg {
@@ -1338,7 +1902,7 @@ element-specific
   width: 100%;
   position: absolute;
   z-index: 10;
-  height: 400px;
+  height: calc(300px - 100%);
   overflow-x: hidden;
   overflow-y: auto;
   right: 3%;
@@ -1385,6 +1949,7 @@ element-specific
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
   border: 1px solid #e3e2e2;
   border-radius: 8px;
   outline: none;
@@ -1398,6 +1963,7 @@ element-specific
   display: block;
   position: relative;
   padding-left: 35px;
+  margin: 0 1rem;
   margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -1410,8 +1976,6 @@ element-specific
   font-weight: bold;
   font-size: 0.85rem;
 }
-
-/* Hide the browser's default radio button */
 .radio_input__container input {
   position: absolute;
   opacity: 0;
@@ -1419,42 +1983,31 @@ element-specific
   height: 0;
   width: 0;
 }
-
-/* Create a custom radio button */
-.checkmark {
+.radio {
   position: absolute;
   top: 0;
   left: 0;
   height: 15px;
   width: 15px;
   background-color: #eee;
+  border: 1px solid #4e5760;
   border-radius: 50%;
 }
-
-/* On mouse-over, add a grey background color */
-.radio_input__container:hover input ~ .checkmark {
+.radio_input__container:hover input ~ .radio {
   background-color: #ccc;
 }
-
-/* When the radio button is checked, add a blue background */
-.radio_input__container input:checked ~ .checkmark {
+.radio_input__container input:checked ~ .radio {
   background-color: #484aa4;
 }
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
+.radio:after {
   content: "";
   position: absolute;
   display: none;
 }
-
-/* Show the indicator (dot/circle) when checked */
-.radio_input__container input:checked ~ .checkmark:after {
+.radio_input__container input:checked ~ .radio:after {
   display: block;
 }
-
-/* Style the indicator (dot/circle) */
-.radio_input__container .checkmark:after {
+.radio_input__container .radio:after {
   top: 3px;
   left: 4px;
   width: 8px;
@@ -1628,7 +2181,10 @@ element-specific
 }
 
 /*Select*/
-.custom-select_size__md {
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
   width: 200px;
 }
 .custom-select_size__lg {
@@ -1658,7 +2214,7 @@ element-specific
   width: 100%;
   position: absolute;
   z-index: 10;
-  height: 400px;
+  height: calc(300px - 100%);
   overflow-x: hidden;
   overflow-y: auto;
   right: 3%;
@@ -1705,6 +2261,7 @@ element-specific
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
   border: 1px solid #e3e2e2;
   border-radius: 8px;
   outline: none;
@@ -1718,6 +2275,7 @@ element-specific
   display: block;
   position: relative;
   padding-left: 35px;
+  margin: 0 1rem;
   margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -1730,8 +2288,6 @@ element-specific
   font-weight: bold;
   font-size: 0.85rem;
 }
-
-/* Hide the browser's default radio button */
 .radio_input__container input {
   position: absolute;
   opacity: 0;
@@ -1739,42 +2295,31 @@ element-specific
   height: 0;
   width: 0;
 }
-
-/* Create a custom radio button */
-.checkmark {
+.radio {
   position: absolute;
   top: 0;
   left: 0;
   height: 15px;
   width: 15px;
   background-color: #eee;
+  border: 1px solid #4e5760;
   border-radius: 50%;
 }
-
-/* On mouse-over, add a grey background color */
-.radio_input__container:hover input ~ .checkmark {
+.radio_input__container:hover input ~ .radio {
   background-color: #ccc;
 }
-
-/* When the radio button is checked, add a blue background */
-.radio_input__container input:checked ~ .checkmark {
+.radio_input__container input:checked ~ .radio {
   background-color: #484aa4;
 }
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
+.radio:after {
   content: "";
   position: absolute;
   display: none;
 }
-
-/* Show the indicator (dot/circle) when checked */
-.radio_input__container input:checked ~ .checkmark:after {
+.radio_input__container input:checked ~ .radio:after {
   display: block;
 }
-
-/* Style the indicator (dot/circle) */
-.radio_input__container .checkmark:after {
+.radio_input__container .radio:after {
   top: 3px;
   left: 4px;
   width: 8px;
@@ -2089,109 +2634,55 @@ themes
 /*
 element-specific
 */
-.form__select_sm__container {
-  position: relative;
-}
-.form__select_sm__container p {
-  margin-top: 0.1rem;
-  position: absolute;
-}
-.form__select_sm {
+.link_icon__md-dark {
+  height: 25px;
+  width: 25px;
   color: #4e5760;
-  font-weight: bold;
-  background: linear-gradient(45deg, transparent 50%, #484aa4 50%), linear-gradient(135deg, #484aa4 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
-  background-position: calc(100% - 21px) calc(1em + 2px), calc(100% - 16px) calc(1em + 2px), 100% 0;
-  background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
-  background-repeat: no-repeat;
-  border: 1px solid #e3e2e2;
-  height: 35px;
-  border-radius: 8px;
-  padding: 0.5em 3.5em 0.5em 1em;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  -moz-appearance: none;
 }
-/*-----------------------------
-      COLORS
-/*-----------------------------
-
-/*
-primaries
-*/
-/*
-errors
-*/
-/*
-
-themes
-*/
-/*
-element-specific
-*/
-.form__select_md__container {
-  position: relative;
+.messages__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
 }
-.form__select_md__container p {
-  margin-top: 0.1rem;
-  position: absolute;
+.messages__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
 }
-.form__select_md {
-  color: #4e5760;
-  font-weight: bold;
-  background: linear-gradient(45deg, transparent 50%, #484aa4 50%), linear-gradient(135deg, #484aa4 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
-  background-position: calc(100% - 21px) calc(1em + 2px), calc(100% - 16px) calc(1em + 2px), 100% 0;
-  background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
-  background-repeat: no-repeat;
-  width: 170px;
-  border: 1px solid #e3e2e2;
-  height: 35px;
-  border-radius: 8px;
-  padding: 0.5em 3.5em 0.5em 1em;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+.notifications__icon_light {
+  height: 25px;
+  width: 25px;
+  color: #fcfcfc;
+  cursor: pointer;
 }
-/*-----------------------------
-      COLORS
-/*-----------------------------
-
-/*
-primaries
-*/
-/*
-errors
-*/
-/*
-
-themes
-*/
-/*
-element-specific
-*/
-.chevron__icon {
-  height: 15px;
-  width: 15px;
-  color: #484aa4;
-  padding: 0 0.4rem;
-  pointer-events: none;
+.notifications__icon_dark {
+  height: 25px;
+  width: 25px;
+  color: #3b3b44;
+  cursor: pointer;
 }
-/*-----------------------------
-      COLORS
-/*-----------------------------
-
-/*
-primaries
-*/
-/*
-errors
-*/
-/*
-
-themes
-*/
-/*
-element-specific
-*/
+.hamburger__menu__icon_dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
+.hamburger__menu__icon_light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
 /*-----------------------------
       COLORS
 /*-----------------------------
@@ -2248,61 +2739,15 @@ element-specific
   cursor: pointer;
   color: #fcfcfc;
 }
-/*-----------------------------
-      COLORS
-/*-----------------------------
-
-/*
-primaries
-*/
-/*
-errors
-*/
-/*
-
-themes
-*/
-/*
-element-specific
-*/
-.link_icon__md-dark {
-  height: 25px;
-  width: 25px;
-  color: #4e5760;
-}
-.messages__icon_dark {
-  height: 25px;
-  width: 25px;
-  color: #3b3b44;
-  cursor: pointer;
-}
-.messages__icon_light {
-  height: 25px;
-  width: 25px;
-  color: #fcfcfc;
-  cursor: pointer;
-}
-.notifications__icon_light {
-  height: 25px;
-  width: 25px;
-  color: #fcfcfc;
-  cursor: pointer;
-}
-.notifications__icon_dark {
-  height: 25px;
-  width: 25px;
-  color: #3b3b44;
-  cursor: pointer;
-}
-.hamburger__menu__icon_dark {
-  width: 24px;
-  cursor: pointer;
-  color: #3b3b44;
-}
-.hamburger__menu__icon_light {
+.icon__sm__light {
   width: 24px;
   cursor: pointer;
   color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
 }
 /*-----------------------------
       COLORS
@@ -2508,7 +2953,10 @@ element-specific
 }
 
 /*Select*/
-.custom-select_size__md {
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
   width: 200px;
 }
 .custom-select_size__lg {
@@ -2538,7 +2986,7 @@ element-specific
   width: 100%;
   position: absolute;
   z-index: 10;
-  height: 400px;
+  height: calc(300px - 100%);
   overflow-x: hidden;
   overflow-y: auto;
   right: 3%;
@@ -2585,6 +3033,7 @@ element-specific
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
   border: 1px solid #e3e2e2;
   border-radius: 8px;
   outline: none;
@@ -2598,6 +3047,7 @@ element-specific
   display: block;
   position: relative;
   padding-left: 35px;
+  margin: 0 1rem;
   margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -2610,8 +3060,6 @@ element-specific
   font-weight: bold;
   font-size: 0.85rem;
 }
-
-/* Hide the browser's default radio button */
 .radio_input__container input {
   position: absolute;
   opacity: 0;
@@ -2619,42 +3067,31 @@ element-specific
   height: 0;
   width: 0;
 }
-
-/* Create a custom radio button */
-.checkmark {
+.radio {
   position: absolute;
   top: 0;
   left: 0;
   height: 15px;
   width: 15px;
   background-color: #eee;
+  border: 1px solid #4e5760;
   border-radius: 50%;
 }
-
-/* On mouse-over, add a grey background color */
-.radio_input__container:hover input ~ .checkmark {
+.radio_input__container:hover input ~ .radio {
   background-color: #ccc;
 }
-
-/* When the radio button is checked, add a blue background */
-.radio_input__container input:checked ~ .checkmark {
+.radio_input__container input:checked ~ .radio {
   background-color: #484aa4;
 }
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
+.radio:after {
   content: "";
   position: absolute;
   display: none;
 }
-
-/* Show the indicator (dot/circle) when checked */
-.radio_input__container input:checked ~ .checkmark:after {
+.radio_input__container input:checked ~ .radio:after {
   display: block;
 }
-
-/* Style the indicator (dot/circle) */
-.radio_input__container .checkmark:after {
+.radio_input__container .radio:after {
   top: 3px;
   left: 4px;
   width: 8px;
@@ -2683,239 +3120,6 @@ element-specific
 }
 .text_area_max_length span {
   color: #484aa4;
-}
-/*-----------------------------
-      COLORS
-/*-----------------------------
-
-/*
-primaries
-*/
-/*
-errors
-*/
-/*
-
-themes
-*/
-/*
-element-specific
-*/
-/*Inputs*/
-.forms__input__field {
-  border: 1px solid #fb4d70;
-}
-.forms__input__error {
-  font-size: 0.85rem;
-  color: #ff0033;
-}
-.forms__input__field_md {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-}
-.forms__input__field_md label {
-  color: #65717c;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-.forms__input__field_md input {
-  border: none;
-  border-radius: 8px;
-  border: 1px solid #e3e2e2;
-  height: 35px;
-  width: 199px;
-}
-.forms__input__field_sm {
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0;
-}
-.forms__input__field_sm label {
-  color: #65717c;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-.forms__input__field_sm input {
-  border: none;
-  border-radius: 8px;
-  border: 1px solid #e3e2e2;
-  height: 35px;
-  width: 75px;
-}
-.forms__input__field_lg {
-  display: flex;
-  margin: 1.5rem 0;
-  flex-direction: column;
-  width: 100%;
-  max-width: 400px;
-}
-.forms__input__field_lg label {
-  color: #65717c;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-.forms__input__field_lg input {
-  border: none;
-  border-radius: 8px;
-  border: 1px solid #e3e2e2;
-  height: 35px;
-}
-
-/*Select*/
-.custom-select_size__md {
-  width: 200px;
-}
-.custom-select_size__lg {
-  width: 300px;
-  max-width: 300px;
-}
-.custom_select__container {
-  height: 35px;
-  border-radius: 8px;
-  padding: 0 0.3rem;
-  cursor: pointer;
-  margin-top: 1.2rem;
-  position: relative;
-}
-.custom_select__container div:first-of-type {
-  border: 1px solid #e3e2e2;
-  border-radius: 8px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.custom_select__container div:nth-child(2) {
-  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  width: 100%;
-  position: absolute;
-  z-index: 10;
-  height: 400px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  right: 3%;
-  background-color: #3b3b44;
-}
-.custom_select__container div:nth-child(2)::-webkit-scrollbar {
-  width: 12px;
-}
-.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
-  background: #232329;
-  border-radius: 8px;
-}
-.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
-  background-color: #31326f;
-  border-radius: 20px;
-  border: 3px solid #232329;
-}
-.custom_select__container div:nth-child(2) option {
-  width: 100%;
-  text-align: center;
-  color: #fff;
-  margin: 0.2rem 0;
-  transition: all 0.25s ease-out;
-  cursor: pointer;
-  padding: 0.2rem 0.2rem;
-  font-size: 0.8rem;
-}
-.custom_select__container div:nth-child(2) option:hover {
-  background-color: #484aa4;
-}
-.custom_select__container p {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  color: #65717c;
-  font-weight: bold;
-  font-size: 0.85rem;
-  pointer-events: none;
-}
-
-/*Textarea*/
-.textarea {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #e3e2e2;
-  border-radius: 8px;
-  outline: none;
-}
-.textarea:focus {
-  border: 2px solid #484aa4;
-}
-
-/**Radio Btn**/
-.radio_input__container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-.radio_input__container label {
-  color: #65717c;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-
-/* Hide the browser's default radio button */
-.radio_input__container input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-/* Create a custom radio button */
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 15px;
-  width: 15px;
-  background-color: #eee;
-  border-radius: 50%;
-}
-
-/* On mouse-over, add a grey background color */
-.radio_input__container:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-
-/* When the radio button is checked, add a blue background */
-.radio_input__container input:checked ~ .checkmark {
-  background-color: #484aa4;
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the indicator (dot/circle) when checked */
-.radio_input__container input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.radio_input__container .checkmark:after {
-  top: 3px;
-  left: 4px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: white;
 }
 /*-----------------------------
       COLORS
@@ -3072,6 +3276,359 @@ element-specific
   color: #ffcc00;
   font-size: 0.8rem;
   font-weight: bold;
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+.custom__checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.custom__checkbox p {
+  font-size: 0.7rem;
+  color: #ff0033;
+}
+.custom__checkbox div {
+  margin-left: 0.5rem;
+}
+.custom__checkbox div span {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #4e5760;
+}
+.custom__checkbox a {
+  font-size: 0.8rem;
+  color: #31326f;
+  text-decoration: none;
+  font-weight: bold;
+}
+.custom__checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.custom_checkmark {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #4e5760;
+  border-radius: 5px;
+  font-size: 0.7rem;
+}
+.custom__checkbox input:checked ~ .custom_checkmark {
+  background-color: #31326f;
+  border: none;
+  border-radius: 5px;
+}
+.custom_checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.custom__checkbox input:checked ~ .custom_checkmark:after {
+  display: block;
+}
+.custom__checkbox .custom_checkmark:after {
+  left: 7px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*-----------------------------
+      COLORS
+/*-----------------------------
+
+/*
+primaries
+*/
+/*
+errors
+*/
+/*
+
+themes
+*/
+/*
+element-specific
+*/
+/*Inputs*/
+.forms__input__field {
+  border: 1px solid #fb4d70;
+}
+.forms__input__error {
+  font-size: 0.85rem;
+  color: #ff0033;
+}
+.forms__input__field_md {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_md label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_md input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 199px;
+}
+.forms__input__field_sm {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+.forms__input__field_sm label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_sm input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+  width: 75px;
+}
+.forms__input__field_lg {
+  display: flex;
+  margin: 1.5rem 0;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+}
+.forms__input__field_lg label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.forms__input__field_lg input {
+  border: none;
+  border-radius: 8px;
+  border: 1px solid #e3e2e2;
+  height: 35px;
+}
+
+/*Select*/
+.custom_select_size__sm {
+  width: 120px;
+}
+.custom_select_size__md {
+  width: 200px;
+}
+.custom-select_size__lg {
+  width: 300px;
+  max-width: 300px;
+}
+.custom_select__container {
+  height: 35px;
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  position: relative;
+}
+.custom_select__container div:first-of-type {
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom_select__container div:nth-child(2) {
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  position: absolute;
+  z-index: 10;
+  height: calc(300px - 100%);
+  overflow-x: hidden;
+  overflow-y: auto;
+  right: 3%;
+  background-color: #3b3b44;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar {
+  width: 12px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.custom_select__container div:nth-child(2)::-webkit-scrollbar-thumb {
+  background-color: #31326f;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.custom_select__container div:nth-child(2) option {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  margin: 0.2rem 0;
+  transition: all 0.25s ease-out;
+  cursor: pointer;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.8rem;
+}
+.custom_select__container div:nth-child(2) option:hover {
+  background-color: #484aa4;
+}
+.custom_select__container p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/*Textarea*/
+.textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid #e3e2e2;
+  border-radius: 8px;
+  outline: none;
+}
+.textarea:focus {
+  border: 2px solid #484aa4;
+}
+
+/**Radio Btn**/
+.radio_input__container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin: 0 1rem;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.radio_input__container label {
+  color: #65717c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.radio_input__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.radio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border: 1px solid #4e5760;
+  border-radius: 50%;
+}
+.radio_input__container:hover input ~ .radio {
+  background-color: #ccc;
+}
+.radio_input__container input:checked ~ .radio {
+  background-color: #484aa4;
+}
+.radio:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.radio_input__container input:checked ~ .radio:after {
+  display: block;
+}
+.radio_input__container .radio:after {
+  top: 3px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+.work_details__form_row {
+  margin: 2rem 0;
+}
+.work_details_time_period {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap-reverse;
+}
+.work_details_time_period > p {
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+  color: #484aa4;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.time_period__label {
+  color: #4e5760;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+.work_details_checkbox__container {
+  display: flex;
+  justify-content: flex-end;
 }
 /*-----------------------------
       COLORS
@@ -3413,6 +3970,16 @@ element-specific
   cursor: pointer;
   color: #fcfcfc;
 }
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
 
 /*-----------------------------
       COLORS
@@ -3644,6 +4211,16 @@ element-specific
   cursor: pointer;
   color: #fcfcfc;
 }
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
+}
 /*-----------------------------
       COLORS
 /*-----------------------------
@@ -3699,6 +4276,16 @@ element-specific
   width: 24px;
   cursor: pointer;
   color: #fcfcfc;
+}
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.icon__sm__dark {
+  width: 24px;
+  cursor: pointer;
+  color: #3b3b44;
 }
 /*
   IMPORTS
