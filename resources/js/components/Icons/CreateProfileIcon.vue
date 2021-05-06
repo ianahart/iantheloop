@@ -10,36 +10,7 @@
 
     name: 'CreateProfileIcon',
 
-    components: {
 
-    },
-
-    props: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    computed : {
-
-    },
-
-    methods: {
-
-    },
   }
 
 </script>
@@ -47,7 +18,6 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
 
   .create_profile__icon {
     width: 25px;

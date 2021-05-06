@@ -57,22 +57,6 @@
       rootStyle: String,
     },
 
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-
     computed: {
       ...mapState('navigation',
         [
@@ -99,10 +83,4 @@
 
 <style lang="scss">
 
-/*
-  IMPORTS
-*/
-
-   @import '../../../sass/general/_variables.scss';
-   @import '../../../sass/general/_base.scss';
 </style>

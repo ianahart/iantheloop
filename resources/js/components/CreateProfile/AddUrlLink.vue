@@ -39,7 +39,7 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
+  // @import '../../../sass/general/_variables.scss';
 
   .add_url_link__container {
     display: flex;

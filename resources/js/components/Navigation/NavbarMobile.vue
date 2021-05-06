@@ -47,25 +47,6 @@
       AuthNavigationLinks,
     },
 
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    beforeDestroy () {
-
-    },
-
     computed: {
 
       ...mapGetters('user',
@@ -85,11 +66,7 @@
 
 
 <style lang="scss">
-/*
-IMPORTS
-*/
-  @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
+
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;

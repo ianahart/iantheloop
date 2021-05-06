@@ -9,40 +9,12 @@
 
 <script>
 
-  // forms will go in here
-
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
   export default {
 
     name: 'Triggers',
 
-    props: {
-
-    },
-
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    computed: {
-
-    },
 
     methods: {
 

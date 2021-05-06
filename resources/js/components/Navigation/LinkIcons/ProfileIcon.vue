@@ -16,33 +16,6 @@
 
     name: 'ProfileIcon',
 
-    props: {
-
-    },
-
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    mounted () {
-
-    },
-
-    created () {
-
-    },
-
-    computed: {
-
-    },
-
     methods: {
       ...mapMutations('profileDropdown',
         [
@@ -62,8 +35,6 @@
 
 
 <style lang="scss">
-
-  @import '../../../../sass/general/_variables.scss';
 
   .profile__icon__container {
     position: relative;

@@ -85,7 +85,7 @@
 
 <style lang="scss">
 
-  @import '../../../../sass/forms/_inputs.scss';
+  // @import '../../../../sass/forms/_inputs.scss';
 
   .text-area__container {
     display: flex;

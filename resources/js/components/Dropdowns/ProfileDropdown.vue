@@ -146,8 +146,6 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
-
   .profile__dropdown {
     height: 600px;
     border-radius: 8px;

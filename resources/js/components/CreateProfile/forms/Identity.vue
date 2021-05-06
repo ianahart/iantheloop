@@ -191,7 +191,7 @@
 
 <style lang="scss">
 
-  @import '../../../../sass/general/_variables.scss';
+  // @import '../../../../sass/general/_variables.scss';
 
 
   .identity_form__row {

@@ -57,7 +57,6 @@
 <style lang="scss">
 
 
-  @import '../../../sass/general/_variables.scss';
   @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
 
  .login__header {

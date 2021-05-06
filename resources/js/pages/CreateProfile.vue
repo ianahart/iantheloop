@@ -29,24 +29,6 @@
       Triggers,
     },
 
-    props: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
 
     beforeDestroy() {
 
@@ -70,10 +52,7 @@
 
 <style lang="scss">
 
-  @import '../../sass/general/_variables.scss';
-
   .create_profile__container {
-    // background-color: lighten($primaryGray, 2);
     background-image: url('../../assets/create_profile_bg.svg');
     background-size: center;
     height: 100%;

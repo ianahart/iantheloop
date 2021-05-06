@@ -16,29 +16,6 @@
       name: String,
       linkText: String,
     },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    computed : {
-
-    },
-
-    methods: {
-
-    },
   }
 
 </script>
@@ -46,7 +23,7 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
+
 
 
 

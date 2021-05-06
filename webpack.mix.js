@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
-const path = require('path');
+require('laravel-mix-purgecss');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -15,8 +16,10 @@ const path = require('path');
 // mix.setPublicPath(__dirname + "/public");
 // mix.setResourceRoot(__dirname + "/resources");
 
-mix.js('resources/js/app.js', 'public/js').vue({ extractStyles: 'public/css/app.css' })
+mix.js('resources/js/app.js', 'public/js').vue({extractStyles: true, globalStyles: 'resources/sass/general/_variables.scss'})
+// .vue({ extractStyles: 'public/css/app.css' })
 .sass('resources/sass/app.scss', 'public/css')
+.purgeCss({enabled: true})
 .copy("resources/assets", "public/images") // <- Might be optional
 // .options(
 //     {

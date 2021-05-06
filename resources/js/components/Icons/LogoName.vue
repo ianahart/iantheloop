@@ -16,28 +16,6 @@
       theme: String,
     },
 
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    methods: {
-
-    }
   };
 
 </script>
@@ -47,8 +25,6 @@
 /*
   IMPORTS
 */
-  @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
 
   .company__logo {
     display :flex;

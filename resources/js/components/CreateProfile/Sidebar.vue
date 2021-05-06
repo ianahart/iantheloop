@@ -52,21 +52,6 @@
       SidebarSection,
     },
 
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
     computed: {
 
       ...mapGetters('user',
@@ -76,15 +61,11 @@
       ),
     },
 
-    methods: {
-
-    },
   }
 </script>
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
 
   .create_profile_sidebar__container {
     background-color: #fff;

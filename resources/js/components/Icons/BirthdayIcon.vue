@@ -19,6 +19,5 @@
 
 <style lang="scss">
 
-  @import '../../../sass/_icons.scss';
 
 </style>

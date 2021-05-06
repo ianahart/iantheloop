@@ -9,38 +9,12 @@
 
 <script>
 
-// ismenuOpen show close icon
 
   export default {
 
     name: 'CloseIcon',
 
-    props: {
 
-    },
-
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    computed: {
-
-    },
 
     methods: {
 
@@ -58,8 +32,7 @@
 /*
   IMPORTS
 */
-  @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
+
 
 
   .close__icon {

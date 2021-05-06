@@ -206,7 +206,7 @@
 
 <style lang="scss">
 
-  @import '../../../../sass/general/_variables.scss';
+  // @import '../../../../sass/general/_variables.scss';
 
   .general_details_form__row {
     display: flex;

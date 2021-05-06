@@ -11,43 +11,13 @@
 
     name: 'SearchIcon',
 
-    props: {
 
-    },
-
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    mounted () {
-
-    },
-    created () {
-
-    },
-
-    computed: {
-
-    },
-
-    methods: {
-
-    }
   }
 
 </script>
 
 
 <style lang="scss">
-
-  @import '../../../sass/general/_variables.scss';
 
   .search__icon {
     width: 25px;

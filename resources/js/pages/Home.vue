@@ -9,20 +9,11 @@
 export default {
     name: "Home",
 
-    components: {},
 
-    props: {},
-
-    created() {},
-
-    mounted() {},
-
-    methods: {}
 };
 </script>
 
 <style lang="scss">
-@import "../../sass/general/_variables.scss";
 
 .home__container {
     box-sizing: border-box;

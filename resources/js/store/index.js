@@ -19,7 +19,7 @@ import generalDetails from './modules/createProfile/generalDetails.js';
 import aboutDetails from './modules/createProfile/aboutDetails.js';
 import identity from './modules/createProfile/identity.js';
 import workDetails from './modules/createProfile/workDetails.js';
-
+import customize from './modules/createProfile/customize.js';
 
 Vue.use(Vuex);
 
@@ -55,6 +55,7 @@ export default new Vuex.Store(
       aboutDetails,
       identity,
       workDetails,
+      customize,
     },
   }
 );

@@ -13,45 +13,12 @@
   export default {
 
     name: 'Header',
-
-    components: {
-
-    },
-
-    props: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    methods: {
-
-    },
   }
 
 </script>
 
 <style lang="scss">
 
-/*
-IMPORTS
-*/
-
- @import '../../../sass/general/_variables.scss';
- @import '../../../sass/general/_base.scss';
  @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
 
 

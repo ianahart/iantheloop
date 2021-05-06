@@ -245,8 +245,8 @@
 
 <style lang="scss">
 
-  @import '../../../../sass/general/_variables.scss';
-  @import '../../../../sass/forms/_inputs.scss';
+  // @import '../../../../sass/general/_variables.scss';
+  // @import '../../../../sass/forms/_inputs.scss';
 
   .work_details__form_row {
     margin: 2rem 0;

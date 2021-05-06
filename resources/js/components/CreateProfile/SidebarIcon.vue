@@ -49,7 +49,6 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
 
 .create_profile_sidebar__icon {
   margin-right: 0.7rem;

@@ -6,7 +6,6 @@
      <span>
        {{ text }}
      </span>
-     <!-- <p>{{ checkboxError }}</p> -->
     </div>
   </label>
 </template>
@@ -52,8 +51,6 @@
 
 
 <style lang="scss">
-
-  @import '../../../../sass/general/_variables.scss';
 
 .custom__checkbox {
   display: block;

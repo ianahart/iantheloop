@@ -76,7 +76,7 @@
 
 <style lang="scss">
 
-    @import '../../../../sass/general/_variables.scss';
+    // @import '../../../../sass/general/_variables.scss';
 
     .add_interest_container {
 

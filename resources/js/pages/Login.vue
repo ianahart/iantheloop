@@ -35,22 +35,12 @@
 
     name: 'Login',
 
-    props: {
-
-    },
-
     components: {
 
       Header,
       InputFieldLg,
     },
 
-    data () {
-
-      return {
-
-      }
-    },
 
     created () {
 
@@ -58,10 +48,6 @@
 
           this.clearRegistration();
       }
-    },
-
-    mounted () {
-
     },
 
     beforeDestroy() {
@@ -154,11 +140,6 @@
 </script>
 
 <style lang="scss">
-
-  @import '../../sass/forms/_inputs.scss';
-  @import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_buttons.scss';
-
 
   .login__container {
     box-sizing: border-box;

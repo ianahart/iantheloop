@@ -1,6 +1,6 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" :class="`h-6 w-6 ${className}`" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
   </svg>
 </template>
 
@@ -8,17 +8,17 @@
 
   export default {
 
-    name: 'PlusIcon',
+    name: 'UploadIcon',
 
     props: {
 
       className: String,
     }
   }
-
-
 </script>
+
 
 <style lang="scss">
 
 </style>
+

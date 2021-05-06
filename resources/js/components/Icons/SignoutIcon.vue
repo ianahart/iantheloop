@@ -12,43 +12,13 @@
 
     name: 'SignoutIcon',
 
-    props: {
 
-    },
-
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    mounted () {
-
-    },
-    created () {
-
-    },
-
-    computed: {
-
-    },
-
-    methods: {
-
-    }
   }
 
 </script>
 
 
 <style lang="scss">
-
-  @import '../../../sass/general/_variables.scss';
 
 .sign__out__icon {
   width: 25px;

@@ -20,29 +20,6 @@
 
     name: 'ShowPasswordIcon',
 
-    props: {
-
-    },
-
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
     computed: {
 
       ...mapState(
@@ -84,8 +61,6 @@
 /*
 IMPORTS
 */
-
-  @import '../../../sass/general/_variables.scss';
 
   .password__icon__container {
 

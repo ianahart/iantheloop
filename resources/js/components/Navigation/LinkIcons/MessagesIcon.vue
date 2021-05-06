@@ -16,28 +16,7 @@
       className: String,
     },
 
-    components: {
 
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    mounted () {
-
-    },
-
-    created () {
-
-    },
-
-    computed: {
-
-    },
 
     methods: {
 
@@ -52,9 +31,5 @@
 
 
 <style lang="scss">
-
-  @import '../../../../sass/_icons.scss';
-
-
 
 </style>

@@ -37,24 +37,10 @@
 
     name: 'ResetPassword',
 
-    props: {
-
-    },
 
     components: {
 
       InputFieldLg,
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
     },
 
     mounted () {
@@ -137,8 +123,6 @@
 
 <style lang="scss">
 
-  @import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_buttons.scss';
   @import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
 
 

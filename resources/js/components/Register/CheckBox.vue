@@ -24,25 +24,6 @@
       url: String,
     },
 
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
     computed: {
 
       ...mapState('createAccount',
@@ -70,12 +51,6 @@
 </script>
 
 <style lang="scss">
-
-/*
-IMPORTS
-*/
-
-  @import '../../../sass/general/_variables.scss';
 
 .create__account__checkbox {
   display: block;

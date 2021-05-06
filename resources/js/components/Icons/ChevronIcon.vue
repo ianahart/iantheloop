@@ -10,36 +10,6 @@
 
     name: 'ChevronIcon',
 
-    props: {
-
-    },
-
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    computed: {
-
-    },
-
-    methods: {
-
-    }
   }
 
 </script>
@@ -47,7 +17,6 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
 
 
   .chevron__icon {

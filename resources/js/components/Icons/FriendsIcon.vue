@@ -10,44 +10,13 @@
 
     name: 'CreateProfileIcon',
 
-    components: {
 
-    },
-
-    props: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    computed : {
-
-    },
-
-    methods: {
-
-    },
   }
 
 </script>
 
 
 <style lang="scss">
-
-  @import '../../../sass/general/_variables.scss';
 
   .friends__icon {
     width: 25px;

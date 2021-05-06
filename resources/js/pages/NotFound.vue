@@ -62,8 +62,6 @@
 </script>
 <style lang="scss">
 
-  @import '../../sass/general/_variables.scss';
-
   .not_found__container {
     background-color: $primaryGray;
     width: 100%;

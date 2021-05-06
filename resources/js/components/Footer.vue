@@ -15,40 +15,10 @@
 
     name: 'Footer',
 
-    components: {
-
-    },
-
-    props: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    methods: {
-
-    },
   }
 </script>
 
 <style lang="scss">
-/*
-IMPORTS
-*/@import '../../sass/general/_variables.scss';
-  @import '../../sass/general/_base.scss';
 
   .footer {
     background-color: lighten(#191919, 10);

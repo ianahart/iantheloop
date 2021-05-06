@@ -19,24 +19,6 @@
       className: String,
     },
 
-    components: {
-
-    },
-
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
 
     computed: {
 
@@ -63,9 +45,6 @@
 /*
   IMPORTS
 */
-  @import '../../../sass/_icons.scss';
-  @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
 
 
 </style>

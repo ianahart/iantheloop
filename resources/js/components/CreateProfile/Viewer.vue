@@ -14,18 +14,22 @@
       <WorkDetails
         v-if="getCurrentForm === 'Work Details'"
       />
+      <Customize
+        v-if="getCurrentForm === 'Customize'"
+      />
     </div>
   </div>
 </template>
 
 <script>
 
-  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { mapGetters } from 'vuex';
 
   import Identity from './forms/Identity.vue';
   import GeneralDetails from './forms/GeneralDetails.vue';
   import AboutDetails from './forms/AboutDetails.vue';
   import WorkDetails from './forms/WorkDetails.vue';
+  import Customize from './forms/Customize.vue';
 
   export default {
 
@@ -41,22 +45,10 @@
       GeneralDetails,
       AboutDetails,
       WorkDetails,
+      Customize,
     },
 
-    data () {
 
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
 
     computed: {
 
@@ -76,7 +68,6 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
 
   .create_profile_viewer__container {
     grid-column:  2 / 5;

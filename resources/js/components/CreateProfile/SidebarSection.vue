@@ -76,8 +76,6 @@
 
 <style lang="scss">
 
-  @import '../../../sass/general/_variables.scss';
-
   .create_profile_sidebar__section {
     cursor: pointer;
     text-align: center;

@@ -50,24 +50,6 @@
       AuthNavigationLinks,
     },
 
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-    },
-
-    beforeDestroy () {
-
-    },
 
     computed: {
 
@@ -104,11 +86,7 @@
 
 
 <style lang="scss">
-/*
-IMPORTS
-*/
-  @import '../../../sass/general/_variables.scss';
-  @import '../../../sass/general/_base.scss';
+
 
   .logged_in_nav {
     background-color: transparent;
