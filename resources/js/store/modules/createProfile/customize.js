@@ -2,21 +2,26 @@
 import axios from 'axios';
 
 import {
-  inputChange,
   getFormData,
   pluckField,
-  errorsPresent
+  clearFields,
+  retrieveFile,
+  setCustomizeSrc,
 } from '../../../helpers/moduleHelpers.js';
 
 const initialState = () => {
 
   return {
     form: [
-          {field: 'background_image', errors: [], label: 'Background Image', value: '',size: '', type: 'file', nameAttr: 'background_image'},
-          {field: 'profile_image', errors: [], label: 'Profile Picture', value: '',size: '', type: 'file', nameAttr: 'profile_image'},
+          {file: 'backgroundfile', field: 'background_image', errors: [], label: 'Background Image', value: '',size: '', type: 'file', nameAttr: 'background_image'},
+          {file: 'profilefile', field: 'profile_image' ,errors: [], label: 'Profile Picture', value: '',size: '', type: 'file', nameAttr: 'profile_image'},
     ],
     errorsPresent: false,
     formName: 'customize',
+    files: [
+      {file: null, input: 'background_image', src: ''},
+      {file: null, input: 'profile_image', src: ''},
+    ],
   };
 };
 
@@ -28,9 +33,14 @@ const customize = {
 
   getters: {
 
-    getCustomize: (state) => {
+    getBackgroundImageFile(state) {
 
-      return getFormData(state);
+      return retrieveFile(state.files, 'background_image');
+    },
+
+    getProfileImageFile(state) {
+
+      return retrieveFile(state.files, 'profile_image');
     },
 
     getBackgroundImage (state) {
@@ -46,10 +56,60 @@ const customize = {
 
   mutations: {
 
-    UPDATE_FIELD: (state, payload) => {
+    REMOVE_IMAGE: (state, payload) => {
 
-      inputChange(state, payload);
+      const file = state.files.find((file) => file.input === payload);
 
+      file.src = '';
+      file.file = null;
+
+      return state.form.map((input) => {
+
+        if (input.field === payload) {
+
+          input.value = '';
+
+          return input;
+        }
+        return input;
+      });
+    },
+
+    SET_IMAGE_FIELD:(state, { file, input, src }) => {
+
+      state.files.forEach((fileObj) => {
+
+          if (fileObj.input === input) {
+
+            fileObj.file = file;
+            fileObj.input = input;
+            fileObj.src = src;
+
+            setCustomizeSrc(state.form, input, src);
+          }
+      });
+    },
+
+      CLEAR_VALUES: (state) => {
+
+        clearFields(state.form);
+
+        state.files.forEach((file) => {
+
+          file.src = '';
+          file.file = null;
+        });
+      },
+
+      CLEAR_ERROR_MSGS: (state) => {
+
+        state.errorsPresent = false;
+
+        state.form.forEach((field) => {
+
+          field.errors = [];
+        }
+        );
     },
 
      SET_ERRORS: (state, payload) => {
@@ -59,17 +119,16 @@ const customize = {
         return;
       }
 
-      state.form.forEach((input, fIdx) => {
+      state.form.forEach((field, formIndex) => {
 
-        payload.forEach((error, pIdx) => {
-
+        payload.forEach((error, errorIndex) => {
           const key = Object.keys(error);
 
-          if (input.field === key.toString()) {
+          if (key.toString() === field.file) {
 
-               state.errorsPresent = true;
-
-               state.form[fIdx].errors.push(...payload[pIdx][input.field]);
+            state.form[formIndex].value = '';
+            state.errorsPresent = true;
+            state.form[formIndex].errors.push(...payload[errorIndex][key]);
           }
         });
       });

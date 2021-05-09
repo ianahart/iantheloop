@@ -10,7 +10,11 @@ use App\Models\User;
 use App\Http\Requests\StoreMultipleForm;
 
 
+/*Get contents off the file*/
 
+// $a = request()->file('backgroundfile');
+
+// error_log(print_r($a->getClientOriginalName(), true));
 class ProfileController extends Controller
 {
     /*
@@ -26,12 +30,16 @@ class ProfileController extends Controller
 
         try {
 
+
+
+
+
             $validated = $request->validated();
 
             if ($validated) {
 
                 //---- GET ALL FORM DATA
-                error_log(print_r($request->all(), true));
+                // error_log(print_r($request->all(), true));
 
 
                 return response()->json(['msg' => 'hi'], 200);

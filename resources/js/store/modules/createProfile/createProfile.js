@@ -1,4 +1,5 @@
 import axios from "axios";
+import customize from "./customize";
 
 const initialState = () => {
 
@@ -47,26 +48,51 @@ const createProfile = {
 
       try {
 
+          let rawData = {
+              identity: rootGetters['identity/getIdentity'],
+              workDetails: rootGetters['workDetails/getWorkDetails'],
+              aboutDetails:   rootGetters['aboutDetails/getAboutDetails'],
+              generalDetails: rootGetters['generalDetails/getGeneralDetails'],
+          };
+
+          let backgroundImageFile = rootGetters['customize/getBackgroundImageFile'];
+          let profileImageFile = rootGetters['customize/getProfileImageFile'];
+
+
+          rawData = JSON.stringify(rawData);
+
+          const formData = new FormData();
+
+          formData.append('data', rawData);
+
+          if (backgroundImageFile.file !== null) {
+
+            formData.append('backgroundfile', backgroundImageFile.file);
+          }
+            formData.append('backgroundsrc', backgroundImageFile.src);
+
+         if (profileImageFile.file !== null) {
+
+          formData.append('profilefile', profileImageFile.file);
+         }
+          formData.append('profilesrc', profileImageFile.src);
+
+
         let response;
 
         response = await axios(
           {
             url: '/api/auth/profile',
             method: 'POST',
+            'contentType': false,
+            'processData': false,
             headers: {
 
-              'Content-Type': 'application/json',
               'Accept' : 'application/json',
             },
 
-            data: {
-              identity: rootGetters['identity/getIdentity'],
-              generalDetails: rootGetters['generalDetails/getGeneralDetails'],
-              aboutDetails:   rootGetters['aboutDetails/getAboutDetails'],
-              // customize: rootGetters['customize/getCustomize'],
-              workDetails: rootGetters['workDetails/getWorkDetails'],
-              },
-            }
+            data: formData,
+          }
         );
 
         console.log(response);
@@ -84,7 +110,7 @@ const createProfile = {
         const forms = {
           identity: [],        //
           aboutDetails:  [],
-          // customize: [],
+          customize: [],
           generalDetails: [],
           workDetails: [],
         }
@@ -93,6 +119,10 @@ const createProfile = {
 
         for (let field in fields) {
 
+          if (!field.includes('.')) {
+
+              forms.customize.push({[field]: fields[field]});
+          }
           const form = field.split('.')[0];
 
           if (Object.keys(forms).includes(form)) {
@@ -103,7 +133,7 @@ const createProfile = {
                 });
           }
         }
-        console.log('Create Profile Errors: ', e.response);
+        console.log('---------Create Profile Errors: ------', e.response);
 
         /**Test a single form**/
         // commit('generalDetails/SET_ERRORS', forms.generalDetails, {root: true});

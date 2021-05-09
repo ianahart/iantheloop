@@ -5,6 +5,7 @@ import {
         getFormData,
         inputChange,
         pluckField,
+        clearFields,
         errorsPresent,
 
       } from '../../../helpers/moduleHelpers.js';
@@ -66,6 +67,12 @@ const aboutDetails = {
   },
 
   mutations: {
+
+    CLEAR_VALUES: (state) => {
+
+      clearFields(state.form);
+
+    },
 
     UPDATE_FIELD: (state, payload) => {
 

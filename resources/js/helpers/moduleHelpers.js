@@ -104,3 +104,38 @@ export function errorsPresent(form, name) {
      return errors;
 
 }
+
+export function clearFields (form) {
+
+     form.forEach((field) => {
+
+          field.value = '';
+
+          field.interests = [];
+
+     });
+}
+
+export function setCustomizeSrc (form, input, src) {
+
+     form.forEach((field) => {
+
+          if (field.field === input) {
+
+               field.value = src;
+          }
+     });
+}
+
+export function retrieveFile (files, name) {
+
+     const filtered = files.filter((file) => {
+
+          if (file.input === name) {
+
+               return file;
+          }
+     });
+
+     return Object.assign({}, ...filtered);
+}

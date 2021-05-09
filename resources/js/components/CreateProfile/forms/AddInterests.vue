@@ -61,7 +61,10 @@
 
       handleAddInterest(interest) {
 
-        this.ADD_INTEREST(interest);
+        if (interest.length) {
+
+          this.ADD_INTEREST(interest);
+        }
       },
 
       handleChange(e) {

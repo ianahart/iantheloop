@@ -5,6 +5,7 @@ import {
   inputChange,
   getFormData,
   pluckField,
+  clearFields,
   errorsPresent
 } from '../../../helpers/moduleHelpers.js';
 
@@ -83,6 +84,12 @@ const workDetails = {
   },
 
   mutations: {
+
+    CLEAR_VALUES: (state) => {
+
+      clearFields(state.form);
+
+    },
 
     TOGGLE_CHECKBOX: (state, payload) => {
 

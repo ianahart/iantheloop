@@ -108,8 +108,6 @@
 
 <style lang="scss">
 
-  // @import '../../../../sass/general/_variables.scss';
-
   .about_detals_form__row {
     margin: 2rem 0;
   }

@@ -34,8 +34,8 @@
         this.$store.commit('generalDetails/CLEAR_ERROR_MSGS');
         this.$store.commit('aboutDetails/CLEAR_ERROR_MSGS');
         this.$store.commit('workDetails/CLEAR_ERROR_MSGS');
-
-
+        this.$store.commit('identity/CLEAR_ERROR_MSGS');
+        this.$store.commit('customize/CLEAR_ERROR_MSGS');
 
         await this.CREATE_PROFILE();
     },
@@ -43,6 +43,13 @@
     clearValues () {
 
       this.RESET_MODULE();
+
+        this.$store.commit('generalDetails/CLEAR_VALUES');
+        this.$store.commit('aboutDetails/CLEAR_VALUES');
+        this.$store.commit('workDetails/CLEAR_VALUES');
+        this.$store.commit('identity/CLEAR_VALUES');
+        this.$store.commit('customize/CLEAR_VALUES');
+
     }
     },
   }

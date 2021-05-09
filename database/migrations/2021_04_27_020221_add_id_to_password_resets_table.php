@@ -14,8 +14,10 @@ class AddIdToPasswordResetsTable extends Migration
     public function up()
     {
         Schema::table('password_resets', function (Blueprint $table) {
-            //
-            $table->id();
+
+            if (!Schema::hasColumn('password_resets', 'id')) {
+                $table->id();
+            }
         });
     }
 
