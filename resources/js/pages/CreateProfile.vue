@@ -36,7 +36,19 @@
     },
 
     computed: {
+  ...mapGetters('user',
+        [
+          'getProfileStatus',
+        ]
+      ),
+    },
 
+    created () {
+
+      if (this.getProfileStatus) {
+        console.log('WORKED');
+        this.$router.push('/');
+      }
     },
 
     methods: {

@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Namshi\JOSE\JWT;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
@@ -102,15 +102,33 @@ class LoginController extends Controller
     }
 
     /*
+     * retrieve user's profile picture
+     * @param void
+     * @return string
+     */
+
+    private function getProfilePic()
+    {
+        if (JWTAuth::user()->profile_created) {
+
+            $profile = Profile::where('user_id', '=', JWTAuth::user()->id)->first();
+
+            return $profile->profile_picture;
+        }
+    }
+
+
+    /*
      * create new token with payload
      * @param String
      * @param int
      * @param object
      * @return string
      */
-
     protected function createNewToken(string $payload, int $TLL, object $user)
     {
+
+        $profile_pic = $this->getProfilePic();
 
         return json_encode(
             [
@@ -121,6 +139,7 @@ class LoginController extends Controller
                 'exp' => time() + $TLL * 60,
                 'user_id' => JWTAuth::user()->id,
                 'profile_created' => JWTAuth::user()->profile_created,
+                'profile_pic' => $profile_pic ?? '',
                 'name' => $user->full_name,
             ]
         );

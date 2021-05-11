@@ -16,6 +16,14 @@
     name: 'Triggers',
 
 
+    computed: {
+      ...mapGetters('user',
+          [
+            'getProfileStatus'
+          ]
+        ),
+    },
+
     methods: {
 
       ...mapMutations('createProfile',
@@ -38,6 +46,11 @@
         this.$store.commit('customize/CLEAR_ERROR_MSGS');
 
         await this.CREATE_PROFILE();
+
+        if (this.getProfileStatus) {
+          console.log('WORKEDDDD');
+          this.$router.push('/');
+        }
     },
 
     clearValues () {

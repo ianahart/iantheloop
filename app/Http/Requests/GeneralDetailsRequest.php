@@ -62,7 +62,7 @@ class GeneralDetailsRequest extends FormRequest
             [
 
                 'generalDetails.town' => ['nullable', 'regex:/^[\pL\s\-]+$/u'],
-                'generalDetails.displayname' => ['nullable', 'alpha_num', 'max:50'],
+                'generalDetails.display_name' => ['nullable', 'alpha_num', 'max:50'],
                 'generalDetails.phone' => ['nullable', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             ],
             $rules
@@ -112,8 +112,8 @@ class GeneralDetailsRequest extends FormRequest
             [
 
                 'generalDetails.town.regex' => 'Letters, spaces, and hyphens allowed',
-                'generalDetails.displayname.alpha_num' => 'Letters and numbers allowed',
-                'generalDetails.displayname.max' => 'Maximum of 50 characters',
+                'generalDetails.display_name.alpha_num' => 'Letters and numbers allowed',
+                'generalDetails.display_name.max' => 'Maximum of 50 characters',
                 'generalDetails.phone.regex' => 'Please provide a valid phone number',
                 'generalDetails.phone.min' => 'Phone number must be at least 10 characters',
             ],

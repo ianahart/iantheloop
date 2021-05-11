@@ -3,7 +3,7 @@
     <h4>Customize your profile by uploading pictures</h4>
       <p class="customize__label">{{ getBackgroundImage.label }}:</p>
       <p class="customize__meta_info"><em>*Please keep all files/pictures under 2MB</em></p>
-      <div v-if="getBackgroundImage.value.length" class="customize_success__container">
+      <div v-if="getBackgroundImage.value.length || getBackgroundImage.errors.length" class="customize_success__container">
         <div>
           <CheckCircleIcon
             className="icon__md icon__success"
@@ -34,9 +34,10 @@
         shape="square"
       />
     </div>
+    <div class="customize_file_upload__separator"></div>
       <p class="customize__label">{{ getProfileImage.label }}:</p>
       <p class="customize__meta_info"><em>*Please keep all files/pictures under 2MB</em></p>
-       <div v-if="getProfileImage.value.length" class="customize_success__container">
+       <div v-if="getProfileImage.value.length || getProfileImage.errors.length" class="customize_success__container">
         <div>
           <CheckCircleIcon
             className="icon__md icon__success"
@@ -152,6 +153,12 @@
     padding: 1rem;
     margin: 2rem auto;
 
+  }
+
+  .customize_file_upload__separator {
+    height: 2px;
+    border-bottom: 1px solid $primaryGray;
+    margin-bottom: 1.3rem;
   }
 
   .profile_image__container {

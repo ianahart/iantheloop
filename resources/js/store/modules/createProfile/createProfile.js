@@ -64,18 +64,8 @@ const createProfile = {
           const formData = new FormData();
 
           formData.append('data', rawData);
-
-          if (backgroundImageFile.file !== null) {
-
-            formData.append('backgroundfile', backgroundImageFile.file);
-          }
-            formData.append('backgroundsrc', backgroundImageFile.src);
-
-         if (profileImageFile.file !== null) {
-
-          formData.append('profilefile', profileImageFile.file);
-         }
-          formData.append('profilesrc', profileImageFile.src);
+          formData.append('backgroundfile', backgroundImageFile.file ?? '');
+          formData.append('profilefile', profileImageFile.file ?? '');
 
 
         let response;
@@ -97,18 +87,20 @@ const createProfile = {
 
         console.log(response);
 
-          // let stringifiedUser = localStorage.getItem('user');
+          let stringifiedUser = localStorage.getItem('user');
 
-          // const parsedUser = JSON.parse(stringifiedUser);
+          const parsedUser = JSON.parse(stringifiedUser);
 
-          // parsedUser.profile_created = response.data.profileCreated;
+          parsedUser.profile_created = response.data.profileCreated;
+          parsedUser.profile_pic = response.data.profile_pic;
 
-          // commit('user/SET_TOKEN', JSON.stringify(parsedUser), { root: true });
+
+          commit('user/SET_TOKEN', JSON.stringify(parsedUser), { root: true });
 
       } catch (e) {
 
         const forms = {
-          identity: [],        //
+          identity: [],
           aboutDetails:  [],
           customize: [],
           generalDetails: [],
@@ -133,10 +125,7 @@ const createProfile = {
                 });
           }
         }
-        console.log('---------Create Profile Errors: ------', e.response);
-
-        /**Test a single form**/
-        // commit('generalDetails/SET_ERRORS', forms.generalDetails, {root: true});
+        // console.log('---------Create Profile Errors: ------', e.response);
 
           for (let form in forms) {
 

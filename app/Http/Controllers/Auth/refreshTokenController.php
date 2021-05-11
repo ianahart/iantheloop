@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use JTWAuth;
-use Namshi\JOSE\JWT;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -39,6 +39,7 @@ class refreshTokenController extends Controller
 
 
             try {
+
                 $TLL = 20160;
 
                 JWTAuth::factory()->setTTL($TLL);
@@ -71,9 +72,27 @@ class refreshTokenController extends Controller
     }
 
 
+    /*
+     * retrieve user's profile picture
+     * @param void
+     * @return string
+     */
+
+    private function getProfilePic()
+    {
+        if (JWTAuth::user()->profile_created) {
+
+            $profile = Profile::where('user_id', '=', JWTAuth::user()->id)->first();
+
+            return $profile->profile_picture;
+        }
+    }
+
 
     protected function respondWithRefreshToken($token, $TLL)
     {
+
+        $profile_pic = $this->getProfilePic();
 
         return json_encode(
             [
@@ -84,6 +103,7 @@ class refreshTokenController extends Controller
                 'exp' => time() + $TLL * 60,
                 'user_id' => JWTAuth::user()->id,
                 'profile_created' => JWTAuth::user()->profile_created,
+                'profile_pic' => $profile_pic ?? '',
                 'name' => JWTAuth::user()->full_name,
             ]
         );

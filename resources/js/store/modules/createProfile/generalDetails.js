@@ -15,7 +15,7 @@ const initialState = () => {
   return {
 
        form: [
-          {field: 'displayname', errors: [], label: 'Display Name', value: '',size: 'md', type: 'text', nameAttr: 'displayname'},
+          {field: 'display_name', errors: [], label: 'Display Name', value: '',size: 'md', type: 'text', nameAttr: 'display_name'},
           {field: 'town', errors: [], label: 'Town', value: '',size: 'md', type: 'text', nameAttr: 'town'},
           {field: 'state', errors: [], label: 'State', value: '',size: 'sm', type: 'text', nameAttr: 'state'},
           {field: 'country', errors: [], label: 'Country', value: '',size: 'md', type: 'text', nameAttr: 'country'},
@@ -42,7 +42,7 @@ const generalDetails = {
     },
     getDisplayName(state) {
 
-      return pluckField(state, 'displayname');
+      return pluckField(state, 'display_name');
     },
     getTown(state) {
 

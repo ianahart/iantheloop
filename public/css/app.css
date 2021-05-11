@@ -1217,6 +1217,11 @@ IMPORTS
   padding: 1rem;
   margin: 2rem auto;
 }
+.customize_file_upload__separator {
+  height: 2px;
+  border-bottom: 1px solid #f2f2f2;
+  margin-bottom: 1.3rem;
+}
 .profile_image__container {
   display: block;
   box-sizing: border-box;
@@ -1464,6 +1469,12 @@ IMPORTS
 }
 .profile__icon__container svg {
   fill: #9ddfd3;
+}
+.profile__icon__container img {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 .profile__icon {
   color: #4e5760;

@@ -106,7 +106,8 @@
       ...mapGetters('user',
         [
           'userName',
-          'getProfileStatus'
+          'getProfileStatus',
+          'getProfilePic'
         ]
       ),
     },

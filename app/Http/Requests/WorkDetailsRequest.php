@@ -27,7 +27,7 @@ class WorkDetailsRequest extends FormRequest
         return [
             'workDetails.company' => ['nullable', 'max:100', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
             'workDetails.position' => ['nullable', 'max:50', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
-            'workDetails.city' => ['nullable', 'max:100', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
+            'workDetails.work_city' => ['nullable', 'max:100', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
             'workDetails.description' => ['nullable', 'max:300', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
         ];
     }
@@ -44,8 +44,8 @@ class WorkDetailsRequest extends FormRequest
             'workDetails.company.regex' => 'Please use only letters, numbers, spaces, and punctuation',
             'workDetails.position.max' => 'The maximum number of characters for the position is (50) characters',
             'workDetails.position.regex' => 'Please use only letters, numbers, spaces, and punctuation',
-            'workDetails.city.max' => 'The maximum number of characters for the city/town is (100) characters',
-            'workDetails.city.regex' => 'Please use only letters, numbers, spaces, and punctuation',
+            'workDetails.work_city.max' => 'The maximum number of characters for the city/town is (100) characters',
+            'workDetails.work_city.regex' => 'Please use only letters, numbers, spaces, and punctuation',
             'workDetails.description.regex' => 'Please use only letters, numbers, spaces, and punctuation',
             'workDetails.description.max' => 'The maximum number of characters for the description is (300)',
 

@@ -58,6 +58,13 @@ const customize = {
 
     REMOVE_IMAGE: (state, payload) => {
 
+      state.form.forEach((field) => {
+
+        if (field.field === payload) {
+          field.errors = [];
+        }
+      });
+
       const file = state.files.find((file) => file.input === payload);
 
       file.src = '';

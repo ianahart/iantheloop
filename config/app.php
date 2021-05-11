@@ -189,7 +189,7 @@ return [
     */
 
     'aliases' => [
-
+        'AmazonS3' => 'App\Helpers\AmazonS3::class',
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,

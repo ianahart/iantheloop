@@ -45,7 +45,7 @@ class StoreMultipleForm extends FormRequest
             'customize' => CustomizeRequest::class,
 
         ];
-        $cust = [];
+
         $rules = [];
         $instance = null;
         foreach ($formRequests as $key => $source) {
