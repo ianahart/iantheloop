@@ -320,6 +320,12 @@ h2 {
   color: #fcfcfc;
 }
 
+.icon__sm__light {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+
 .icon__sm__dark {
   width: 24px;
   cursor: pointer;
@@ -1388,6 +1394,214 @@ IMPORTS
     padding-top: 2.3rem;
 }
 }
+.user_profile__background_image {
+  border-radius: 8px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.user_profile__profile_image {
+  border-radius: 50%;
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  bottom: -120px;
+  display: inline-block;
+}
+.profile__header {
+  box-sizing: border-box;
+  border-radius: 8px;
+  max-width: 940px;
+  margin: 0 auto;
+  height: 440px;
+}
+.profile__header_image__section {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.profile_stats_followers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.profile_stats_followers p {
+  margin: 0;
+  color: #3b3b44;
+  font-weight: bold;
+}
+.profile_stats_followers p:last-of-type {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #c4c4c4;
+  font-weight: normal;
+}
+.profile_stats_following {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.profile_stats_following p {
+  margin: 0;
+  color: #3b3b44;
+  font-weight: bold;
+}
+.profile_stats_following p:last-of-type {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #c4c4c4;
+  font-weight: normal;
+}
+.profile_stats_follow_btn button {
+  background-color: transparent;
+  border: 1px solid #c4c4c4;
+  cursor: pointer;
+  height: 30px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  color: gray;
+  transition: 0.5s ease-out;
+}
+.profile_stats_follow_btn button:hover {
+  background-color: #efefef;
+}
+.profile_stats__container {
+  max-width: 650px;
+  border-radius: 8px;
+  margin-left: auto;
+  margin-right: 5.5rem;
+  margin-top: 1.3rem;
+  padding: 1.2rem 0;
+}
+.profile_stats__row {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.profile_stats_divider {
+  height: 50px;
+  border-right: 1px solid #f2f2f2;
+  border-left: 1px solid #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.profile_stats_display_name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.profile_stats_display_name p {
+  margin: 0;
+  color: #3b3b44;
+  font-weight: bold;
+}
+.profile_stats_display_name p:last-of-type {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #c4c4c4;
+  font-weight: normal;
+}
+.profile_stats_company {
+  color: #c4c4c4;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+.profile_stats_display_name p:first-of-type {
+  color: #31326f;
+  font-weight: normal;
+}
+@media (max-width: 600px) {
+.profile_stats__container {
+    margin-top: 6.9rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+}
+.profile_work_preview {
+  color: gray;
+  font-size: 0.9rem;
+}
+.profile_work_preview span {
+  color: #ff0033;
+}
+.profile__link {
+  color: #484aa4;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  background-color: #e0e0e0;
+  height: 35px;
+  padding: 0.1 0.2rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  margin: 0 1rem;
+  border-radius: 8px;
+  transition: all 0.5s ease-out;
+}
+.profile__link:first-of-type {
+  background-color: #484aa4;
+  color: #fcfcfc;
+}
+.profile__link:hover {
+  background-color: #cccccc;
+  color: #3b3b44;
+}
+.profile__navigation {
+  display: flex;
+  justify-content: space-evenly;
+}
+@media (max-width: 600px) {
+.profile__navigation {
+    justify-content: flex-start;
+}
+}
+.profile_dashboard__container {
+  max-width: 880px;
+  border-radius: 8px;
+  margin: 0 auto;
+  margin-top: 1rem;
+  margin-bottom: 2.2rem;
+  background-color: #f2f2f2;
+  box-sizing: border-box;
+}
+.profile_dashboard__row {
+  box-sizing: border-box;
+  padding: 1rem;
+  max-width: 400px;
+  margin-right: auto;
+  margin-left: 8rem;
+}
+@media (max-width: 600px) {
+.profile_dashboard__row {
+    margin-right: auto;
+    margin-left: 1rem;
+}
+}
+
+.profile_component__wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  height: 100%;
+}
+.profile__container {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+}
+@media(max-width: 600px) {
+.profile__container {
+    padding: 0.5rem;
+}
+}
+
+
 .not_found__container {
   background-color: #f2f2f2;
   width: 100%;

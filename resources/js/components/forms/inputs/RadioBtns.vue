@@ -7,6 +7,7 @@
           :type="type"
           :name="nameAttr"
           :value="label.toLowerCase()"
+          :checked="selected === label.toLowerCase() ? true : false"
         />
           <span class="radio"></span>
         {{ label }}
@@ -39,6 +40,7 @@
       nameAttr: String,
       commitPath: String,
       form: String,
+      selected: String,
     },
 
     components: {

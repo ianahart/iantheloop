@@ -31,6 +31,13 @@ const user = {
         return JSON.parse(state.jwtToken).profile_created;
       }
     },
+       getUserId (state) {
+
+      if (state.jwtToken) {
+
+        return JSON.parse(state.jwtToken).user_id;
+      }
+    },
 
         getProfilePic (state) {
 

@@ -23,6 +23,7 @@
           :label="getRelationship.statuses[index]"
           :value="getRelationship.value"
           :nameAttr="getRelationship.nameAttr"
+          :selected="selectedRadio"
           commitPath="aboutDetails/UPDATE_FIELD"
         />
       </div>
@@ -95,6 +96,7 @@
             'getBio',
             'getRelationship',
             'getInterests',
+            'selectedRadio'
           ]
         ),
     },

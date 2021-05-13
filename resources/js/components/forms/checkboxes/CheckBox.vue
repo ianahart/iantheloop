@@ -1,6 +1,6 @@
 <template>
-  <label @change="handleCheckBox()" class="custom__checkbox">
-    <input type="checkbox" :checked="isChecked ? 'checked': ''">
+  <label @change="handleCheckBox(checked)" class="custom__checkbox">
+    <input type="checkbox" :checked="checked">
     <span class="custom_checkmark"></span>
     <div>
      <span>
@@ -19,6 +19,7 @@
 
     props: {
       text: String,
+      checked: Boolean,
     },
 
     components: {
@@ -28,7 +29,7 @@
     data () {
 
       return {
-        isChecked: false,
+
       }
     },
 
@@ -39,9 +40,7 @@
     methods: {
       handleCheckBox() {
 
-        this.isChecked = !this.isChecked;
-
-        this.$emit('checkbox', this.isChecked);
+        this.$emit('checkbox');
 
       }
     }

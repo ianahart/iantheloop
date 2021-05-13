@@ -67,7 +67,7 @@ const login = {
       state.form.forEach((field) => {
 
         if (keys.includes(field.field)) {
-          console.log(field.errors);
+
           field.errors.push(payload[field.field]['errors']);
 
         }
@@ -105,7 +105,7 @@ const login = {
         }
 
       } catch (e) {
-        console.log(e.response);
+
         if (e.response.status === 400) {
 
           commit('SET_ERRORS', e.response.data);

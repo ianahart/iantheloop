@@ -47,8 +47,10 @@
 
         await this.CREATE_PROFILE();
 
+
+
         if (this.getProfileStatus) {
-          console.log('WORKEDDDD');
+
           this.$router.push('/');
         }
     },

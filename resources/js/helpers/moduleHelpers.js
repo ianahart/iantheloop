@@ -25,9 +25,20 @@ export function updateVisibility (state, form, isPasswordShowing) {
 // for single form
 export function getFormData (state) {
 
-     const data =  state.form.map(({ field, value }) => {
+     let input;
 
-        return {[field]: value};
+     const data =  state.form.map(({ field, value, defaultValue }) => {
+
+          if (defaultValue !== undefined && defaultValue === value) {
+
+               input = '';
+          } else {
+
+               input = value;
+          }
+
+
+        return {[field]: input};
       })
 
      return Object.assign({}, ...data);

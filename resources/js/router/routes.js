@@ -60,6 +60,14 @@ const routes = [
     }
   },
   {
+    path: '/profile/:id',
+    name: 'Profile',
+    component: () => import('../pages/Profile.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
     path: '/friends',
     name: 'Friends',
     component: () => import('../pages/Friends.vue'),

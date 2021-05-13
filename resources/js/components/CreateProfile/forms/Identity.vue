@@ -27,6 +27,7 @@
               :label="getGender.options[index]"
               :value="getGender.value"
               :nameAttr="getGender.nameAttr"
+              :selected="selectedRadio"
               commitPath="identity/UPDATE_FIELD"
             />
         </div>
@@ -41,10 +42,9 @@
         </div>
         <div class="day__month__selects">
         <CustomSelect
-            :marker="month.marker"
+            marker="month"
             @selected="handleSelection"
             className="custom_select__container custom_select_size__sm"
-            defaultOption="Month"
             commitPath="identity/UPDATE_FIELD"
             :type="getBirthMonth.type"
             :errors="getBirthMonth.errors"
@@ -53,14 +53,13 @@
             :nameAttr="getBirthMonth.nameAttr"
             :field="getBirthMonth.field"
             :options="months"
-            :selected="month.selected"
+            :selected="getBirthMonth.value"
             />
             <CustomSelect
-              v-if="getBirthMonth.value.length"
-              :marker="day.marker"
+              v-if="getBirthMonth.value !== 'Month'"
+              marker="day"
               @selected="handleSelection"
               className="custom_select__container custom_select_size__sm"
-              defaultOption="Month"
               commitPath="identity/UPDATE_FIELD"
               :type="getBirthDay.type"
               :errors="getBirthDay.errors"
@@ -69,16 +68,15 @@
               :nameAttr="getBirthDay.nameAttr"
               :field="getBirthDay.field"
               :options="getDaysInMonth"
-              :selected="day.selected"
+              :selected="getBirthDay.value"
             />
         </div>
     </div>
       <div class="identity_form__row">
         <CustomSelect
-          :marker="year.marker"
+          marker="day"
           @selected="handleSelection"
           className="custom_select__container custom_select_size__sm"
-          defaultOption="Month"
           commitPath="identity/UPDATE_FIELD"
           :type="getBirthYear.type"
           :errors="getBirthYear.errors"
@@ -87,7 +85,7 @@
           :nameAttr="getBirthYear.nameAttr"
           :field="getBirthYear.field"
           :options="yearsList"
-          :selected="year.selected"
+          :selected="getBirthYear.value"
       />
     </div>
   </div>
@@ -124,18 +122,7 @@
 
       return {
           yearsList: years,
-          day: {
-          marker: 'day',
-          selected: 'Day',
-        },
-        month: {
-          marker: 'month',
-          selected: 'Month',
-        },
-        year: {
-          marker: 'year',
-          selected: 'Year',
-        },
+
       }
     },
 
@@ -162,6 +149,7 @@
           'getBirthYear',
           'getBirthMonth',
           'getDaysInMonth',
+          'selectedRadio',
         ]
       ),
     },
@@ -176,12 +164,7 @@
 
       handleSelection ({ selection }) {
 
-        if (selection.field === 'birth_month') {
 
-          this.day.selected = 'Day';
-        }
-
-        this[selection.marker].selected = selection.selected;
 
         this.UPDATE_FIELD(selection);
       },
@@ -191,7 +174,7 @@
 
 <style lang="scss">
 
-  // @import '../../../../sass/general/_variables.scss';
+
 
 
   .identity_form__row {

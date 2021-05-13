@@ -17,10 +17,10 @@ const initialState = () => {
           {field: 'position', errors: [], label: 'Position', value: '',size: 'lg', type: 'text', nameAttr: 'position'},
           {field: 'work_city', errors: [], label: 'City/Town', value: '',size: 'lg', type: 'text', nameAttr: 'work_city'},
           {field: 'description', errors: [], label: 'Description', value: '',size: 'md', type: 'text', nameAttr: 'birth_year'},
-          {field: 'month_from', errors: [], label: 'Month', value: '',size: '', type: 'text', nameAttr: 'month_from'},
-          {field: 'year_from', errors: [], label: 'Year', value: '',size: '', type: 'text', nameAttr: 'year_from'},
-          {field: 'month_to', errors: [], label: 'Month', value: '',size: '', type: 'text', nameAttr: 'month_to'},
-          {field: 'year_to', errors: [], label: 'Year', value: '',size: '', type: 'text', nameAttr: 'year_to'},
+          {field: 'month_from', errors: [], label: 'Month', value: 'Month',size: '', type: 'text', nameAttr: 'month_from', defaultValue: 'Month'},
+          {field: 'year_from', errors: [], label: 'Year', value: 'Year',size: '', type: 'text', nameAttr: 'year_from', defaultValue: 'Year'},
+          {field: 'month_to', errors: [], label: 'Month', value: 'Month',size: '', type: 'text', nameAttr: 'month_to', defaultValue: 'Month'},
+          {field: 'year_to', errors: [], label: 'Year', value: 'Year',size: '', type: 'text', nameAttr: 'year_to', defaultValue: 'Year'},
     ],
     months: [{name: 'Jan', abbrv: 'Jan', id: 1},{name: 'Feb', abbrv: 'Feb', id: 2}, {name: 'Mar', abbrv: 'Mar', id: 3},{name: 'Apr', abbrv: 'Apr', id: 4}, {name: 'May', abbrv: 'May', id: 5}, {name: 'Jun', abbrv: 'Jun', id: 6}, {name: 'Jul', abbrv: 'Jul', id: 7}, {name: 'Aug', abbrv: 'Aug', id: 8},{name: 'Sep', abbrv: 'Sep', id: 9}, {name: 'Oct', abbrv: 'Oct', id: 10}, {name: 'Nov', abbrv: 'Nov', id: 11}, {name: 'Dec', abbrv: 'Dec', id: 12}],
     errorsPresent: false,
@@ -39,7 +39,11 @@ const workDetails = {
 
     getWorkDetails: (state) => {
 
-      return getFormData(state);
+      const formData = getFormData(state);
+
+      formData.work_currently = state.timePeriodChecked;
+
+      return formData;
     },
 
 
@@ -92,7 +96,7 @@ const workDetails = {
     },
 
     TOGGLE_CHECKBOX: (state, payload) => {
-
+      console.log(payload);
       state.timePeriodChecked = !state.timePeriodChecked;
 
       if (state.timePeriodChecked) {
@@ -107,8 +111,10 @@ const workDetails = {
 
       if (!state.timePeriodChecked) {
 
-        state.form[state.form.length - 2].value = '';
-        state.form[state.form.length - 1].value = '';
+        state.form[state.form.length - 2].value = 'Month';
+        state.form[state.form.length - 1].value = 'Year';
+
+
       }
     },
 
@@ -133,7 +139,7 @@ const workDetails = {
 
      SET_ERRORS: (state, payload) => {
 
-      console.log(payload);
+
 
       state.form.forEach((input, fIdx) => {
 
@@ -150,6 +156,12 @@ const workDetails = {
             });
         });
     },
+
+
+    RESET_MODULE: (state) => {
+
+      Object.assign(state, initialState());
+    }
   },
 
   actions: {

@@ -56,6 +56,12 @@ const customize = {
 
   mutations: {
 
+
+    RESET_MODULE: (state) => {
+
+      Object.assign(state, initialState());
+    },
+
     REMOVE_IMAGE: (state, payload) => {
 
       state.form.forEach((field) => {

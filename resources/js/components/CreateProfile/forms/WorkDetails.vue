@@ -48,10 +48,9 @@
           <p>From</p>
           <div>
             <CustomSelect
-              :marker="yearfrom.marker"
+              marker="yearfrom"
               @selected="handleSelection"
               className="custom_select__container custom_select_size__sm"
-              defaultOption="Year"
               commitPath="workDetails/UPDATE_FIELD"
               :type="getYearFrom.type"
               :errors="getYearFrom.errors"
@@ -60,13 +59,12 @@
               :nameAttr="getYearFrom.nameAttr"
               :field="getYearFrom.field"
               :options="years"
-              :selected="yearfrom.selected"
+              :selected="getYearFrom.value"
               />
             <CustomSelect
-              :marker="monthfrom.marker"
+              marker="monthfrom"
               @selected="handleSelection"
               className="custom_select__container custom_select_size__sm"
-              defaultOption="Month"
               commitPath="workDetails/UPDATE_FIELD"
               :type="getMonthFrom.type"
               :errors="getMonthFrom.errors"
@@ -75,16 +73,15 @@
               :nameAttr="getMonthFrom.nameAttr"
               :field="getMonthFrom.field"
               :options="months"
-              :selected="monthfrom.selected"
+              :selected="getMonthFrom.value"
             />
           </div>
-          <p v-if="!timePeriodChecked && yearfrom.selected !== 'Year'">To</p>
-          <div v-if="!timePeriodChecked  && yearfrom.selected !== 'Year'">
+          <p v-if="!timePeriodChecked && getYearFrom.value !== 'Year'">To</p>
+          <div v-if="!timePeriodChecked  && getYearFrom.value !== 'Year'">
             <CustomSelect
-              :marker="yearto.marker"
+              marker="yearto"
               @selected="handleSelection"
               className="custom_select__container custom_select_size__sm"
-              defaultOption="Year"
               commitPath="workDetails/UPDATE_FIELD"
               :type="getYearTo.type"
               :errors="getYearTo.errors"
@@ -93,13 +90,12 @@
               :nameAttr="getYearTo.nameAttr"
               :field="getYearTo.field"
               :options="yearsTo"
-              :selected="yearto.selected"
+              :selected="getYearTo.value"
             />
             <CustomSelect
-              :marker="monthto.marker"
+              marker="monthto"
               @selected="handleSelection"
               className="custom_select__container custom_select_size__sm"
-              defaultOption="Month"
               commitPath="workDetails/UPDATE_FIELD"
               :type="getMonthTo.type"
               :errors="getMonthTo.errors"
@@ -108,14 +104,15 @@
               :nameAttr="getMonthTo.nameAttr"
               :field="getMonthTo.field"
               :options="months"
-              :selected="monthto.selected"
+              :selected="getMonthTo.value"
             />
         </div>
         <div class="work_details_checkbox__container">
           <CheckBox
-            v-if="yearfrom.selected !== 'Year'"
+            v-if="getYearFrom.value !== 'Year'"
             @checkbox="handleCheckBox"
             text="Currently"
+            :checked="timePeriodChecked"
           />
         </div>
         </div>
@@ -187,7 +184,7 @@
 
       yearsTo () {
 
-        const startIndex = this.years.findIndex((year) => year.abbrv === this.yearfrom.selected);
+        const startIndex = this.years.findIndex((year) => year.abbrv === this.getYearFrom.value);
 
         return this.years.slice(startIndex);
       },
@@ -225,15 +222,12 @@
 
       handleSelection ({ selection }) {
 
-        this[selection.marker].selected = selection.selected;
+
 
         this.UPDATE_FIELD(selection);
       },
 
       handleCheckBox () {
-
-        this.yearto.selected = 'Year';
-        this.monthto.selected = 'Month';
 
         this.TOGGLE_CHECKBOX();
       }
@@ -244,9 +238,6 @@
 
 
 <style lang="scss">
-
-  // @import '../../../../sass/general/_variables.scss';
-  // @import '../../../../sass/forms/_inputs.scss';
 
   .work_details__form_row {
     margin: 2rem 0;

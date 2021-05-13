@@ -33,10 +33,12 @@ class Profile extends Model
         'year_to',
         'profile_picture',
         'background_picture',
+        'work_currently'
     ];
 
     protected $casts = [
         'links' => 'array',
         'interests' => 'array',
+        'work_currently' => 'boolean',
     ];
 }

@@ -21,10 +21,9 @@
           :field="getTown.field"
         />
         <CustomSelect
-          :marker="state.marker"
+          marker="state"
           @selected="handleSelection"
           className="custom_select__container custom-select_size__md"
-          defaultOption="State"
           commitPath="generalDetails/UPDATE_FIELD"
           :type="getState.type"
           :errors="getState.errors"
@@ -33,7 +32,7 @@
           :nameAttr="getState.nameAttr"
           :field="getState.field"
           :options="states"
-          :selected="state.selected"
+          :selected="getState.value"
         />
       </div>
       <div class="general_details_form__row">
@@ -47,10 +46,9 @@
           :field="getPhone.field"
         />
         <CustomSelect
-          :marker="country.marker"
+          marker="country"
           @selected="handleSelection"
           className="custom_select__container custom-select_size__lg"
-          defaultOption="Country"
           commitPath="generalDetails/UPDATE_FIELD"
           :type="getCountry.type"
           :errors="getCountry.errors"
@@ -59,7 +57,7 @@
           :nameAttr="getCountry.nameAttr"
           :field="getCountry.field"
           :options="countries"
-          :selected="country.selected"
+          :selected="getCountry.value"
         />
       </div>
       <div class="general_details_urls__container">
@@ -136,14 +134,7 @@
       return {
         states,
         countries,
-        state: {
-          marker: 'state',
-          selected: 'State',
-        },
-        country: {
-          marker: 'country',
-          selected: 'Country',
-        },
+
       }
     },
 
@@ -186,7 +177,7 @@
 
       handleSelection ({ selection }) {
 
-        this[selection.marker].selected = selection.selected;
+
 
         this.UPDATE_FIELD(selection);
       },

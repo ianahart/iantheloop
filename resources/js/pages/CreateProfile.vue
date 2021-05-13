@@ -33,6 +33,12 @@
     beforeDestroy() {
 
       this.RESET_MODULE();
+      this.$store.commit('workDetails/RESET_MODULE');
+      this.$store.commit('identity/RESET_MODULE');
+      this.$store.commit('generalDetails/RESET_MODULE');
+      this.$store.commit('customize/RESET_MODULE');
+      this.$store.commit('aboutDetails/RESET_MODULE');
+
     },
 
     computed: {
@@ -46,7 +52,7 @@
     created () {
 
       if (this.getProfileStatus) {
-        console.log('WORKED');
+
         this.$router.push('/');
       }
     },

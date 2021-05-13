@@ -32,6 +32,14 @@ const aboutDetails = {
 
   getters: {
 
+
+    selectedRadio: (state) => {
+
+      const radioField = state.form.find((field) => field.field === 'relationship');
+
+      return radioField.value;
+    },
+
     getAboutDetails (state) {
 
       let prop;

@@ -17,8 +17,8 @@ const initialState = () => {
        form: [
           {field: 'display_name', errors: [], label: 'Display Name', value: '',size: 'md', type: 'text', nameAttr: 'display_name'},
           {field: 'town', errors: [], label: 'Town', value: '',size: 'md', type: 'text', nameAttr: 'town'},
-          {field: 'state', errors: [], label: 'State', value: '',size: 'sm', type: 'text', nameAttr: 'state'},
-          {field: 'country', errors: [], label: 'Country', value: '',size: 'md', type: 'text', nameAttr: 'country'},
+          {field: 'state', errors: [], label: 'State', value: 'State',size: 'sm', type: 'text', nameAttr: 'state' ,defaultValue: 'State'},
+          {field: 'country', errors: [], label: 'Country', value: 'Country',size: 'md', type: 'text', nameAttr: 'country', defaultValue: 'Country'},
           {field: 'phone', errors: [], label: 'Phone', value: '',size: 'md', type: 'text', nameAttr: 'phone'},
     ],
     generatedFieldsCounter: 0,

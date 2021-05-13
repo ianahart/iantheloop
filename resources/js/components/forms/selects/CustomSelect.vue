@@ -10,11 +10,12 @@
         :key="option.id"
         @click="getSelection(
           {
-          field, value:option.name,
+          field,
+          value:option.name,
           error: '',
           form: null,
           selected: option.abbrv ? option.abbrv : option.name,
-          marker,
+
           }
         )"
       >
@@ -33,9 +34,8 @@
     name: 'CustomSelect',
 
     props: {
-      marker: String,
+
       className: String,
-      defaultOption: String,
       field: String,
       type: String,
       errors: Array,

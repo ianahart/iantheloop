@@ -10,6 +10,21 @@
       <ul>
         <li>
           <div class="profile__dropdown__section">
+            <div v-if="getProfileStatus" class="profile__dropdown__link">
+              <BookIcon
+                className="icon__sm__light"
+              />
+              <DropDownLink
+                name="Profile"
+                linkText="Your Profile"
+                param="id"
+                :paramValue="getUserId.toString()"
+              />
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="profile__dropdown__section">
             <div v-if="!getProfileStatus" class="profile__dropdown__link">
               <CreateProfileIcon />
               <DropDownLink
@@ -57,6 +72,8 @@
   import FriendsIcon from '../../components/Icons/FriendsIcon.vue';
   import SearchIcon from '../../components/Icons/SearchIcon.vue';
   import DropDownLink from '../../components/Dropdowns/DropDownLink.vue';
+  import BookIcon from '../Icons/BookIcon.vue';
+
 
   import { mapMutations, mapGetters, mapActions } from 'vuex';
 
@@ -76,6 +93,7 @@
       FriendsIcon,
       SearchIcon,
       DropDownLink,
+      BookIcon,
     },
 
     data () {
@@ -107,7 +125,8 @@
         [
           'userName',
           'getProfileStatus',
-          'getProfilePic'
+          'getProfilePic',
+          'getUserId'
         ]
       ),
     },

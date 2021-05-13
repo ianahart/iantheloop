@@ -1,5 +1,5 @@
 <template>
-      <router-link :to="{name: `${name}`}">{{ linkText }}</router-link>
+      <router-link :to="{name: `${name}`, params: {[`${param}`]: `${paramValue}` }}">{{ linkText }}</router-link>
 </template>
 
 <script>
@@ -15,6 +15,8 @@
     props: {
       name: String,
       linkText: String,
+      param: String,
+      paramValue: String,
     },
   }
 

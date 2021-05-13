@@ -8,20 +8,80 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Helpers\AmazonS3;
 use App\Http\Requests\StoreMultipleForm;
-
+use Exception;
+use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProfileController extends Controller
 {
-    /*
-     * Create user profile
-     * @param Request $request
-     * @return JsonResponse
-     */
 
     private int $userId;
     private array $data;
     public string $profilePic;
 
+
+    /*
+     * Get base profile data
+     * @param string $id
+     * @return JsonResponse
+     */
+
+    public function show(string $id)
+    {
+        try {
+            $fullName = JWTAuth::user()->full_name;
+
+            $profile = Profile::where('user_id', '=', $id)
+                ->select(
+                    [
+                        'id',
+                        'company',
+                        'position',
+                        'display_name',
+                        'profile_picture',
+                        'background_picture',
+                    ]
+                )
+                ->first();
+
+            $profile->full_name = $fullName;
+
+            $profile = array_map(
+                function ($column) {
+
+                    if (isset($column)) {
+
+                        $formatted = preg_match('/^https?:\/\//', $column) ? $column : ucwords($column);
+                        return $formatted;
+                    }
+                },
+                $profile->getAttributes()
+            );
+
+            return response()->json(
+                [
+                    'msg' => 'success',
+                    'profile' => $profile
+                ],
+                200
+            );
+        } catch (Exception $e) {
+
+            return response()->json(
+                [
+                    'msg' => 'Profile for user not found',
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        }
+    }
+
+    /*
+     * Create user profile
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function store(StoreMultipleForm $request)
     {
 
@@ -118,7 +178,14 @@ class ProfileController extends Controller
         $links = [];
 
         foreach ($this->data as $key => $value) {
+            if ($key === 'work_currently') {
+                error_log(print_r(gettype($this->data[$key]), true));
 
+                // if ($this->data[$key] === false) {
+                //     error_log(print_r('wooooopie its false', true));
+                // }
+                error_log(print_r($this->data[$key], true));
+            }
             if (!str_contains($key, 'url-') && !in_array($key, $excludeFields)) {
 
                 if (is_array($this->data[$key])) {
@@ -135,7 +202,13 @@ class ProfileController extends Controller
                     $profile->$key = $encodedArray;
                 } else {
 
-                    $profile->$key = strtolower($value);
+                    if (gettype($value) !== 'boolean') {
+
+                        $profile->$key = strtolower($value);
+                    } else {
+
+                        $profile->$key = $value;
+                    }
                 }
             } else if (str_contains($key, 'url-')) {
 

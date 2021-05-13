@@ -15,6 +15,22 @@ router.beforeEach((to, from, next) => {
 
   /*
   *
+  * If user is authenticated but does not have a profile disallow them to visit pro
+  **/
+
+  if (to.name === 'Profile' && to.meta.requiresAuth) {
+
+    if (!store.getters['user/getProfileStatus']) {
+
+      next({path: '/'});
+    }
+
+    next();
+  }
+
+
+  /*
+  *
   * If user is not authenticated redirect to login. else continue to route
   **/
   if (to.matched.some((route) => route.meta.requiresAuth && !store.getters['user/isLoggedIn'])) {
