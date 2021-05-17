@@ -1,5 +1,5 @@
 <template>
-    <img class="user_profile__profile_image" :src="getBaseProfile.profile_picture" />
+    <img :class="className" :src="src" />
 </template>
 
 <script>
@@ -11,7 +11,8 @@
     name: 'ProfileImage',
 
     props: {
-
+      className: String,
+      src:String,
     },
 
     components: {
@@ -32,13 +33,10 @@
 
 <style lang="scss">
 
-  .user_profile__profile_image {
-      border-radius: 50%;
-      position: absolute;
-      height: 200px;
-      width: 200px;
-      bottom: -120px;
-      display: inline-block;
-    }
+
+ .default_profile_image {
+
+   background-color: $primaryGray;
+ }
 
 </style>

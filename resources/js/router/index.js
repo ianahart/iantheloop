@@ -10,15 +10,17 @@ const router = new VueRouter(
   }
 );
 
+const authenticatedProfileRoutes = ['Profile', 'ProfileAbout', 'ProfileEdit'];
+
 router.beforeEach((to, from, next) => {
 
 
   /*
   *
-  * If user is authenticated but does not have a profile disallow them to visit pro
+  * If user is authenticated but does not have a profile disallow them to visit profile(s)
   **/
 
-  if (to.name === 'Profile' && to.meta.requiresAuth) {
+  if (authenticatedProfileRoutes.includes(to.name) && to.meta.requiresAuth) {
 
     if (!store.getters['user/getProfileStatus']) {
 

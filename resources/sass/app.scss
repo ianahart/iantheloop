@@ -1,9 +1,48 @@
 @import "./general/_variables.scss";
-
 @import "./general/_base.scss";
-
 @import "./forms/inputs.scss";
-
+@import "./fonts.scss";
 @import "./general/buttons.scss";
-
 @import "./icons.scss";
+
+.profile_image_lg {
+    border-radius: 50%;
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    bottom: -120px;
+    display: inline-block;
+}
+
+.profile_image_lg_square {
+    border-radius: 8px;
+    height: 200px;
+    width: 200px;
+    top: 0;
+    display: inline-block;
+}
+
+.profile_image_md {
+    border-radius: 50%;
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    bottom: -120px;
+    display: inline-block;
+}
+
+.default_profile_image_lg {
+    border-radius: 50%;
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    bottom: -120px;
+    display: inline-block;
+}
+
+.default_profile_image_lg_square {
+    height: 200px;
+    width: 200px;
+    top: 0;
+    display: inline-block;
+}

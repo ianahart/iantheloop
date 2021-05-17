@@ -1,6 +1,10 @@
 <template>
   <router-link
-    :to="{name: `${name}`}"
+    :to="{
+      name: `${name}`,
+      params:{
+        [`${Object.keys(this.params).toString()}`]: `${Object.values(this.params).toString()}`}
+        }"
     class="profile__link"
   >
      {{ text }}
@@ -17,7 +21,11 @@
 
       name: String,
       text: String,
+      params: Object,
     },
+
+    mounted() {
+    }
   }
 </script>
 

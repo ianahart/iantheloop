@@ -1,16 +1,17 @@
 <template>
   <div class="profile__navigation">
     <ProfileLink
-      v-for="link in profileNavigation" :key="link.id"
+      v-for="link in getProfileLinks" :key="link.id"
       :name="link.name"
       :text="link.text"
+      :params="link.params"
     />
   </div>
 </template>
 
 <script>
 
-  import { mapState, mapGetters, mapMutations } from 'vuex';
+  import { mapState, mapGetters } from 'vuex';
 
   import ProfileLink from './ProfileLink.vue';
 
@@ -18,26 +19,18 @@
 
     name: 'SubNavigation',
 
-    props: {
-
-    },
-
     components: {
 
       ProfileLink,
     },
-
     computed: {
-      ...mapState('profile',
+
+      ...mapGetters('profile',
         [
-          'profileNavigation'
+          'getProfileLinks'
         ]
       ),
     },
-
-    methods: {
-
-    }
   }
 </script>
 

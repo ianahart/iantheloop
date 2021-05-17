@@ -17,24 +17,30 @@ class ProfileController extends Controller
 
     private int $userId;
     private array $data;
+    public string $fullName;
     public string $profilePic;
-
 
     /*
      * Get base profile data
      * @param string $id
      * @return JsonResponse
      */
-
     public function show(string $id)
     {
         try {
-            $fullName = JWTAuth::user()->full_name;
+
+            $profileExists = User::where('id', $id)->value('profile_created');
+
+            if (!$profileExists) {
+
+                throw new Exception();
+            }
 
             $profile = Profile::where('user_id', '=', $id)
                 ->select(
                     [
                         'id',
+                        'user_id',
                         'company',
                         'position',
                         'display_name',
@@ -44,19 +50,14 @@ class ProfileController extends Controller
                 )
                 ->first();
 
-            $profile->full_name = $fullName;
+            if (!empty($profile)) {
 
-            $profile = array_map(
-                function ($column) {
+                $this->fullName = $this->getFullName($id);
 
-                    if (isset($column)) {
+                $profile->full_name = $this->fullName;
 
-                        $formatted = preg_match('/^https?:\/\//', $column) ? $column : ucwords($column);
-                        return $formatted;
-                    }
-                },
-                $profile->getAttributes()
-            );
+                $profile = $this->capitalizeColumns($profile->getAttributes(), ['bio']);
+            }
 
             return response()->json(
                 [
@@ -75,6 +76,154 @@ class ProfileController extends Controller
                 404
             );
         }
+    }
+
+    /*
+     * Capitalize columns that need it
+     * @param array $data
+     * @param array $excludes
+     * @return JsonResponse
+     */
+    private function capitalizeColumns(array $data, array $excludes)
+    {
+
+        $array = [];
+
+        array_walk($data, function ($val, $key) use (&$array, $excludes) {
+
+            if (isset($val)) {
+
+                $array[$key] = preg_match('/^https?:\/\//', $val)
+                    || in_array($key, $excludes) ? $val : ucwords($val);
+            }
+        });
+        return $array;
+    }
+
+    /*
+     * Get user full name
+     * @param string $userId
+     * @return string
+     */
+    private function getFullName(string $userId)
+    {
+        $user = User::where('id', '=', $userId)->first();
+
+        return $user->full_name;
+    }
+
+    /*
+     * Get all of profile data
+     * @param string $profileId
+     * @return JsonResponse
+     */
+    public function showAbout(string $profileId)
+    {
+        try {
+
+            $profileData = Profile::findOrFail($profileId);
+
+            $profileData = $profileData->getAttributes();
+
+            $profileData['full_name'] = $this->getFullName($profileData['user_id']);
+
+            $formattedAboutData = $this->formatAboutData($profileData);
+
+            return response()->json(
+                [
+                    'msg' => 'success',
+                    'profile' => $formattedAboutData,
+                ],
+                200
+            );
+        } catch (Exception $e) {
+
+            return response()->json(
+                [
+                    'msg' => 'Profile details were not found',
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        }
+    }
+
+    /*
+     * Punctuate paragraph text
+     * @param string
+     * @return string
+     */
+    private function punctuateParagraph(string $paragraph)
+    {
+        $words = explode(' ', strtolower(trim($paragraph)));
+
+        $punctuated = [];
+
+        for ($i = 0; $i < count($words); $i++) {
+
+            if (str_ends_with($words[$i], '.')) {
+
+                if ($i === count($words) - 1) {
+
+                    array_push($punctuated, $words[$i]);
+                } else if ($i < count($words)) {
+
+                    $start = strtoupper(
+                        substr($words[$i + 1], 0, 1)
+                    ) . substr($words[$i + 1], 1);
+
+                    array_push($punctuated,  $words[$i], $start);
+                }
+            } else {
+
+                array_push($punctuated,  $words[$i]);
+            }
+        }
+
+        foreach ($punctuated as $key => $word) {
+
+            if ($key < count($punctuated) - 1 && str_ends_with($punctuated[$key], '.')) {
+
+                $firstChar = substr($punctuated[$key + 1], 0, 1);
+
+                if ($firstChar === ucfirst($firstChar)) {
+
+                    array_splice($punctuated, $key + 2, 1);
+                }
+            }
+        }
+
+        $punctuated[0] = ucfirst($punctuated[0]);
+
+        return implode(' ', $punctuated);
+
+        error_log(print_r(implode(' ', $punctuated), true));
+    }
+
+    /*
+     * Format about data
+     * @param array
+     * @return array;
+     */
+    private function formatAboutData(array $data)
+    {
+        $data = $this->capitalizeColumns($data, ['bio', 'description']);
+
+        $data['interests'] = array_map(
+            function ($interest) {
+                $interest['name'] = ucwords($interest['name']);
+                return $interest;
+            },
+            json_decode(json_decode($data['interests'], true), true)
+        );
+
+        $data['links'] = json_decode(json_decode($data['links'], true));
+
+        $data['bio'] = $this->punctuateParagraph($data['bio']);
+
+        $data['description'] = $this->punctuateParagraph($data['description']);
+
+        return $data;
     }
 
     /*
@@ -135,14 +284,11 @@ class ProfileController extends Controller
         $this->userId = $decoded->sub;
     }
 
-
-
     /*
      * add  the user supplied form data to user profile
      * @params mixed $file
      * @return null or string
      */
-
     private function fileValue(mixed $file)
     {
 
@@ -161,8 +307,6 @@ class ProfileController extends Controller
      * @void
      * @return void
      */
-
-
     private function storeProfile()
     {
         $backgroundFile = $this->data['backgroundfile'];
@@ -178,14 +322,7 @@ class ProfileController extends Controller
         $links = [];
 
         foreach ($this->data as $key => $value) {
-            if ($key === 'work_currently') {
-                error_log(print_r(gettype($this->data[$key]), true));
 
-                // if ($this->data[$key] === false) {
-                //     error_log(print_r('wooooopie its false', true));
-                // }
-                error_log(print_r($this->data[$key], true));
-            }
             if (!str_contains($key, 'url-') && !in_array($key, $excludeFields)) {
 
                 if (is_array($this->data[$key])) {
@@ -231,7 +368,6 @@ class ProfileController extends Controller
      * @param void
      * @return boolean
      */
-
     private function updateProfileCreated()
     {
 
@@ -244,6 +380,12 @@ class ProfileController extends Controller
         return true;
     }
 
+
+    /*
+     * merge form arrays into a single array
+     * @param array $request
+     * @return void
+     */
     private function restructureFormData(array $request)
     {
 
@@ -279,7 +421,6 @@ class ProfileController extends Controller
      * @param object $file string $fileName
      * @return string
      */
-
     private function getFileURL(object $file, string $fileName)
     {
 
@@ -290,5 +431,45 @@ class ProfileController extends Controller
         $fileURL = $s3Instance->downloadFromBucket();
 
         return $fileURL;
+    }
+
+    /*
+     * Get all of profile data
+     * @param string $profileId
+     * @return JsonResponse
+     */
+    public function edit(string $profileId)
+    {
+
+        try {
+
+            $profile = Profile::where('id', '=', $profileId)->first();
+
+            if ($profile->user_id !== JWTAuth::user()->id) {
+
+                throw new Exception('User not allowed to edit another user\'s profile');
+            }
+
+            $profile->interests = json_decode($profile->interests, true);
+            $profile->links = json_decode($profile->links, true);
+
+            return response()->json(
+                [
+                    'msg' => 'success',
+                    'data' => $profile,
+                ],
+                200
+            );
+        } catch (Exception $e) {
+
+            return response()->json(
+                [
+                    'msg' => 'error',
+                    'intercept' => false,
+                    'error' => $e->getMessage()
+                ],
+                401
+            );
+        }
     }
 }
