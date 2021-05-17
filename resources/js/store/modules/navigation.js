@@ -8,11 +8,11 @@ const navigation = {
       {component: 'Home', linkText: 'home'},
       {component: 'Login', linkText: 'login'},
       {component: 'CreateAccount', linkText: 'create account'},
-      {component: 'About', linkText: 'about'},
+      {component: 'AboutLooped', linkText: 'about'},
     ],
     authNavigationLinks: [
       {component: 'Home', linkText: 'home'},
-      {component: 'About', linkText: 'about'},
+      {component: 'AboutLooped', linkText: 'about'},
     ],
   },
 

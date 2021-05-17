@@ -70,10 +70,34 @@
     color: $primaryBlack;
 }
 
+.icon__md__neutral {
+    width: 48px;
+    cursor: pointer;
+    color: darken($primaryGray, 10);
+}
+
 .icon__md {
     width: 48px;
 }
 
 .icon__success {
     color: $success;
+}
+
+.icon__lg__dark {
+    width: 125px;
+    cursor: pointer;
+    color: $primaryBlack;
+}
+
+.icon__lg__neutral {
+    width: 125px;
+    cursor: pointer;
+    color: darken($primaryGray, 10);
+}
+
+.icon__lg__light {
+    width: 125px;
+    cursor: pointer;
+    color: $primaryWhite;
 }

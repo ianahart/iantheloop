@@ -14,8 +14,8 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'About',
-    component: () => import('../pages/About.vue'),
+    name: 'AboutLooped',
+    component: () => import('../pages/AboutLooped.vue'),
   },
 
   {
@@ -59,14 +59,7 @@ const routes = [
       requiresAuth: true,
     }
   },
-  {
-    path: '/profile/:id',
-    name: 'Profile',
-    component: () => import('../pages/Profile.vue'),
-    meta: {
-      requiresAuth: true,
-    }
-  },
+
   {
     path: '/friends',
     name: 'Friends',
@@ -84,9 +77,36 @@ const routes = [
     }
   },
 
+    {
+      path: '/profile/:profileId/edit',
+      name: 'ProfileEdit',
+      component: () => import('../pages/ProfileEdit.vue'),
+      meta: {
+        requiresAuth: true,
+      }
+    },
+
+    {
+    path: '/profile/:profileId/about',
+    name: 'ProfileAbout',
+    component: () => import('../pages/ProfileAbout.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/profile/:id',
+    name: 'Profile',
+    component: () => import('../pages/Profile.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+
   // Always have NotFound as bottom route
   {
-    path: '*',
+    path: '/not-found',
+    alias: '*',
     name: 'NotFound',
     component: () => import ('../pages/NotFound.vue'),
   },

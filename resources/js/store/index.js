@@ -21,6 +21,8 @@ import identity from './modules/createProfile/identity.js';
 import workDetails from './modules/createProfile/workDetails.js';
 import customize from './modules/createProfile/customize.js';
 import profile from './modules/profile/profile.js';
+import profileAbout from './modules/profile/profileAbout.js';
+import profileEdit from './modules/profile/profileEdit.js';
 
 Vue.use(Vuex);
 
@@ -58,6 +60,8 @@ export default new Vuex.Store(
       workDetails,
       customize,
       profile,
+      profileAbout,
+      profileEdit,
     },
   }
 );

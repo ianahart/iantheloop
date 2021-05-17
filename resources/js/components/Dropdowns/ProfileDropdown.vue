@@ -33,7 +33,9 @@
               />
             </div>
             <div v-if="getProfileStatus" class="profile__dropdown__link">
-                <SearchIcon />
+                <SearchIcon
+                  className="icon__sm__light"
+                />
                 <DropDownLink
                   name="FindFriends"
                   linkText="Find Friends"

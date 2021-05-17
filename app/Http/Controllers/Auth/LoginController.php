@@ -32,7 +32,7 @@ class LoginController extends Controller
 
             if (Hash::check($password, $user->password)) {
 
-                $TLL =  60;
+                $TLL = 60;
 
                 JWTAuth::factory()->setTTL($TLL);
 

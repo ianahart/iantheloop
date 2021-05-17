@@ -1,8 +1,6 @@
 <template>
-  <!-- <div v-if="dataLoaded" class="profile__container">
-    <Header />
-  </div> -->
-    <div class="profile__container">
+
+    <div  v-if="dataLoaded" class="profile__container">
       <div class="profile_component__wrapper">
         <Header />
         <ProfileStats/>
@@ -12,18 +10,6 @@
 </template>
 
 <script>
-
-
-        // backgroundpicture done
-        // profilepic done
-          // display name
-         // follower stats
-        // follow btn,
-        // full name
-        // company
-        // position
-
-        //
 
   import { mapGetters, mapMutations, mapState,  mapActions } from 'vuex';
 
@@ -41,10 +27,6 @@
       Dashboard,
     },
 
-    created () {
-
-    },
-
     async mounted () {
 
       await this.fetchBaseProfileData(this.$route.params.id);
@@ -55,11 +37,46 @@
       this.clearBaseProfileState();
     },
 
+    data () {
+
+      return {
+        paramChange: false,
+      }
+    },
+
+    watch: {
+
+      '$route.params.id': function () {
+
+        this.RESET_MODULE();
+
+        this.fetchBaseProfileData(this.$route.params.id);
+      },
+
+      fetchError () {
+
+        if (this.fetchError) {
+
+          this.RESET_MODULE();
+          this.$router.push({name: 'NotFound'});
+        }
+      },
+
+    },
+
+
+
     computed: {
+
+        linkParam () {
+
+          return this.$route.params.id;
+        },
 
       ...mapState('profile',
           [
-            'dataLoaded'
+            'dataLoaded',
+            'fetchError',
           ]
         ),
     },

@@ -146,11 +146,6 @@
 
       validateFile (file) {
 
-        // if (!file.type.includes('image/')) {
-
-        //   this.error = 'File must be of type image';
-        //   return;
-        // }
 
         if (file.size > this.maxSize) {
 
