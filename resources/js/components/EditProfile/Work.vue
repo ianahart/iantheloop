@@ -20,9 +20,10 @@
 
     },
 
-    mounted () {
+    // mounted() {
+    //   console.log('Work Tab: ', this.getEditGroup);
+    // },
 
-    },
 
     beforeDestroy() {
 
@@ -30,6 +31,11 @@
 
     computed: {
 
+      ...mapGetters('profileEdit',
+        [
+          'getEditGroup'
+        ]
+      ),
     },
 
     methods: {

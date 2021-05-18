@@ -16,7 +16,7 @@ const initialState = () => {
           {field: 'company', errors: [], label: 'Company', value: '',size: 'lg', type: 'text', nameAttr: 'company'},
           {field: 'position', errors: [], label: 'Position', value: '',size: 'lg', type: 'text', nameAttr: 'position'},
           {field: 'work_city', errors: [], label: 'City/Town', value: '',size: 'lg', type: 'text', nameAttr: 'work_city'},
-          {field: 'description', errors: [], label: 'Description', value: '',size: 'md', type: 'text', nameAttr: 'birth_year'},
+          {field: 'description', errors: [], label: 'Description', value: '',size: 'md', type: 'text', nameAttr: 'description'},
           {field: 'month_from', errors: [], label: 'Month', value: 'Month',size: '', type: 'text', nameAttr: 'month_from', defaultValue: 'Month'},
           {field: 'year_from', errors: [], label: 'Year', value: 'Year',size: '', type: 'text', nameAttr: 'year_from', defaultValue: 'Year'},
           {field: 'month_to', errors: [], label: 'Month', value: 'Month',size: '', type: 'text', nameAttr: 'month_to', defaultValue: 'Month'},

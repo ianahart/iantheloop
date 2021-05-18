@@ -29,7 +29,7 @@ const profileAbout = {
 
     getUserFirstName (state) {
 
-      return state.aboutData.full_name.split(' ')[0];
+      return state.aboutData.full_name ? state.aboutData.full_name.split(' ')[0] : '';
     },
   },
 

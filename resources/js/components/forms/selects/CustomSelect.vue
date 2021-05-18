@@ -14,12 +14,12 @@
           value:option.name,
           error: '',
           form: null,
-          selected: option.abbrv ? option.abbrv : option.name,
+          selected: option.name !== option.abbrv ? option.abbrv : option.name,
 
           }
         )"
       >
-      <span>{{ option.abbrv === selected  ? '&#10003; ' + option.abbrv : option.abbrv }}</span>
+      <span>{{ option.name === selected  ? '&#10003; ' + option.abbrv : option.abbrv }}</span>
     </option>
     </div>
   </div>

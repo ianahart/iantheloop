@@ -150,3 +150,27 @@ export function retrieveFile (files, name) {
 
      return Object.assign({}, ...filtered);
 }
+
+export function filterEditGroup(form, group) {
+
+    const filterGroup = {};
+
+    const fields = form.filter((field) => field.group === group);
+    fields.forEach((field) => {
+
+     filterGroup[field.field] = field;
+    });
+    return filterGroup;
+}
+
+export function getCurrentRadioValue(form, targetField) {
+
+     const radioField = form.find((field) => field.field === targetField);
+
+     return radioField.value;
+}
+
+export function getObjPos(form, targetField) {
+
+     return form.findIndex((field) => field.field === targetField);
+}

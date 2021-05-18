@@ -1,10 +1,12 @@
 import axios from 'axios';
 
 import {
-    getFormData,
     inputChange,
     pluckField,
     clearFields,
+    filterEditGroup,
+    getCurrentRadioValue,
+    getObjPos,
     errorsPresent
   } from '../../../helpers/moduleHelpers.js';
 
@@ -15,12 +17,11 @@ const initialState = () => {
     editData: [],
     fetchError: '',
     dataLoaded: false,
-    interestsCounter: 0,
     timePeriodChecked: false,
     generatedFieldsCounter: 0,
+    interestsIndexer: 0,
     currentWindow: 'General',
-    allWindow: false,
-    windows: ['All', 'General', 'Identity', 'Work', 'About', 'Pictures'],
+    windows: ['General', 'Identity', 'Work', 'About', 'Pictures'],
     files: [
       {file: null, input: 'background_image', src: ''},
       {file: null, input: 'profile_image', src: ''},
@@ -66,9 +67,52 @@ const profileEdit = {
 
   getters: {
 
-    getEditData: (state) => {
 
-      return state.editData;
+    getLinks(state) {
+
+      return state.form.filter((field) => {
+
+        return field.field.includes('url-');
+      });
+    },
+
+    getEditGroup (state) {
+
+      return filterEditGroup(state.form, state.currentWindow);
+    },
+
+    selectedGenderRadio: (state) => {
+
+      return getCurrentRadioValue(state.form, 'gender');
+    },
+
+    selectedRelationshipRadio: (state) => {
+
+      return getCurrentRadioValue(state.form, 'relationship');
+
+    },
+
+    getDaysInMonth (state) {
+
+      let amount;
+
+      const { value } = state.form.find(({ field }) => field === 'birth_month');
+
+      const daysInMonth = {
+        '31': ['Jan', 'Mar', 'May', 'Jul', 'Aug', 'Oct', 'Dec'],
+        '30': ['Nov', 'Sep', 'Jun', 'Apr'],
+        '28': ['Feb'],
+      }
+
+      for (let prop in daysInMonth) {
+
+        if (daysInMonth[prop].includes(value)) {
+
+           amount = parseInt(prop);
+        }
+      }
+
+      return state.days.slice(0, amount);
     },
 
   },
@@ -81,17 +125,72 @@ const profileEdit = {
      Object.assign(state, initialState());
     },
 
+    DELETE_INTEREST: (state, payload) => {
+
+      const pos = getObjPos(state.form, 'interests');
+
+      state.form[pos].interests = state.form[pos].interests.filter((interest) => interest.id !== payload);
+
+      console.log('did we make it? ', payload);
+    },
+
+    INDEX_INTEREST: (state, payload) => {
+
+      state.interestsIndexer++;
+
+      const interestsPos = getObjPos(state.form, 'interests');
+
+      state.form[interestsPos].interests.push({id: state.interestsIndexer, name: payload});
+      state.form[interestsPos].value = '';
+    },
+
+    SET_INTEREST_VALUE: (state, payload) => {
+
+      const formIndex = state.form.findIndex((field) => field.field === 'interests');
+
+      state.form[formIndex].value = payload;
+    },
+
+
+
+
+
+    REMOVE_LINK: (state, payload) => {
+
+      state.form = state.form.filter((field) => field.id !== payload);
+    },
+
+
+     UPDATE_FIELD: (state, payload) => {
+      console.log('Check: ', payload);
+       if (payload.field === 'birth_month') {
+
+        const BirthDayField = state.form.find(({ field }) => field === 'birth_day' );
+
+        BirthDayField.value = 'Day';
+      }
+
+      inputChange(state, payload);
+    },
+
+    ADD_FIELD: (state, payload) => {
+
+      state.generatedFieldsCounter++;
+
+      state.form.push({
+        field: `url-${state.generatedFieldsCounter}`,
+        errors: [],
+        label: 'Link',
+        value: '',
+        size: 'lg',
+        type: 'text',
+        id: state.generatedFieldsCounter,
+        nameAttr: `url-${state.generatedFieldsCounter}`
+      });
+    },
+
     CHANGE_WINDOW: (state, payload) => {
 
-      state.allWindow = payload === 'All' ? true : false;
-
-      if (payload === 'All') {
-
-        state.allWindow = true;
-        state.currentWindow = payload;
-
-        return;
-      }
 
       state.currentWindow = payload;
     },
@@ -106,7 +205,14 @@ const profileEdit = {
 
       state.form.forEach((field) => {
 
-        field.value = data[field.field];
+          if (field.field === 'interests') {
+
+            field.interests = data[field.field];
+            field.value = '';
+          } else {
+
+            field.value = data[field.field];
+          }
       });
 
       data.links.forEach((link, index) => {
@@ -122,6 +228,9 @@ const profileEdit = {
           nameAttr: `url-${index}`
         });
       });
+
+      state.interestsIndexer = Math.max(...data.interests.map((val) => val.id));
+      state.generatedFieldsCounter = data.links.length;
 
       state.dataLoaded = true;
     },

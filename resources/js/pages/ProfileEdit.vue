@@ -7,22 +7,23 @@
     <div class="profile_edit__section__container">
      <SectionNav />
      <div class="profile_edit__forms">
-      <div v-if="currentWindow === 'General' || allWindow" class="profile_edit__section">
+      <div v-if="currentWindow === 'General'" class="profile_edit__section">
         <General />
       </div>
-      <div v-if="currentWindow === 'Identity' || allWindow" class="profile_edit__section">
+      <div v-if="currentWindow === 'Identity'" class="profile_edit__section">
         <Identity />
       </div>
-        <div v-if="currentWindow === 'About' || allWindow" class="profile_edit__section">
+        <div v-if="currentWindow === 'About'" class="profile_edit__section">
           <About />
       </div>
-      <div v-if="currentWindow === 'Work' || allWindow" class="profile_edit__section">
+      <div v-if="currentWindow === 'Work'" class="profile_edit__section">
           <Work />
       </div>
-      <div v-if="currentWindow === 'Pictures' || allWindow" class="profile_edit__section">
+      <div v-if="currentWindow === 'Pictures'" class="profile_edit__section">
         <Pictures />
       </div>
      </div>
+    <div class="profile_edit__section__container_bg"></div>
     </div>
   </div>
 </template>
@@ -67,6 +68,7 @@
     },
 
     computed: {
+
       ...mapState('profileEdit',
         [
           'dataLoaded',
@@ -128,29 +130,32 @@
   border-radius: 8px;
   box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
   min-height: 600px;
-
   max-width: 940px;
   margin: 3rem auto;
 }
 
+.profile_edit__section__container_bg {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-image: url('../../assets/edit_profile_form.svg');
+  min-height: 300px;
+  height: auto;
+  margin: 0 auto;
+  margin-top: 1.5rem;
+}
+
 .profile_edit__section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  // border: 1px solid blue;
+  margin: 2rem auto 3rem auto;
   height: 100%;
 }
 
 .profile_edit__forms {
   box-sizing: border-box;
   padding: 1rem;
-  background-image: url('../../assets/edit_profile_form.svg');
   width: 100%;
   min-height: 600px;
- height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
+  height: 100%;
 }
-
-
 </style>
