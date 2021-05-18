@@ -67,6 +67,11 @@
       }
     },
 
+    beforeDestroy () {
+
+      this.RESET_MODULE();
+    },
+
     computed: {
 
       ...mapState('profileEdit',

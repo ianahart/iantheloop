@@ -96,7 +96,7 @@ const workDetails = {
     },
 
     TOGGLE_CHECKBOX: (state, payload) => {
-      console.log(payload);
+
       state.timePeriodChecked = !state.timePeriodChecked;
 
       if (state.timePeriodChecked) {

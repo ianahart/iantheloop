@@ -17,14 +17,16 @@ const initialState = () => {
     editData: [],
     fetchError: '',
     dataLoaded: false,
-    timePeriodChecked: false,
+    isCurrentlyChecked: false,
+    initialBackgroundPic: null,
+    initialProfilePic: null,
     generatedFieldsCounter: 0,
     interestsIndexer: 0,
     currentWindow: 'General',
     windows: ['General', 'Identity', 'Work', 'About', 'Pictures'],
     files: [
-      {file: null, input: 'background_image', src: ''},
-      {file: null, input: 'profile_image', src: ''},
+      {file: null, input: 'background_picture', src: ''},
+      {file: null, input: 'profile_picture', src: ''},
     ],
     days: [{name: '1', abbrv: '1', id: 1}, {name: '2', abbrv: '2', id: 2}, {name: '3', abbrv: '3', id: 3},{name: '4', abbrv: '4', id: 4},{name: '5', abbrv: '5', id: 5},{name: '6', abbrv: '6', id: 6},{name: '7', abbrv: '7', id: 7},{name: '8', abbrv: '8', id: 8},{name: '9', abbrv: '9', id: 9},{name: '10', abbrv: '10', id: 10},{name: '11', abbrv: '11', id: 11},{name: '12', abbrv: '12', id: 12},{name: '13', abbrv: '13', id: 13},{name: '14', abbrv: '14', id: 14}, {name: '15', abbrv: '15', id: 15},{name: '16', abbrv: '16', id: 16},{name: '17', abbrv: '17', id: 17},{name: '18', abbrv: '18', id: 18},{name: '19', abbrv: '19', id: 19},{name: '20', abbrv: '20', id: 20},{name: '21', abbrv: '21', id: 21},{name: '22', abbrv: '22', id: 22},{name: '23', abbrv: '23', id: 23},{name: '24', abbrv: '24', id: 24},{name: '25', abbrv: '25', id: 25},{name: '26', abbrv: '26', id: 26},{name: '27', abbrv: '27', id: 27},{name: '28', abbrv: '28', id: 28}, {name: '29', abbrv: '29', id: 29},{name: '30', abbrv: '30', id: 30}, {name: '31', abbrv: '31', id: 31}],
     months: [{name: 'Jan', abbrv: 'Jan', id: 1},{name: 'Feb', abbrv: 'Feb', id: 2}, {name: 'Mar', abbrv: 'Mar', id: 3},{name: 'Apr', abbrv: 'Apr', id: 4}, {name: 'May', abbrv: 'May', id: 5}, {name: 'Jun', abbrv: 'Jun', id: 6}, {name: 'Jul', abbrv: 'Jul', id: 7}, {name: 'Aug', abbrv: 'Aug', id: 8},{name: 'Sep', abbrv: 'Sep', id: 9}, {name: 'Oct', abbrv: 'Oct', id: 10}, {name: 'Nov', abbrv: 'Nov', id: 11}, {name: 'Dec', abbrv: 'Dec', id: 12}],
@@ -119,10 +121,82 @@ const profileEdit = {
 
   mutations: {
 
+        RESET_MODULE: (state) => {
 
-    RESET_MODULE: (state) => {
+        Object.assign(state, initialState());
+        },
 
-     Object.assign(state, initialState());
+        SET_PICTURE: (state, { input, file, src }) => {
+
+          if(input === 'profile_picture') {
+
+            state.initialProfilePic = false;
+          }
+
+          if (input === 'background_picture') {
+
+            state.initialBackgroundPic = false;
+          }
+
+          const fieldIndex = getObjPos(state.form, input);
+          const fileIndex = state.files.findIndex((file) => file.input === input);
+
+          const obj = {file, input, src};
+
+          state.form[fieldIndex].value = src;
+          state.files[fileIndex] = obj;
+        },
+
+
+
+
+        REMOVE_PICTURE: (state, payload) => {
+
+          const fieldIndex = getObjPos(state.form, payload);
+
+          state.form[fieldIndex].value = '';
+
+          state.files.forEach((fileObj) => {
+
+            if (fileObj.input === payload) {
+
+              fileObj.file = null;
+              fileObj.src = '';
+            }
+          });
+        },
+
+
+
+
+
+
+
+
+
+
+        TOGGLE_CURRENTLY: (state, payload) => {
+
+        state.isCurrentlyChecked = !state.isCurrentlyChecked;
+
+        const monthToIndex = getObjPos(state.form, 'month_to');
+        const yearToIndex = getObjPos(state.form, 'year_to');
+
+
+      if (state.isCurrentlyChecked) {
+
+        const d = new Date();
+        const { abbrv } = state.months.find((month) => month.id === d.getMonth() + 1);
+
+        state.form[monthToIndex].value = abbrv;
+        state.form[yearToIndex].value =  d.getFullYear().toString();
+      }
+
+      if (!state.isCurrentlyChecked) {
+
+        state.form[monthToIndex].value = 'Month';
+        state.form[yearToIndex].value = 'Year';
+      }
     },
 
     DELETE_INTEREST: (state, payload) => {
@@ -131,7 +205,7 @@ const profileEdit = {
 
       state.form[pos].interests = state.form[pos].interests.filter((interest) => interest.id !== payload);
 
-      console.log('did we make it? ', payload);
+
     },
 
     INDEX_INTEREST: (state, payload) => {
@@ -162,7 +236,7 @@ const profileEdit = {
 
 
      UPDATE_FIELD: (state, payload) => {
-      console.log('Check: ', payload);
+
        if (payload.field === 'birth_month') {
 
         const BirthDayField = state.form.find(({ field }) => field === 'birth_day' );
@@ -214,6 +288,10 @@ const profileEdit = {
             field.value = data[field.field];
           }
       });
+
+      state.isCurrentlyChecked = data.work_currently;
+      state.initialProfilePic = true;
+      state.initialBackgroundPic = true;
 
       data.links.forEach((link, index) => {
 

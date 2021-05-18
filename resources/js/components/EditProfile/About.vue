@@ -75,11 +75,6 @@
       InterestCollection,
     },
 
-    mounted() {
-
-      console.log('Interests: ', this.getEditGroup.interests);
-    },
-
     beforeDestroy() {
 
     },
