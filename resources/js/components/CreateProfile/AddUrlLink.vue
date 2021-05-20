@@ -39,8 +39,6 @@
 
 <style lang="scss">
 
-  // @import '../../../sass/general/_variables.scss';
-
   .add_url_link__container {
     display: flex;
     align-items: center;
@@ -55,7 +53,6 @@
       margin-left: 0.2rem;
       color: $mainInputLabel;
     }
-
   }
 
 </style>

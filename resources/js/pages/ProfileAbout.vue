@@ -167,19 +167,19 @@
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-
   import PreviousRoute from '../components/Navigation/PreviousRoute.vue';
-  import CompletionBar from '../components/AboutProfile/CompletionBar.vue';
-  import ProfileImage from '../components/Profile/ProfileImage.vue';
-  import DefaultProfileIcon from '../components/Icons/DefaultProfileIcon.vue';
-  import UserSolidIcon from '../components/Icons/UserSolidIcon.vue';
+
   import BirthdayIcon from '../components/Icons/BirthdayIcon.vue';
+  import CompletionBar from '../components/AboutProfile/CompletionBar.vue';
+  import DefaultProfileIcon from '../components/Icons/DefaultProfileIcon.vue';
   import HeartSolidIcon from '../components/Icons/HeartSolidIcon.vue';
-  import WorkSolidIcon from '../components/Icons/WorkSolidIcon.vue';
-  import PinSolidIcon from '../components/Icons/PinSolidIcon.vue';
   import HouseSolidIcon from '../components/Icons/HouseSolidIcon.vue';
   import LinkIcon from '../components/Icons/LinkIcon.vue';
+  import PinSolidIcon from '../components/Icons/PinSolidIcon.vue';
+  import ProfileImage from '../components/Profile/ProfileImage.vue';
   import SearchIcon from '../components/Icons/SearchIcon.vue';
+  import UserSolidIcon from '../components/Icons/UserSolidIcon.vue';
+  import WorkSolidIcon from '../components/Icons/WorkSolidIcon.vue';
 
 
   export default {
@@ -187,19 +187,18 @@
     name: 'ProfileAbout',
 
     components: {
-
-      PreviousRoute,
+      BirthdayIcon,
       CompletionBar,
       DefaultProfileIcon,
-      ProfileImage,
-      UserSolidIcon,
-      BirthdayIcon,
       HeartSolidIcon,
-      WorkSolidIcon,
-      PinSolidIcon,
       HouseSolidIcon,
       LinkIcon,
+      PinSolidIcon,
+      PreviousRoute,
+      ProfileImage,
       SearchIcon,
+      UserSolidIcon,
+      WorkSolidIcon,
     },
 
     async mounted () {

@@ -85,13 +85,11 @@
 
 <style lang="scss">
 
-  // @import '../../../../sass/forms/_inputs.scss';
-
   .text-area__container {
     display: flex;
     flex-direction: column;
     max-width: 420px;
-    height: 150px;
+    min-height: 150px;
     box-sizing: border-box;
     width: 100%;
 

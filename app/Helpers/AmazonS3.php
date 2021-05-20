@@ -15,7 +15,7 @@ class AmazonS3
   public function __construct($fileName, $file)
   {
 
-    $this->fileName = uniqid() . $fileName;
+    $this->fileName = $fileName;
     $this->file = $file;
     $this->s3 = new S3Client(
       [
@@ -56,5 +56,21 @@ class AmazonS3
       ->getObjectUrl(env('AWS_BUCKET'), $this->fileName);
 
     return $fileURL;
+  }
+
+  public function deleteFromBucket()
+  {
+    try {
+
+      $this->s3->deleteObject(
+        [
+          'Bucket' => env('AWS_BUCKET'),
+          'Key' => $this->fileName,
+        ]
+      );
+    } catch (S3Exception $e) {
+      error_log(print_r($e->getMessage(), true));
+      return $e->getMessage();
+    }
   }
 }

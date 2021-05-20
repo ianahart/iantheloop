@@ -43,6 +43,7 @@ export function getFormData (state) {
 
      return Object.assign({}, ...data);
 
+
 }
 
 // for module with more than one form
@@ -173,4 +174,19 @@ export function getCurrentRadioValue(form, targetField) {
 export function getObjPos(form, targetField) {
 
      return form.findIndex((field) => field.field === targetField);
+}
+
+// profileEdit.js
+export function prepareEditFile(form, files, target) {
+
+   const file = files.find((file) => file.input === target);
+   const field = form.find((field) => field.field === target);
+   let value = file;
+
+   if (value.file === null) {
+
+     value.src = field.value;
+   }
+
+   return value;
 }

@@ -1,13 +1,13 @@
 import axios from 'axios';
+import { flatten } from 'lodash';
 
 import {
     inputChange,
-    pluckField,
     clearFields,
     filterEditGroup,
     getCurrentRadioValue,
+    prepareEditFile,
     getObjPos,
-    errorsPresent
   } from '../../../helpers/moduleHelpers.js';
 
 const initialState = () => {
@@ -16,7 +16,11 @@ const initialState = () => {
 
     editData: [],
     fetchError: '',
+    userId: null,
+    formErrors: false,
     dataLoaded: false,
+    profileId: null,
+    isUpdated: false,
     isCurrentlyChecked: false,
     initialBackgroundPic: null,
     initialProfilePic: null,
@@ -55,8 +59,8 @@ const initialState = () => {
           {field: "relationship",errors: [],label: "Relationship Status",value: "",size: "md",type: "radio",nameAttr: "relationship",statuses: ["Single","In a relationship","Married","Divorced","N/A"] ,group: 'About'},
           {field: "interests",errors: [],label: "Interests",value: "",size: "sm",type: "text",nameAttr: "interests",interests: [] ,group: 'About'},
 
-          {file: 'backgroundfile', field: 'background_picture', errors: [], label: 'Background Image', value: '',size: '', type: 'file', nameAttr: 'background_picture' ,group: 'Pictures'},
-          {file: 'profilefile', field: 'profile_picture' ,errors: [], label: 'Profile Picture', value: '',size: '', type: 'file', nameAttr: 'profile_picture' ,group: 'Pictures'},
+          {file: 'background_picture', field: 'background_picture', errors: [], label: 'Background Image', value: '',size: '', type: 'file', nameAttr: 'background_picture' ,group: 'Pictures'},
+          {file: 'profile_picture', field: 'profile_picture' ,errors: [], label: 'Profile Picture', value: '',size: '', type: 'file', nameAttr: 'profile_picture' ,group: 'Pictures'},
     ],
   }
 };
@@ -69,6 +73,37 @@ const profileEdit = {
 
   getters: {
 
+    getFormData (state) {
+
+      let data = state.form.map((field) => {
+
+        const val = field.field === 'interests' ? field.interests : field.value;
+
+        return {[field.field]:val};
+      });
+
+      // remove these fields because they are packaged separately and not part of form
+      // for validation
+      const exclude = ['background_picture', 'profile_picture'];
+      data = data.filter((item) => {
+
+        if(!exclude.includes(...Object.keys(item))) {
+          return item;
+        }
+      });
+
+      return Object.assign({}, ...data);
+    },
+
+    getBackgroundPicture(state) {
+
+      return prepareEditFile(state.form, state.files, 'background_picture');
+    },
+
+    getProfilePicture(state) {
+
+      return prepareEditFile(state.form, state.files, 'profile_picture');
+    },
 
     getLinks(state) {
 
@@ -126,6 +161,23 @@ const profileEdit = {
         Object.assign(state, initialState());
         },
 
+        CLEAR_FORM: (state) => {
+
+          clearFields(state.form);
+        },
+
+
+        CLEAR_ERRORS: (state) => {
+
+          state.formErrors = false;
+
+          state.form.forEach((field) => {
+
+            field.errors = [];
+          });
+
+        },
+
         SET_PICTURE: (state, { input, file, src }) => {
 
           if(input === 'profile_picture') {
@@ -147,9 +199,6 @@ const profileEdit = {
           state.files[fileIndex] = obj;
         },
 
-
-
-
         REMOVE_PICTURE: (state, payload) => {
 
           const fieldIndex = getObjPos(state.form, payload);
@@ -165,15 +214,6 @@ const profileEdit = {
             }
           });
         },
-
-
-
-
-
-
-
-
-
 
         TOGGLE_CURRENTLY: (state, payload) => {
 
@@ -224,10 +264,6 @@ const profileEdit = {
 
       state.form[formIndex].value = payload;
     },
-
-
-
-
 
     REMOVE_LINK: (state, payload) => {
 
@@ -292,6 +328,7 @@ const profileEdit = {
       state.isCurrentlyChecked = data.work_currently;
       state.initialProfilePic = true;
       state.initialBackgroundPic = true;
+      state.profileId = data.id;
 
       data.links.forEach((link, index) => {
 
@@ -311,6 +348,34 @@ const profileEdit = {
       state.generatedFieldsCounter = data.links.length;
 
       state.dataLoaded = true;
+    },
+
+    SET_VALIDATION_ERRORS:(state, payload) => {
+
+      const interestsIndex = getObjPos(state.form, 'interests');
+
+      state.formErrors = true;
+
+      state.form.forEach((field, index) => {
+
+        for( let prop in payload) {
+
+          if(prop.includes('interests') && field.field === 'interests') {
+            state.form[interestsIndex].errors.push(...payload[prop]);
+          }
+
+          if (field.field === prop) {
+              state.form[index].errors.push(...payload[prop]);
+          }
+        }
+      });
+      state.form[interestsIndex].errors = [...new Set(state.form[interestsIndex].errors)];
+    },
+
+    SET_IS_UPDATED: (state, payload) => {
+
+      state.userId = payload.user_id;
+      state.isUpdated = payload.isUpdated;
     },
   },
 
@@ -339,9 +404,73 @@ const profileEdit = {
           commit('SET_EDIT_DATA', response.data);
          }
       } catch (e) {
+
         console.log(e.response);
-        // console.log('store/profile/profileEdit: ', e.response);
-        // commit('SET_FETCH_ERROR',e.response.data.msg);
+      }
+    },
+
+    async UPDATE_PROFILE ({commit, state, getters }) {
+
+      try {
+
+        const formData = new FormData();
+        const fields = getters.getFormData;
+        const backgroundPicture = getters.getBackgroundPicture;
+        const profilePicture = getters.getProfilePicture;
+
+        formData.append('_method', 'PATCH');
+
+        if (backgroundPicture.file) {
+
+          formData.append('background_picture', backgroundPicture.file ?? '');
+        } else {
+
+          fields.background_pic_prev = backgroundPicture.src;
+        }
+
+        if (profilePicture.file) {
+
+          formData.append('profile_picture', profilePicture.file ?? '');
+        } else {
+
+          fields.profile_pic_prev = profilePicture.src;
+        }
+
+        fields.work_currently = state.isCurrentlyChecked;
+
+        formData.append('data', JSON.stringify(fields));
+
+        const response = await axios(
+            {
+              method:'POST',
+              url: `/api/auth/profile/${state.profileId}/update`,
+              'contentType': false,
+              'processData': false,
+              headers: {
+                'Accept' : 'application/json',
+                'Content-Type': 'application/json',
+              },
+              data: formData,
+            }
+          );
+
+        console.log('profileEdit: ', response.data);
+
+
+
+        let stringifiedUser = localStorage.getItem('user');
+        const parsedUser = JSON.parse(stringifiedUser);
+        parsedUser.profile_pic = response.data.profile_pic;
+        commit('user/SET_TOKEN', JSON.stringify(parsedUser), { root: true });
+
+        commit('SET_IS_UPDATED', {isUpdated:response.data.isUpdated, user_id: parsedUser.user_id});
+      } catch (e) {
+        if (e.response.status === 422) {
+
+          const { errors } = e.response.data;
+
+          commit('SET_VALIDATION_ERRORS', errors);
+        }
       }
     }
 

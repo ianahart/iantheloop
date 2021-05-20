@@ -14,8 +14,8 @@
     import { mapGetters, mapActions, mapMutations, mapState } from 'vuex';
 
     import Sidebar from '../components/CreateProfile/Sidebar.vue';
-    import Viewer from '../components/CreateProfile/Viewer.vue';
     import Triggers from '../components/CreateProfile/Triggers.vue';
+    import Viewer from '../components/CreateProfile/Viewer.vue';
 
   export default {
 
@@ -25,8 +25,8 @@
     components: {
 
       Sidebar,
-      Viewer,
       Triggers,
+      Viewer,
     },
 
 

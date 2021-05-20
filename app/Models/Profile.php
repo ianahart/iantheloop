@@ -32,7 +32,9 @@ class Profile extends Model
         'month_to',
         'year_to',
         'profile_picture',
+        'profile_filename',
         'background_picture',
+        'background_filename',
         'work_currently'
     ];
 

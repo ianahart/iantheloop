@@ -14,8 +14,8 @@
   import { mapGetters, mapMutations, mapState,  mapActions } from 'vuex';
 
   import Header from '../components/Profile/Header.vue';
-  import ProfileStats from '../components/Profile/ProfileStats.vue';
   import Dashboard from '../components/Profile/Dashboard.vue';
+  import ProfileStats from '../components/Profile/ProfileStats.vue';
 
   export default {
 
@@ -23,8 +23,8 @@
 
     components: {
       Header,
-      ProfileStats,
       Dashboard,
+      ProfileStats,
     },
 
     async mounted () {

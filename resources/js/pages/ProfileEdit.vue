@@ -4,6 +4,7 @@
       routeName="Profile"
     />
     <h3 class="profile_edit__title">Edit Profile</h3>
+    <FormControls />
     <div class="profile_edit__section__container">
      <SectionNav />
      <div class="profile_edit__forms">
@@ -34,25 +35,27 @@
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
   import PreviousRoute from '../components/Navigation/PreviousRoute.vue';
-  import SectionNav from '../components/EditProfile/SectionNav.vue';
+  import About from '../components/EditProfile/About.vue';
+  import FormControls from '../components/EditProfile/FormControls.vue';
   import General from '../components/EditProfile/General.vue';
   import Identity from '../components/EditProfile/Identity.vue';
-  import About from '../components/EditProfile/About.vue';
-  import Work from '../components/EditProfile/Work.vue';
   import Pictures from '../components/EditProfile/Pictures.vue';
+  import SectionNav from '../components/EditProfile/SectionNav.vue';
+  import Work from '../components/EditProfile/Work.vue';
 
   export default {
 
     name: 'ProfileEdit',
 
     components: {
-      PreviousRoute,
-      SectionNav,
+      About,
+      FormControls,
       General,
       Identity,
-      About,
-      Work,
       Pictures,
+      PreviousRoute,
+      SectionNav,
+      Work,
     },
 
     async created () {

@@ -19,8 +19,8 @@
   import { mapGetters } from 'vuex';
 
   import Followers from './Followers.vue';
-  import Following from './Following.vue';
   import FollowBtn from './FollowBtn.vue';
+  import Following from './Following.vue';
 
   export default {
 
@@ -33,8 +33,8 @@
     components: {
 
       Followers,
-      Following,
       FollowBtn,
+      Following,
     },
 
     computed: {

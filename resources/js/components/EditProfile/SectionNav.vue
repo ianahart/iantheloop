@@ -20,10 +20,10 @@
 
 <script>
 
+  import { mapGetters, mapState, mapMutations } from 'vuex';
+
   import NavBtn from './NavBtn.vue';
   import PenSolidIcon from '../Icons/PenSolidIcon.vue';
-
-  import { mapGetters, mapState, mapMutations } from 'vuex';
 
   export default {
 

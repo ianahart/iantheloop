@@ -75,8 +75,8 @@
 
   import { mapGetters, mapMutations } from 'vuex';
 
+  import CheckCircleIcon from '../../Icons/CheckCircleIcon.vue';
   import FileUpload from '../../forms/inputs/FileUpload.vue';
-  import CheckCircleIcon from '../../Icons/ CheckCircleIcon.vue';
 
   export default {
 
@@ -84,8 +84,8 @@
 
     components: {
 
-      FileUpload,
       CheckCircleIcon,
+      FileUpload,
     },
 
     data () {

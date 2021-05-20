@@ -45,6 +45,7 @@ Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 Route::get('/auth/newsfeed', [NewsFeedController::class, 'index'])->middleware('auth:api');
 Route::get('/auth/profile/{profileId}/edit', [ProfileController::class, 'edit'])->middleware('auth:api');
 Route::get('/auth/profile/{profileId}/about', [ProfileController::class, 'showAbout'])->middleware('auth:api');
+Route::patch('/auth/profile/{profileId}/update', [ProfileController::class, 'update'])->middleware('auth:api');
 Route::get('/auth/profile/{id}', [ProfileController::class, 'show'])->middleware('auth:api');
 Route::post('/auth/profile', [ProfileController::class, 'store'])->middleware('auth:api');
 Route::post('/auth/logout', [LogoutController::class, 'store'])->middleware(('auth:api'));

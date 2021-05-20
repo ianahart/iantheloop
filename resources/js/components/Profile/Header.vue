@@ -27,8 +27,8 @@
   import { mapGetters } from 'vuex';
 
   import BackgroundImage from './BackgroundImage.vue';
-  import ProfileImage from './ProfileImage.vue';
   import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
+  import ProfileImage from './ProfileImage.vue';
 
   export default {
     name: 'Header',
@@ -38,10 +38,9 @@
     },
 
     components: {
-
       BackgroundImage,
-      ProfileImage,
       DefaultProfileIcon,
+      ProfileImage,
     },
 
     mounted () {

@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Helpers\AmazonS3;
 use App\Http\Requests\StoreMultipleForm;
+use App\Http\Requests\EditProfileRequest;
+use Error;
 use Exception;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -19,6 +21,9 @@ class ProfileController extends Controller
     private array $data;
     public string $fullName;
     public string $profilePic;
+    public array $editedData;
+    public bool $isUpdated;
+    public string $updatedProfilePic;
 
     /*
      * Get base profile data
@@ -196,8 +201,6 @@ class ProfileController extends Controller
         $punctuated[0] = ucfirst($punctuated[0]);
 
         return implode(' ', $punctuated);
-
-        error_log(print_r(implode(' ', $punctuated), true));
     }
 
     /*
@@ -287,19 +290,22 @@ class ProfileController extends Controller
     /*
      * add  the user supplied form data to user profile
      * @params mixed $file
-     * @return null or string
+     * @return array
      */
     private function fileValue(mixed $file)
     {
 
         $fileURL = '';
-
+        $fileName = '';
         if (isset($file)) {
 
-            $fileName = $file->getClientOriginalName();
+            $fileName = uniqid() . $file->getClientOriginalName();
             $fileURL = $this->getFileURL($file, $fileName);
         }
-        return $fileURL;
+        return [
+            $fileURL,
+            $fileName
+        ];
     }
 
     /*
@@ -312,8 +318,9 @@ class ProfileController extends Controller
         $backgroundFile = $this->data['backgroundfile'];
         $profileFile = $this->data['profilefile'];
 
-        $backgroundURL = $this->fileValue($backgroundFile);
-        $profileURL = $this->fileValue($profileFile);
+        [$backgroundURL, $backgroundFileName] = $this->fileValue($backgroundFile);
+        [$profileURL, $profileFileName] = $this->fileValue($profileFile);
+
 
         $profile = new Profile();
 
@@ -358,7 +365,9 @@ class ProfileController extends Controller
         $profile->links = json_encode($links);
         $profile->user_id = $this->userId;
         $profile->profile_picture = $profileURL;
+        $profile->profile_filename = $profileFileName;
         $profile->background_picture = $backgroundURL;
+        $profile->background_filename = $backgroundFileName;
 
         $profile->save();
     }
@@ -471,5 +480,230 @@ class ProfileController extends Controller
                 401
             );
         }
+    }
+
+    /*
+     * Get all of profile data
+     * @param EditProfileRequest $request
+     * @param string $profileId
+     * @return JsonResponse
+     */
+    public function update(EditProfileRequest $request, string $profileId)
+    {
+        try {
+
+            $validated = $request->validated();
+
+            if ($validated) {
+
+                $this->editedData = $request->all();
+                $exclude = ['data', '_method', 'background_pic_prev', 'profile_pic_prev'];
+
+                $this->removeMetaData($exclude);
+                $this->sanitizeEditedData();
+
+                $profile = Profile::find($profileId);
+                $this->makeUpdates($profile);
+            }
+
+
+            if ($this->isUpdated) {
+
+                return response()
+                    ->json(
+                        [
+                            'msg' => 'success',
+                            'isUpdated' => $this->isUpdated,
+                            'profile_pic' => $this->updatedProfilePic,
+                        ],
+                        200
+                    );
+            }
+        } catch (Exception $e) {
+            error_log(print_r($e->getMessage(), true));
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to update profile. Please try again soon.'
+                    ],
+                    400
+                );
+        }
+    }
+
+    /*
+     * sanitize the edit request data
+     * @param void
+     * @param
+     * @return JsonResponse
+     */
+    private function sanitizeEditedData()
+    {
+        $excluded = [
+            'profile_picture',
+            'background_picture',
+            'profile_pic_prev',
+            'background_pic_prev',
+            'interests',
+            'work_currently'
+        ];
+        $links = [];
+        $urlKeys = [];
+
+        foreach ($this->editedData as $key => $val) {
+
+            if (!in_array($key, $excluded) && isset($val)) {
+
+                if (str_contains($key, 'url-')) {
+
+                    $links[] = $val;
+                    $urlKeys[] = $key;
+                }
+                $this->editedData[$key] = strtolower(trim($val));
+            }
+        }
+
+        $interests = $this->editedData['interests'];
+
+        for ($i = 0; $i < count($interests); $i++) {
+            $interests[$i]['name'] = strtolower(
+                trim($interests[$i]['name'])
+            );
+        }
+
+        for ($j = 0; $j < count($urlKeys); $j++) {
+            unset($this->editedData[$urlKeys[$j]]);
+        }
+
+        $this->editedData['interests'] = json_encode($interests);
+        $this->editedData['links'] = count($links) ? json_encode($links) : json_encode([]);
+        $this->editedData['work_currently'] = $this->editedData['work_currently'] ? 1 : 0;
+    }
+
+    /*
+     * remove fields that will not be inserted into DB
+     * @param array $metaData
+     * @return void
+     */
+    private function removeMetaData(array $metaData)
+    {
+        $this->editedData = array_filter(
+            $this->editedData,
+            function ($val, $key) use ($metaData) {
+
+                if (!in_array($key, $metaData)) {
+
+                    return $key;
+                }
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
+    }
+
+    /*
+    * make updates to columns for the given profile
+    * @param object $profile
+    * @return void
+    */
+    // 2021-05-11 00:52:15
+    private function makeUpdates(object $profile)
+    {
+
+        foreach ($this->editedData as $key => $val) {
+
+            $routedValue = $this->routeValues($key, $val, $profile);
+
+            if (is_array($routedValue)) {
+
+                $routedValueKey = array_keys($routedValue)[0];
+
+                if ($key === $routedValueKey) {
+
+                    $profile->$key = $routedValue[$key][$key];
+                    $prefix = explode('_', $routedValueKey)[0];
+                    $fileName = $prefix . '_filename';
+                    $profile->$fileName = $routedValue[$key][$fileName];
+                }
+            } else {
+
+                $profile->$key = $routedValue;
+            }
+        }
+
+        $this->updatedProfilePic = $profile->profile_picture;
+
+        $profile->save();
+        $this->isUpdated = true;
+    }
+
+
+
+    /*
+    * make updates to columns for the given profile
+    * @param string $key
+    * @param mixed $value
+    * @param object $profile
+    * @return mixed (string, array)
+    */
+
+    private function routeValues(
+        string $key,
+        mixed $value,
+        object $profile
+    ) {
+        $result = null;
+
+        switch ($key) {
+
+            case 'background_picture':
+
+                if (isset($profile->background_filename)) {
+
+                    $this->deletePrevFile($profile->background_filename);
+                }
+
+                [$backgroundURL, $backgroundFileName] = $this->fileValue($value);
+
+                $result = [
+                    $key => [
+                        'background_picture' => $backgroundURL,
+                        'background_filename' => $backgroundFileName
+                    ]
+                ];
+                break;
+
+            case 'profile_picture':
+
+                if (isset($profile->profile_filename)) {
+
+                    $this->deletePrevFile($profile->profile_filename);
+                }
+
+                [$profileURL, $profileFileName] = $this->fileValue($value);
+
+                $result = [
+                    $key => [
+                        'profile_picture' => $profileURL,
+                        'profile_filename' => $profileFileName
+                    ]
+                ];
+                break;
+
+            default:
+                $result = $value;
+        }
+        return $result;
+    }
+
+    /*
+    * delete previous file from amazon s3
+    * @param string $fileName
+    * @return void
+    */
+    private function deletePrevFile(string $fileName)
+    {
+
+        $s3Instance = new AmazonS3($fileName, null);
+        $s3Instance->deleteFromBucket();
     }
 }

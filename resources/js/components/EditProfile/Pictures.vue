@@ -85,10 +85,13 @@
 
   import { mapGetters, mapState, mapMutations } from 'vuex';
 
-  import FileUpload from '../forms/inputs/FileUpload.vue';
-  import CheckCircleIcon from '../Icons/ CheckCircleIcon.vue';
-  import PictureSolidIcon from '../Icons/PictureSolidIcon.vue';
   import CameraSolidIcon from  '../Icons/CameraSolidIcon.vue';
+  import CheckCircleIcon from '../Icons/CheckCircleIcon.vue';
+  import PictureSolidIcon from '../Icons/PictureSolidIcon.vue';
+
+  import FileUpload from '../forms/inputs/FileUpload.vue';
+
+
 
   export default {
 
@@ -99,10 +102,10 @@
     },
 
     components: {
-      FileUpload,
-      CheckCircleIcon,
-      PictureSolidIcon,
       CameraSolidIcon,
+      CheckCircleIcon,
+      FileUpload,
+      PictureSolidIcon,
     },
 
     beforeDestroy() {

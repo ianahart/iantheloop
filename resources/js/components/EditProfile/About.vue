@@ -18,7 +18,7 @@
       <div class="edit_profile_about_row">
         <TextArea
           :field="getEditGroup.bio.field"
-          maxLength="300"
+          maxLength="500"
           :type="getEditGroup.bio.type"
           :errors="getEditGroup.bio.errors"
           :label="getEditGroup.bio.label"
@@ -29,7 +29,6 @@
       </div>
       <div class="edit_profile_about_row">
         <p class="interest_limit" v-if="getEditGroup.interests.length === 5">You've reached the maximum interests you can have (5)</p>
-        <p class="forms__input__error" v-for="(error, index) in getEditGroup.interests.errors" :key="index">{{ error }}</p>
           <InterestForm
             @inputchange="updateInterestInput"
             @add="indexInterest"
@@ -50,13 +49,16 @@
 </template>
 
 <script>
-     //addinterest   // v-if="getEditGroup.interests.interests.length !== 5"
+
   import { mapGetters, mapState, mapMutations } from 'vuex';
 
+  import InterestCollection from './InterestCollection.vue';
+  import InterestForm from './InterestForm.vue';
   import RadioBtns from '../forms/inputs/RadioBtns.vue';
   import TextArea from '../forms/inputs/TextArea.vue';
-  import InterestForm from '../EditProfile/InterestForm.vue';
-  import InterestCollection from '../EditProfile/InterestCollection.vue';
+
+
+
 
 
   export default {
@@ -68,11 +70,10 @@
     },
 
     components: {
-
+      InterestCollection,
+      InterestForm,
       RadioBtns,
       TextArea,
-      InterestForm,
-      InterestCollection,
     },
 
     beforeDestroy() {

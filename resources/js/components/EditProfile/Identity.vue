@@ -97,14 +97,15 @@
 
   import { mapGetters, mapState, mapMutations } from 'vuex';
 
+  import BirthdayIcon from '../Icons/BirthdayIcon.vue';
+  import CustomSelect from '../forms/selects/CustomSelect.vue';
+  import FemaleIcon from '../Icons/FemaleIcon.vue';
+  import MaleIcon from '../Icons/MaleIcon.vue';
+  import RadioBtns from '../forms/inputs/RadioBtns.vue';
+  import TransgenderIcon from '../Icons/TransgenderIcon.vue';
+
   import { years } from '../../data/selectYears';
 
-  import TransgenderIcon from '../Icons/TransgenderIcon.vue';
-  import MaleIcon from '../Icons/MaleIcon.vue';
-  import FemaleIcon from '../Icons/FemaleIcon.vue';
-  import CustomSelect from '../forms/selects/CustomSelect.vue';
-  import RadioBtns from '../forms/inputs/RadioBtns.vue';
-  import BirthdayIcon from '../Icons/BirthdayIcon.vue';
 
   export default {
 
@@ -115,13 +116,12 @@
     },
 
     components: {
-
-      TransgenderIcon,
-      MaleIcon,
-      FemaleIcon,
-      CustomSelect,
-      RadioBtns,
       BirthdayIcon,
+      CustomSelect,
+      FemaleIcon,
+      MaleIcon,
+      RadioBtns,
+      TransgenderIcon,
     },
 
     data () {

@@ -99,16 +99,15 @@
 
   import { mapState, mapGetters, mapMutations } from 'vuex';
 
-  import InputFieldSm from '../../forms/inputs/InputFieldSm.vue';
-  import InputFieldMd from '../../forms/inputs/InputFieldMd.vue';
-  import InputFieldLg from '../../forms/inputs/InputFieldLg.vue';
+  import AddUrlLink from '../../CreateProfile/AddUrlLink.vue';
   import CustomSelect from '../../forms/selects/CustomSelect.vue';
-  import LinkIcon from '../../Icons/LinkIcon.vue';
-  import AddUrlLink from '../AddUrlLink.vue';
+  import InputFieldLg from '../../forms/inputs/InputFieldLg.vue';
   import InputFieldLink from '../../forms/inputs/InputFieldLink.vue';
+  import InputFieldMd from '../../forms/inputs/InputFieldMd.vue';
+  import LinkIcon from '../../Icons/LinkIcon.vue';
 
-  import { states } from '../../../data/states.js';
   import { countries } from '../../../data/countries.js';
+  import { states } from '../../../data/states.js';
 
   export default {
 
@@ -119,14 +118,12 @@
     },
 
     components: {
-
-      InputFieldSm,
-      InputFieldMd,
-      InputFieldLg,
-      CustomSelect,
-      LinkIcon,
       AddUrlLink,
+      CustomSelect,
+      InputFieldLg,
       InputFieldLink,
+      InputFieldMd,
+      LinkIcon,
     },
 
     data () {
@@ -197,8 +194,6 @@
 
 <style lang="scss">
 
-  // @import '../../../../sass/general/_variables.scss';
-
   .general_details_form__row {
     display: flex;
     align-items: center;
@@ -244,4 +239,4 @@
     font-size: 0.85rem;
   }
 
-</style>
+// </style>

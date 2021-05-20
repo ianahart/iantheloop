@@ -25,11 +25,12 @@
 
   import { mapGetters } from 'vuex';
 
-  import Identity from './forms/Identity.vue';
-  import GeneralDetails from './forms/GeneralDetails.vue';
   import AboutDetails from './forms/AboutDetails.vue';
-  import WorkDetails from './forms/WorkDetails.vue';
   import Customize from './forms/Customize.vue';
+  import GeneralDetails from './forms/GeneralDetails.vue';
+  import Identity from './forms/Identity.vue';
+  import WorkDetails from './forms/WorkDetails.vue';
+
 
   export default {
 
@@ -40,12 +41,11 @@
     },
 
     components: {
-
-      Identity,
-      GeneralDetails,
       AboutDetails,
-      WorkDetails,
       Customize,
+      GeneralDetails,
+      Identity,
+      WorkDetails,
     },
 
 

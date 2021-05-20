@@ -45,9 +45,9 @@
   import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
 
   import Header from '../components/Register/Header.vue';
-  import InputFieldMd from '../components/forms/inputs/InputFieldMd.vue';
-  import InputFieldLg from '../components/forms/inputs/InputFieldLg.vue';
   import CheckBox from '../components/Register/CheckBox.vue';
+  import InputFieldLg from '../components/forms/inputs/InputFieldLg.vue';
+  import InputFieldMd from '../components/forms/inputs/InputFieldMd.vue';
 
   export default {
 
@@ -60,9 +60,9 @@
     components: {
 
       Header,
-      InputFieldMd,
-      InputFieldLg,
       CheckBox,
+      InputFieldLg,
+      InputFieldMd,
     },
 
     computed: {

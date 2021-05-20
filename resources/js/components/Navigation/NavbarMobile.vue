@@ -24,11 +24,11 @@
 
   import { mapGetters } from 'vuex';
 
+  import AuthNavigationLinks from './AuthNavigationLinks';
+  import CloseIcon from '../Icons/CloseIcon';
   import HamburgerIcon from '../Icons/HamburgerIcon'
   import LogoName from '../Icons/LogoName';
-  import CloseIcon from '../Icons/CloseIcon';
   import NavigationLinks from './NavigationLinks';
-  import AuthNavigationLinks from './AuthNavigationLinks';
 
   export default {
 
@@ -39,12 +39,11 @@
     },
 
     components: {
-
-      HamburgerIcon,
+      AuthNavigationLinks,
       CloseIcon,
+      HamburgerIcon,
       LogoName,
       NavigationLinks,
-      AuthNavigationLinks,
     },
 
     computed: {

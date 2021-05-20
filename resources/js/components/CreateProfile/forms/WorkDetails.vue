@@ -125,10 +125,11 @@
 
   import { mapState, mapGetters, mapMutations } from 'vuex';
 
+
+  import CheckBox from '../../forms/checkboxes/CheckBox.vue';
+  import CustomSelect from '../../forms/selects/CustomSelect.vue';
   import InputFieldLg from '../../forms/inputs/InputFieldLg.vue';
   import TextArea from '../../forms/inputs/TextArea.vue';
-  import CustomSelect from '../../forms/selects/CustomSelect.vue';
-  import CheckBox from '../../forms/checkboxes/CheckBox.vue';
 
   import { workSelectYears } from '../../../data/selectYears';
 
@@ -141,11 +142,10 @@
     },
 
     components: {
-
+      CheckBox,
+      CustomSelect,
       InputFieldLg,
       TextArea,
-      CustomSelect,
-      CheckBox,
     },
 
     data () {

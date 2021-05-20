@@ -67,14 +67,14 @@
 
 
 <script>
-
-  import ProfileIcon from '../Navigation/LinkIcons/ProfileIcon.vue';
-  import SignoutIcon from '../../components/Icons/SignoutIcon.vue';
-  import CreateProfileIcon from '../../components/Icons/CreateProfileIcon.vue';
-  import FriendsIcon from '../../components/Icons/FriendsIcon.vue';
-  import SearchIcon from '../../components/Icons/SearchIcon.vue';
-  import DropDownLink from '../../components/Dropdowns/DropDownLink.vue';
   import BookIcon from '../Icons/BookIcon.vue';
+  import CreateProfileIcon from '../../components/Icons/CreateProfileIcon.vue';
+  import DropDownLink from '../../components/Dropdowns/DropDownLink.vue';
+  import FriendsIcon from '../../components/Icons/FriendsIcon.vue';
+  import ProfileIcon from '../Navigation/LinkIcons/ProfileIcon.vue';
+  import SearchIcon from '../../components/Icons/SearchIcon.vue';
+  import SignoutIcon from '../../components/Icons/SignoutIcon.vue';
+
 
 
   import { mapMutations, mapGetters, mapActions } from 'vuex';
@@ -88,14 +88,13 @@
     },
 
     components: {
-
-      ProfileIcon,
-      SignoutIcon,
-      CreateProfileIcon,
-      FriendsIcon,
-      SearchIcon,
-      DropDownLink,
       BookIcon,
+      CreateProfileIcon,
+      DropDownLink,
+      FriendsIcon,
+      ProfileIcon,
+      SearchIcon,
+      SignoutIcon,
     },
 
     data () {

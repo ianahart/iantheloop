@@ -56,7 +56,9 @@ const profileAbout = {
         'updated_at',
         'user_id',
         'full_name',
-        'work_currently'
+        'work_currently',
+        'background_filename',
+        'profile_filename',
       ];
 
       state.totalFields = Object.keys(state.aboutData).length - excluded.length;

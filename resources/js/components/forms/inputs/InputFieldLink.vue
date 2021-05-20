@@ -88,7 +88,6 @@
 
 <style lang="scss">
 
-  // @import '../../../../sass/general/_variables.scss';
 
   .urllinks-enter-active,
   .urllinks-leave-active {

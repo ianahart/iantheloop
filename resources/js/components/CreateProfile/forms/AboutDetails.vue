@@ -4,7 +4,7 @@
       <div class="about_detals_form__row">
         <TextArea
           :field="getBio.field"
-          maxLength="300"
+          maxLength="500"
           :type="getBio.type"
           :errors="getBio.errors"
           :label="getBio.label"
@@ -53,10 +53,10 @@
 
   import { mapGetters } from 'vuex';
 
-  import TextArea from '../../forms/inputs/TextArea.vue';
-  import RadioBtns from '../../forms/inputs/RadioBtns.vue';
   import AddInterests from '../../CreateProfile/forms/AddInterests.vue';
   import Interests from '../../CreateProfile/forms/Interests.vue';
+  import RadioBtns from '../../forms/inputs/RadioBtns.vue';
+  import TextArea from '../../forms/inputs/TextArea.vue';
 
   export default {
 
@@ -67,11 +67,10 @@
     },
 
     components: {
-
-      TextArea,
-      RadioBtns,
       AddInterests,
       Interests,
+      RadioBtns,
+      TextArea,
     },
 
     data () {

@@ -38,19 +38,18 @@
 
   import { mapState } from 'vuex';
 
-  import ProfileIcon from './LinkIcons/ProfileIcon';
   import MessagesIcon from './LinkIcons/MessagesIcon';
   import NotificationsIcon from './LinkIcons/NotificationsIcon';
+  import ProfileIcon from './LinkIcons/ProfileIcon';
 
   export default {
 
     name: 'NavigationLinks',
 
     components: {
-
-      ProfileIcon,
       MessagesIcon,
       NotificationsIcon,
+      ProfileIcon,
     },
 
     props: {

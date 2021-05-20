@@ -18,7 +18,7 @@
 
   export default {
 
-    name: 'ShowPasswordIcon',
+    name: 'PasswordIcon',
 
     computed: {
 
@@ -56,21 +56,3 @@
 
 </script>
 
-<style lang="scss">
-
-/*
-IMPORTS
-*/
-
-  .password__icon__container {
-
-    svg {
-    height: 25px;
-    color: darken($primaryGray, 15);
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    cursor: pointer,
-    }
-  }
-</style>

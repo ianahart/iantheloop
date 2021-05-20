@@ -25,7 +25,7 @@ class AboutDetailsRequest extends FormRequest
     {
 
         return [
-            'aboutDetails.bio' => ['nullable', 'max:300', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
+            'aboutDetails.bio' => ['nullable', 'max:500', 'regex:/^[\.a-zA-Z0-9,!?\' ]*$/'],
             'aboutDetails.interests.*.name' => ['nullable', 'max:75', 'min:2', 'regex:/(^[A-Za-z0-9 ]+$)+/'],
         ];
     }
@@ -38,8 +38,8 @@ class AboutDetailsRequest extends FormRequest
     public function messages()
     {
         return [
-            'aboutDetails.bio.max' => 'The maximum number of characters for the bio is (300)',
-            'aboutDetails.bio.regex' => 'Please use only letters, numbers, spaces, and punctuation',
+            'aboutDetails.bio.max' => 'The maximum number of characters for the bio is (500)',
+            'aboutDetails.bio.regex' => 'Please use only letters, numbers, spaces, apostrophes, and punctuation',
             'aboutDetails.interests.*.name.min' => 'The minimum number of characters for an interest is (2)',
             'aboutDetails.interests.*.name.max' => 'The maximum number of characters for an interest is (75)',
             'aboutDetails.interests.*.name.regex' => 'Please use only letters, numbers, and spaces',

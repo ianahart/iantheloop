@@ -15,17 +15,6 @@
 </script>
 
 
-<style lang="scss">
 
-
-
-  .chevron__icon {
-    height: 15px;
-    width: 15px;
-    color: $themeLightBlue;
-    padding: 0 0.4rem;
-    pointer-events: none;
-  }
-</style>
 
 

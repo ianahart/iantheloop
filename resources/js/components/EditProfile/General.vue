@@ -63,14 +63,14 @@
           :selected="getEditGroup.country.value"
         />
       </div>
-      <div class="general_details_urls__container">
-        <div class="general_details_urls__heading">
+      <div class="general_urls__container">
+        <div class="general_urls__heading">
          <LinkIcon
            className="link_icon__md-dark"
          />
          <h4>Websites and Social Links</h4>
         </div>
-        <div class="general_details__urls">
+        <div>
           <p v-if="getLinks.length === 5" class="max_urls">Please remove one to add another (limit reached)</p>
           <AddUrlLink
             v-if="getLinks.length < 5"
@@ -78,7 +78,7 @@
             @linkclicked="addUrlLink"
           />
         </div>
-        <div class="geneneral_details_generated_urls">
+        <div>
            <InputFieldLink
               v-for="link in getLinks" :key="link.id"
               @removelink="handleRemoveLink"
@@ -98,18 +98,21 @@
 
 <script>
 
-  import { mapGetters, mapState, mapMutations } from 'vuex';
-
-  import { states } from '../../data/states.js';
-  import { countries } from '../../data/countries.js';
+  import { mapState, mapGetters, mapMutations } from 'vuex';
 
 
-  import InputFieldMd from '../forms/inputs/InputFieldMd.vue';
-  import InputFieldLg from '../forms/inputs/InputFieldLg.vue';
-  import CustomSelect from '../forms/selects/CustomSelect.vue';
+
   import AddUrlLink from '../CreateProfile/AddUrlLink.vue';
+  import CustomSelect from '../forms/selects/CustomSelect.vue';
+  import InputFieldLg from '../forms/inputs/InputFieldLg.vue';
   import InputFieldLink from '../forms/inputs/InputFieldLink.vue';
+  import InputFieldMd from '../forms/inputs/InputFieldMd.vue';
   import LinkIcon from '../Icons/LinkIcon.vue';
+
+  import { countries } from '../../data/countries.js';
+  import { states } from '../../data/states.js';
+
+
 
 
   export default {
@@ -121,11 +124,11 @@
     },
 
     components: {
-      InputFieldMd,
-      InputFieldLg,
-      CustomSelect,
-      InputFieldLink,
       AddUrlLink,
+      CustomSelect,
+      InputFieldLg,
+      InputFieldLink,
+      InputFieldMd,
       LinkIcon,
     },
 
@@ -213,6 +216,23 @@
   justify-content: space-between;
   align-items: center;
 }
+
+  .general_urls__container {
+    margin-top: 1.2rem;
+  }
+
+  .general_urls__heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    h4 {
+        padding: 0;
+        color: $mainInputLabel;
+        letter-spacing: 0;
+        margin-left: 0.2rem;
+    }
+  }
 
 @media(max-width:650px) {
 

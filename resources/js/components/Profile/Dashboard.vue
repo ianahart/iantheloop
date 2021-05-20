@@ -9,8 +9,8 @@
 
 <script>
 
-  import WorkPreview from './WorkPreview.vue';
   import ProfileNavigation from './ProfileNavigation.vue';
+  import WorkPreview from './WorkPreview.vue';
 
   export default {
 
@@ -21,9 +21,8 @@
     },
 
     components: {
-
-      WorkPreview,
       ProfileNavigation,
+      WorkPreview,
     },
   }
 </script>

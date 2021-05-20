@@ -48,8 +48,6 @@
 
 <style lang="scss">
 
-  // @import '../../../../sass/general/_variables.scss';
-
   .about_details_interest__container {
     background-color: $primaryGray;
     margin: 1rem;

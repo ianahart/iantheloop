@@ -29,10 +29,10 @@
 
   import { mapState, mapGetters } from 'vuex';
 
+  import AuthNavigationLinks from './AuthNavigationLinks';
   import HamburgerIcon from '../Icons/HamburgerIcon';
   import LogoName from '../Icons/LogoName';
   import NavigationLinks from './NavigationLinks';
-  import AuthNavigationLinks from './AuthNavigationLinks';
 
   export default {
 
@@ -43,11 +43,10 @@
     },
 
     components: {
-
+      AuthNavigationLinks,
       HamburgerIcon,
       LogoName,
       NavigationLinks,
-      AuthNavigationLinks,
     },
 
 
