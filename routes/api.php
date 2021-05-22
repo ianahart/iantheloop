@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\refreshTokenController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\General\ProfileController;
+use App\Http\Controllers\general\StatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,3 +50,4 @@ Route::patch('/auth/profile/{profileId}/update', [ProfileController::class, 'upd
 Route::get('/auth/profile/{id}', [ProfileController::class, 'show'])->middleware('auth:api');
 Route::post('/auth/profile', [ProfileController::class, 'store'])->middleware('auth:api');
 Route::post('/auth/logout', [LogoutController::class, 'store'])->middleware(('auth:api'));
+Route::patch('/auth/stats/follow/{userId}/update', [StatsController::class, 'updateFollowStats'])->middleware('auth:api');

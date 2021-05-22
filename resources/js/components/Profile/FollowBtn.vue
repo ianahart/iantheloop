@@ -1,11 +1,13 @@
 <template>
    <div class="profile_stats_follow_btn">
-     <button @click="followUser">Follow</button>
+     <button @click="updateFollowStats">Follow</button>
    </div>
 </template>
 
 
 <script>
+
+  import { mapState,  mapActions } from 'vuex';
 
   export default {
 
@@ -25,10 +27,16 @@
 
     methods: {
 
-      followUser () {
+      ...mapActions('profile',
+        [
+          'UPDATE_FOLLOW_STATS'
+        ]
+      ),
 
-        console.log('User followed');
-      },
+      updateFollowStats () {
+
+        this.UPDATE_FOLLOW_STATS();
+      } ,
     }
   }
 </script>

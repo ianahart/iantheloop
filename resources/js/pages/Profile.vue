@@ -64,8 +64,6 @@
 
     },
 
-
-
     computed: {
 
         linkParam () {
@@ -85,7 +83,7 @@
 
       ...mapMutations('profile',
           [
-          'RESET_MODULE'
+            'RESET_MODULE',
           ]
         ),
 

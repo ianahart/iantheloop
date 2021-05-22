@@ -1,6 +1,6 @@
 <template>
   <div class="profile_stats_following">
-      <p>107<p>
+      <p>{{ followingCount }}<p>
       <p>following</p>
     </div>
 </template>
@@ -12,7 +12,7 @@
     name: 'Following',
 
     props: {
-
+      followingCount: Number,
     },
 
     components: {

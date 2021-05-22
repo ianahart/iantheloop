@@ -6,17 +6,24 @@
        <p class="profile_stats_company">{{ getBaseProfile.company }}</p>
      </div>
      <div class="profile_stats_divider"></div>
-     <Followers />
+     <Followers
+       :followersCount="profileStats.followers_count"
+     />
     <div class="profile_stats_divider"></div>
-    <Following />
-    <FollowBtn />
+    <Following
+      :followingCount="profileStats.following_count"
+    />
+    <FollowBtn
+      v-if="currentUserId !== parseInt($route.params.id)"
+      :stats="profileStats"
+    />
   </div>
   </div>
 </template>
 
 <script>
 
-  import { mapGetters } from 'vuex';
+  import { mapState, mapGetters } from 'vuex';
 
   import Followers from './Followers.vue';
   import FollowBtn from './FollowBtn.vue';
@@ -38,6 +45,13 @@
     },
 
     computed: {
+
+      ...mapState('profile',
+        [
+          'currentUserId',
+          'profileStats'
+        ]
+      ),
 
       ...mapGetters('profile',
         [

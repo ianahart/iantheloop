@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\Stats;
 use App\Helpers\AmazonS3;
 use App\Http\Requests\StoreMultipleForm;
 use App\Http\Requests\EditProfileRequest;
-use Error;
+use App\Models\Stat;
 use Exception;
-use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProfileController extends Controller
@@ -64,10 +64,13 @@ class ProfileController extends Controller
                 $profile = $this->capitalizeColumns($profile->getAttributes(), ['bio']);
             }
 
+            $stat = Stat::where('user_id', '=', $id)->first();
+
             return response()->json(
                 [
                     'msg' => 'success',
-                    'profile' => $profile
+                    'profile' => $profile,
+                    'stats' => $stat,
                 ],
                 200
             );
@@ -250,6 +253,16 @@ class ProfileController extends Controller
                 $this->getUserIdFromToken($token);
 
                 $this->storeProfile();
+
+                $stat = new Stat();
+
+                $userFullName = User::where('id', '=', $this->userId)->pluck('full_name');
+
+                $stat->user_id = $this->userId;
+
+                $stat->name = $userFullName[0];
+
+                $stat->save();
 
                 $status = $this->updateProfileCreated();
 
