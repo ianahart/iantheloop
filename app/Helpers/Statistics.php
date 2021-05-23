@@ -4,15 +4,108 @@ namespace App\Helpers;
 
 use Exception;
 
-
 class Statistics
 {
-  public object $viewingUser;
-  public object $currentUser;
-  public string $exception;
-  public  $timestamp;
 
+  private int $timestamp;
+  public bool $userIsFollowing;
+  public object $user;
+  public object $subject;
+  public array $userList;
+  public string $userId;
+  public array $notifications;
+  private string $status;
+  public int $listCount;
 
+  public function __construct($user, $subject)
+  {
+
+    $this->user = $user;
+    $this->subject = $subject;
+
+    $this->timestamp = time();
+    $this->userUpdated = false;
+    $this->userIsFollowing = false;
+  }
+
+  public function getUserIsFollowing()
+  {
+
+    return $this->userIsFollowing;
+  }
+
+  public function setUserList($userList)
+  {
+    $this->userList = !isset($userList) ? [] : $userList;
+  }
+
+  public function setUserId($userId)
+  {
+
+    $this->userId = $userId;
+  }
+
+  public function getUserList()
+  {
+
+    return $this->userList;
+  }
+
+  public function setListCount($listCount)
+  {
+
+    $this->listCount = $listCount;
+  }
+
+  public function getListCount()
+  {
+
+    return $this->listCount;
+  }
+
+  public function setNotifications($notifications)
+  {
+
+    $this->notifications = !isset($notifications) ? [] : $notifications;
+  }
+
+  public function getNotifications()
+  {
+
+    return $this->notifications;
+  }
+
+  public function setStatus($status)
+  {
+
+    $this->status = $status;
+  }
+
+  /*
+  * Check if the current user is following the subject
+  * @param void
+  * @return void
+  */
+  public function  checkCurrUserFollowing()
+  {
+    try {
+
+      $id = strval($this->user->user_id);
+
+      $following = $this->subject->followers[$id];
+
+      if (isset($following)) {
+
+        $this->userIsFollowing = true;
+      }
+    } catch (Exception $e) {
+
+      if (strlen($e->getMessage())) {
+
+        $this->userIsFollowing = false;
+      }
+    }
+  }
 
   /*
      * the user being followed is added to the current user's following column
@@ -20,66 +113,102 @@ class Statistics
      * @param void
      * @return void
      */
-  public function updateFollow()
+  public function addFollow()
   {
-
     try {
 
-      $this->currentUser->following = !isset($this->currentUser->following) ? [] : json_decode($this->currentUser->following, true);
-      $this->viewingUser->followers = !isset($this->viewingUser->followers) ? [] : json_decode($this->viewingUser->followers, true);
-      $this->currentUser->notifications = !isset($this->currentUser->notifications) ? [] : json_decode($this->currentUser->notifications, true);
-      $this->viewingUser->notifications = !isset($this->viewingUser->notifications) ? [] : json_decode($this->viewingUser->notifications, true);
+      $this->userList[$this->userId] = [
 
-      $this->currentUser->following[] = [
-        'id' => $this->viewingUser->user_id,
-        'name' => $this->viewingUser->name,
+        'id' => $this->userId,
+        'name' => $this->subject->name,
         'timestamp' => $this->timestamp,
       ];
 
-      $this->viewingUser->followers[] = [
-        'id' => $this->currentUser->user_id,
-        'name' => $this->currentUser->name,
-        'timestamp' => $this->timestamp,
-      ];
-
-      $this->currentUser->following_count = $this->currentUser->following_count + 1;
-      $this->viewingUser->followers_count = $this->viewingUser->followers_count + 1;
-
-      $this->currentUser->notifications[] = [
-        'name' => $this->viewingUser->name,
-        'notification' => 'You started following ' . $this->viewingUser->name . '.',
-        'timestamp' => $this->timestamp,
-      ];
-
-      $this->viewingUser->notifications[] = [
-        'name' => $this->currentUser->name,
-        'notification' => $this->currentUser->name . ' started following you.',
-        'timestamp' => $this->timestamp,
-      ];
+      $this->listCount = $this->listCount + 1;
     } catch (Exception $e) {
 
-      error_log(print_r($e->getMessage(), true));
+      if (strlen($e->getMessage())) {
 
-      $this->exception = $e->getMessage();
+        $this->userIsFollowing = false;
+      }
     }
   }
-
   /*
-     * the user being followed is removed from the current user's following list
-     *  the current user is removed from the user being followed followers list.
+     * the current user is removed from the user's being followed list
+     * the user being followed is removed from the current user's follow list
      * @param void
      * @return void
      */
-
   public function removeFollow()
   {
 
     try {
+
+      $remove = array_search(strval($this->userId), $this->userList[$this->userId]);
+
+      if ($remove) {
+
+        unset($this->userList[$this->userId]);
+      }
+
+      $this->listCount = $this->listCount - 1;
     } catch (Exception $e) {
 
       error_log(print_r($e->getMessage()));
 
       $this->exception = $e->getMessage();
     }
+  }
+
+  public function addNotification()
+  {
+
+    try {
+
+      $message = $this->makeMessage();
+
+      $this->notifications[$this->subject->name] = [
+
+        'name' => $this->subject->name,
+        'notification' => $message,
+        'timestamp' => $this->timestamp,
+      ];
+    } catch (Exception $e) {
+
+      error_log(print_r($e->getMessage()));
+
+      $this->exception = $e->getMessage();
+    }
+  }
+
+  private function makeMessage()
+  {
+
+    $message = null;
+
+    switch ($this->status) {
+
+      case 'unfollowed':
+
+        $message = 'You unfollowed ' . $this->subject->name . '.';
+        break;
+
+      case 'unfollowed by':
+
+        $message = $this->subject->name . ' has unfollowed you.';
+        break;
+
+      case 'followed':
+
+        $message = $this->subject->name . ' has started following you.';
+        break;
+
+      case 'following':
+
+        $message = 'You started following ' . $this->subject->name . '.';
+        break;
+    }
+
+    return $message;
   }
 }

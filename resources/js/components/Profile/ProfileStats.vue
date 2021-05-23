@@ -1,23 +1,34 @@
 <template>
   <div class="profile_stats__container">
-   <div class="profile_stats__row">
-     <div class="profile_stats_display_name">
-       <p>{{ getBaseProfile.display_name }}</p>
-       <p class="profile_stats_company">{{ getBaseProfile.company }}</p>
-     </div>
-     <div class="profile_stats_divider"></div>
-     <Followers
-       :followersCount="profileStats.followers_count"
-     />
-    <div class="profile_stats_divider"></div>
-    <Following
-      :followingCount="profileStats.following_count"
-    />
-    <FollowBtn
-      v-if="currentUserId !== parseInt($route.params.id)"
-      :stats="profileStats"
-    />
-  </div>
+   <div class="profile_stats_row__container">
+      <div class="profile_stats__row">
+        <div class="profile_stats_display_name">
+          <p>{{ getBaseProfile.display_name }}</p>
+          <p class="profile_stats_company">{{ getBaseProfile.company }}</p>
+        </div>
+        <div class="profile_stats_divider"></div>
+        <Followers
+          :followersCount="profileStats.followers_count"
+        />
+        <div class="profile_stats_divider"></div>
+        <Following
+          :followingCount="profileStats.following_count"
+        />
+      </div>
+      <div class="profile_stats__buttons">
+        <FollowBtn
+          v-if="currentUserId !== parseInt($route.params.id) && !currUserFollowing"
+          :stats="profileStats"
+        />
+        <FollowingBtn
+          v-if="currUserFollowing"
+        />
+
+       <div  v-if="isModalOpen">
+         <FollowingModal />
+       </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -28,6 +39,8 @@
   import Followers from './Followers.vue';
   import FollowBtn from './FollowBtn.vue';
   import Following from './Following.vue';
+  import FollowingBtn from './FollowingBtn.vue';
+  import FollowingModal from './FollowingModal.vue';
 
   export default {
 
@@ -42,14 +55,19 @@
       Followers,
       FollowBtn,
       Following,
+      FollowingBtn,
+      FollowingModal,
     },
+
 
     computed: {
 
       ...mapState('profile',
         [
           'currentUserId',
-          'profileStats'
+          'profileStats',
+          'currUserFollowing',
+          'isModalOpen'
         ]
       ),
 
@@ -64,6 +82,14 @@
 
 <style lang="scss">
 
+
+  .profile_stats__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
   .profile_stats__container {
     max-width: 650px;
     border-radius: 8px;
@@ -73,10 +99,16 @@
     padding: 1.2rem 0;
   }
 
+  .profile_stats_row__container {
+  display: flex;
+  justify-content: space-evenly;
+  }
+
   .profile_stats__row {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    flex-grow: 1;
   }
 
   .profile_stats_divider {
@@ -99,6 +131,13 @@
       color: $primaryBlack;
       font-weight: bold;
 
+
+      &:first-of-type {
+
+        color: $themeBlue;
+        font-weight: normal;
+    }
+
       &:last-of-type {
         margin-top: 0.3rem;
         font-size: 0.8rem;
@@ -114,23 +153,65 @@
     font-weight: normal;
   }
 
-  .profile_stats_display_name {
+  @media(max-width: 930px) {
+
+
+  .profile_stats__buttons {
+    width: 25%;
+    margin: 0 auto;
+    margin-top: 2rem;
+
+  }
+
+   .profile_stats_row__container {
+
+     flex-direction: column;
+  }
+
+    .profile_stats__container {
+      margin-top: 6.9rem;
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+     .profile_stats_display_name {
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
     p {
+      margin: 0;
+      color: $primaryBlack;
+      font-weight: bold;
+      font-size:0.7rem;
+
+
       &:first-of-type {
 
         color: $themeBlue;
+        font-weight: normal;
+        font-size: 0.7rem;
+    }
+
+      &:last-of-type {
+        margin-top: 0.3rem;
+        font-size: 0.7rem;
+        color: darken($primaryGray, 18);
         font-weight: normal;
       }
     }
   }
 
-  @media(max-width: 600px) {
+  .profile_stats_following,
+  .profile_stats_followers {
 
-    .profile_stats__container {
-      margin-top: 6.9rem;
-      margin-left: auto;
-      margin-right: auto;
+    p {
+      font-size: 0.7rem;
     }
   }
+}
+
+
 
 </style>

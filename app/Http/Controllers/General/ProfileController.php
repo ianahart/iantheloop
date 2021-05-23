@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use App\Models\Profile;
-use App\Models\Stats;
 use App\Helpers\AmazonS3;
+use App\Helpers\Statistics;
 use App\Http\Requests\StoreMultipleForm;
 use App\Http\Requests\EditProfileRequest;
 use App\Models\Stat;
 use Exception;
+use stdClass;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ProfileController extends Controller
@@ -66,11 +67,29 @@ class ProfileController extends Controller
 
             $stat = Stat::where('user_id', '=', $id)->first();
 
+            $currentUserId = JWTAuth::user()->id;
+            $currentUser = new stdClass();
+            $currentUser->user_id = $currentUserId;
+
+
+            //  $statisticInst = new Statistics();
+            $statisticInst = new Statistics($currentUser, $stat);
+
+            $statisticInst->checkCurrUserFollowing();
+
+            $currUserFollowing = $statisticInst->getUserIsFollowing();
+
+            if (!$currUserFollowing) {
+
+                $currUserFollowing = false;
+            }
+
             return response()->json(
                 [
                     'msg' => 'success',
                     'profile' => $profile,
                     'stats' => $stat,
+                    'currUserFollowing' => $currUserFollowing,
                 ],
                 200
             );

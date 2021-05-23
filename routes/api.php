@@ -51,3 +51,4 @@ Route::get('/auth/profile/{id}', [ProfileController::class, 'show'])->middleware
 Route::post('/auth/profile', [ProfileController::class, 'store'])->middleware('auth:api');
 Route::post('/auth/logout', [LogoutController::class, 'store'])->middleware(('auth:api'));
 Route::patch('/auth/stats/follow/{userId}/update', [StatsController::class, 'updateFollowStats'])->middleware('auth:api');
+Route::patch('/auth/stats/unfollow/{userId}/update', [StatsController::class, 'updateUnfollowStats'])->middleware('auth:api');

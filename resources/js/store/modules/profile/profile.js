@@ -12,6 +12,8 @@ const initialState = () => {
     currentUserId: null,
     profileStats: null,
     viewingUserId: null,
+    currUserFollowing: null,
+    isModalOpen: false,
   }
 };
 
@@ -61,10 +63,20 @@ const profile = {
      Object.assign(state, initialState());
     },
 
-    SET_PROFILE_STATS: (state, payload) => {
+    TOGGLE_MODAL: (state) => {
 
-      state.profileStats = payload;
-      state.viewingUserId = payload.user_id;
+      state.isModalOpen = !state.isModalOpen;
+    },
+
+    CLOSE_MODAL: (state, payload) => {
+
+        state.isModalOpen = payload;
+    },
+
+    SET_PROFILE_STATS: (state, payload) => {
+      state.profileStats = payload.stats;
+      state.viewingUserId = payload.stats.user_id;
+      state.currUserFollowing = payload.currUserFollowing;
     },
 
     SET_BASE_PROFILE_DATA: (state, payload) => {
@@ -111,7 +123,7 @@ const profile = {
               },
             }
           );
-         commit('SET_PROFILE_STATS', response.data.stats);
+         commit('SET_PROFILE_STATS', response.data);
          commit('SET_BASE_PROFILE_DATA', response.data.profile);
 
       } catch (e) {
@@ -136,8 +148,33 @@ const profile = {
             }
         );
 
-        console.log('UPDATE_FOLLOW_STATS RESPONSE: ', response);
-        commit('SET_PROFILE_STATS', response.data.stats);
+        commit('SET_PROFILE_STATS', response.data);
+
+      } catch(e) {
+
+        console.log(e.response);
+      }
+    },
+
+    async UNFOLLOW ({ state, commit }) {
+
+      try {
+
+        const response = await axios(
+            {
+              method:'PATCH',
+              url: `/api/auth/stats/unfollow/${state.currentUserId}/update`,
+              headers: {
+                'Accept' : 'application/json',
+                'Content-Type': 'application/json',
+              },
+              data: {viewingUserId: state.viewingUserId},
+            }
+        );
+
+            console.log(response);
+
+        commit('SET_PROFILE_STATS', response.data);
 
       } catch(e) {
 

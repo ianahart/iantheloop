@@ -1,130 +1,103 @@
 <template>
+    <div v-if="dataLoaded" class="profile__container">
+        <div class="profile_component__wrapper">
+            <Header />
+            <ProfileStats />
+            <Dashboard />
 
-    <div  v-if="dataLoaded" class="profile__container">
-      <div class="profile_component__wrapper">
-        <Header />
-        <ProfileStats/>
-        <Dashboard />
-      </div>
+        </div>
     </div>
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapState, mapActions } from "vuex";
 
-  import { mapGetters, mapMutations, mapState,  mapActions } from 'vuex';
+import Header from "../components/Profile/Header.vue";
+import Dashboard from "../components/Profile/Dashboard.vue";
+import ProfileStats from "../components/Profile/ProfileStats.vue";
 
-  import Header from '../components/Profile/Header.vue';
-  import Dashboard from '../components/Profile/Dashboard.vue';
-  import ProfileStats from '../components/Profile/ProfileStats.vue';
-
-  export default {
-
-    name: 'Profile',
+export default {
+    name: "Profile",
 
     components: {
-      Header,
-      Dashboard,
-      ProfileStats,
+        Header,
+        Dashboard,
+        ProfileStats
     },
 
-    async mounted () {
-
-      await this.fetchBaseProfileData(this.$route.params.id);
-
+    async mounted() {
+        await this.fetchBaseProfileData(this.$route.params.id);
     },
 
-    beforeDestroy () {
-      this.clearBaseProfileState();
+    beforeDestroy() {
+        this.clearBaseProfileState();
     },
 
-    data () {
-
-      return {
-        paramChange: false,
-      }
+    data() {
+        return {
+            paramChange: false
+        };
     },
 
     watch: {
+        "$route.params.id": function() {
+            this.RESET_MODULE();
 
-      '$route.params.id': function () {
+            this.fetchBaseProfileData(this.$route.params.id);
+        },
 
-        this.RESET_MODULE();
-
-        this.fetchBaseProfileData(this.$route.params.id);
-      },
-
-      fetchError () {
-
-        if (this.fetchError) {
-
-          this.RESET_MODULE();
-          this.$router.push({name: 'NotFound'});
+        fetchError() {
+            if (this.fetchError) {
+                this.RESET_MODULE();
+                this.$router.push({ name: "NotFound" });
+            }
         }
-      },
-
     },
 
     computed: {
-
-        linkParam () {
-
-          return this.$route.params.id;
+        linkParam() {
+            return this.$route.params.id;
         },
 
-      ...mapState('profile',
-          [
-            'dataLoaded',
-            'fetchError',
-          ]
-        ),
+        ...mapState("profile", [
+            "dataLoaded",
+            "fetchError",
+        ])
     },
 
     methods: {
+        ...mapMutations("profile", ["RESET_MODULE"]),
 
-      ...mapMutations('profile',
-          [
-            'RESET_MODULE',
-          ]
-        ),
+        ...mapActions("profile", ["FETCH_BASE_PROFILE_DATA"]),
 
-      ...mapActions('profile',
-          [
-            'FETCH_BASE_PROFILE_DATA'
-          ]
-        ),
+        clearBaseProfileState() {
+            this.RESET_MODULE();
+        },
 
-      clearBaseProfileState() {
-
-        this.RESET_MODULE();
-      },
-
-      async fetchBaseProfileData (profileId) {
-
-        await this.FETCH_BASE_PROFILE_DATA(profileId);
-      }
-    },
-  }
+        async fetchBaseProfileData(profileId) {
+            await this.FETCH_BASE_PROFILE_DATA(profileId);
+        }
+    }
+};
 </script>
 
 <style>
-
 .profile_component__wrapper {
-  max-width: 960px;
-  margin: 0 auto;
-  height: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    height: 100%;
 }
 
 .profile__container {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
 }
 
-@media(max-width: 600px) {
-  .profile__container {
-    padding: 0.5rem;
-  }
+@media (max-width: 600px) {
+    .profile__container {
+        padding: 0.5rem;
+    }
 }
-
 </style>

@@ -18,43 +18,62 @@ class StatsController extends Controller
      * the current user is added to the user being followed follower's column
      * @param string $userId
      * @param Request $request
-     * @return JsonResponse (to be determined)
+     * @return JsonResponse
      */
     public function updateFollowStats(Request $request, string $userId)
     {
         try {
 
-            $viewingUserId = $request->all()['viewingUserId'];
 
+
+            $viewingUserId = $request->all()['viewingUserId'];
 
             $currentUserStat = Stat::where('user_id', '=', $userId)->first();
             $viewingUserStat = Stat::where('user_id', '=', $viewingUserId)->first();
 
-            $statistic = new Statistics;
+            $statisticSubject = new Statistics($viewingUserStat, $currentUserStat,);
+            $statisticUser = new Statistics($currentUserStat, $viewingUserStat);
 
-            $statistic->viewingUser = (object) $viewingUserStat->getAttributes();
-            $statistic->currentUser = (object) $currentUserStat->getAttributes();
-            $statistic->timestamp = time();
+            $statisticUser->setUserList($currentUserStat->following);
+            $statisticUser->setUserId($viewingUserStat->user_id);
+            $statisticUser->setListCount($currentUserStat->following_count);
+            $statisticUser->setNotifications($currentUserStat->notifications);
+            $statisticUser->setStatus('following');
 
-            $statistic->updateFollow();
+            $statisticSubject->setUserList($viewingUserStat->followers);
+            $statisticSubject->setUserId($currentUserStat->user_id);
+            $statisticSubject->setListCount($viewingUserStat->followers_count);
+            $statisticSubject->setNotifications($viewingUserStat->notifications);
+            $statisticSubject->setStatus('followed');
 
-            $viewingUserStat->followers_count = $statistic->viewingUser->followers_count;
-            $currentUserStat->following_count = $statistic->currentUser->following_count;
+            // $statisticUser->removeFollow();
+            // $statisticSubject->removeFollow();
 
-            $viewingUserStat->followers = $statistic->viewingUser->followers;
-            $currentUserStat->following = $statistic->currentUser->following;
 
-            $viewingUserStat->notifications = $statistic->viewingUser->notifications;
-            $currentUserStat->notifications = $statistic->currentUser->notifications;
+            $statisticUser->addFollow();
+            $statisticSubject->addFollow();
 
-            $currentUserStat->save();
+
+            $currentUserStat->following = $statisticUser->getUserList();
+            $currentUserStat->following_count = $statisticUser->getListCount();
+            $viewingUserStat->followers = $statisticSubject->getUserList();
+            $viewingUserStat->followers_count = $statisticSubject->getListCount();
+
+            $statisticUser->addNotification();
+            $statisticSubject->addNotification();
+
+            $currentUserStat->notifications = $statisticUser->getNotifications();
+            $viewingUserStat->notifications = $statisticSubject->getNotifications();
+
             $viewingUserStat->save();
+            $currentUserStat->save();
 
             return response()
                 ->json(
                     [
-                        'msg' => 'Resource updated.',
-                        'stats' => $statistic->viewingUser,
+                        'msg' => 'user followed',
+                        'stats' => $viewingUserStat,
+                        'currUserFollowing' => 1,
                     ],
                     200
                 );
@@ -68,5 +87,85 @@ class StatsController extends Controller
                     400
                 );
         }
+    }
+
+    /*
+    * unfollow the viewing user
+    * @param string $userId
+    * @param Request $request
+    * @return JsonResponse
+    */
+
+    public function updateUnfollowStats(Request $request, string $userId)
+    {
+
+        try {
+
+
+            $viewingUserId = $request->all()['viewingUserId'];
+
+            $currentUserStat = Stat::where('user_id', '=', $userId)->first();
+            $viewingUserStat = Stat::where('user_id', '=', $viewingUserId)->first();
+
+            $statisticSubject = new Statistics($viewingUserStat, $currentUserStat,);
+            $statisticUser = new Statistics($currentUserStat, $viewingUserStat);
+
+            $statisticUser->setUserList($currentUserStat->following);
+            $statisticUser->setUserId($viewingUserStat->user_id);
+            $statisticUser->setListCount($currentUserStat->following_count);
+            $statisticUser->setNotifications($currentUserStat->notifications);
+            $statisticUser->setStatus('unfollowed');
+
+            $statisticSubject->setUserList($viewingUserStat->followers);
+            $statisticSubject->setUserId($currentUserStat->user_id);
+            $statisticSubject->setListCount($viewingUserStat->followers_count);
+            $statisticSubject->setNotifications($viewingUserStat->notifications);
+            $statisticSubject->setStatus('unfollowed by');
+
+            $statisticUser->removeFollow();
+            $statisticSubject->removeFollow();
+
+            $currentUserStat->following = $statisticUser->getUserList();
+            $currentUserStat->following_count = $statisticUser->getListCount();
+            $viewingUserStat->followers = $statisticSubject->getUserList();
+            $viewingUserStat->followers_count = $statisticSubject->getListCount();
+
+            $statisticUser->addNotification();
+            $statisticSubject->addNotification();
+
+            $currentUserStat->notifications = $statisticUser->getNotifications();
+            $viewingUserStat->notifications = $statisticSubject->getNotifications();
+
+            $currentUserStat->save();
+            $viewingUserStat->save();
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'user unfollowed',
+                        'stats' => $viewingUserStat,
+                        'currUserFollowing' => false
+                    ]
+                );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    ['msg' => $e->getMessage()],
+                    400
+                );
+        }
+    }
+
+    private function setStatisticProps($obj, $user, $subject)
+    {
+        $obj->setUser($user);
+        $obj->setSubject($subject);
+        $obj->setFollowers($subject->followers);
+        $obj->setFollowing($user->following);
+        $obj->setFollowersCount($subject->followers_count);
+        $obj->setFollowingCount($user->following_count);
+        $obj->setUserNotifications($user->notifications);
+        $obj->setSubjectNotifications($subject->notifications);
     }
 }
