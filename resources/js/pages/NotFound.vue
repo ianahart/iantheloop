@@ -5,6 +5,7 @@
         <h1>Oops!</h1>
         <h3>We can't seem to find the page you're looking for.</h3>
         <p>Error code: 404</p>
+        <p v-if="Object.keys(this.$route.query).length">{{ decodeURI($route.query.status) }}</p>
         <div class="not_found__links">
           <router-link :to="{name: 'Home'}">Home</router-link>
           <p @click="goBack">Back</p>

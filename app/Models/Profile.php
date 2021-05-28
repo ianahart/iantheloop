@@ -43,4 +43,11 @@ class Profile extends Model
         'interests' => 'array',
         'work_currently' => 'boolean',
     ];
+
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -59,32 +59,39 @@ const routes = [
       requiresAuth: true,
     }
   },
-
   {
-    path: '/friends',
-    name: 'Friends',
-    component: () => import('../pages/Friends.vue'),
+    path: '/explore',
+    name: 'Explore',
+    component: () => import('../pages/Explore.vue'),
     meta: {
       requiresAuth: true,
     }
   },
   {
-    path: '/find-friends',
-    name: 'FindFriends',
-    component: () => import('../pages/FindFriends.vue'),
+    path: '/network/following/:id',
+    name: 'Following',
+    component: () => import('../pages/Following.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+    path: '/network/followers/:id',
+    name: 'Followers',
+    component: () => import('../pages/Followers.vue'),
     meta: {
       requiresAuth: true,
     }
   },
 
-    {
-      path: '/profile/:profileId/edit',
-      name: 'ProfileEdit',
-      component: () => import('../pages/ProfileEdit.vue'),
-      meta: {
-        requiresAuth: true,
-      }
-    },
+  {
+    path: '/profile/:profileId/edit',
+    name: 'ProfileEdit',
+    component: () => import('../pages/ProfileEdit.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
 
     {
     path: '/profile/:profileId/about',

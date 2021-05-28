@@ -37,15 +37,30 @@
                   className="icon__sm__light"
                 />
                 <DropDownLink
-                  name="FindFriends"
-                  linkText="Find Friends"
+                  name="Explore"
+                  linkText="Explore"
                 />
              </div>
               <div v-if="getProfileStatus" class="profile__dropdown__link">
-                <FriendsIcon />
+              <FollowingIcon
+                  className="icon__sm__light"
+                />
                 <DropDownLink
-                  name="Friends"
-                  linkText="Friends"
+                  name="Following"
+                  linkText="Following"
+                  param="id"
+                  :paramValue="getUserId.toString()"
+                />
+              </div>
+              <div v-if="getProfileStatus" class="profile__dropdown__link">
+                <FollowersIcon
+                  className="icon__sm__light"
+                />
+                <DropDownLink
+                  name="Followers"
+                  linkText="Followers"
+                  param="id"
+                  :paramValue="getUserId.toString()"
                 />
             </div>
           </div>
@@ -70,10 +85,11 @@
   import BookIcon from '../Icons/BookIcon.vue';
   import CreateProfileIcon from '../../components/Icons/CreateProfileIcon.vue';
   import DropDownLink from '../../components/Dropdowns/DropDownLink.vue';
-  import FriendsIcon from '../../components/Icons/FriendsIcon.vue';
   import ProfileIcon from '../Navigation/LinkIcons/ProfileIcon.vue';
   import SearchIcon from '../../components/Icons/SearchIcon.vue';
   import SignoutIcon from '../../components/Icons/SignoutIcon.vue';
+  import FollowersIcon from '../Icons/FollowersIcon.vue';
+  import FollowingIcon from '../Icons/FollowingIcon.vue';
 
 
 
@@ -91,10 +107,11 @@
       BookIcon,
       CreateProfileIcon,
       DropDownLink,
-      FriendsIcon,
       ProfileIcon,
       SearchIcon,
       SignoutIcon,
+      FollowersIcon,
+      FollowingIcon,
     },
 
     data () {

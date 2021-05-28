@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\General\ProfileController;
 use App\Http\Controllers\general\StatsController;
+use App\Http\Controllers\General\NetworkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +53,5 @@ Route::post('/auth/profile', [ProfileController::class, 'store'])->middleware('a
 Route::post('/auth/logout', [LogoutController::class, 'store'])->middleware(('auth:api'));
 Route::patch('/auth/stats/follow/{userId}/update', [StatsController::class, 'updateFollowStats'])->middleware('auth:api');
 Route::patch('/auth/stats/unfollow/{userId}/update', [StatsController::class, 'updateUnfollowStats'])->middleware('auth:api');
+Route::get('/auth/network/following/show/{userId}', [NetworkController::class, 'showFollowing'])->middleware('auth:api');
+Route::get('/auth/network/followers/show/{userId}', [NetworkController::class, 'showFollowers'])->middleware('auth:api');

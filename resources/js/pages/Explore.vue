@@ -1,6 +1,6 @@
 <template>
-  <div class="friends__container">
-    <h1>Your friends page</h1>
+  <div class="explore__container">
+    <h1>Explore Page</h1>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 
   export default {
 
-    name: 'Friends',
+    name: 'Explore',
 
     components: {
 

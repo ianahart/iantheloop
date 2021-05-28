@@ -8,6 +8,26 @@
     pointer-events: none;
 }
 
+.following_solid__icon {
+    height: 24px;
+    width: 24px;
+
+    path {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.follower_solid__icon {
+    height: 24px;
+    width: 24px;
+
+    path {
+        height: 100%;
+        width: 100%;
+    }
+}
+
 .password__icon__container {
     svg {
         height: 25px;

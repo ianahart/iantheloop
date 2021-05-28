@@ -1,11 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-/*
-MODULES
-*/
-
-
 import user from './modules/user.js';
 import login from './modules/login.js';
 import navigation from './modules/navigation.js';
@@ -23,6 +18,7 @@ import customize from './modules/createProfile/customize.js';
 import profile from './modules/profile/profile.js';
 import profileAbout from './modules/profile/profileAbout.js';
 import profileEdit from './modules/profile/profileEdit.js';
+import network from './modules/network.js';
 
 Vue.use(Vuex);
 
@@ -62,6 +58,7 @@ export default new Vuex.Store(
       profile,
       profileAbout,
       profileEdit,
+      network,
     },
   }
 );

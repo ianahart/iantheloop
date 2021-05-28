@@ -55,7 +55,7 @@
     position: relative;
 
     svg {
-      fill: $themeDarkGreen;
+      fill: $themePink;
     }
 
     img {
@@ -67,7 +67,7 @@
   }
 
   .profile__icon {
-    color: $mainInputLabel;
+    color: $themeLightBlue;
     height: 42px;
     width: 42px;
     cursor: pointer;

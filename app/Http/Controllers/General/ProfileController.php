@@ -72,7 +72,6 @@ class ProfileController extends Controller
             $currentUser->user_id = $currentUserId;
 
 
-            //  $statisticInst = new Statistics();
             $statisticInst = new Statistics($currentUser, $stat);
 
             $statisticInst->checkCurrUserFollowing();
@@ -273,12 +272,14 @@ class ProfileController extends Controller
 
                 $this->storeProfile();
 
-                $stat = new Stat();
-
                 $userFullName = User::where('id', '=', $this->userId)->pluck('full_name');
 
-                $stat->user_id = $this->userId;
+                $stat = new Stat();
 
+                $profileId = Profile::where('user_id', '=', $this->userId)->pluck('id');
+
+                $stat->user_id = $this->userId;
+                $stat->profile_id = $profileId[0];
                 $stat->name = $userFullName[0];
 
                 $stat->save();

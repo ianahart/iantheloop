@@ -1,11 +1,13 @@
 <template>
-  <div class="profile_stats_following">
+  <div @click="goToFollowing" class="profile_stats_following">
       <p>{{ followingCount }}<p>
       <p>following</p>
     </div>
 </template>
 
 <script>
+
+  import { mapState } from 'vuex';
 
   export default {
 
@@ -17,7 +19,24 @@
 
     components: {
 
+    },
+
+    computed: {
+
+      ...mapState('profile',
+        [
+          'viewingUserId'
+        ]
+      ),
+    },
+
+    methods: {
+      goToFollowing () {
+
+        this.$router.push({ name: 'Following', params: { id: this.viewingUserId.toString() } })
+      },
     }
+
   }
 
 </script>
@@ -29,6 +48,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    cursor: pointer;
 
     p {
       margin: 0;

@@ -15,7 +15,9 @@ class CreateStatsTable extends Migration
     {
         Schema::create('stats', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('profile_id');
             $table->unsignedBigInteger('user_id');
+            $table->foreign('profile_id')->references('id')->on('profiles')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->json('following')->nullable();
             $table->json('followers')->nullable();
