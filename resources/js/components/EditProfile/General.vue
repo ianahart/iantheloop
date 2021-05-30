@@ -24,6 +24,7 @@
           :field="getEditGroup.town.field"
         />
         <CustomSelect
+          v-if="getEditGroup.country.value.toLowerCase() === 'united states'"
           marker="state"
           @selected="handleSelection"
           className="custom_select__container custom-select_size__md"

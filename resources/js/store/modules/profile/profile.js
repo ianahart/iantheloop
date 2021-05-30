@@ -172,8 +172,6 @@ const profile = {
             }
         );
 
-            console.log(response);
-
         commit('SET_PROFILE_STATS', response.data);
 
       } catch(e) {

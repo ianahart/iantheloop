@@ -84,6 +84,13 @@ const generalDetails = {
     },
 
     UPDATE_FIELD: (state, payload) => {
+      const stateFieldIndex = state.form.findIndex((field) => field.field === 'state');
+
+
+      if (payload.field === 'country' && payload.value.toLowerCase() !== 'united states') {
+
+        state.form[stateFieldIndex].value = 'State';
+      }
 
       inputChange(state, payload);
 

@@ -140,3 +140,21 @@
     cursor: pointer;
     color: $primaryWhite;
 }
+
+.user_status_indicator_online {
+    background-color: darken(limegreen, 2);
+    margin-left: 0.3rem;
+    border: 2px solid black;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+}
+
+.user_status_indicator_offline {
+    background-color: gray;
+    margin-left: 0.3rem;
+    border: 2px solid black;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+}

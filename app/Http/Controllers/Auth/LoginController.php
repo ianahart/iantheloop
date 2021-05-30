@@ -7,19 +7,23 @@ use App\Models\User;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Helpers\Status;
 use Namshi\JOSE\JWT;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
 
 class LoginController extends Controller
 {
+
+
+    public bool $authStatus;
+    public string $userStatus;
+
     /*
      * Login user and return a token
      * @param Request $request
      * @return JsonResponse
      */
-
-
     public function store(Request $request)
     {
 
@@ -38,9 +42,12 @@ class LoginController extends Controller
 
                 $payload = JWTAuth::attempt($request->form);
 
+
+                $this->updateStatus();
+
                 $jwt = $this->createNewToken($payload, $TLL, $user);
 
-                $this->updateAuthStatus($jwt);
+
 
                 return response()->json(
                     [
@@ -84,21 +91,24 @@ class LoginController extends Controller
 
     /*
      * update authentication column
-     * @param String
+     * @param void
      * @return void
      */
 
-    private function updateAuthStatus(string $token)
+    private function updateStatus()
     {
 
-        $contents = json_decode($token, true);
+        $userStatus = new Status(JWTAuth::user()->id);
 
-        User::where('id', '=', $contents['user_id'])
-            ->update(
-                [
-                    'is_logged_in' => true
-                ]
-            );
+        $userStatus->updateStatus(true, 'online');
+
+        $exception = $userStatus->getException();
+
+        if (!$exception) {
+
+            $this->userStatus = 'online';
+            $this->authStatus = true;
+        }
     }
 
     /*
@@ -141,6 +151,8 @@ class LoginController extends Controller
                 'profile_created' => JWTAuth::user()->profile_created,
                 'profile_pic' => $profile_pic ?? '',
                 'name' => $user->full_name,
+                'status' => $this->userStatus,
+                'is_logged_in' => $this->authStatus,
             ]
         );
     }

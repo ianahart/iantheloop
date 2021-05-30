@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Helpers\Status;
 
 class LogoutController extends Controller
 {
@@ -42,15 +43,11 @@ class LogoutController extends Controller
      * @return void
      */
 
-
     private function updateIsLoggedIn()
     {
 
-        User::where('id', '=', JWTAuth::user()->id)
-            ->update(
-                [
-                    'is_logged_in' => false
-                ]
-            );
+        $userStatus = new Status(JWTAuth::user()->id);
+
+        $userStatus->updateStatus(false, 'offline');
     }
 }

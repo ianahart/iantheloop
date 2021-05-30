@@ -1,13 +1,26 @@
 <template>
-  <div class="profile__dropdown">
+  <div ref="profileDropDown" class="profile__dropdown">
     <div class="profile__dropdown__top">
       <div>
-        <ProfileIcon />
+        <ProfileIcon location="dropDown" />
       </div>
       <p>{{ userName }}</p>
     </div>
+    <div  class="dropdown_user_status">
+      <p>{{ getStatus }}</p>
+    </div>
     <div class="profile__dropdown__links">
       <ul>
+          <li>
+          <div class="profile__dropdown__section">
+            <div ref="statusToggle" id="statusToggle">
+              <UserStatus
+              :status="getStatus"
+
+              />
+            </div>
+          </div>
+        </li>
         <li>
           <div class="profile__dropdown__section">
             <div v-if="getProfileStatus" class="profile__dropdown__link">
@@ -90,10 +103,10 @@
   import SignoutIcon from '../../components/Icons/SignoutIcon.vue';
   import FollowersIcon from '../Icons/FollowersIcon.vue';
   import FollowingIcon from '../Icons/FollowingIcon.vue';
+  import UserStatus from '../User/UserStatus.vue';
 
 
-
-  import { mapMutations, mapGetters, mapActions } from 'vuex';
+  import { mapState, mapMutations, mapGetters, mapActions } from 'vuex';
 
   export default {
 
@@ -112,6 +125,7 @@
       SignoutIcon,
       FollowersIcon,
       FollowingIcon,
+      UserStatus,
     },
 
     data () {
@@ -122,11 +136,16 @@
     },
 
     created () {
-
+      window.addEventListener('click', this.dropDownClickAway);
     },
 
     mounted () {
 
+    },
+
+    beforeDestroy() {
+      window.removeEventListener('click', this.dropDownClickAway);
+      this.closeDropdown();
     },
 
     watch:{
@@ -139,12 +158,19 @@
 
     computed: {
 
+      ...mapState('profileDropdown',
+        [
+          'isProfileDropdownOpen',
+        ]
+      ),
+
       ...mapGetters('user',
         [
           'userName',
           'getProfileStatus',
           'getProfilePic',
-          'getUserId'
+          'getUserId',
+          'getStatus',
         ]
       ),
     },
@@ -158,7 +184,7 @@
 
       ...mapMutations('profileDropdown',
           [
-            'CLOSE_PROFILE_DROPDOWN'
+            'CLOSE_PROFILE_DROPDOWN',
           ]
         ),
 
@@ -175,6 +201,43 @@
 
         this.$router.push({ name: 'Login' });
       },
+
+      dropDownClickAway(e) {
+
+        const profileIcon = e.target.id === 'profileIcon';
+        const statusContainer = e.target.id === 'statusToggle';
+        const dropDown = this.$refs.profileDropDown === e.target;
+
+        const [statusChildren, statusGrandChildren] = [
+            [...this.$refs.statusToggle.children],
+            [...this.$refs.statusToggle.children[0].children],
+          ];
+
+        const statusGreatGrandChild = [...statusGrandChildren[1].children][0];
+        const statusGreatGrandChildSibling = [...statusGrandChildren[0].children][0];
+
+        const isChild = statusChildren.includes(e.target);
+        const isGrandChild = statusGrandChildren.includes(e.target);
+        const isGreatGrandChild = statusGreatGrandChild === e.target;
+        const isGreatGrandChildSibling = statusGreatGrandChildSibling === e.target;
+
+        const conditions = [
+          profileIcon,
+          statusContainer,
+          dropDown,
+          isChild,
+          isGrandChild,
+          isGreatGrandChild,
+          isGreatGrandChildSibling,
+          ];
+        const allPassed = conditions.every((condition) => condition === false);
+
+        if (this.isProfileDropdownOpen && allPassed) {
+
+          this.closeDropdown();
+        }
+
+      }
     },
   }
 
@@ -204,7 +267,6 @@
     box-sizing: border-box;
     padding: 0 0.5rem;
     align-items: center;
-    margin-bottom:1.5rem;
 
 
     div {
@@ -216,7 +278,8 @@
 
 
     p {
-      margin-top: 0.3rem;
+      margin-top: 2rem;
+      margin-bottom: 0;
       color: darken($primaryWhite, 5);
     }
   }
@@ -232,6 +295,18 @@
     }
   }
 
+  .dropdown_user_status {
+
+    p {
+      color: $primaryWhite;
+      font-size: 0.85rem;
+      text-align: center;
+      margin: 0.1rem 0 0 0;
+      font-weight: 100;
+      color: silver;
+    }
+  }
+
   .profile__dropdown__section {
 
     border-top: 1px solid darken(#838383, 5);
@@ -239,11 +314,12 @@
 
   .profile__dropdown__link {
     display: flex;
-    justify-content: flex-start;
+    box-sizing: border-box;
     align-items: center;
     cursor: pointer;
     border-radius: 5px;
     padding: 0.4rem 0.4rem;
+    width:100%;
 
     &:hover {
       background-color: rgba(105,105,105,0.5);
@@ -251,12 +327,20 @@
 
     a {
       text-decoration: none;
+      width:100%;
     }
 
     span, a {
       color: $primaryWhite;
       font-size: 0.85rem;
+
     }
+  }
+
+  #statusToggle {
+    border-radius: 5px;
+    padding: 0.4rem 0.4rem;
+    box-sizing: border-box;
   }
 
   @media(max-width: 600px) {

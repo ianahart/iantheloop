@@ -115,7 +115,4 @@
 
 
 <style lang="scss">
-
-  // @import '../../../../sass/general/_variables.scss';
-
 </style>

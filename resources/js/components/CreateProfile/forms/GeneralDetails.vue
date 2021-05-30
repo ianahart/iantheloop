@@ -21,6 +21,7 @@
           :field="getTown.field"
         />
         <CustomSelect
+         v-if="getCountry.value.toLowerCase() === 'united states'"
           marker="state"
           @selected="handleSelection"
           className="custom_select__container custom-select_size__md"

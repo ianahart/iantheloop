@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\General\ProfileController;
 use App\Http\Controllers\general\StatsController;
 use App\Http\Controllers\General\NetworkController;
+use App\Http\Controllers\General\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,6 @@ Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 |--------------------------------------------------------------------------
 |
 */
-
 Route::get('/auth/newsfeed', [NewsFeedController::class, 'index'])->middleware('auth:api');
 Route::get('/auth/profile/{profileId}/edit', [ProfileController::class, 'edit'])->middleware('auth:api');
 Route::get('/auth/profile/{profileId}/about', [ProfileController::class, 'showAbout'])->middleware('auth:api');
@@ -55,3 +55,4 @@ Route::patch('/auth/stats/follow/{userId}/update', [StatsController::class, 'upd
 Route::patch('/auth/stats/unfollow/{userId}/update', [StatsController::class, 'updateUnfollowStats'])->middleware('auth:api');
 Route::get('/auth/network/following/show/{userId}', [NetworkController::class, 'showFollowing'])->middleware('auth:api');
 Route::get('/auth/network/followers/show/{userId}', [NetworkController::class, 'showFollowers'])->middleware('auth:api');
+Route::patch('/auth/user/status/{userId}/update', [UserController::class, 'updateUserStatus'])->middleware('auth:api');

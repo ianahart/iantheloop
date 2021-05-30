@@ -273,6 +273,13 @@ const profileEdit = {
 
      UPDATE_FIELD: (state, payload) => {
 
+      const stateFieldIndex = state.form.findIndex((field) => field.field === 'state');
+
+      if (payload.field === 'country' && payload.value.toLowerCase() !== 'united states') {
+
+        state.form[stateFieldIndex].value = 'State';
+      }
+
        if (payload.field === 'birth_month') {
 
         const BirthDayField = state.form.find(({ field }) => field === 'birth_day' );
@@ -313,7 +320,9 @@ const profileEdit = {
     },
     SET_EDIT_DATA: (state, { data }) => {
 
-      state.form.forEach((field) => {
+      state.form.forEach((field, index) => {
+
+
 
           if (field.field === 'interests') {
 
@@ -321,7 +330,20 @@ const profileEdit = {
             field.value = '';
           } else {
 
-            field.value = data[field.field];
+              if (field.field === 'state') {
+
+
+              if (!data[field.field]) {
+
+                state.form[index].value = 'State';
+              } else {
+
+                state.form[index].value = data[field.field];
+              }
+            } else {
+
+              field.value = data[field.field];
+            }
           }
       });
 
@@ -377,6 +399,22 @@ const profileEdit = {
       state.userId = payload.user_id;
       state.isUpdated = payload.isUpdated;
     },
+
+    REPLACE_DEFAULT_VALUES: (state) => {
+
+      const stateFieldIndex = getObjPos(state.form, 'state');
+      const countryFieldIndex = getObjPos(state.form, 'country');
+
+      if (state.form[stateFieldIndex].value.toLowerCase() === 'state') {
+
+        state.form[stateFieldIndex].value = '';
+      }
+
+      if (state.form[countryFieldIndex].value.toLowerCase() === 'country') {
+
+        state.form[stateFieldIndex].value = '';
+      }
+    }
   },
 
   actions: {
@@ -413,7 +451,9 @@ const profileEdit = {
 
       try {
 
+        commit('REPLACE_DEFAULT_VALUES');
         const formData = new FormData();
+
         const fields = getters.getFormData;
         const backgroundPicture = getters.getBackgroundPicture;
         const profilePicture = getters.getProfilePicture;
@@ -453,10 +493,6 @@ const profileEdit = {
               data: formData,
             }
           );
-
-        console.log('profileEdit: ', response.data);
-
-
 
         let stringifiedUser = localStorage.getItem('user');
         const parsedUser = JSON.parse(stringifiedUser);

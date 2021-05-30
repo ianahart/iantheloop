@@ -85,7 +85,7 @@
       ...mapMutations('user',
           [
 
-            'SET_AUTH_STATUS'
+            'SET_AUTH_STATUS',
           ]
         ),
 

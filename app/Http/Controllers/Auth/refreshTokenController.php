@@ -7,6 +7,7 @@ use Exception;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use JTWAuth;
+use App\Helpers\Status;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -51,7 +52,6 @@ class refreshTokenController extends Controller
 
                 $accessToken = $this->respondWithRefreshToken($refreshToken, $TLL);
 
-
                 return response()->json(
                     [
                         'access_token' => $accessToken,
@@ -60,6 +60,10 @@ class refreshTokenController extends Controller
                     200
                 );
             } catch (JWTException $e) {
+
+                $userStatus = new Status(JWTAuth::user()->id);
+
+                $userStatus->updateStatus(false, 'offline');
 
                 return response()->json(
                     [
@@ -94,18 +98,29 @@ class refreshTokenController extends Controller
 
         $profile_pic = $this->getProfilePic();
 
-        return json_encode(
-            [
-                'iss' => 'jwt-auth',
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'iat' => time(),
-                'exp' => time() + $TLL * 60,
-                'user_id' => JWTAuth::user()->id,
-                'profile_created' => JWTAuth::user()->profile_created,
-                'profile_pic' => $profile_pic ?? '',
-                'name' => JWTAuth::user()->full_name,
-            ]
-        );
+        $userStatus = new Status(JWTAuth::user()->id);
+
+        $userStatus->updateStatus(true, 'online');
+
+        $exception = $userStatus->getException();
+
+        if (!$exception) {
+
+            return json_encode(
+                [
+                    'iss' => 'jwt-auth',
+                    'access_token' => $token,
+                    'token_type' => 'bearer',
+                    'iat' => time(),
+                    'exp' => time() + $TLL * 60,
+                    'user_id' => JWTAuth::user()->id,
+                    'profile_created' => JWTAuth::user()->profile_created,
+                    'profile_pic' => $profile_pic ?? '',
+                    'name' => JWTAuth::user()->full_name,
+                    'is_logged_in' => true,
+                    'status' => 'online',
+                ]
+            );
+        }
     }
 }

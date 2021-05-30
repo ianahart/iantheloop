@@ -448,6 +448,24 @@ h2 {
   color: #d9d9d9;
 }
 
+.user_status_indicator_online {
+  background-color: #30c530;
+  margin-left: 0.3rem;
+  border: 2px solid black;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+}
+
+.user_status_indicator_offline {
+  background-color: gray;
+  margin-left: 0.3rem;
+  border: 2px solid black;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+}
+
 .modal-enter-active,
 .modal-leave-active {
   transition: all 0.5s;
@@ -1233,7 +1251,6 @@ body {
   margin-left: 0.2rem;
   color: #4e5760;
 }
-
 .password__icon__outer__container {
   position: relative;
 }
@@ -2901,31 +2918,30 @@ div.about_profile_work__row p {
 }
 .profile__icon__container {
   position: relative;
+  cursor: pointer;
 }
 .profile__icon__container svg {
   fill: #fb4d70;
+  pointer-events: none;
 }
 .profile__icon__container img {
   height: 42px;
   width: 42px;
   border-radius: 50%;
-  cursor: pointer;
+  pointer-events: none;
 }
 .profile__icon {
   color: #484aa4;
   height: 42px;
   width: 42px;
-  cursor: pointer;
+  pointer-events: none;
 }
 .profile_online_indicator {
-  height: 6px;
-  width: 6px;
   border-radius: 50%;
-  background-color: limegreen;
   position: absolute;
   bottom: 10px;
   right: 2px;
-  border: 2px solid #000;
+  pointer-events: none;
 }
 /*
   IMPORTS
@@ -3067,6 +3083,65 @@ div.about_profile_work__row p {
   color: #fcfcfc;
   transform: rotate(180deg);
 }
+.dropdown_user_status__container {
+  display: flex;
+  align-items: center;
+}
+.dropdown_user_status__container p {
+  color: #fcfcfc;
+  font-size: 0.8rem;
+  font-weight: 100;
+}
+.user_status_flex_item {
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+.status_toggle_btn__container {
+  position: relative;
+  border-radius: 16px;
+  width: 50px;
+  height: 25px;
+  margin-left: auto;
+  cursor: pointer;
+  padding: 0.1rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background-color: #000;
+}
+.status_toggle_btn__container span {
+  color: #484aa4;
+  pointer-events: none;
+}
+.status_toggle_btn {
+  box-sizing: border-box;
+  padding: 0.1rem;
+  top: 0;
+  left: 0;
+  border-radius: 50px;
+  height: 85%;
+  width: 15px;
+}
+.status_toggle_btn_online {
+  background-color: #484aa4;
+  transition: all 0.4s ease-out;
+  transform: translateX(17px);
+  pointer-events: none;
+}
+.status_toggle_btn_offline {
+  background-color: #fcfcfc;
+  transition: all 0.4s ease-out;
+  pointer-events: none;
+}
+.status_toggle_btn_container_online {
+  border: 2px solid #484aa4;
+  transition: all 0.4s ease-out;
+}
+.status_toggle_btn_container_offline {
+  border: 2px solid #fcfcfc;
+  transition: all 0.4s ease-out;
+}
 .profile__dropdown {
   height: 600px;
   border-radius: 8px;
@@ -3086,13 +3161,13 @@ div.about_profile_work__row p {
   box-sizing: border-box;
   padding: 0 0.5rem;
   align-items: center;
-  margin-bottom: 1.5rem;
 }
 .profile__dropdown__top div:first-of-type {
   margin-top: 0.1rem;
 }
 .profile__dropdown__top p {
-  margin-top: 0.3rem;
+  margin-top: 2rem;
+  margin-bottom: 0;
   color: #efefef;
 }
 .profile__dropdown__links ul {
@@ -3101,26 +3176,41 @@ div.about_profile_work__row p {
 .profile__dropdown__links li {
   list-style-type: none;
 }
+.dropdown_user_status p {
+  color: #fcfcfc;
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0.1rem 0 0 0;
+  font-weight: 100;
+  color: silver;
+}
 .profile__dropdown__section {
   border-top: 1px solid #767676;
 }
 .profile__dropdown__link {
   display: flex;
-  justify-content: flex-start;
+  box-sizing: border-box;
   align-items: center;
   cursor: pointer;
   border-radius: 5px;
   padding: 0.4rem 0.4rem;
+  width: 100%;
 }
 .profile__dropdown__link:hover {
   background-color: rgba(105, 105, 105, 0.5);
 }
 .profile__dropdown__link a {
   text-decoration: none;
+  width: 100%;
 }
 .profile__dropdown__link span, .profile__dropdown__link a {
   color: #fcfcfc;
   font-size: 0.85rem;
+}
+#statusToggle {
+  border-radius: 5px;
+  padding: 0.4rem 0.4rem;
+  box-sizing: border-box;
 }
 @media (max-width: 600px) {
 .profile__dropdown {
