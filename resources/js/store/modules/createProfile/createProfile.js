@@ -85,7 +85,7 @@ const createProfile = {
           }
         );
 
-        console.log(response);
+
 
           let stringifiedUser = localStorage.getItem('user');
 

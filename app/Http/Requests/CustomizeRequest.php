@@ -25,15 +25,6 @@ class CustomizeRequest extends FormRequest
     {
         $rules = [];
 
-        // if ($this->all()['customize']['backgroundfile'] !== null) {
-        //     $rules['backgroundfile'] = ['sometimes', 'mimes:jpg,bmp,png', 'max:2001'];
-        // }
-
-        // if ($this->all()['customize']['profilefile'] !== null) {
-        //     $rules['profilefile'] = ['sometimes', 'mimes:jpg,bmp,png', 'max: 2001'];
-        // }
-        // return $rules;
-        // error_log(print_r($this->all()['customize'], true));
 
         return [
             'backgroundfile' => ['nullable', 'mimes:jpg,bmp,png', 'max:2001'],

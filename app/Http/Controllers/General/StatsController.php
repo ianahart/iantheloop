@@ -73,7 +73,7 @@ class StatsController extends Controller
                     [
                         'msg' => 'user followed',
                         'stats' => $viewingUserStat,
-                        'currUserFollowing' => 1,
+                        'currUserFollowing' => true,
                     ],
                     200
                 );

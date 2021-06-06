@@ -258,6 +258,7 @@
     z-index: 10;
     width: 190px;
     box-sizing: border-box;
+    z-index: 17;
   }
 
   .profile__dropdown__top {

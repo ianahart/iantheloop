@@ -14,6 +14,7 @@ use App\Http\Controllers\General\ProfileController;
 use App\Http\Controllers\general\StatsController;
 use App\Http\Controllers\General\NetworkController;
 use App\Http\Controllers\General\UserController;
+use App\Http\Controllers\General\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,9 +51,11 @@ Route::get('/auth/profile/{profileId}/about', [ProfileController::class, 'showAb
 Route::patch('/auth/profile/{profileId}/update', [ProfileController::class, 'update'])->middleware('auth:api');
 Route::get('/auth/profile/{id}', [ProfileController::class, 'show'])->middleware('auth:api');
 Route::post('/auth/profile', [ProfileController::class, 'store'])->middleware('auth:api');
-Route::post('/auth/logout', [LogoutController::class, 'store'])->middleware(('auth:api'));
+Route::post('/auth/logout', [LogoutController::class, 'store'])->middleware('auth:api');
 Route::patch('/auth/stats/follow/{userId}/update', [StatsController::class, 'updateFollowStats'])->middleware('auth:api');
 Route::patch('/auth/stats/unfollow/{userId}/update', [StatsController::class, 'updateUnfollowStats'])->middleware('auth:api');
 Route::get('/auth/network/following/show/{userId}', [NetworkController::class, 'showFollowing'])->middleware('auth:api');
 Route::get('/auth/network/followers/show/{userId}', [NetworkController::class, 'showFollowers'])->middleware('auth:api');
 Route::patch('/auth/user/status/{userId}/update', [UserController::class, 'updateUserStatus'])->middleware('auth:api');
+Route::post('/auth/posts/store', [PostController::class, 'store'])->middleware('auth:api');
+Route::get('/auth/posts', [PostController::class, 'index'])->middleware('auth:api');

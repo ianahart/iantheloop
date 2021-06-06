@@ -79,7 +79,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 10;
+    z-index: 17;
     box-shadow: 0px 0px 9px 3px rgba(41,41,41,.25);
 
 

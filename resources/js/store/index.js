@@ -19,6 +19,7 @@ import profile from './modules/profile/profile.js';
 import profileAbout from './modules/profile/profileAbout.js';
 import profileEdit from './modules/profile/profileEdit.js';
 import network from './modules/network.js';
+import profileWall from './modules/profileWall.js';
 
 Vue.use(Vuex);
 
@@ -59,6 +60,7 @@ export default new Vuex.Store(
       profileAbout,
       profileEdit,
       network,
+      profileWall,
     },
   }
 );

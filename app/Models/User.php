@@ -75,4 +75,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Profile::class);
     }
+
+    /**
+     * Get the posts associated with the user.
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'subject_user_id');
+    }
 }
