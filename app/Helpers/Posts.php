@@ -12,10 +12,13 @@ class Posts
 {
   private object $user;
   private object $post;
+  private int $currentUserId;
+  private int $activePostId;
   public array $data;
   public int $subjectUserId;
   public int $lastPostItem;
   public string $exception;
+  public int $statusCode;
   public array $posts;
 
   public function __construct(object $user, object $post)
@@ -41,10 +44,26 @@ class Posts
     $this->lastPostItem = $lastPostItem;
   }
 
+  public function setCurrentUserId($currentUserId)
+  {
+
+    $this->currentUserId = $currentUserId;
+  }
+
+  public function setActivePostId($activePostId)
+  {
+    $this->activePostId = $activePostId;
+  }
+
   public function getException()
   {
 
     return isset($this->exception) ? $this->exception : NULL;
+  }
+
+  public function getStatusCode()
+  {
+    return $this->statusCode;
   }
 
   public function getPosts()
@@ -106,13 +125,22 @@ class Posts
 
     try {
       // how many models to be returned from the database
-      $offset = 2;
+      $limit = 2;
 
-      $posts = $this->user::find($this->subjectUserId)
-        ->posts()
-        ->where('id', '>', $this->lastPostItem)
-        ->orderBy('id', 'ASC')
-        ->paginate($offset)->toArray();
+      if ($this->lastPostItem === 0) {
+
+        $posts = $this->user::find($this->subjectUserId)
+          ->posts()
+          ->latest()
+          ->paginate($limit)->toArray();
+      } else {
+
+        $posts = $this->user::find($this->subjectUserId)
+          ->posts()
+          ->where('id', '<', $this->lastPostItem)
+          ->orderBy('id', 'DESC')
+          ->paginate($limit)->toArray();
+      }
 
       if ($posts['total'] <= 0) {
 
@@ -237,4 +265,92 @@ class Posts
 
     return $enhancedPosts;
   }
+
+  public function deletePost()
+  {
+    try {
+
+      $post = $this->findSinglePost();
+
+      if (is_array($post)) {
+
+        $this->statusCode = $post['status'];
+        throw new Exception($post['msg']);
+      }
+
+      $filename = null;
+
+      if (isset($post->video_filename)) {
+
+        $filename = $post->video_filename;
+      }
+
+      if (isset($post->photo_filename)) {
+
+        $filename = $post->photo_filename;
+      }
+
+      if (!is_null($filename)) {
+
+        $this->deleteFile($filename);
+      }
+
+      $post->delete();
+    } catch (Exception $e) {
+      error_log(print_r($e->getMessage(), true));
+      $this->exception = $e->getMessage();
+    }
+  }
+
+  /*
+    * find post by id and verify the user is allowed to delete
+    * @param void
+    * @return mixed
+    */
+  private function findSinglePost()
+  {
+
+    $post = $this->post::find($this->activePostId);
+
+    if (is_null($post)) {
+
+      return [
+        'msg' => 'Post not found',
+        'status' => 404
+      ];
+    }
+
+    if (
+      $this->currentUserId !== $post->author_user_id
+      && $this->currentUserId !== $post->subject_user_id
+    ) {
+
+      return [
+        'msg' => 'User not allowed to delete post',
+        'status' => 403
+      ];
+    }
+
+    return $post;
+  }
+
+  /*
+  * delete file belonging to post from amazon s3
+  * @param string $filename
+  * @return void
+  */
+  private function deleteFile(string $filename)
+  {
+
+    $bucket = new AmazonS3($filename, null);
+    $bucket->deleteFromBucket();
+  }
 }
+
+
+// id of 28 should get deleted
+// should get deleted from s3 1623023401delete_me.jpeg
+
+// id of 29 should get deleted
+// id of 30 should get deleted
+//posts/1623099159SampleVideo_1280x720_1mb.mp4

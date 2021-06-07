@@ -1,6 +1,10 @@
 <template>
   <div v-if="postsLoaded" class="profile_posts__container">
-    <h2>Posts</h2>
+    <Post
+      v-for="post in posts"
+      :key="post.id"
+      :post="post"
+    />
     <button v-if="morePosts" @click="loadMore">LOAD MORE</button>
   </div>
 </template>
@@ -8,6 +12,8 @@
 <script>
 
   import { mapState, mapMutations, mapActions } from 'vuex';
+
+  import Post from './Post.vue';
 
   export default {
 
@@ -23,7 +29,7 @@
     },
 
     components: {
-
+      Post,
     },
 
     computed: {
@@ -32,6 +38,7 @@
         [
           'postsLoaded',
           'morePosts',
+          'posts',
         ]
       ),
     },
@@ -57,5 +64,12 @@
 </script>
 
 <style lang="scss">
+
+.profile_posts__container {
+  box-sizing: border-box;
+  padding:0.5rem;
+  width: 100%;
+  margin-top: 2rem;
+}
 
 </style>

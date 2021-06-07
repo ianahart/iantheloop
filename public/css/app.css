@@ -340,6 +340,20 @@ h2 {
   pointer-events: none;
 }
 
+.horizontal_dots__icon {
+  height: 24px;
+  width: 24px;
+  color: #7b7b7b;
+  cursor: pointer;
+}
+
+.flag_solid__icon {
+  height: 20px;
+  width: 20px;
+  color: #ffcc00;
+  cursor: pointer;
+}
+
 .following_solid__icon {
   height: 24px;
   width: 24px;
@@ -402,6 +416,12 @@ h2 {
   width: 24px;
   cursor: pointer;
   color: #fcfcfc;
+}
+
+.icon__xsm__dark {
+  width: 20px;
+  height: 20px;
+  color: #3b3b44;
 }
 
 .icon__sm__light {
@@ -541,6 +561,13 @@ h2 {
   border-radius: 50%;
   height: 75px;
   width: 75px;
+  display: inline-block;
+}
+
+.default_profile_image_rel_sm {
+  border-radius: 50%;
+  height: 45px;
+  width: 45px;
   display: inline-block;
 }
 
@@ -3146,6 +3173,136 @@ div.about_profile_work__row p {
     margin-top: 1.2rem;
     width: 99%;
 }
+}
+.post_user_actions__container {
+  background-color: #FFF;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  box-sizing: border-box;
+  padding: 0.3rem;
+  position: absolute;
+  width: 110px;
+  top: 1px;
+  right: 12px;
+}
+.post_user_actions__container p {
+  font-size: 0.75rem;
+  color: #474752;
+  margin: 0.2rem;
+  pointer-events: none;
+}
+.post_user_actions_flag {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+.post_user_actions_flag svg {
+  pointer-events: none;
+}
+.post_user_actions_delete {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+.post_user_actions_empty_icon {
+  width: 20px;
+  height: 20px;
+}
+.post__container {
+  background-color: #f2f2f2;
+  border: 1px solid #f2f2f2;
+  padding: 0.5rem;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  margin-bottom: 1.5rem;
+  box-sizing: border-box;
+}
+.post_top__container {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+.post_top__column {
+  display: flex;
+}
+.post__names {
+  display: flex;
+  align-items: center;
+}
+.post__names a {
+  cursor: pointer;
+  text-decoration: none;
+}
+.post__names p {
+  margin: 1rem 0.3rem 0 0.3rem;
+  font-family: "Secular One", sans-serif;
+  font-weight: 200;
+  color: #474752;
+}
+.post__names svg {
+  margin: 1rem 0.3rem 0 0.3rem;
+  color: #cccccc;
+}
+.post_author_profile_pic__container img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+.post_author_profile_pic__container svg {
+  color: #fb4d70;
+  background: #484aa4;
+}
+.posted__date p {
+  font-size: 0.8rem;
+  color: gray;
+  margin-top: 0.4rem;
+}
+.post_body__container_row {
+  margin-top: 1.2rem;
+  box-sizing: border-box;
+}
+.post_body__text {
+  font-size: 0.9rem;
+  color: #44444f;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.6;
+}
+.post__divider {
+  border-top: 1px solid #e3e2e2;
+  width: 100%;
+  margin: 0.5rem 0;
+}
+.post_body__media_container {
+  display: flex;
+  justify-content: center;
+}
+.post_body__media_container img {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+}
+.post_body__media_player {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+}
+.post_options_dots__container {
+  position: relative;
+}
+@media (max-width: 600px) {
+.post__container {
+    width: 100%;
+}
+}
+.profile_posts__container {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  width: 100%;
+  margin-top: 2rem;
 }
 .profile_wall__container {
   box-sizing: border-box;

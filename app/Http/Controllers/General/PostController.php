@@ -141,4 +141,59 @@ class PostController extends Controller
                 );
         }
     }
+
+    /*
+    * Delete the specified post
+    * @param  Request $request
+    * @param string $id
+    * @return JsonResponse
+    */
+    public function delete(Request $request, string $id)
+    {
+        try {
+
+            $post = new Posts($this->user, $this->post);
+
+            $post->setCurrentUserId(intval($request->query('user')));
+            $post->setActivePostId(intval($id));
+
+            $post->deletePost();
+
+            $exception = $post->getException();
+            $statusCode  = null;
+
+            if ($exception) {
+
+                $statusCode = $post->getStatusCode();
+
+                return response()
+                    ->json(
+                        [
+                            'msg' => 'Sorry, something went wrong',
+                            'error' => $exception
+                        ],
+                        $statusCode
+                    );
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'post deleted'
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            error_log(print_r($e->getMessage(), true));
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to remove post',
+                        'error' => $e->getMessage(),
+                    ],
+                    404
+                );
+        }
+    }
 }

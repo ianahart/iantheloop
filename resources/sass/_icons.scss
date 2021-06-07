@@ -8,6 +8,20 @@
     pointer-events: none;
 }
 
+.horizontal_dots__icon {
+    height: 24px;
+    width: 24px;
+    color: darken(gray, 2);
+    cursor: pointer;
+}
+
+.flag_solid__icon {
+    height: 20px;
+    width: 20px;
+    color: $warning;
+    cursor: pointer;
+}
+
 .following_solid__icon {
     height: 24px;
     width: 24px;
@@ -83,6 +97,12 @@
     width: 24px;
     cursor: pointer;
     color: $primaryWhite;
+}
+
+.icon__xsm__dark {
+    width: 20px;
+    height: 20px;
+    color: $primaryBlack;
 }
 
 .icon__sm__light {

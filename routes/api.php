@@ -15,6 +15,7 @@ use App\Http\Controllers\general\StatsController;
 use App\Http\Controllers\General\NetworkController;
 use App\Http\Controllers\General\UserController;
 use App\Http\Controllers\General\PostController;
+use App\Models\Post;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,3 +60,4 @@ Route::get('/auth/network/followers/show/{userId}', [NetworkController::class, '
 Route::patch('/auth/user/status/{userId}/update', [UserController::class, 'updateUserStatus'])->middleware('auth:api');
 Route::post('/auth/posts/store', [PostController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/posts', [PostController::class, 'index'])->middleware('auth:api');
+Route::delete('/auth/posts/{id}/delete', [PostController::class, 'delete'])->middleware('auth:api');

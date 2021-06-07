@@ -155,6 +155,10 @@ const profileWall = {
       Object.assign(state, initialState());
     },
 
+    DELETE_POST: (state, postDelId) => {
+      const delIndex = state.posts.findIndex(post => post.id === postDelId);
+      state.posts.splice(delIndex, 1);
+    },
   },
 
   actions: {
@@ -213,24 +217,34 @@ const profileWall = {
             }
           }
         );
-
-          // console.log('/modules/store/profileWall.js @LOAD_POSTS: (200)', response);
           commit('SET_POSTS', response.data);
           commit('SET_POSTS_LOADED', true);
       } catch(e){
-        console.log(e);
-        // console.log('/modules/store/profileWall.js @LOAD_POSTS: (404)', e.response);
         commit('SET_POSTS_LOADED', false);
       }
+    },
+
+    async DELETE_POST({ state, commit }, payload) {
+
+      try {
+
+        let response = await axios(
+          {
+            method: 'DELETE',
+            url: `/api/auth/posts/${payload.id}/delete?user=${payload.currentUserId}`,
+            headers: {
+              'Accept' : 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+          console.log('DELETE_POST suc: ', response);
+          commit('DELETE_POST', payload.id);
+      } catch (e) {
+
+        console.log('DELETE_POST err: ', e.response);
+      }
     }
-
-
-
-
-
-
-
-
   }
 };
 
