@@ -43,13 +43,13 @@ class PostController extends Controller
                     unset($formData['data']);
                 }
 
-                $this->addPost($this->user, $this->post, $formData);
+                $newPost = $this->addPost($this->user, $this->post, $formData);
 
                 return response()
                     ->json(
                         [
                             'msg' => 'request successful',
-                            'data' => 'hi'
+                            'new_post' => $newPost
                         ],
                         201
                     );
@@ -73,14 +73,19 @@ class PostController extends Controller
     * @param object $user
     * @param object $post
     * @param array $data
-    * @return void
+    * @return object;
     */
     public function addPost(object $user, object $post, array $data)
     {
         $post = new Posts($user, $post);
 
         $post->setData($data);
+
+        $post->setSubjectUserId(intval($data['subject_user_id']));
         $post->addPost();
+        $newPost = $post->getNewPost();
+
+        return array_shift($newPost);
     }
 
     /*

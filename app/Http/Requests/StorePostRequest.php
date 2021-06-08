@@ -56,7 +56,7 @@ class StorePostRequest extends FormRequest
 
         $data = json_decode($this->request->all()['data'], true);
 
-        error_log(print_r($this->request->all(), true));
+
         $this->merge(
             $data,
         );

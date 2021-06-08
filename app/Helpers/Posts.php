@@ -12,6 +12,7 @@ class Posts
 {
   private object $user;
   private object $post;
+  private array $newPost;
   private int $currentUserId;
   private int $activePostId;
   public array $data;
@@ -59,6 +60,12 @@ class Posts
   {
 
     return isset($this->exception) ? $this->exception : NULL;
+  }
+
+  public function getNewPost()
+  {
+
+    return $this->newPost;
   }
 
   public function getStatusCode()
@@ -118,6 +125,10 @@ class Posts
 
       $post->save();
     }
+    $this->newPost = $post->refresh()->toArray();
+
+    $this->subjectUserId = $this->newPost['subject_user_id'];
+    $this->newPost = $this->enhancePosts(['data' => ['data' => $this->newPost]]);
   }
 
   public function findPosts()
@@ -125,7 +136,7 @@ class Posts
 
     try {
       // how many models to be returned from the database
-      $limit = 2;
+      $limit = 3;
 
       if ($this->lastPostItem === 0) {
 
@@ -256,6 +267,7 @@ class Posts
 
       $post['post_posted'] = $this->createPostedDate($post['created_at']);
       $post['subject_name'] = $subjectName;
+      $post['seen'] = false;
       $authorColumns = $this->appendAuthorColumns($post['author_user_id']);
 
       $post = array_merge($post, $authorColumns);
@@ -346,11 +358,3 @@ class Posts
     $bucket->deleteFromBucket();
   }
 }
-
-
-// id of 28 should get deleted
-// should get deleted from s3 1623023401delete_me.jpeg
-
-// id of 29 should get deleted
-// id of 30 should get deleted
-//posts/1623099159SampleVideo_1280x720_1mb.mp4
