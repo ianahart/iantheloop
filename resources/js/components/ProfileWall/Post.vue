@@ -1,5 +1,5 @@
 <template>
-  <div ref="post" class="post__container">
+  <div :data-id="post.id" ref="post" class="post__container">
     <div class="post_top__container">
       <div class="post_top__column">
         <div class="post_author_profile_pic__container">
@@ -94,7 +94,9 @@
     name: 'Post',
 
     props: {
+      lastPostItem: Number,
       post: Object,
+      observer: IntersectionObserver,
     },
 
     components: {
@@ -113,6 +115,20 @@
 
     mounted() {
       this.$refs.post.addEventListener('click', this.closeOptionsFallback);
+
+      if (this.lastPostItem === this.post.id) {
+
+          this.observer.observe(this.$refs.post);
+      }
+    },
+
+    watch: {
+      'post.seen': function () {
+
+        if (this.post.seen) {
+          this.observer.unobserve(this.$refs.post);
+        }
+      }
     },
 
     beforeDestroy() {

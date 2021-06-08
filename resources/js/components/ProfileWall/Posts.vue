@@ -1,11 +1,15 @@
 <template>
-  <div v-if="postsLoaded" class="profile_posts__container">
+  <div
+    ref="postsContainer"
+    class="profile_posts__container"
+  >
     <Post
       v-for="post in posts"
       :key="post.id"
       :post="post"
+      :observer="observer"
+      :lastPostItem="lastPostItem"
     />
-    <button v-if="morePosts" @click="loadMore">LOAD MORE</button>
   </div>
 </template>
 
@@ -23,13 +27,32 @@
       subjectUserId: String,
     },
 
+    components: {
+      Post,
+    },
+
+    data () {
+
+      return {
+        observer: null,
+        debounceID: '',
+      }
+    },
+
     async created () {
 
        await this.loadPosts(this.subjectUserId);
     },
 
-    components: {
-      Post,
+    mounted () {
+
+      this.setupObserver();
+    },
+
+    beforeDestroy() {
+
+      this.observer.disconnect();
+      clearTimeout(this.debounceID);
     },
 
     computed: {
@@ -39,6 +62,7 @@
           'postsLoaded',
           'morePosts',
           'posts',
+          'lastPostItem',
         ]
       ),
     },
@@ -51,16 +75,82 @@
         ]
       ),
 
+      ...mapMutations('profileWall',
+        [
+          'SET_POST_SEEN'
+        ]
+      ),
+
+      handlePostSeen(payload) {
+
+        this.SET_POST_SEEN(payload);
+      },
+
+      setupObserver() {
+
+        const options = {
+           root: null,
+           rootMargin: '0px',
+           threshold: 1.0,
+        };
+
+        this.observer = new IntersectionObserver(this.onElementObserved, options);
+
+      },
+
+    onElementObserved(entries) {
+
+        entries.forEach((entry) => {
+
+          if (entry.intersectionRatio > 0.75) {
+
+            let seenId = entry.target.attributes['data-id'].value;
+            this.SET_POST_SEEN(parseInt(seenId));
+
+            this.debounce(() => {
+
+              this.loadMore();
+            }, 400);
+          }
+        });
+      },
+
+      debounce(fn, delay = 400) {
+
+      return ((...args) => {
+
+        clearTimeout(this.debounceID)
+
+        this.debounceID = setTimeout(() => {
+
+          this.debounceID = null
+
+          fn(...args)
+        }, delay)
+      })()
+      },
+
       async loadMore () {
-        await this.LOAD_POSTS(this.subjectUserId);
+        try {
+
+          await this.LOAD_POSTS(this.subjectUserId);
+        } catch(e) {
+
+        }
       },
 
       async loadPosts (subjectUserId) {
+        try {
 
-        await this.LOAD_POSTS(subjectUserId);
+          await this.LOAD_POSTS(subjectUserId);
+        } catch (e) {
+
+        }
       }
     },
   }
+
+
 </script>
 
 <style lang="scss">

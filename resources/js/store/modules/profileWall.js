@@ -48,6 +48,20 @@ const profileWall = {
       }
     },
 
+    SET_POST_SEEN: (state, seenId) => {
+
+        const postIndex = state.posts.findIndex((post) => post.id === seenId);
+
+        state.posts[postIndex].seen = true;
+    },
+
+    SET_POST: (state, payload) => {
+
+      payload.new_post.seen = false;
+
+      state.posts.unshift(payload.new_post);
+    },
+
     SET_POSTS_LOADED: (state, payload) => {
 
       state.postsLoaded = payload;
@@ -194,6 +208,8 @@ const profileWall = {
               data
           }
         );
+
+          commit('SET_POST', response.data);
 
       } catch (e) {
 
