@@ -47,6 +47,12 @@
 
     computed: {
 
+      ...mapState('profileWall',
+        [
+          'responseError'
+        ]
+      ),
+
       ...mapState('profile',
         [
           'currentUserId'
@@ -67,11 +73,14 @@
         console.log('Post flagged: ', id);
       },
 
-      deletePost(id, currentUserId) {
+      async deletePost(id, currentUserId) {
 
-        this.DELETE_POST({ id, currentUserId });
+        await this.DELETE_POST({ id, currentUserId });
+
+        if (this.responseError) {
+          this.$router.push({name: 'NotFound'});
+        }
       }
-
     }
   }
 

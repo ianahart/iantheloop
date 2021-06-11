@@ -10,6 +10,8 @@ const initialState = () => {
     postsLoaded: false,
     modalFormIsOpen: false,
     isInputActive: false,
+    responseError: false,
+    morePosts: true,
     postErrors: [],
     postInputPlaceholder: '',
     postInputPhoto: { src: '', file: null, input: ''},
@@ -17,7 +19,6 @@ const initialState = () => {
     postInputText: '',
     postInputTextLength: null,
     lastPostItem: 0,
-    morePosts: true,
     posts: [],
   }
 };
@@ -39,7 +40,7 @@ const profileWall = {
 
       if (payload.posts !== null && payload.more_records) {
 
-        state.posts.push(...payload.posts.data);
+        state.posts.push(...payload.posts);
         state.lastPostItem = payload.last_post_item;
         state.morePosts = true;
 
@@ -173,6 +174,30 @@ const profileWall = {
       const delIndex = state.posts.findIndex(post => post.id === postDelId);
       state.posts.splice(delIndex, 1);
     },
+
+    RESPONSE_ERROR: (state) => {
+
+      state.responseError = true;
+    },
+
+    LIKE_POST:(state, payload) => {
+      const postIndex = state.posts.findIndex((post) => post.id === payload.postId);
+
+      state.posts[postIndex].post_likes = [];
+      state.posts[postIndex].post_likes.push(
+          {
+            name: state.currentUserFullName,
+            user_id: payload.currentUserId
+          });
+      state.posts[postIndex].likes = state.posts[postIndex].likes + 1;
+    },
+
+    UNLIKE_POST: (state, payload) => {
+      const postIndex = state.posts.findIndex(post => post.id === payload.post_id);
+      const likeIndex = state.posts[postIndex].post_likes.findIndex(lk => lk.id === payload.id);
+
+      state.posts[postIndex].post_likes.splice(likeIndex, 1);
+    },
   },
 
   actions: {
@@ -233,6 +258,7 @@ const profileWall = {
             }
           }
         );
+
           commit('SET_POSTS', response.data);
           commit('SET_POSTS_LOADED', true);
       } catch(e){
@@ -254,11 +280,62 @@ const profileWall = {
             }
           }
         );
-          console.log('DELETE_POST suc: ', response);
           commit('DELETE_POST', payload.id);
       } catch (e) {
 
         console.log('DELETE_POST err: ', e.response);
+        commit('RESPONSE_ERROR');
+      }
+    },
+
+    async LIKE_POST({ state, commit }, payload) {
+
+      try {
+
+        let response = await axios(
+          {
+            method: 'POST',
+            url: `/api/auth/post-likes/store`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            data: {
+              current_user_id: payload.currentUserId,
+              post_id: payload.postId,
+            }
+          }
+        );
+
+       commit('LIKE_POST', payload);
+
+      } catch (e) {
+
+        console.log(e.response);
+      }
+    },
+
+    async UNLIKE_POST({ state, commit }, payload) {
+
+      try {
+
+        let response = await axios(
+          {
+            method: 'DELETE',
+            url: `/api/auth/post-likes/${payload.id}/delete`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            data: payload,
+          }
+          )
+          console.log('UNLIKE_POST SUCC: ',response);
+
+        commit('UNLIKE_POST', payload);
+      } catch(e) {
+
+        console.log('UNLIKE_POST ERR: ',e.response);
       }
     }
   }

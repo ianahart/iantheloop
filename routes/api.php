@@ -15,7 +15,8 @@ use App\Http\Controllers\general\StatsController;
 use App\Http\Controllers\General\NetworkController;
 use App\Http\Controllers\General\UserController;
 use App\Http\Controllers\General\PostController;
-use App\Models\Post;
+use App\Http\Controllers\General\PostLikeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -61,3 +62,5 @@ Route::patch('/auth/user/status/{userId}/update', [UserController::class, 'updat
 Route::post('/auth/posts/store', [PostController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/posts', [PostController::class, 'index'])->middleware('auth:api');
 Route::delete('/auth/posts/{id}/delete', [PostController::class, 'delete'])->middleware('auth:api');
+Route::post('/auth/post-likes/store', [PostLikeController::class, 'store'])->middleware('auth:api');
+Route::delete('/auth/post-likes/{id}/delete', [PostLikeController::class, 'delete'])->middleware('auth:api');

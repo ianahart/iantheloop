@@ -347,6 +347,12 @@ h2 {
   cursor: pointer;
 }
 
+.likes_solid__md_icon {
+  height: 20px;
+  width: 20px;
+  color: #484aa4;
+}
+
 .flag_solid__icon {
   height: 20px;
   width: 20px;
@@ -3210,6 +3216,60 @@ div.about_profile_work__row p {
   width: 20px;
   height: 20px;
 }
+.rotate-enter-active, .rotate-leave-active {
+  transition: all 0.4s ease-out;
+  transform: rotate(-10deg);
+}
+.rotate-enter, .rotate-leave-to {
+  transform: rotate(50deg);
+  opacity: 0;
+}
+.likes__container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.likes__container span {
+  font-size: 0.9rem;
+}
+.thumbs_up__non_active {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.thumbs_up__non_active span {
+  color: #4e5760;
+}
+.thumbs_up__non_active svg {
+  color: #4e5760;
+  margin-right: 0.1rem;
+}
+.thumbs_up__active {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.thumbs_up__active span {
+  color: #484aa4;
+  font-weight: bold;
+}
+.thumbs_up__active svg {
+  margin-right: 0.1rem;
+  transform: rotate(-10deg);
+}
+.comment_trigger__container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.comment_trigger__container svg {
+  color: #4e5760;
+}
+.comment_trigger__container p {
+  font-size: 0.9rem;
+  color: #4e5760;
+  margin-left: 0.1rem;
+}
 .post__container {
   background-color: #f2f2f2;
   border: 1px solid #f2f2f2;
@@ -3228,6 +3288,10 @@ div.about_profile_work__row p {
 }
 .post_top__column {
   display: flex;
+}
+.post_likes_names {
+  display: flex;
+  align-items: center;
 }
 .post__names {
   display: flex;
@@ -3292,6 +3356,51 @@ div.about_profile_work__row p {
 }
 .post_options_dots__container {
   position: relative;
+}
+.post__stats_count {
+  margin: 0.3rem 0;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.post_likes_count_icon__container {
+  height: 17px;
+  width: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #484aa4;
+  margin-right: 0.1rem;
+}
+.post_likes_count_icon__container svg {
+  color: #fff;
+  height: 12px;
+  width: 12px;
+}
+.post__likes_count {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+.post__likes_count span {
+  margin: 0 0.1rem;
+  font-size: 0.8rem;
+  color: #4e5760;
+}
+.post__comments_count {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+.post__comments_count span {
+  font-size: 0.8rem;
+  margin: 0 0.1rem;
+  color: #4e5760;
+}
+.post__interactions_container {
+  display: flex;
+  justify-content: space-evenly;
 }
 @media (max-width: 600px) {
 .post__container {

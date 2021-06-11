@@ -15,12 +15,23 @@ class Post extends Model
         'video_filename',
         'photo_link',
         'video_link',
+        'like_records',
         'likes',
         'comments_count',
+    ];
+
+
+    protected $casts = [
+        'like_records' => 'array',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'subject_user_id');
+    }
+
+    public function postLikes()
+    {
+        return $this->hasMany(PostLike::class, 'post_id');
     }
 }

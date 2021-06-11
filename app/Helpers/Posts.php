@@ -51,6 +51,12 @@ class Posts
     $this->currentUserId = $currentUserId;
   }
 
+  public function setColumnToUpdate($columnToUpdate)
+  {
+
+    $this->columnToUpdate = $columnToUpdate;
+  }
+
   public function setActivePostId($activePostId)
   {
     $this->activePostId = $activePostId;
@@ -128,7 +134,7 @@ class Posts
     $this->newPost = $post->refresh()->toArray();
 
     $this->subjectUserId = $this->newPost['subject_user_id'];
-    $this->newPost = $this->enhancePosts(['data' => ['data' => $this->newPost]]);
+    $this->newPost = $this->enhancePosts([$this->newPost]);
   }
 
   public function findPosts()
@@ -143,26 +149,35 @@ class Posts
         $posts = $this->user::find($this->subjectUserId)
           ->posts()
           ->latest()
-          ->paginate($limit)->toArray();
+          ->paginate($limit);
       } else {
 
         $posts = $this->user::find($this->subjectUserId)
           ->posts()
           ->where('id', '<', $this->lastPostItem)
           ->orderBy('id', 'DESC')
-          ->paginate($limit)->toArray();
+          ->paginate($limit);
       }
 
-      if ($posts['total'] <= 0) {
+      if ($posts->total() <= 0) {
 
         throw new ModelNotFoundException('all records fetched');
       }
 
-      $enhancedPosts = $this->enhancePosts($posts);
+      $postsCollection = [];
 
-      $this->lastPostItem = $posts['data'][count($posts['data']) - 1]['id'];
-      $posts['data'] = $enhancedPosts;
-      $this->posts = $posts;
+      foreach ($posts as $value) {
+
+        $value->postLikes;
+
+        $postsCollection[] = $value->toArray();
+      }
+
+      $enhancedPosts = $this->enhancePosts($postsCollection);
+
+      $this->lastPostItem = $postsCollection[count($postsCollection) - 1]['id'];
+
+      $this->posts = $enhancedPosts;
     } catch (ModelNotFoundException $e) {
 
       $this->exception = $e->getMessage();
@@ -263,11 +278,12 @@ class Posts
 
     $subjectName = $this->appendSubjectName();
 
-    foreach ($posts['data'] as $post) {
+    foreach ($posts as $post) {
 
       $post['post_posted'] = $this->createPostedDate($post['created_at']);
       $post['subject_name'] = $subjectName;
       $post['seen'] = false;
+
       $authorColumns = $this->appendAuthorColumns($post['author_user_id']);
 
       $post = array_merge($post, $authorColumns);

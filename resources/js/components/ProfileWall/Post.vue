@@ -1,261 +1,362 @@
 <template>
-  <div :data-id="post.id" ref="post" class="post__container">
-    <div class="post_top__container">
-      <div class="post_top__column">
-        <div class="post_author_profile_pic__container">
-          <img v-if="post.profile_picture" :src="post.profile_picture" />
-          <DefaultProfileIcon
-            v-else
-            className="default_profile_image_rel_sm"
-          />
-        </div>
-        <div class="post_header__container">
-          <div class="post__names">
-            <router-link
-              :to="{name: 'Profile', params: {id: `${post.author_user_id.toString()}`}}"
+    <div :data-id="post.id" ref="post" class="post__container">
+        <div class="post_top__container">
+            <div class="post_top__column">
+                <div class="post_author_profile_pic__container">
+                    <img
+                        v-if="post.profile_picture"
+                        :src="post.profile_picture"
+                    />
+                    <DefaultProfileIcon
+                        v-else
+                        className="default_profile_image_rel_sm"
+                    />
+                </div>
+                <div class="post_header__container">
+                    <div class="post__names">
+                        <router-link
+                            :to="{
+                                name: 'Profile',
+                                params: {
+                                    id: `${post.author_user_id.toString()}`
+                                }
+                            }"
+                        >
+                            <p>{{ post.full_name }}</p>
+                        </router-link>
+                        <PlaySolidIcon className="icon__xsm__dark" />
+                        <p>{{ post.subject_name }}</p>
+                    </div>
+                    <div class="posted__date">
+                        <p>{{ post.post_posted }}</p>
+                    </div>
+                </div>
+            </div>
+            <div
+                @click="togglePostOptions"
+                class="post_options_dots__container"
             >
-              <p>{{ post.full_name }}</p>
-            </router-link>
-            <PlaySolidIcon
-              className="icon__xsm__dark"
+                <PostActions
+                    v-if="isPostOptionsOpen"
+                    :authorUserId="post.author_user_id"
+                    :subjectUserId="post.subject_user_id"
+                    :postId="post.id"
+                />
+                <div ref="postActionsTrigger">
+                    <HorizontalDotsIcon
+                        className="horizontal_dots__icon"
+                        marker="postActions"
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="post_body__container_row">
+            <p class="post_body__text">{{ post.post_text }}</p>
+            <div
+                v-if="post.photo_link !== null || post.video_link !== null"
+                class="post_body__media_container"
+            >
+                <a v-if="post.photo_link !== null" :href="post.photo_link">
+                    <img
+                        v-if="post.photo_link !== null"
+                        :src="post.photo_link"
+                        :alt="post.photo_filename"
+                    />
+                </a>
+                <div
+                    v-if="post.video_link !== null"
+                    class="post_body__media_player"
+                >
+                    <a v-if="post.video_link !== null" :href="post.video_link">
+                        <VideoPlayer :src="post.video_link" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="post__stats_count">
+            <div class="post__likes_count">
+                <div class="post_likes_count_icon__container">
+                    <ThumbsUpIcon />
+                </div>
+                <div v-if="getUserId" class="post_likes_names">
+                     <span v-if="post.likes > 0">{{ postLikesText }}</span>
+                </div>
+            </div>
+            <div class="post__comments_count">
+                <span>0</span>
+                <span>comments</span>
+            </div>
+        </div>
+        <div class="post__divider"></div>
+        <div class="post__interactions_container">
+            <Likes
+                @addlike="handleAddLike"
+                @removelike="handleRemoveLike"
+                :data="post"
+                :currentUserId="getUserId"
             />
-            <p>{{ post.subject_name }}</p>
+            <CommentTrigger />
         </div>
-        <div class="posted__date">
-          <p>{{ post.post_posted }}</p>
-        </div>
-        </div>
-      </div>
-      <div
-        @click="togglePostOptions"
-        class="post_options_dots__container"
-      >
-        <PostActions
-          v-if="isPostOptionsOpen"
-          :authorUserId="post.author_user_id"
-          :subjectUserId="post.subject_user_id"
-          :postId="post.id"
-        />
-        <div ref="postActionsTrigger">
-          <HorizontalDotsIcon
-            className="horizontal_dots__icon"
-            marker="postActions"
-          />
-        </div>
-      </div>
+        <div class="post__divider"></div>
     </div>
-    <div class="post_body__container_row">
-      <p class="post_body__text">{{ post.post_text }}</p>
-      <div
-        v-if="post.photo_link !== null || post.video_link !== null"
-        class="post_body__media_container"
-      >
-        <a
-          v-if="post.photo_link !== null"
-          :href="post.photo_link"
-        >
-          <img
-            v-if="post.photo_link !== null"
-            :src="post.photo_link" :alt="post.photo_filename"/>
-        </a>
-        <div
-          v-if="post.video_link !== null"
-          class="post_body__media_player"
-        >
-          <a
-            v-if="post.video_link !== null"
-            :href="post.video_link"
-          >
-            <VideoPlayer
-              :src="post.video_link"
-            />
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="post__divider"></div>
-  </div>
 </template>
 
-
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import HorizontalDotsIcon from "../Icons/HorizontalDotsIcon.vue";
+import PlaySolidIcon from "../Icons/PlaySolidIcon.vue";
+import VideoPlayer from "./VideoPlayer.vue";
+import DefaultProfileIcon from "../Icons/DefaultProfileIcon.vue";
+import PostActions from "./PostActions.vue";
+import Likes from "./Likes.vue";
+import ThumbsUpIcon from "../Icons/ThumbsUpIcon.vue";
+import CommentTrigger from "./CommentTrigger.vue";
 
-  import HorizontalDotsIcon from '../Icons/HorizontalDotsIcon.vue';
-  import PlaySolidIcon from '../Icons/PlaySolidIcon.vue';
-  import VideoPlayer from './VideoPlayer.vue';
-  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
-  import PostActions from './PostActions.vue';
-
-
-  export default {
-
-    name: 'Post',
+export default {
+    name: "Post",
 
     props: {
-      lastPostItem: Number,
-      post: Object,
-      observer: IntersectionObserver,
+        lastPostItem: Number,
+        post: Object,
+        observer: IntersectionObserver
     },
 
     components: {
-      HorizontalDotsIcon,
-      PlaySolidIcon,
-      VideoPlayer,
-      DefaultProfileIcon,
-      PostActions,
+        HorizontalDotsIcon,
+        PlaySolidIcon,
+        VideoPlayer,
+        DefaultProfileIcon,
+        PostActions,
+        Likes,
+        ThumbsUpIcon,
+        CommentTrigger
     },
 
-    data () {
-      return {
-        isPostOptionsOpen: false,
-      }
+    data() {
+        return {
+            isPostOptionsOpen: false,
+            debounceID: ""
+        };
     },
 
     mounted() {
-      this.$refs.post.addEventListener('click', this.closeOptionsFallback);
+        this.$refs.post.addEventListener("click", this.closeOptionsFallback);
 
-      if (this.lastPostItem === this.post.id) {
-
-          this.observer.observe(this.$refs.post);
-      }
+        if (this.lastPostItem === this.post.id) {
+            this.observer.observe(this.$refs.post);
+        }
     },
 
     watch: {
-      'post.seen': function () {
-
-        if (this.post.seen) {
-          this.observer.unobserve(this.$refs.post);
-        }
-      }
+        "post.seen": function() {
+            if (this.post.seen) {
+                this.observer.unobserve(this.$refs.post);
+            }
+        },
     },
 
     beforeDestroy() {
-      this.$refs.post.removeEventListener('click', this.closeOptionsFallback);
+        this.$refs.post.removeEventListener("click", this.closeOptionsFallback);
     },
 
-    computed : {
+    computed: {
+        ...mapGetters("user",
+            [
+                "getUserId"
+            ]
+        ),
 
+        postLikesText () {
+
+            let text = '';
+            let likes = this.post.post_likes;
+            const currentUser = likes.find((user) => user.user_id === this.getUserId);
+            let names;
+
+            if (likes.length === 1) {
+                const dynamicSubStr = currentUser ? `You` : `${likes[0].liker_name}`;
+                text = `${dynamicSubStr} liked this`;
+            }
+
+            if (likes.length === 2) {
+                names = currentUser ? likes.find((lk) => lk.user_id !== this.getUserId) : likes.map((lk) => lk.liker_name).join(' and ');
+                text = `${currentUser ? 'You and' : ''} ${typeof names === 'string' ? names : names.liker_name} liked this`;
+            }
+
+            if (likes.length > 2) {
+                let offset = currentUser ? 1 : 2;
+
+                names = likes.slice(likes.length - offset).map((lk, index) => {
+                    if (lk.user_id === this.getUserId) {
+                       const { liker_name} = likes.slice(-2, -1)[0];
+                        return liker_name;
+                    } else {
+                        return lk.liker_name;
+                    }
+                });
+
+                if (currentUser) {
+                    names.unshift('You, ');
+                    const idx = likes.findIndex((lk) => currentUser.user_id === lk.user_id);
+                    offset = 2;
+                }
+                names = names.join(' ');
+                text =  `${names} and ${likes.length - offset} others like this`;
+            }
+            return text;
+        },
     },
 
     methods: {
 
-      togglePostOptions () {
-        this.isPostOptionsOpen = !this.isPostOptionsOpen;
-      },
+        ...mapActions("profileWall",
+            [
+                "LIKE_POST",
+                'UNLIKE_POST',
+            ]
+        ),
 
-      closeOptionsFallback (e) {
+        togglePostOptions() {
+            this.isPostOptionsOpen = !this.isPostOptionsOpen;
+        },
 
-        if (e.target.id !== 'postActions') {
+        closeOptionsFallback(e) {
+            if (e.target.id !== "postActions") {
+                this.isPostOptionsOpen = false;
+            }
+        },
 
-          this.isPostOptionsOpen = false;
+        async handleAddLike(payload) {
+            this.debounce(async () => {
+                await this.LIKE_POST({
+                    postId: payload,
+                    currentUserId: this.getUserId
+                });
+            }, 350);
+        },
+
+        async handleRemoveLike(payload) {
+
+            this.debounce(async () => {
+                await this.UNLIKE_POST(payload);
+            }, 350);
+        },
+
+        debounce(fn, delay = 400) {
+            return ((...args) => {
+                clearTimeout(this.debounceID);
+
+                this.debounceID = setTimeout(() => {
+                    this.debounceID = null;
+
+                    fn(...args);
+                }, delay);
+            })();
         }
-
-
-      }
-    },
-  }
+    }
+};
 </script>
 
 <style lang="scss">
-
 .post__container {
-  background-color: $primaryGray;
-  border: 1px solid $primaryGray;
-  padding: 0.5rem;
-  width: 80%;
-  margin: 0 auto;
-  border-radius: 8px;
-  box-shadow: rgb(0 0 0 / 10%) 0px 20px 25px -5px, rgb(0 0 0 / 4%) 0px 10px 10px -5px;
-  margin-bottom: 1.5rem;
-  box-sizing: border-box;
+    background-color: $primaryGray;
+    border: 1px solid $primaryGray;
+    padding: 0.5rem;
+    width: 80%;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: rgb(0 0 0 / 10%) 0px 20px 25px -5px,
+        rgb(0 0 0 / 4%) 0px 10px 10px -5px;
+    margin-bottom: 1.5rem;
+    box-sizing: border-box;
 }
 
-
 .post_top__container {
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
 }
 
 .post_top__column {
+    display: flex;
+}
+
+.post_likes_names {
   display: flex;
+  align-items: center;
 }
 
 .post__names {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  a {
-    cursor: pointer;
-    text-decoration: none;
-  }
+    a {
+        cursor: pointer;
+        text-decoration: none;
+    }
 
-  p {
-    margin: 1rem 0.3rem 0 0.3rem;
-    font-family: 'Secular One', sans-serif;
-    font-weight: 200;
-    color: lighten($primaryBlack, 5)
-  }
+    p {
+        margin: 1rem 0.3rem 0 0.3rem;
+        font-family: "Secular One", sans-serif;
+        font-weight: 200;
+        color: lighten($primaryBlack, 5);
+    }
 
-  svg {
-     margin: 1rem 0.3rem 0 0.3rem;
-     color: darken($primaryGray, 15);
-
-  }
+    svg {
+        margin: 1rem 0.3rem 0 0.3rem;
+        color: darken($primaryGray, 15);
+    }
 }
 
 .post_author_profile_pic__container {
-
     img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-  }
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+    }
 
-  svg {
-    color: $themePink;
-    background: $themeLightBlue;
-  }
+    svg {
+        color: $themePink;
+        background: $themeLightBlue;
+    }
 }
 
 .posted__date {
-
-  p {
-    font-size: 0.8rem;
-    color: gray;
-    margin-top: 0.4rem;
-  }
+    p {
+        font-size: 0.8rem;
+        color: gray;
+        margin-top: 0.4rem;
+    }
 }
 
 .post_body__container_row {
-  margin-top: 1.2rem;
-  box-sizing: border-box;
+    margin-top: 1.2rem;
+    box-sizing: border-box;
 }
 
 .post_body__text {
-  font-size: 0.9rem;
-  color: lighten($primaryBlack, 4);
-  font-family: 'Open Sans', sans-serif;
-  line-height: 1.6;
+    font-size: 0.9rem;
+    color: lighten($primaryBlack, 4);
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.6;
 }
 
 .post__divider {
-  border-top: 1px solid $mainInputBorder;
-  width: 100%;
-  margin: 0.5rem 0;
+    border-top: 1px solid $mainInputBorder;
+    width: 100%;
+    margin: 0.5rem 0;
 }
 
 .post_body__media_container {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 
-  img {
-    width: 200px;
-    height: 200px;
-    border-radius: 8px;
-  }
+    img {
+        width: 200px;
+        height: 200px;
+        border-radius: 8px;
+    }
 }
 
 .post_body__media_player {
@@ -265,16 +366,63 @@
 }
 
 .post_options_dots__container {
-  position: relative;
+    position: relative;
 }
 
+.post__stats_count {
+    margin: 0.3rem 0;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
 
+.post_likes_count_icon__container {
+    height: 17px;
+    width: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: $themeLightBlue;
+    margin-right: 0.1rem;
+
+    svg {
+        color: #fff;
+        height: 12px;
+        width: 12px;
+    }
+}
+
+.post__likes_count {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    span {
+        margin: 0 0.1rem;
+        font-size: 0.8rem;
+        color: $mainInputLabel;
+    }
+}
+
+.post__comments_count {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    span {
+        font-size: 0.8rem;
+        margin: 0 0.1rem;
+        color: $mainInputLabel;
+    }
+}
+
+.post__interactions_container {
+    display: flex;
+    justify-content: space-evenly;
+}
 
 @media (max-width: 600px) {
-
-  .post__container {
-    width: 100%;
-  }
+    .post__container {
+        width: 100%;
+    }
 }
-
 </style>
