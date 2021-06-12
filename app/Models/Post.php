@@ -34,4 +34,10 @@ class Post extends Model
     {
         return $this->hasMany(PostLike::class, 'post_id');
     }
+
+    public function flaggedPosts()
+    {
+
+        return $this->hasMany(FlaggedPost::class, 'post_id');
+    }
 }

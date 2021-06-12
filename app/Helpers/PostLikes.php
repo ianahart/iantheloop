@@ -14,6 +14,7 @@ class PostLikes
   private array $postLikeToDel;
   public object $postLike;
   public object $post;
+  private object $newLike;
 
   public function __construct($postLike, $post)
   {
@@ -39,6 +40,12 @@ class PostLikes
     return isset($this->exception) ? $this->exception : NULL;
   }
 
+  public function getNewLike()
+  {
+
+    return $this->newLike;
+  }
+
   public function setPostLikeToDel($postLikeToDel)
   {
     $this->postLikeToDel = $postLikeToDel;
@@ -53,8 +60,6 @@ class PostLikes
       $newLike->post_id = $this->postId;
       $newLike->user_id = $this->currentUserId;
 
-      // $alreadyLiked = $this->postLike->
-
       $formatted = explode(' ',  $newLike->user->full_name);
 
       $formatted = array_map(
@@ -68,6 +73,8 @@ class PostLikes
 
       $newLike->save();
       $newLike->refresh();
+
+      $this->newLike = $newLike;
 
       $post = $newLike->post;
       $post->likes = $post->likes + 1;

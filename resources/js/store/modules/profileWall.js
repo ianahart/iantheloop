@@ -4,22 +4,33 @@ import axios from 'axios';
 const initialState = () => {
 
   return {
-
-    currentUserFullName: '',
-    currentUserFirstName: '',
     postsLoaded: false,
-    modalFormIsOpen: false,
+    modalIsOpen: false,
     isInputActive: false,
     responseError: false,
+    flagPostFinished: false,
+    alreadyFlaggedError: '',
     morePosts: true,
-    postErrors: [],
+    activeModal: '',
+    currentUserFullName: '',
+    currentUserFirstName: '',
     postInputPlaceholder: '',
-    postInputPhoto: { src: '', file: null, input: ''},
-    postInputVideo: {src: '', file: null, input: ''},
     postInputText: '',
     postInputTextLength: null,
+    activeFlagPostId: null,
     lastPostItem: 0,
+    postInputPhoto: { src: '', file: null, input: ''},
+    postInputVideo: {src: '', file: null, input: ''},
     posts: [],
+    postErrors: [],
+    flaggedOptions:[
+      {id: 0, reasonText: 'Violence', selected: false},
+      {id: 1, reasonText: 'Nudity', selected: false},
+      {id: 2, reasonText: 'Harassment', selected: false},
+      {id: 3, reasonText: 'False Information', selected: false},
+      {id: 4, reasonText: 'Spam', selected: false},
+      {id: 5, reasonText: 'Hate Speech', selected: false},
+    ],
   }
 };
 
@@ -31,10 +42,21 @@ const profileWall = {
 
   getters: {
 
+    unselectedFlaggedOptions (state) {
+         return state.flaggedOptions.filter((flaggedOption) => !flaggedOption.selected);
+    },
 
+    selectedFlaggedOptions (state) {
+      return state.flaggedOptions.filter((flaggedOption) => flaggedOption.selected);
+    }
   },
 
   mutations: {
+
+    SET_FLAGGED_OPTION: (state, payload) => {
+      const index = state.flaggedOptions.findIndex(flaggedOption => flaggedOption.id === payload.option.id);
+      state.flaggedOptions[index].selected = payload.action === 'selected' ? true : false;
+    },
 
     SET_POSTS: (state, payload) => {
 
@@ -59,6 +81,7 @@ const profileWall = {
     SET_POST: (state, payload) => {
 
       payload.new_post.seen = false;
+      payload.new_post.post_likes = [];
 
       state.posts.unshift(payload.new_post);
     },
@@ -142,14 +165,21 @@ const profileWall = {
       state.postInputPlaceholder = parseInt(payload.baseProfileUserId) === payload.currentUserId ? currentUser : userViewed;
     },
 
-    OPEN_MODAL_FORM: (state) => {
+    OPEN_MODAL: (state, payload) => {
 
-      state.modalFormIsOpen = true;
+      state.modalIsOpen = true;
+      state.activeModal = payload.modal;
+
+      if (payload.activeFlagPostId !== null) {
+        state.activeFlagPostId = payload.activeFlagPostId;
+      }
     },
 
-    CLOSE_MODAL_FORM: (state) => {
+    CLOSE_MODAL: (state) => {
 
-      state.modalFormIsOpen = false;
+      state.modalIsOpen = false;
+      state.activeModal = '';
+      state.activeFlagPostId = null;
     },
 
     CURRENT_USER_NAME: (state, payload) => {
@@ -180,23 +210,42 @@ const profileWall = {
       state.responseError = true;
     },
 
-    LIKE_POST:(state, payload) => {
-      const postIndex = state.posts.findIndex((post) => post.id === payload.postId);
+    LIKE_POST:(state, { new_like }) => {
+      const postIndex = state.posts.findIndex((post) => post.id === new_like.post_id);
 
-      state.posts[postIndex].post_likes = [];
-      state.posts[postIndex].post_likes.push(
-          {
-            name: state.currentUserFullName,
-            user_id: payload.currentUserId
-          });
+      state.posts[postIndex].post_likes =  [];
+      state.posts[postIndex].post_likes.push(new_like);
       state.posts[postIndex].likes = state.posts[postIndex].likes + 1;
     },
 
     UNLIKE_POST: (state, payload) => {
+
       const postIndex = state.posts.findIndex(post => post.id === payload.post_id);
       const likeIndex = state.posts[postIndex].post_likes.findIndex(lk => lk.id === payload.id);
 
       state.posts[postIndex].post_likes.splice(likeIndex, 1);
+    },
+
+    SET_ALREADY_FLAGGED_ERROR: (state, payload) => {
+
+      state.alreadyFlaggedError = payload;
+    },
+
+    CLEAR_ALREADY_FLAGGED_ERROR:(state) => {
+
+      state.alreadyFlaggedError = '';
+    },
+
+    RESET_FLAGGED_OPTIONS: (state) => {
+
+      state.flaggedOptions.forEach((flaggedOption) => {
+
+        flaggedOption.selected = false;
+      });
+    },
+
+    FLAG_POST_FINISHED : (state, payload) => {
+      state.flagPostFinished = payload;
     },
   },
 
@@ -282,8 +331,6 @@ const profileWall = {
         );
           commit('DELETE_POST', payload.id);
       } catch (e) {
-
-        console.log('DELETE_POST err: ', e.response);
         commit('RESPONSE_ERROR');
       }
     },
@@ -307,8 +354,7 @@ const profileWall = {
           }
         );
 
-       commit('LIKE_POST', payload);
-
+       commit('LIKE_POST', response.data);
       } catch (e) {
 
         console.log(e.response);
@@ -330,14 +376,41 @@ const profileWall = {
             data: payload,
           }
           )
-          console.log('UNLIKE_POST SUCC: ',response);
-
         commit('UNLIKE_POST', payload);
       } catch(e) {
 
         console.log('UNLIKE_POST ERR: ',e.response);
       }
+    },
+
+  async FLAG_POST ({ state, getters, commit }, payload) {
+
+    try {
+
+      const response = await axios(
+          {
+            method: 'POST',
+            url: `/api/auth/flagged-posts/store`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            data: {
+                post_id: payload.postId,
+                user_id: payload.userId,
+                reasons: getters.selectedFlaggedOptions,
+            },
+          }
+        );
+
+        commit('FLAG_POST_FINISHED', true);
+
+    } catch (e) {
+
+          commit('SET_ALREADY_FLAGGED_ERROR', e.response.data.error);
+          commit('FLAG_POST_FINISHED', true);
     }
+  }
   }
 };
 

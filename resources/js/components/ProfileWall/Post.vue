@@ -1,5 +1,9 @@
 <template>
     <div :data-id="post.id" ref="post" class="post__container">
+        <FlaggedOptions
+            :post="post"
+            @flagpost="handleFlagPost"
+        />
         <div class="post_top__container">
             <div class="post_top__column">
                 <div class="post_author_profile_pic__container">
@@ -112,6 +116,7 @@ import PostActions from "./PostActions.vue";
 import Likes from "./Likes.vue";
 import ThumbsUpIcon from "../Icons/ThumbsUpIcon.vue";
 import CommentTrigger from "./CommentTrigger.vue";
+import FlaggedOptions from './FlaggedOptions.vue';
 
 export default {
     name: "Post",
@@ -130,13 +135,15 @@ export default {
         PostActions,
         Likes,
         ThumbsUpIcon,
-        CommentTrigger
+        CommentTrigger,
+        FlaggedOptions,
     },
 
     data() {
         return {
             isPostOptionsOpen: false,
-            debounceID: ""
+            debounceID: "",
+            errorID: '',
         };
     },
 
@@ -158,9 +165,19 @@ export default {
 
     beforeDestroy() {
         this.$refs.post.removeEventListener("click", this.closeOptionsFallback);
+        clearTimeout(this.debounceID);
+        clearTimeout(this.errorID);
     },
 
     computed: {
+
+        ...mapState('profileWall',
+            [
+                'alreadyFlaggedError',
+                'flagPostFinished'
+            ]
+        ),
+
         ...mapGetters("user",
             [
                 "getUserId"
@@ -210,10 +227,20 @@ export default {
 
     methods: {
 
+        ...mapMutations('profileWall',
+            [
+                'CLOSE_MODAL',
+                'CLEAR_ALREADY_FLAGGED_ERROR',
+                'RESET_FLAGGED_OPTIONS',
+                'FLAG_POST_FINISHED'
+            ]
+        ),
+
         ...mapActions("profileWall",
             [
                 "LIKE_POST",
                 'UNLIKE_POST',
+                'FLAG_POST',
             ]
         ),
 
@@ -228,6 +255,7 @@ export default {
         },
 
         async handleAddLike(payload) {
+
             this.debounce(async () => {
                 await this.LIKE_POST({
                     postId: payload,
@@ -241,6 +269,33 @@ export default {
             this.debounce(async () => {
                 await this.UNLIKE_POST(payload);
             }, 350);
+        },
+
+        async handleFlagPost (payload) {
+
+            this.debounce(async () => {
+
+                    await this.FLAG_POST({ postId: payload, userId: this.getUserId });
+
+                    if (this.flagPostFinished) {
+
+                        if (this.alreadyFlaggedError.length) {
+
+                            this.errorID = setTimeout(() => {
+
+                            this.CLEAR_ALREADY_FLAGGED_ERROR();
+                            this.RESET_FLAGGED_OPTIONS();
+                            this.FLAG_POST_FINISHED(false);
+                            this.CLOSE_MODAL();
+                        }, 2500);
+
+                        } else {
+                            this.RESET_FLAGGED_OPTIONS();
+                            this.FLAG_POST_FINISHED(false);
+                            this.CLOSE_MODAL();
+                        }
+                    }
+            }, 400);
         },
 
         debounce(fn, delay = 400) {
@@ -270,6 +325,7 @@ export default {
         rgb(0 0 0 / 4%) 0px 10px 10px -5px;
     margin-bottom: 1.5rem;
     box-sizing: border-box;
+    position: relative;
 }
 
 .post_top__container {

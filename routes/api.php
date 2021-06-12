@@ -16,6 +16,7 @@ use App\Http\Controllers\General\NetworkController;
 use App\Http\Controllers\General\UserController;
 use App\Http\Controllers\General\PostController;
 use App\Http\Controllers\General\PostLikeController;
+use App\Http\Controllers\General\FlaggedPostController;
 
 
 /*
@@ -64,3 +65,4 @@ Route::get('/auth/posts', [PostController::class, 'index'])->middleware('auth:ap
 Route::delete('/auth/posts/{id}/delete', [PostController::class, 'delete'])->middleware('auth:api');
 Route::post('/auth/post-likes/store', [PostLikeController::class, 'store'])->middleware('auth:api');
 Route::delete('/auth/post-likes/{id}/delete', [PostLikeController::class, 'delete'])->middleware('auth:api');
+Route::post('/auth/flagged-posts/store', [FlaggedPostController::class, 'store'])->middleware('auth:api');

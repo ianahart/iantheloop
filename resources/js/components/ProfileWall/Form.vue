@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-form" appear>
-    <div v-if="modalFormIsOpen && dataLoaded" class="profile_form__container">
+    <div v-if="modalIsOpen && dataLoaded && activeModal === 'create_post'" class="profile_form__container">
       <header>
         <h3>Create a Post</h3>
         <div @click="closeForm">
@@ -137,7 +137,8 @@
 
       ...mapState('profileWall',
         [
-          'modalFormIsOpen',
+          'modalIsOpen',
+          'activeModal',
           'postInputText',
           'currentUserFullName',
           'currentUserFirstName',
@@ -154,7 +155,7 @@
 
       ...mapMutations('profileWall',
         [
-          'CLOSE_MODAL_FORM',
+          'CLOSE_MODAL',
           'SET_POST_INPUT_TEXT',
           'SET_INITIAL_POST_INPUT_TEXT',
           'SET_FILE',
@@ -184,7 +185,7 @@
 
       closeForm () {
 
-        this.CLOSE_MODAL_FORM();
+        this.CLOSE_MODAL();
       },
 
       removeMedia(type) {
@@ -302,7 +303,7 @@
 
             this.RESET_POST_STATE();
             this.RESET_POST_ERRORS();
-            this.CLOSE_MODAL_FORM();
+            this.CLOSE_MODAL();
           }
 
         } else {

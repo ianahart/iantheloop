@@ -4,7 +4,7 @@
     class="post_user_actions__container"
   >
     <div
-      @click="flagPost(postId, currentUserId)"
+      @click="openFlagModal"
       v-if="currentUserId !== authorUserId && authorUserId !== subjectUserId"
       class="post_user_actions_flag"
     >
@@ -62,15 +62,21 @@
 
     methods: {
 
+      ...mapMutations('profileWall',
+        [
+          'OPEN_MODAL'
+        ]
+      ),
+
       ...mapActions('profileWall',
         [
           'DELETE_POST'
         ]
       ),
 
-      flagPost(id) {
+      openFlagModal () {
 
-        console.log('Post flagged: ', id);
+        this.OPEN_MODAL({ modal: 'flag_post', activeFlagPostId: this.postId });
       },
 
       async deletePost(id, currentUserId) {

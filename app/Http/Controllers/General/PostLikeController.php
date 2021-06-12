@@ -37,12 +37,14 @@ class PostLikeController extends Controller
             $postLikes->setCurrentUserId(intval($request->all()['current_user_id']));
 
             $postLikes->addLikeToPost();
+            $newLike = $postLikes->getNewLike();
 
 
             return response()
                 ->json(
                     [
                         'msg' => 'Post has been liked',
+                        'new_like' => $newLike,
                     ],
                     201
                 );

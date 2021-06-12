@@ -1,5 +1,5 @@
 <template>
-  <div v-if="modalFormIsOpen" class="profile_modal_form__modal">
+  <div v-if="modalIsOpen" class="profile_modal_form__modal">
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 
   export default {
 
-    name: 'ModalForm',
+    name: 'Modal',
 
 
     components: {
@@ -29,15 +29,13 @@
 
       ...mapState('profileWall',
         [
-          'modalFormIsOpen'
+          'modalIsOpen'
         ]
       ),
     },
 
     methods : {
 
-      resetModalForm () {
-      },
     },
   }
 </script>

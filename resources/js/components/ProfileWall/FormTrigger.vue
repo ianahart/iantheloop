@@ -85,12 +85,12 @@
 
       ...mapMutations('profileWall',
         [
-          'OPEN_MODAL_FORM'
+          'OPEN_MODAL'
         ]
       ),
       launchPostForm () {
 
-        this.OPEN_MODAL_FORM();
+        this.OPEN_MODAL({ modal: 'create_post', activeFlagPostId: '' });
       },
     },
   }

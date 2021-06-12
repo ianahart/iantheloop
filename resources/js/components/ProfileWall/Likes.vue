@@ -50,6 +50,7 @@
       }
     },
 
+
     computed : {
 
       hasCurUserLiked() {

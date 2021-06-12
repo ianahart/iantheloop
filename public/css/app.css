@@ -3270,6 +3270,322 @@ div.about_profile_work__row p {
   color: #4e5760;
   margin-left: 0.1rem;
 }
+.not_found__container {
+  background-color: #f2f2f2;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.not_found__content {
+  background-color: #fff;
+  box-sizing: border-box;
+  height: 90%;
+  width: 90%;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.not_found__content h1, .not_found__content h3, .not_found__content p {
+  color: #474752;
+}
+.not_found__content h1 {
+  font-size: 5rem;
+}
+.not_found__content h3 {
+  width: 75%;
+}
+.not_found__links {
+  display: flex;
+  align-items: center;
+}
+.not_found__links a, .not_found__links p {
+  display: block;
+  margin: 0.5rem;
+  color: #ff0033;
+}
+.not_found__links p {
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+.not_found__content {
+    flex-direction: column;
+}
+.not_found__content img {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.not_found__content h3, .not_found__content h1, .not_found__content p {
+    text-align: center;
+}
+.not_found__content h3 {
+    margin: 0 auto;
+}
+.not_found__links {
+    justify-content: center;
+}
+}
+.create_profile__icon {
+  width: 25px;
+  height: 25px;
+  color: #fcfcfc;
+}
+.profile__icon__container {
+  position: relative;
+  cursor: pointer;
+}
+.profile__icon__container svg {
+  fill: #fb4d70;
+  pointer-events: none;
+}
+.profile__icon__container img {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.profile__icon {
+  color: #484aa4;
+  height: 42px;
+  width: 42px;
+  pointer-events: none;
+}
+.profile_online_indicator {
+  border-radius: 50%;
+  position: absolute;
+  bottom: 10px;
+  right: 2px;
+  pointer-events: none;
+}
+/*
+  IMPORTS
+*/
+/*
+  IMPORTS
+*/
+.company__logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.company__logo img {
+  width: 75px;
+  height: 60px;
+}
+.logged_in_nav {
+  background-color: transparent;
+}
+.logged_in_nav a {
+  color: #3b3b44;
+}
+.default_nav {
+  background-color: #3b3b44;
+}
+.default_nav a {
+  color: #fcfcfc;
+}
+.navbar__desktop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.1rem 0.7rem;
+}
+.navbar__desktop p {
+  margin: 1rem auto;
+  text-align: center;
+}
+.logo__container {
+  display: flex;
+  justify-content: space-between;
+}
+.nav__links__desktop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  width: 80%;
+  margin-bottom: 0;
+}
+.nav__links__desktop li {
+  margin: 0 0.5rem;
+  list-style-type: none;
+}
+.nav__links__desktop li:first-of-type {
+  margin-right: auto;
+}
+.nav__links__desktop a {
+  font-size: 0.85rem;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: 0.1rem;
+  font-weight: 100;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.25s ease-in-out;
+}
+.nav__links__desktop a:hover {
+  border-bottom: 3px solid #fb4d70;
+}
+.nav__links__desktop a:first-of-type {
+  margin-right: auto;
+}
+@media (max-width: 600px) {
+.logo__container {
+    width: 90%;
+}
+}
+/*
+  IMPORTS
+*/
+.close__icon {
+  width: 24px;
+  cursor: pointer;
+  color: #fcfcfc;
+}
+.flag-left-enter-active, .flag-left-leave-active {
+  transition: all 0.4s ease-out;
+}
+.flag-left-enter, .flag-left-leave-to {
+  transform: translate(100px);
+  opacity: 0;
+}
+.flag-right-enter-active, .flag-right-leave-active {
+  transition: all 0.4s ease-out;
+}
+.flag-right-enter, .flag-right-leave-to {
+  transform: translate(-100px);
+  opacity: 0;
+}
+.remove_selected__flag_option {
+  position: absolute;
+  top: -1px;
+  right: 1px;
+}
+.flag_post_option__container {
+  color: #fff;
+}
+.flag_post_option__container p {
+  font-size: 0.8rem;
+  font-family: "Open Sans", sans-serif;
+  margin: 0.1rem;
+  background-color: #323239;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-radius: 12px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.45s ease-out;
+}
+.flag_post_option__container p:hover {
+  background-color: #3b3b44;
+}
+.flag_option_group {
+  position: relative;
+}
+.flag_option_left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.flag_option_left p:hover {
+  transform: rotate(6deg);
+}
+.flag_option_selected {
+  margin-right: auto;
+  max-width: 150px;
+}
+.flag_option_selected svg {
+  height: 12px;
+  width: 12px;
+}
+.flag_option_selected p {
+  margin: 0.2rem 0;
+  background-color: rgba(72, 74, 164, 0.5);
+}
+.flag_option_selected p:hover {
+  background-color: rgba(72, 74, 164, 0.8);
+  transform: rotate(6deg);
+}
+.flag_option_right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.flag_option_right p:hover {
+  transform: rotate(-6deg);
+}
+.flag-post-modal-enter-active, .flag-post-modal-leave-active {
+  transition: all 0.4s ease-out;
+}
+.flag-post-modal-enter, .flag-post-modal-leave-to {
+  transform: translate(50px, 100px);
+  opacity: 0;
+}
+.flag_post_options__container {
+  background-color: #3d3d47;
+  box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  position: absolute;
+  padding: 0.5rem;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 16;
+}
+.flagged_post__options_instructions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.flagged_post__options_instructions p {
+  margin: 0.1rem;
+  font-size: 0.85rem;
+  font-family: "Open Sans", sans-serif;
+  color: #f2f2f2;
+}
+#already_flagged_error {
+  margin: 0.1rem;
+  font-size: 0.85rem;
+  font-family: "Open Sans", sans-serif;
+  color: #ff0033;
+}
+.flagged_post_divider {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  margin: 0.2rem 0;
+}
+.flag_post__exit {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+}
+.flag_post_options_btn_container {
+  margin: 1.8rem auto 1rem auto;
+  display: flex;
+  justify-content: flex-end;
+}
+.flag_post_options_btn_container button {
+  cursor: pointer;
+  color: #fff;
+  background-color: #31326f;
+  transition: all 0.4s ease-out;
+  border-radius: 8px;
+  padding: 0.3rem 0.4rem;
+  border: none;
+  width: 150px;
+  height: 35px;
+}
+.flag_post_options_btn_container button:hover {
+  background-color: #3d3f8b;
+}
 .post__container {
   background-color: #f2f2f2;
   border: 1px solid #f2f2f2;
@@ -3280,6 +3596,7 @@ div.about_profile_work__row p {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
   margin-bottom: 1.5rem;
   box-sizing: border-box;
+  position: relative;
 }
 .post_top__container {
   box-sizing: border-box;
@@ -3458,183 +3775,6 @@ div.about_profile_work__row p {
 
 
 
-.not_found__container {
-  background-color: #f2f2f2;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-}
-.not_found__content {
-  background-color: #fff;
-  box-sizing: border-box;
-  height: 90%;
-  width: 90%;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.not_found__content h1, .not_found__content h3, .not_found__content p {
-  color: #474752;
-}
-.not_found__content h1 {
-  font-size: 5rem;
-}
-.not_found__content h3 {
-  width: 75%;
-}
-.not_found__links {
-  display: flex;
-  align-items: center;
-}
-.not_found__links a, .not_found__links p {
-  display: block;
-  margin: 0.5rem;
-  color: #ff0033;
-}
-.not_found__links p {
-  text-decoration: underline;
-  cursor: pointer;
-}
-@media (max-width: 600px) {
-.not_found__content {
-    flex-direction: column;
-}
-.not_found__content img {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-.not_found__content h3, .not_found__content h1, .not_found__content p {
-    text-align: center;
-}
-.not_found__content h3 {
-    margin: 0 auto;
-}
-.not_found__links {
-    justify-content: center;
-}
-}
-.create_profile__icon {
-  width: 25px;
-  height: 25px;
-  color: #fcfcfc;
-}
-.profile__icon__container {
-  position: relative;
-  cursor: pointer;
-}
-.profile__icon__container svg {
-  fill: #fb4d70;
-  pointer-events: none;
-}
-.profile__icon__container img {
-  height: 42px;
-  width: 42px;
-  border-radius: 50%;
-  pointer-events: none;
-}
-.profile__icon {
-  color: #484aa4;
-  height: 42px;
-  width: 42px;
-  pointer-events: none;
-}
-.profile_online_indicator {
-  border-radius: 50%;
-  position: absolute;
-  bottom: 10px;
-  right: 2px;
-  pointer-events: none;
-}
-/*
-  IMPORTS
-*/
-/*
-  IMPORTS
-*/
-.company__logo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.company__logo img {
-  width: 75px;
-  height: 60px;
-}
-.logged_in_nav {
-  background-color: transparent;
-}
-.logged_in_nav a {
-  color: #3b3b44;
-}
-.default_nav {
-  background-color: #3b3b44;
-}
-.default_nav a {
-  color: #fcfcfc;
-}
-.navbar__desktop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.1rem 0.7rem;
-}
-.navbar__desktop p {
-  margin: 1rem auto;
-  text-align: center;
-}
-.logo__container {
-  display: flex;
-  justify-content: space-between;
-}
-.nav__links__desktop {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  width: 80%;
-  margin-bottom: 0;
-}
-.nav__links__desktop li {
-  margin: 0 0.5rem;
-  list-style-type: none;
-}
-.nav__links__desktop li:first-of-type {
-  margin-right: auto;
-}
-.nav__links__desktop a {
-  font-size: 0.85rem;
-  font-family: "Secular One", sans-serif;
-  letter-spacing: 0.1rem;
-  font-weight: 100;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: all 0.25s ease-in-out;
-}
-.nav__links__desktop a:hover {
-  border-bottom: 3px solid #fb4d70;
-}
-.nav__links__desktop a:first-of-type {
-  margin-right: auto;
-}
-@media (max-width: 600px) {
-.logo__container {
-    width: 90%;
-}
-}
-/*
-  IMPORTS
-*/
-.close__icon {
-  width: 24px;
-  cursor: pointer;
-  color: #fcfcfc;
-}
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s;
 }
