@@ -22,8 +22,8 @@
 <script>
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import FormTrigger from './FormTrigger.vue';
-  import Posts from './Posts.vue';
+  import FormTrigger from './Post/FormTrigger.vue';
+  import Posts from './Post/Posts.vue';
 
   export default {
 

@@ -30,6 +30,11 @@ const profile = {
       return state.baseProfileData;
     },
 
+    getProfileOwner(state) {
+
+      return parseInt(state.baseProfileData.user_id);
+    },
+
     getProfileLinks (state) {
 
       let isCurrentUserProfile;

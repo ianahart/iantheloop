@@ -131,18 +131,18 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-import HorizontalDotsIcon from "../Icons/HorizontalDotsIcon.vue";
-import PlaySolidIcon from "../Icons/PlaySolidIcon.vue";
-import VideoPlayer from "./VideoPlayer.vue";
-import DefaultProfileIcon from "../Icons/DefaultProfileIcon.vue";
+import HorizontalDotsIcon from "../../Icons/HorizontalDotsIcon.vue";
+import PlaySolidIcon from "../../Icons/PlaySolidIcon.vue";
+import VideoPlayer from "../VideoPlayer.vue";
+import DefaultProfileIcon from "../../Icons/DefaultProfileIcon.vue";
 import PostActions from "./PostActions.vue";
 import Likes from "./Likes.vue";
-import ThumbsUpIcon from "../Icons/ThumbsUpIcon.vue";
-import CommentTrigger from "./CommentTrigger.vue";
+import ThumbsUpIcon from "../../Icons/ThumbsUpIcon.vue";
+import CommentTrigger from "../Comment/CommentTrigger.vue";
 import FlaggedOptions from './FlaggedOptions.vue';
-import CommentForm from './CommentForm.vue';
-import Comments from './Comments.vue';
-import Comment from './Comment.vue';
+import CommentForm from '../Comment/CommentForm.vue';
+import Comments from '../Comment/Comments.vue';
+import Comment from '../Comment/Comment.vue';
 
 
 export default {

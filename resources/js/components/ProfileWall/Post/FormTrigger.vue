@@ -49,9 +49,9 @@
 
   import { mapState, mapMutations } from 'vuex';
 
-  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
-  import PictureSolidIcon from '../Icons/PictureSolidIcon.vue';
-  import VideoSolidIcon from '../Icons/VideoSolidIcon.vue';
+  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
+  import PictureSolidIcon from '../../Icons/PictureSolidIcon.vue';
+  import VideoSolidIcon from '../../Icons/VideoSolidIcon.vue';
   import Form from './Form.vue';
 
   export default {

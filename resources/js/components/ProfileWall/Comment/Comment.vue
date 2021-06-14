@@ -16,19 +16,28 @@
         <h4>{{ postComment.full_name }}</h4>
         <p>{{ postComment.comment_text }}</p>
       </div>
+      <CommentOptions
+        @delete="deleteComment"
+        :postComment="postComment"
+      />
     </div>
-     <div class="single_comment_interactions">
-       <p @click="likeComment(postComment)">Like</p>
-       <span></span>
-       <p @click="replyToComment(postComment)">Reply</p>
-       <p>{{ postComment.posted_date }}</p>
+     <div class="xs_spacer_top">
+       <CommentInteractions
+         @like="likeComment"
+         @reply="replyToComment"
+         :postComment="postComment"
+       />
      </div>
     </div>
 </template>
 
 <script>
 
-  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
+  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+
+  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
+  import CommentInteractions from './CommentInteractions.vue';
+  import CommentOptions from './CommentOptions.vue';
 
   export default {
 
@@ -41,12 +50,14 @@
 
     components: {
       DefaultProfileIcon,
+      CommentInteractions,
+      CommentOptions,
     },
 
     data () {
 
       return {
-
+        debounceID: '',
       }
     },
 
@@ -54,7 +65,17 @@
 
     },
 
+    beforeDestroy() {
+      clearTimeout(this.debounceID);
+    },
+
     methods: {
+
+      ...mapActions('profileWall',
+        [
+          'DELETE_COMMENT'
+        ]
+      ),
 
       likeComment(comment) {
 
@@ -65,6 +86,35 @@
 
         console.log('Replying to comment: ', comment.id);
       },
+
+      async deleteComment(comment) {
+
+        try {
+
+          await this.DELETE_COMMENT(
+            {
+              commentID: comment.id,
+              postID: comment.post_id,
+              userID: comment.user_id,
+            });
+
+        } catch(e) {
+
+          console.log('Comment.vue: ', e);
+        }
+      },
+
+      debounce(fn, delay = 400) {
+          return ((...args) => {
+              clearTimeout(this.debounceID);
+
+              this.debounceID = setTimeout(() => {
+                  this.debounceID = null;
+
+                  fn(...args);
+              }, delay);
+          })();
+        }
     },
   }
 
@@ -120,32 +170,4 @@
     }
   }
 
-  .single_comment_interactions {
-    margin-top: 0.3rem;
-    display: flex;
-    align-items: center;
-
-    p {
-      margin: 0.1rem 0.3rem;
-      color: $themeLightBlue;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.25s ease-out;
-
-      &:hover {
-        color: darken($themeBlue, 5);
-      }
-      &:last-of-type {
-        color: gray;
-        font-size: 0.6rem;
-      }
-    }
-
-    span {
-      background-color: darken($primaryBlack, 5);
-      height: 3px;
-      width: 3px;
-      border-radius: 50%;
-    }
-  }
 </style>

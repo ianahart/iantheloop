@@ -98,11 +98,11 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import CloseSolidIcon from '../Icons/CloseSolidIcon.vue';
-  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
-  import PictureSolidIcon from '../Icons/PictureSolidIcon.vue';
-  import VideoSolidIcon from '../Icons/VideoSolidIcon.vue';
-  import VideoPlayer from './VideoPlayer.vue';
+  import CloseSolidIcon from '../../Icons/CloseSolidIcon.vue';
+  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
+  import PictureSolidIcon from '../../Icons/PictureSolidIcon.vue';
+  import VideoSolidIcon from '../../Icons/VideoSolidIcon.vue';
+  import VideoPlayer from '../VideoPlayer.vue';
 
   export default {
 

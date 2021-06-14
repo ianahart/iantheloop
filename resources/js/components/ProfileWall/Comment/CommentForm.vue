@@ -33,7 +33,7 @@
 <script>
 
   import { mapState, mapMutations, mapActions } from 'vuex';
-  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
+  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
 
   export default {
 

@@ -3,9 +3,12 @@
 namespace App\Helpers;
 
 use App\Models\Comment as CommentModel;
+// use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
+
 use DateTime;
 use App\Exceptions\CommentMaxLimitException;
-
+use Exception;
 
 class Comment
 {
@@ -31,6 +34,11 @@ class Comment
     $this->commentText = $commentText;
   }
 
+  public function setCommentId($commentId)
+  {
+    return $this->commentId = $commentId;
+  }
+
   public function getError()
   {
     return isset($this->error) ? $this->error : NULL;
@@ -45,7 +53,6 @@ class Comment
   *@param void
   *@return object $latestComment
   */
-
   public function addComment()
   {
 
@@ -109,5 +116,26 @@ class Comment
       $fullName .= strtoupper(substr($value, 0, 1))  . substr($value, 1) . ' ';
     }
     return trim($fullName);
+  }
+
+  public function deleteComment()
+  {
+    try {
+
+      $comment = CommentModel::find($this->commentId);
+
+      $isCommentAuthor = $comment->user_id === Auth::user()->id;
+      $isWallOwner = Auth::user()->id === $comment->post->subject_user_id;
+
+      if (!$isCommentAuthor && !$isWallOwner) {
+        throw new Exception('Forbidden action: cannot delete comment that is not yours');
+      }
+      unset($comment->post);
+
+      $comment->delete();
+    } catch (Exception $e) {
+
+      $this->error = $e->getMessage();
+    }
   }
 }

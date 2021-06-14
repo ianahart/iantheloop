@@ -28,7 +28,7 @@
 
   import { mapState, mapMutations, mapActions } from 'vuex';
 
-  import FlagSolidIcon from '../Icons/FlagSolidIcon.vue';
+  import FlagSolidIcon from '../../Icons/FlagSolidIcon.vue';
 
   export default {
 

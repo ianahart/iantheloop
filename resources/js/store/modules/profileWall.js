@@ -83,6 +83,7 @@ const profileWall = {
 
       payload.new_post.seen = false;
       payload.new_post.post_likes = [];
+      payload.new_post.post_comments = [];
 
       state.posts.unshift(payload.new_post);
     },
@@ -257,10 +258,12 @@ const profileWall = {
 
         state.posts[index].post_comments = [];
         state.posts[index].post_comments.unshift(latest_comment);
+        state.posts[index].comments_count++;
 
         return;
       }
       state.posts[index].post_comments.unshift(latest_comment);
+      state.posts[index].comments_count++;
     },
 
 
@@ -295,6 +298,12 @@ const profileWall = {
 
       state.commentErrors = [];
     },
+
+    DELETE_COMMENT: (state, payload) => {
+      const postIndex = state.posts.findIndex((post) => post.id === payload.postID);
+      const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.commentID);
+      state.posts[postIndex].post_comments.splice(commentIndex, 1);
+    }
   },
 
   actions: {
@@ -305,15 +314,15 @@ const profileWall = {
 
          const data = new FormData();
 
-      let rawData = {
-        subject_user_id: payload.subject_user_id,
-        author_user_id: payload.author_user_id,
-        post_text: state.postInputText,
-      }
+        let rawData = {
+          subject_user_id: payload.subject_user_id,
+          author_user_id: payload.author_user_id,
+          post_text: state.postInputText,
+        }
 
-      data.append('data', JSON.stringify(rawData));
-      data.append('videofile', state.postInputVideo.file ?? '');
-      data.append('photofile', state.postInputPhoto.file ?? '');
+        data.append('data', JSON.stringify(rawData));
+        data.append('videofile', state.postInputVideo.file ?? '');
+        data.append('photofile', state.postInputPhoto.file ?? '');
 
        let response;
 
@@ -478,12 +487,36 @@ const profileWall = {
       commit('SET_COMMENT', response.data);
       commit('SET_REQUEST_FINISHED', true);
     } catch(e) {
-      console.log(e);
       commit('SET_COMMENT_ERROR', { response: e.response, post_id: payload.post_id });
       commit('SET_REQUEST_FINISHED', true);
     }
+  },
+
+  async DELETE_COMMENT({ state, commit }, payload) {
+
+    try {
+
+      const response = await axios(
+        {
+          method: 'DELETE',
+          url: `/api/auth/comments/${payload.commentID}/delete?uid=${payload.userID}`,
+          headers: {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+          }
+        }
+      );
+      console.log('Actions: @DELETE_COMMENT SUCC: ', response);
+      if (response.status === 200) {
+
+        commit('DELETE_COMMENT', payload);
+      }
+    } catch(e) {
+
+      console.log('Actions: @DELETE_COMMENT ERR: ', e);
+    }
   }
-}
+ }
 };
 
 export default profileWall;

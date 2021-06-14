@@ -8,9 +8,8 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\Status;
-use Namshi\JOSE\JWT;
 use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
+
 
 class LoginController extends Controller
 {

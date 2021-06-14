@@ -62,4 +62,48 @@ class CommentController extends Controller
                 );
         }
     }
+
+    /*
+    *Delete a comment if owner of the comment
+    *@param Request $request
+    *@param String  $commentID
+    *@return JsonResponse
+    */
+    public function delete(Request $request, string $commentID)
+    {
+        try {
+
+            $comment = new Comment;
+
+            $comment->setUserId(intval($request->query('uid')));
+            $comment->setCommentId(intval($commentID));
+
+            $comment->deleteComment();
+
+            $error = $comment->getError();
+
+            if (gettype($error) === 'string') {
+                throw new Exception($error);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'successfully deleted',
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Forbidden action',
+                        'error' => $e->getMessage(),
+                        'intercept' => false
+                    ],
+                    403
+                );
+        }
+    }
 }

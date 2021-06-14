@@ -43,7 +43,7 @@
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
   import FlaggedOption from './FlaggedOption.vue';
-  import CloseIcon from '../Icons/CloseIcon.vue'
+  import CloseIcon from '../../Icons/CloseIcon.vue'
 
   export default {
 

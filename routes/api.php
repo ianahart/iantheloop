@@ -67,3 +67,4 @@ Route::post('/auth/post-likes/store', [PostLikeController::class, 'store'])->mid
 Route::delete('/auth/post-likes/{id}/delete', [PostLikeController::class, 'delete'])->middleware('auth:api');
 Route::post('/auth/flagged-posts/store', [FlaggedPostController::class, 'store'])->middleware('auth:api');
 Route::post('/auth/comments/store', [CommentController::class, 'store'])->middleware('auth:api');
+Route::delete('/auth/comments/{commentID}/delete', [CommentController::class, 'delete'])->middleware('auth:api');

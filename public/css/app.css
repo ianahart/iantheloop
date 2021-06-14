@@ -563,6 +563,10 @@ h2 {
   color: #fb4d70;
 }
 
+.xs_spacer_top {
+  margin-top: 0.25rem;
+}
+
 .profile_image_rel_md {
   border-radius: 50%;
   height: 75px;
@@ -3640,6 +3644,60 @@ div.about_profile_work__row p {
   border-radius: 8px;
   background-color: rgba(255, 0, 51, 0.8);
 }
+.single_comment_interactions {
+  display: flex;
+  align-items: center;
+}
+.single_comment_interactions p {
+  margin: 0.1rem 0.3rem;
+  color: #484aa4;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.25s ease-out;
+}
+.single_comment_interactions p:hover {
+  color: #292a5d;
+}
+.single_comment_interactions p:last-of-type {
+  color: gray;
+  font-size: 0.6rem;
+}
+.single_comment_interactions span {
+  background-color: #2f2f36;
+  height: 3px;
+  width: 3px;
+  border-radius: 50%;
+}
+.comment_options_container {
+  margin-left: 0.2rem;
+  cursor: pointer;
+  position: relative;
+}
+.comment_options_pop_up {
+  position: absolute;
+  background-color: #e5e5e5;
+  top: 18px;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  left: -20px;
+  width: 60px;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  transition: all 0.25s ease-out;
+}
+.comment_options_pop_up:hover {
+  background-color: #ededed;
+}
+.comment_options_pop_up p {
+  color: #4e5760;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.25s ease-out;
+  margin: 0.1rem;
+}
+.comment_options_pop_up p:hover {
+  color: #59646e;
+}
 .single_comment_container {
   box-sizing: border-box;
   padding: 0.5rem;
@@ -3680,31 +3738,6 @@ div.about_profile_work__row p {
   border-radius: 50%;
   color: #fb4d70;
   background-color: #484aa4;
-}
-.single_comment_interactions {
-  margin-top: 0.3rem;
-  display: flex;
-  align-items: center;
-}
-.single_comment_interactions p {
-  margin: 0.1rem 0.3rem;
-  color: #484aa4;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.25s ease-out;
-}
-.single_comment_interactions p:hover {
-  color: #292a5d;
-}
-.single_comment_interactions p:last-of-type {
-  color: gray;
-  font-size: 0.6rem;
-}
-.single_comment_interactions span {
-  background-color: #2f2f36;
-  height: 3px;
-  width: 3px;
-  border-radius: 50%;
 }
 .post__container {
   background-color: #f2f2f2;
