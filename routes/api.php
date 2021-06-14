@@ -10,6 +10,7 @@ use App\Http\Controllers\General\NewsFeedController;
 use App\Http\Controllers\Auth\refreshTokenController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\General\CommentController;
 use App\Http\Controllers\General\ProfileController;
 use App\Http\Controllers\general\StatsController;
 use App\Http\Controllers\General\NetworkController;
@@ -41,7 +42,6 @@ Route::post('/auth/token/refresh', [refreshTokenController::class, 'store']);
 Route::post('/auth/recovery', [ForgotPasswordController::class, 'store']);
 Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 
-
 /*
 |--------------------------------------------------------------------------
 | Private Routes
@@ -66,3 +66,4 @@ Route::delete('/auth/posts/{id}/delete', [PostController::class, 'delete'])->mid
 Route::post('/auth/post-likes/store', [PostLikeController::class, 'store'])->middleware('auth:api');
 Route::delete('/auth/post-likes/{id}/delete', [PostLikeController::class, 'delete'])->middleware('auth:api');
 Route::post('/auth/flagged-posts/store', [FlaggedPostController::class, 'store'])->middleware('auth:api');
+Route::post('/auth/comments/store', [CommentController::class, 'store'])->middleware('auth:api');

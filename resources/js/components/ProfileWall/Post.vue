@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class="post__comments_count">
-                <span>0</span>
+                <span>{{ post.comments_count }}</span>
                 <span>comments</span>
             </div>
         </div>
@@ -99,9 +99,32 @@
                 :data="post"
                 :currentUserId="getUserId"
             />
-            <CommentTrigger />
+            <CommentTrigger
+                @toggle="toggleCommentForm"
+            />
         </div>
         <div class="post__divider"></div>
+        <div class="post_comment_row">
+            <CommentForm
+                :post="post"
+                :currentUserProfilePic="currentUserProfilePic"
+                :isCommentFormOpen="isCommentFormOpen"
+                :userId="getUserId"
+                @closeform="closeCommentForm"
+            />
+        </div>
+        <div class="post_comment_row">
+            <div v-if="post.post_comments.length && commentPreviewShowing">
+                <p class="toggle_comments_btn" @click="toggleComments">View more comments...</p>
+                <Comment
+                  :postComment="previewComment"
+                />
+            </div>
+            <Comments
+              v-else-if="post.post_comments.length && !commentPreviewShowing"
+              :post="post"
+            />
+        </div>
     </div>
 </template>
 
@@ -117,6 +140,10 @@ import Likes from "./Likes.vue";
 import ThumbsUpIcon from "../Icons/ThumbsUpIcon.vue";
 import CommentTrigger from "./CommentTrigger.vue";
 import FlaggedOptions from './FlaggedOptions.vue';
+import CommentForm from './CommentForm.vue';
+import Comments from './Comments.vue';
+import Comment from './Comment.vue';
+
 
 export default {
     name: "Post",
@@ -124,7 +151,8 @@ export default {
     props: {
         lastPostItem: Number,
         post: Object,
-        observer: IntersectionObserver
+        observer: IntersectionObserver,
+        currentUserProfilePic: String,
     },
 
     components: {
@@ -137,13 +165,18 @@ export default {
         ThumbsUpIcon,
         CommentTrigger,
         FlaggedOptions,
+        CommentForm,
+        Comments,
+        Comment,
     },
 
     data() {
-        return {
+     return {
             isPostOptionsOpen: false,
+            isCommentFormOpen: false,
             debounceID: "",
             errorID: '',
+            commentPreviewShowing: true,
         };
     },
 
@@ -183,6 +216,12 @@ export default {
                 "getUserId"
             ]
         ),
+
+        previewComment() {
+
+
+            return this.post.post_comments.length ? this.post.post_comments.slice(0, 1)[0] : [];
+        },
 
         postLikesText () {
 
@@ -244,6 +283,14 @@ export default {
             ]
         ),
 
+        toggleComments() {
+            this.commentPreviewShowing = false;
+        },
+
+        closeCommentForm(payload) {
+            this.isCommentFormOpen = payload;
+        },
+
         togglePostOptions() {
             this.isPostOptionsOpen = !this.isPostOptionsOpen;
         },
@@ -252,6 +299,10 @@ export default {
             if (e.target.id !== "postActions") {
                 this.isPostOptionsOpen = false;
             }
+        },
+
+        toggleCommentForm() {
+            this.isCommentFormOpen = !this.isCommentFormOpen;
         },
 
         async handleAddLike(payload) {
@@ -274,21 +325,17 @@ export default {
         async handleFlagPost (payload) {
 
             this.debounce(async () => {
-
                     await this.FLAG_POST({ postId: payload, userId: this.getUserId });
 
                     if (this.flagPostFinished) {
-
                         if (this.alreadyFlaggedError.length) {
 
                             this.errorID = setTimeout(() => {
-
-                            this.CLEAR_ALREADY_FLAGGED_ERROR();
-                            this.RESET_FLAGGED_OPTIONS();
-                            this.FLAG_POST_FINISHED(false);
-                            this.CLOSE_MODAL();
+                                this.CLEAR_ALREADY_FLAGGED_ERROR();
+                                this.RESET_FLAGGED_OPTIONS();
+                                this.FLAG_POST_FINISHED(false);
+                                this.CLOSE_MODAL();
                         }, 2500);
-
                         } else {
                             this.RESET_FLAGGED_OPTIONS();
                             this.FLAG_POST_FINISHED(false);
@@ -474,6 +521,22 @@ export default {
 .post__interactions_container {
     display: flex;
     justify-content: space-evenly;
+}
+
+.post_comment_row {
+    margin: 1rem auto 0.3rem auto;
+}
+
+.toggle_comments_btn {
+    font-size: 0.9rem;
+    color: gray;
+    font-family: 'Open sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+
+    &:hover {
+        color: darken(gray, 5);
+    }
 }
 
 @media (max-width: 600px) {

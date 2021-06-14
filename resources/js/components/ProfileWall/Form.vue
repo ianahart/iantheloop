@@ -142,7 +142,6 @@
           'postInputText',
           'currentUserFullName',
           'currentUserFirstName',
-          'isInputActive',
           'postInputPlaceholder',
           'postInputPhoto',
           'postInputVideo',

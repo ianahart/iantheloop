@@ -91,4 +91,10 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->hasMany(FlaggedPost::class, 'user_id');
     }
+
+    public function comments()
+    {
+
+        return $this->hasMany(Comment::class, 'user_id');
+    }
 }

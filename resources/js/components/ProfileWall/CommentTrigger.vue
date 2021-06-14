@@ -1,5 +1,8 @@
 <template>
-  <div class="comment_trigger__container">
+  <div
+    class="comment_trigger__container"
+    @click="toggleVisibility"
+  >
     <CommentIcon
       className="icon__xsm__dark"
     />
@@ -30,6 +33,9 @@
 
     methods: {
 
+      toggleVisibility () {
+        this.$emit('toggle');
+      }
     }
   }
 </script>

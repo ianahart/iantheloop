@@ -9,6 +9,7 @@
       :post="post"
       :observer="observer"
       :lastPostItem="lastPostItem"
+      :currentUserProfilePic="currentUserProfilePic"
     />
   </div>
 </template>
@@ -25,6 +26,7 @@
 
     props: {
       subjectUserId: String,
+      currentUserProfilePic: String,
     },
 
     components: {

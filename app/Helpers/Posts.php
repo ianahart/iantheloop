@@ -165,12 +165,30 @@ class Posts
       }
 
       $postsCollection = [];
+      $COMMENT_LIMIT = 3;
 
-      foreach ($posts as $value) {
+      foreach ($posts as $post) {
 
-        $value->postLikes;
+        $post->postLikes;
+        $comments = $post->comments()
+          ->orderBy('id', 'DESC')
+          ->paginate($COMMENT_LIMIT);
 
-        $postsCollection[] = $value->toArray();
+        $post->last_comment = $comments[count($comments) - 1];
+        $postComments = [];
+
+        foreach ($comments as $comment) {
+
+          $comment->full_name = $this->formatName($comment->user->full_name);
+          $comment->profile_picture = $comment->user->profile->profile_picture;
+          $comment->posted_date = $this->createPostedDate($comment->created_at);
+
+          unset($comment->user);
+          array_push($postComments, $comment);
+        }
+        $post->post_comments = $postComments;
+        $post->comments_count = $post->comments()->count();
+        $postsCollection[] = $post->toArray();
       }
 
       $enhancedPosts = $this->enhancePosts($postsCollection);

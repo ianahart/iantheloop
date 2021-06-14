@@ -9,6 +9,7 @@
      />
      <Posts
       :subjectUserId="baseProfile.user_id"
+      :currentUserProfilePic="currentUserProfilePic"
      />
    </div>
    <div class="restrict_profile_wall" v-else>

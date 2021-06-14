@@ -6,23 +6,24 @@ const initialState = () => {
   return {
     postsLoaded: false,
     modalIsOpen: false,
-    isInputActive: false,
     responseError: false,
     flagPostFinished: false,
-    alreadyFlaggedError: '',
+    requestFinished: false,
     morePosts: true,
+    postInputTextLength: null,
+    activeFlagPostId: null,
+    lastPostItem: 0,
+    alreadyFlaggedError: '',
     activeModal: '',
     currentUserFullName: '',
     currentUserFirstName: '',
     postInputPlaceholder: '',
     postInputText: '',
-    postInputTextLength: null,
-    activeFlagPostId: null,
-    lastPostItem: 0,
     postInputPhoto: { src: '', file: null, input: ''},
     postInputVideo: {src: '', file: null, input: ''},
     posts: [],
     postErrors: [],
+    commentErrors:[],
     flaggedOptions:[
       {id: 0, reasonText: 'Violence', selected: false},
       {id: 1, reasonText: 'Nudity', selected: false},
@@ -210,6 +211,7 @@ const profileWall = {
       state.responseError = true;
     },
 
+
     LIKE_POST:(state, { new_like }) => {
       const postIndex = state.posts.findIndex((post) => post.id === new_like.post_id);
 
@@ -246,6 +248,52 @@ const profileWall = {
 
     FLAG_POST_FINISHED : (state, payload) => {
       state.flagPostFinished = payload;
+    },
+
+    SET_COMMENT: (state, { latest_comment }) => {
+
+      const index = state.posts.findIndex(post => post.id === latest_comment.post_id);
+      if (!Object.keys(state.posts[index]).includes('post_comments')) {
+
+        state.posts[index].post_comments = [];
+        state.posts[index].post_comments.unshift(latest_comment);
+
+        return;
+      }
+      state.posts[index].post_comments.unshift(latest_comment);
+    },
+
+
+    SET_COMMENT_ERROR:(state, payload) =>{
+
+      if (payload.response.status === 422) {
+
+        const [ error ] = payload.response.data.errors.input;
+
+        state.commentErrors.push(
+          {
+            message: error,
+            post_id: payload.post_id
+          }
+        )
+      } else if (payload.response.status > 399 && payload.response.status < 422) {
+        state.commentErrors.push(
+          {
+            message: payload.response.data.error[0],
+            post_id: payload.post_id,
+          }
+        )
+      }
+    },
+
+    SET_REQUEST_FINISHED: (state, payload) => {
+
+      state.requestFinished = payload;
+    },
+
+    RESET_COMMENT_ERRORS: (state) => {
+
+      state.commentErrors = [];
     },
   },
 
@@ -379,7 +427,6 @@ const profileWall = {
         commit('UNLIKE_POST', payload);
       } catch(e) {
 
-        console.log('UNLIKE_POST ERR: ',e.response);
       }
     },
 
@@ -410,8 +457,33 @@ const profileWall = {
           commit('SET_ALREADY_FLAGGED_ERROR', e.response.data.error);
           commit('FLAG_POST_FINISHED', true);
     }
+  },
+
+  async ADD_COMMENT ({ state, commit }, payload) {
+
+    try {
+
+      const response = await axios(
+        {
+          method: 'POST',
+          url: `/api/auth/comments/store`,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          data: payload,
+        }
+      );
+
+      commit('SET_COMMENT', response.data);
+      commit('SET_REQUEST_FINISHED', true);
+    } catch(e) {
+      console.log(e);
+      commit('SET_COMMENT_ERROR', { response: e.response, post_id: payload.post_id });
+      commit('SET_REQUEST_FINISHED', true);
+    }
   }
-  }
+}
 };
 
 export default profileWall;
