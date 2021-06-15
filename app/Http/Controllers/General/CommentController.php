@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCommentRequest;
 use App\Helpers\Comment;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommentController extends Controller
 {
@@ -103,6 +104,50 @@ class CommentController extends Controller
                         'intercept' => false
                     ],
                     403
+                );
+        }
+    }
+
+    /*
+    *Retrieve the specified post's comments
+    *@param Request $request
+    *@param String  $postID
+    *@return JsonResponse
+    */
+    public function show(Request $request, string $postID)
+    {
+        try {
+
+            $comment = new Comment;
+
+            $comment->setPostId(intval($postID));
+            $comment->setLastComment(intval($request->query('last')));
+
+            $comments = $comment->refillComments();
+
+            $error = $comment->getError();
+
+            if (gettype($error) === 'string') {
+                throw new ModelNotFoundException($error);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success',
+                        'post_comments' => $comments,
+                    ],
+                    200
+                );
+        } catch (ModelNotFoundException $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Comments not found',
+                        'error' => $e->getMessage()
+                    ],
+                    404
                 );
         }
     }

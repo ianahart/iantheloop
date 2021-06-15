@@ -125,6 +125,21 @@
               :post="post"
             />
         </div>
+        <div class="md_spacer">
+            <p
+              @click="loadMoreComments"
+              class="load_more_post_comments"
+              v-if="!commentPreviewShowing && post.post_comments.length <= post.comments_count && commentsLoaded.postId !== post.id"
+            >
+              Load More...
+            </p>
+            <p
+                class="post_comments_loaded"
+                v-if="post.comments_count === post.post_comments.length && post.id === commentsLoaded.postId"
+            >
+              {{ commentsLoaded.message }}
+            </p>
+        </div>
     </div>
 </template>
 
@@ -207,7 +222,8 @@ export default {
         ...mapState('profileWall',
             [
                 'alreadyFlaggedError',
-                'flagPostFinished'
+                'flagPostFinished',
+                'commentsLoaded',
             ]
         ),
 
@@ -280,6 +296,7 @@ export default {
                 "LIKE_POST",
                 'UNLIKE_POST',
                 'FLAG_POST',
+                'REFILL_COMMENTS',
             ]
         ),
 
@@ -303,6 +320,12 @@ export default {
 
         toggleCommentForm() {
             this.isCommentFormOpen = !this.isCommentFormOpen;
+        },
+
+        loadMoreComments() {
+          this.debounce(async() => {
+              await this.REFILL_COMMENTS(this.post.id);
+          }, 400);
         },
 
         async handleAddLike(payload) {
@@ -536,6 +559,29 @@ export default {
 
     &:hover {
         color: darken(gray, 5);
+    }
+}
+
+.load_more_post_comments,
+.post_comments_loaded {
+    text-align: center;
+    font-size: 0.9rem;
+    transition: all 0.25s ease-out;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.load_more_post_comments {
+    color: gray;
+    cursor: pointer;
+    &:hover {
+      color: lighten(gray, 5);
+    }
+}
+
+.post_comments_loaded {
+    color: $themeLightBlue;
+      &:hover {
+      color: lighten($themeLightBlue, 5);
     }
 }
 

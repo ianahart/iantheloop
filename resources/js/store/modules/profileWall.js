@@ -21,6 +21,7 @@ const initialState = () => {
     postInputText: '',
     postInputPhoto: { src: '', file: null, input: ''},
     postInputVideo: {src: '', file: null, input: ''},
+    commentsLoaded: {message: '', postId: ''},
     posts: [],
     postErrors: [],
     commentErrors:[],
@@ -303,6 +304,16 @@ const profileWall = {
       const postIndex = state.posts.findIndex((post) => post.id === payload.postID);
       const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.commentID);
       state.posts[postIndex].post_comments.splice(commentIndex, 1);
+    },
+
+    REFILL_COMMENTS: (state, payload) => {
+
+      state.posts[payload.postIndex].post_comments.push(...payload.post_comments);
+    },
+
+    SET_COMMENTS_LOADED:(state, payload) => {
+
+      state.commentsLoaded = payload;
     }
   },
 
@@ -506,14 +517,47 @@ const profileWall = {
           }
         }
       );
-      console.log('Actions: @DELETE_COMMENT SUCC: ', response);
+
       if (response.status === 200) {
 
         commit('DELETE_COMMENT', payload);
       }
     } catch(e) {
+     // returns a 403
+     // setup later on
+    }
+  },
 
-      console.log('Actions: @DELETE_COMMENT ERR: ', e);
+  async REFILL_COMMENTS ({ state, commit }, payload) {
+
+    try {
+
+      const postIndex = state.posts.findIndex(post => post.id === payload);
+      const lastComment = state.posts[postIndex].post_comments[state.posts[postIndex].post_comments.length - 1];
+
+      const response = await axios(
+          {
+            method: 'GET',
+            url: `/api/auth/posts/${payload}/comments/show?last=${lastComment.id}`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          commit('REFILL_COMMENTS',
+          {
+            post_comments: response.data.post_comments,
+            postIndex,
+          });
+        }
+
+    } catch(e) {
+
+      commit('SET_COMMENTS_LOADED',{message: e.response.data.error, postId: payload});
+
     }
   }
  }

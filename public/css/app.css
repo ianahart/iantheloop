@@ -563,6 +563,10 @@ h2 {
   color: #fb4d70;
 }
 
+.md_spacer {
+  margin: 1rem 0;
+}
+
 .xs_spacer_top {
   margin-top: 0.25rem;
 }
@@ -3884,6 +3888,26 @@ div.about_profile_work__row p {
 }
 .toggle_comments_btn:hover {
   color: #737373;
+}
+.load_more_post_comments,
+.post_comments_loaded {
+  text-align: center;
+  font-size: 0.9rem;
+  transition: all 0.25s ease-out;
+  font-family: "Open Sans", sans-serif;
+}
+.load_more_post_comments {
+  color: gray;
+  cursor: pointer;
+}
+.load_more_post_comments:hover {
+  color: #8d8d8d;
+}
+.post_comments_loaded {
+  color: #484aa4;
+}
+.post_comments_loaded:hover {
+  color: #5254b3;
 }
 @media (max-width: 600px) {
 .post__container {

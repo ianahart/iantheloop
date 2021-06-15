@@ -3,19 +3,21 @@
 namespace App\Helpers;
 
 use App\Models\Comment as CommentModel;
-// use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
-
+use DateTimeZone;
 use DateTime;
 use App\Exceptions\CommentMaxLimitException;
 use Exception;
 
 class Comment
 {
+  const MAX_LIMIT = 3;
+
   private string $commentText;
   private string $error;
   private int $postId;
   private int $userId;
+  private int $lastComment;
   private int $commentId;
   private int $code;
 
@@ -36,7 +38,18 @@ class Comment
 
   public function setCommentId($commentId)
   {
-    return $this->commentId = $commentId;
+    $this->commentId = $commentId;
+  }
+
+  public function setLastComment($lastComment)
+  {
+
+    $this->lastComment = $lastComment;
+  }
+
+  public function getMaxLimit()
+  {
+    return Comment::MAX_LIMIT;
   }
 
   public function getError()
@@ -89,8 +102,9 @@ class Comment
       $latestComment = $commentModel->refresh();
 
       $latestComment->profile_picture = $latestComment->user->profile->profile_picture;
-      $latestComment->author_name = $this->formatName($latestComment);
+      $latestComment->author_name = $this->formatName($latestComment->user->full_name);
       $latestComment->posted_date = 'Just Posted';
+
       unset($latestComment->user);
 
       return $latestComment ?? NULL;
@@ -103,13 +117,13 @@ class Comment
 
   /*
   *format user name
-  *@param Object $comment
-  *@return string
+  *@param String $comment
+  *@return String
   */
-  private function formatName(object $comment)
+  private function formatName(string $name)
   {
 
-    $arr = explode(' ', $comment->user->full_name);
+    $arr = explode(' ', $name);
     $fullName = '';
 
     foreach ($arr as $value) {
@@ -137,5 +151,65 @@ class Comment
 
       $this->error = $e->getMessage();
     }
+  }
+
+  /*
+  *fetch more comments for the specified post
+  *@void
+  *@return void
+  */
+  public function refillComments()
+  {
+
+    try {
+
+      $comments = CommentModel::where('post_id', '=', $this->postId)
+        ->where('id', '<', $this->lastComment)
+        ->orderBy('id', 'DESC')
+        ->paginate($this->getMaxLimit());
+
+      if ($comments->count() <= 0 || is_null($comments)) {
+
+        throw new Exception('All comments for this post have been loaded');
+      }
+
+      $commentsArray = [];
+
+      foreach ($comments as $comment) {
+
+        $comment->profile_picture = $comment
+          ->user
+          ->profile
+          ->profile_picture;
+        $comment->full_name = $this->formatName($comment->user->full_name);
+        $comment->posted_date = $this->createPostedDate($comment->created_at);
+
+        unset($comment->user);
+
+        array_push($commentsArray, $comment->toArray());
+      }
+
+      return $commentsArray;
+    } catch (Exception $e) {
+
+      $this->error = $e->getMessage();
+    }
+  }
+
+  /*
+  *make a readable date for the ui
+  *@void
+  *@return void
+  */
+  private function createPostedDate(string $date)
+  {
+
+    $date = new DateTime($date);
+
+    $date->setTimezone(new DateTimeZone('America/New_York'));
+
+    $formattedDate = $date->format('M j Y h:i a');
+
+    return $formattedDate;
   }
 }
