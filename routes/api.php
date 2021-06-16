@@ -18,6 +18,7 @@ use App\Http\Controllers\General\UserController;
 use App\Http\Controllers\General\PostController;
 use App\Http\Controllers\General\PostLikeController;
 use App\Http\Controllers\General\FlaggedPostController;
+use App\Http\Controllers\General\CommentLikeController;
 
 
 /*
@@ -32,16 +33,11 @@ use App\Http\Controllers\General\FlaggedPostController;
 |
 */
 
-
-
-
-
 Route::post('/auth/register', [RegisterController::class, 'store']);
 Route::post('/auth/login', [LoginController::class, 'store']);
 Route::post('/auth/token/refresh', [refreshTokenController::class, 'store']);
 Route::post('/auth/recovery', [ForgotPasswordController::class, 'store']);
 Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
-
 /*
 |--------------------------------------------------------------------------
 | Private Routes
@@ -69,3 +65,5 @@ Route::post('/auth/flagged-posts/store', [FlaggedPostController::class, 'store']
 Route::post('/auth/comments/store', [CommentController::class, 'store'])->middleware('auth:api');
 Route::delete('/auth/comments/{commentID}/delete', [CommentController::class, 'delete'])->middleware('auth:api');
 Route::get('/auth/posts/{postId}/comments/show', [CommentController::class, 'show'])->middleware('auth:api');
+Route::post('/auth/comment-likes/store', [CommentLikeController::class, 'store'])->middleware('auth:api');
+Route::delete('/auth/comment-likes/{commentLikeId}/delete', [CommentLikeController::class, 'delete'])->middleware('auth:api');

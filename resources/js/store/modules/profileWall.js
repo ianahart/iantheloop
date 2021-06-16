@@ -314,7 +314,21 @@ const profileWall = {
     SET_COMMENTS_LOADED:(state, payload) => {
 
       state.commentsLoaded = payload;
-    }
+    },
+
+    REACT_COMMENT: (state, payload) => {
+      const postIndex = state.posts.findIndex((post) => post.id === payload.post_id);
+      const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.comment_id);
+
+      if (payload.action === 'like') {
+        state.posts[postIndex].post_comments[commentIndex].comment_likes.push(payload);
+        state.posts[postIndex].post_comments[commentIndex].likes++;
+      } else if (payload.action === 'unlike') {
+        const index = state.posts[postIndex].post_comments[commentIndex].comment_likes.findIndex((like) => like.id === payload.id)
+        state.posts[postIndex].post_comments[commentIndex].comment_likes.splice(index, 1);
+        state.posts[postIndex].post_comments[commentIndex].likes--;
+      }
+    },
   },
 
   actions: {
@@ -558,6 +572,57 @@ const profileWall = {
 
       commit('SET_COMMENTS_LOADED',{message: e.response.data.error, postId: payload});
 
+    }
+  },
+  async LIKE_COMMENT({ state, commit }, payload) {
+
+    try {
+
+      const response = await axios(
+        {
+          method: 'POST',
+          url: `/api/auth/comment-likes/store`,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          data: payload,
+        }
+      );
+
+        if (response.status === 200) {
+            payload.id = response.data.comment_like;
+            commit('REACT_COMMENT', payload);
+        }
+
+    } catch(e) {
+
+      // console.log('Actions @LIKE_COMMENT (error): ', e.response);
+    }
+  },
+
+  async UNLIKE_COMMENT( {state, commit}, payload) {
+
+    try {
+      console.log('This is the payload: ', payload);
+      const response = await axios(
+        {
+          method: 'DELETE',
+          url: `/api/auth/comment-likes/${payload.id}/delete?commentId=${payload.comment_id}&action=${payload.action}&userId=${payload.user_id}`,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 200) {
+
+        commit('REACT_COMMENT', payload);
+      }
+
+    } catch(e) {
+        // console.log('Actions @UNLIKE_COMMENT (error): ', e.response);
     }
   }
  }

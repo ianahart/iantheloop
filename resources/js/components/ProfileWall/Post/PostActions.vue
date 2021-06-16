@@ -5,7 +5,7 @@
   >
     <div
       @click="openFlagModal"
-      v-if="currentUserId !== authorUserId && authorUserId !== subjectUserId"
+      v-if="currentUserId !== authorUserId && currentUserId !== subjectUserId"
       class="post_user_actions_flag"
     >
       <FlagSolidIcon
@@ -37,7 +37,7 @@
     components: {
       FlagSolidIcon,
     },
-
+//  v-if="currentUserId !== authorUserId && authorUserId !== subjectUserId"
     props: {
       subjectUserId: Number,
       authorUserId: Number,

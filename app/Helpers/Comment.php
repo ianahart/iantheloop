@@ -3,16 +3,18 @@
 namespace App\Helpers;
 
 use App\Models\Comment as CommentModel;
+use App\Models\CommentLike as CommentLikeModel;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\CommentMaxLimitException;
 use DateTimeZone;
 use DateTime;
-use App\Exceptions\CommentMaxLimitException;
 use Exception;
 
 class Comment
 {
   const MAX_LIMIT = 3;
 
+  private array $commentLike;
   private string $commentText;
   private string $error;
   private int $postId;
@@ -45,6 +47,11 @@ class Comment
   {
 
     $this->lastComment = $lastComment;
+  }
+
+  public function setCommentLike($commentLike)
+  {
+    return $this->commentLike = $commentLike;
   }
 
   public function getMaxLimit()
@@ -104,6 +111,7 @@ class Comment
       $latestComment->profile_picture = $latestComment->user->profile->profile_picture;
       $latestComment->author_name = $this->formatName($latestComment->user->full_name);
       $latestComment->posted_date = 'Just Posted';
+      $latestComment->commentLikes;
 
       unset($latestComment->user);
 
@@ -183,6 +191,7 @@ class Comment
           ->profile_picture;
         $comment->full_name = $this->formatName($comment->user->full_name);
         $comment->posted_date = $this->createPostedDate($comment->created_at);
+        $comment->commentLikes;
 
         unset($comment->user);
 
@@ -211,5 +220,84 @@ class Comment
     $formattedDate = $date->format('M j Y h:i a');
 
     return $formattedDate;
+  }
+
+  // does the current user like it? how to show that
+
+  public function addCommentLike()
+  {
+    try {
+
+      $userLikedAlready = CommentLikeModel::where('user_id', '=', $this->commentLike['user_id'])
+        ->where('comment_id', '=', $this->commentLike['comment_id'])
+        ->first();
+
+      if (!is_null($userLikedAlready)) {
+        throw new Exception('You have already liked this comment');
+      }
+
+      $commentLike = new CommentLikeModel();
+
+      foreach ($this->commentLike as $key => $value) {
+        $void = ['action', 'post_id'];
+
+        if (!in_array($key, $void)) {
+
+          $commentLike->$key = $value;
+        }
+      }
+
+      $this->updateLikeCount();
+
+      $commentLike->save();
+      $commentLike->refresh();
+
+      return $commentLike->id;
+    } catch (Exception $e) {
+
+      $this->error = $e->getMessage();
+    }
+  }
+
+  /*
+  * Update the comment's like to reflect the action
+  * @param void
+  * @return void
+  */
+  private function updateLikeCount()
+  {
+
+    $comment = CommentModel::find($this->commentLike['comment_id']);
+    $updatedValue = NULL;
+
+    if ($this->commentLike['action'] === 'like') {
+
+      $updatedValue = $comment->likes + 1;
+    }
+
+    if ($this->commentLike['action'] === 'unlike') {
+
+      $updatedValue = $comment->likes - 1;
+    }
+    $comment->likes = $updatedValue;
+
+    $comment->save();
+  }
+
+  public function removeCommentLike()
+  {
+
+    try {
+
+      $commentLike = CommentLikeModel::where('user_id', '=', $this->commentLike['user_id'])
+        ->where('id', '=', $this->commentLike['comment_like_id'])
+        ->first();
+
+      $commentLike->delete();
+
+      $this->updateLikeCount();
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
   }
 }

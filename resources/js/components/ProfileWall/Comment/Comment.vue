@@ -15,6 +15,10 @@
       <div class="single_comment_body_container">
         <h4>{{ postComment.full_name }}</h4>
         <p>{{ postComment.comment_text }}</p>
+        <p id="post_comment_likes">{{ postComment.likes }}</p>
+        <div class="post_comment_likes_icon_container ">
+            <ThumbsUpSolidIcon />
+        </div>
       </div>
       <CommentOptions
         @delete="deleteComment"
@@ -24,8 +28,10 @@
      <div class="xs_spacer_top">
        <CommentInteractions
          @like="likeComment"
+         @unlike="unlikeComment"
          @reply="replyToComment"
          :postComment="postComment"
+         :currentUserId="getUserId"
        />
      </div>
     </div>
@@ -38,6 +44,7 @@
   import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
   import CommentInteractions from './CommentInteractions.vue';
   import CommentOptions from './CommentOptions.vue';
+  import ThumbsUpSolidIcon from '../../Icons/ThumbsUpSolidIcon.vue';
 
   export default {
 
@@ -52,6 +59,7 @@
       DefaultProfileIcon,
       CommentInteractions,
       CommentOptions,
+      ThumbsUpSolidIcon,
     },
 
     data () {
@@ -62,7 +70,12 @@
     },
 
     computed: {
-
+      ...mapGetters('user',
+        [
+          'getUserId',
+          'userName',
+        ]
+      ),
     },
 
     beforeDestroy() {
@@ -73,13 +86,37 @@
 
       ...mapActions('profileWall',
         [
-          'DELETE_COMMENT'
+          'DELETE_COMMENT',
+          'LIKE_COMMENT',
+          'UNLIKE_COMMENT',
         ]
       ),
 
-      likeComment(comment) {
+      unlikeComment(commentLike) {
+          try {
+              this.debounce(async() => {
+                 await this.UNLIKE_COMMENT(commentLike);
+         }, 300);
+        } catch(e) {
 
-         console.log('Liking comment: ', comment.id);
+        }
+      },
+
+      likeComment(comment) {
+        try {
+              this.debounce(async() => {
+                 await this.LIKE_COMMENT(
+                  {
+                    user_id: this.getUserId,
+                    liked_by: this.userName.toLowerCase(),
+                    comment_id: comment.id,
+                    post_id: comment.post_id,
+                    action: 'like',
+                  });
+         }, 300);
+        } catch(e) {
+
+        }
       },
 
       replyToComment(comment) {
@@ -133,6 +170,7 @@
   }
 
   .single_comment_body_container {
+    position: relative;
     background-color: darken(#fff, 2);
     border-radius: 12px;
     padding: 0.5rem;
@@ -168,6 +206,35 @@
       color: $themePink;
       background-color: $themeLightBlue;
     }
+  }
+
+  .post_comment_likes_icon_container {
+    position: absolute;
+    bottom: -6px;
+    right: -2px;
+    height: 17px;
+    width: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: $themeRoyalBlue;
+    margin-right: 0.1rem;
+
+    svg {
+        color: #fff;
+        height: 12px;
+        width: 12px;
+    }
+  }
+
+  #post_comment_likes {
+    position: absolute;
+    right: 15px;
+    bottom: -6px;
+    font-size: 0.85rem;
+    color: $themeRoyalBlue;
+    margin: 0 0.2rem;
   }
 
 </style>

@@ -689,8 +689,8 @@ class ProfileController extends Controller
         switch ($key) {
 
             case 'background_picture':
-
-                if (isset($profile->background_filename)) {
+                error_log(print_r($profile->profile_filename . ' ASDKLASDSADS', true));
+                if (!is_null($profile->background_filename) && !empty($profile->background_filename)) {
 
                     $this->deletePrevFile($profile->background_filename);
                 }
@@ -707,7 +707,7 @@ class ProfileController extends Controller
 
             case 'profile_picture':
 
-                if (isset($profile->profile_filename)) {
+                if (!is_null($profile->profile_filename) && !empty($profile->profile_filename)) {
 
                     $this->deletePrevFile($profile->profile_filename);
                 }

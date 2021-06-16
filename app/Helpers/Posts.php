@@ -133,6 +133,7 @@ class Posts
     }
     $this->newPost = $post->refresh()->toArray();
 
+
     $this->subjectUserId = $this->newPost['subject_user_id'];
     $this->newPost = $this->enhancePosts([$this->newPost]);
   }
@@ -182,6 +183,7 @@ class Posts
           $comment->full_name = $this->formatName($comment->user->full_name);
           $comment->profile_picture = $comment->user->profile->profile_picture;
           $comment->posted_date = $this->createPostedDate($comment->created_at);
+          $comment->commentLikes;
 
           unset($comment->user);
           array_push($postComments, $comment);

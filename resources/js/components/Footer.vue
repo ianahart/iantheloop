@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div :class="`${footerStyles} footer`">
     <p>All Rights Reserved &#169;</p>
     <p>LoOped 2021</p>
     <div class="footer_policies">
@@ -14,6 +14,10 @@
   export default {
 
     name: 'Footer',
+
+    props: {
+      footerStyles: String,
+    }
 
   }
 </script>
@@ -42,7 +46,6 @@
       margin-bottom: 0.5rem;
     }
   }
-
   @media(max-width: 600px) {
 
     .footer {

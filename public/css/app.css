@@ -3672,6 +3672,14 @@ div.about_profile_work__row p {
   width: 3px;
   border-radius: 50%;
 }
+#unlike_post_comment {
+  margin: 0.1rem 0.3rem;
+  color: #4169e1;
+  font-weight: 800;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.25s ease-out;
+}
 .comment_options_container {
   margin-left: 0.2rem;
   cursor: pointer;
@@ -3711,6 +3719,7 @@ div.about_profile_work__row p {
   display: flex;
 }
 .single_comment_body_container {
+  position: relative;
   background-color: #fafafa;
   border-radius: 12px;
   padding: 0.5rem;
@@ -3742,6 +3751,32 @@ div.about_profile_work__row p {
   border-radius: 50%;
   color: #fb4d70;
   background-color: #484aa4;
+}
+.post_comment_likes_icon_container {
+  position: absolute;
+  bottom: -6px;
+  right: -2px;
+  height: 17px;
+  width: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #4169e1;
+  margin-right: 0.1rem;
+}
+.post_comment_likes_icon_container svg {
+  color: #fff;
+  height: 12px;
+  width: 12px;
+}
+#post_comment_likes {
+  position: absolute;
+  right: 15px;
+  bottom: -6px;
+  font-size: 0.85rem;
+  color: #4169e1;
+  margin: 0 0.2rem;
 }
 .post__container {
   background-color: #f2f2f2;
