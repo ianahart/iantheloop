@@ -274,9 +274,11 @@ class Comment
     return $formattedDate;
   }
 
-  public function addCommentLike()
+  public function addCommentLike(String $type)
   {
     try {
+
+      // type either 'comment' or 'reply';
 
       $userLikedAlready = CommentLikeModel::where('user_id', '=', $this->commentLike['user_id'])
         ->where('comment_id', '=', $this->commentLike['comment_id'])
@@ -289,7 +291,12 @@ class Comment
       $commentLike = new CommentLikeModel();
 
       foreach ($this->commentLike as $key => $value) {
-        $void = ['action', 'post_id'];
+        $void = [
+          'action',
+          'type',
+          'post_id',
+          'parent_id'
+        ];
 
         if (!in_array($key, $void)) {
 

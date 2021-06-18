@@ -23,7 +23,7 @@ class CommentLikeController extends Controller
             $comment = new Comment;
 
             $comment->setCommentLike($request->all());
-            $commentLike = $comment->addCommentLike();
+            $commentLike = $comment->addCommentLike($request->all()['type']);
 
             $error = $comment->getError();
 
@@ -67,7 +67,7 @@ class CommentLikeController extends Controller
                 'comment_like_id' => $commentLikeId,
                 'user_id' => $request->query('userId'),
             ];
-
+            error_log(print_r($likeData, true));
             $comment = new Comment;
             $comment->setCommentLike($likeData);
 

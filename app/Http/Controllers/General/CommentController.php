@@ -178,9 +178,6 @@ class CommentController extends Controller
                 throw new Exception($error, $comment->getCode());
             }
 
-
-
-            error_log(print_r($request->all(), true));
             return response()
                 ->json(
                     [

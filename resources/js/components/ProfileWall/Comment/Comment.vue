@@ -30,8 +30,9 @@
          @like="likeComment"
          @unlike="unlikeComment"
          @replypopup="replyToCommentPopup"
-         :postComment="postComment"
+         :comment="postComment"
          :currentUserId="getUserId"
+         commentType="comment"
        />
      </div>
      <div class="xs_spacer_top">
@@ -47,14 +48,15 @@
         :requestFinished="requestFinished"
        />
      </div>
-    <div v-if="shouldReplyThreadStart" class="start_reply_thread">
-       <p @click="toggleReplyThread">
+    <div v-if="shouldReplyThreadStart">
+       <p class="start_reply_thread" @click="toggleReplyThread">
          <strong>({{ postComment.reply_comments_count === 1 ? 1 :  postComment.reply_comments_count - 1  }})
          </strong>
          {{ postComment.reply_comments_count === 1 ? 'Reply...' : 'Replies...' }}
        </p>
         <ReplyComment
           :replyComment="firstReplyComment"
+          :originalComment="postComment.id"
           :currentUserId="getUserId"
         />
      </div>
@@ -63,6 +65,7 @@
           v-for="replyComment in postComment.reply_comments"
           :key="replyComment.id"
           :replyComment="replyComment"
+          :originalComment="postComment.id"
           :currentUserId="getUserId"
         />
      </div>
@@ -258,8 +261,10 @@
       },
 
       unlikeComment(commentLike) {
+
           try {
               this.debounce(async() => {
+                commentLike.type = 'comment';
                  await this.UNLIKE_COMMENT(commentLike);
          }, 300);
         } catch(e) {
@@ -276,6 +281,7 @@
                     liked_by: this.userName.toLowerCase(),
                     comment_id: comment.id,
                     post_id: comment.post_id,
+                    type: 'comment',
                     action: 'like',
                   });
          }, 300);
@@ -418,10 +424,7 @@
   }
 
   .start_reply_thread {
-    p:first-of-type {
-      font-size: 0.75rem;
-    }
-    p {
+
       cursor: pointer;
       transition: all 0.25s ease-in-out;
       color: gray;
@@ -431,7 +434,7 @@
       &:hover {
         color: darken(gray, 5);
       }
-    }
+
   }
   .load_more_replies {
     color: gray;

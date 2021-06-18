@@ -1,10 +1,10 @@
 <template>
   <div class="single_comment_interactions">
-    <p v-if="!hasCurUserLiked" @click="emitLike(postComment)">Like</p>
-    <p @click="emitUnlike(postComment)" id="unlike_post_comment" v-if="hasCurUserLiked">Unlike</p>
+    <p v-if="!hasCurUserLiked" @click="emitLike(comment)">Like</p>
+    <p @click="emitUnlike(comment)" id="unlike_post_comment" v-if="hasCurUserLiked">Unlike</p>
     <span></span>
-    <p @click="emitReplyPopup">Reply</p>
-    <p>{{ postComment.posted_date }}</p>
+    <p v-if="commentType === 'comment'" @click="emitReplyPopup">Reply</p>
+    <p>{{ comment.posted_date }}</p>
   </div>
 </template>
 
@@ -17,19 +17,23 @@
     name: 'CommentInteractions',
 
     props: {
-      postComment: Object,
+      comment: Object,
       currentUserId: Number,
+      commentType: String,
     },
 
     computed: {
       hasCurUserLiked () {
-        return this.postComment.comment_likes.some((like) => like.user_id === this.currentUserId);
+
+          return this.comment.comment_likes.some((like) => like.user_id === this.currentUserId);
+
       },
     },
 
     methods: {
 
       emitLike(comment) {
+
         this.$emit('like', comment);
       },
 
@@ -37,6 +41,8 @@
         const commentLike = comment.comment_likes.find((like) => like.user_id === this.currentUserId);
         commentLike.post_id = comment.post_id;
         commentLike.action = 'unlike';
+        commentLike.type = comment.reply_to_comment_id === null ? 'comment' : 'reply';
+
         this.$emit('unlike', commentLike);
       },
 

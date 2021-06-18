@@ -190,6 +190,7 @@ class Posts
 
           foreach ($replyComments as $replyComment) {
             $this->applyDisplayFields($replyComment);
+            $replyComment->commentLikes;
             unset($replyComment->user);
           }
 

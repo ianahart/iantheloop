@@ -332,16 +332,40 @@ const profileWall = {
     },
 
     REACT_COMMENT: (state, payload) => {
-      const postIndex = state.posts.findIndex((post) => post.id === payload.post_id);
-      const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.comment_id);
+
+        const postIndex = state.posts.findIndex((post) => post.id === payload.post_id);
+        const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.comment_id);
+
+        if (payload.action === 'like') {
+          state.posts[postIndex].post_comments[commentIndex].comment_likes.push(payload);
+          state.posts[postIndex].post_comments[commentIndex].likes++;
+        } else {
+          const index = state.posts[postIndex].post_comments[commentIndex].comment_likes.findIndex((like) => like.id === payload.id)
+          state.posts[postIndex].post_comments[commentIndex].comment_likes.splice(index, 1);
+          state.posts[postIndex].post_comments[commentIndex].likes--;
+      }
+    },
+
+
+
+
+    REACT_REPLY_COMMENT: (state, payload) => {
+
+        const postIndex = state.posts.findIndex((post) => post.id === payload.post_id);
+       const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.parent_id);
+       const replyCommentIndex = state.posts[postIndex].post_comments[commentIndex].reply_comments.findIndex(reply => reply.id === payload.comment_id);
 
       if (payload.action === 'like') {
-        state.posts[postIndex].post_comments[commentIndex].comment_likes.push(payload);
-        state.posts[postIndex].post_comments[commentIndex].likes++;
-      } else if (payload.action === 'unlike') {
-        const index = state.posts[postIndex].post_comments[commentIndex].comment_likes.findIndex((like) => like.id === payload.id)
-        state.posts[postIndex].post_comments[commentIndex].comment_likes.splice(index, 1);
-        state.posts[postIndex].post_comments[commentIndex].likes--;
+        state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.push(payload);
+        state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].likes++;
+      } else  {
+
+        const index = state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.findIndex((like) => like.id === payload.id)
+
+
+       state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.splice(index, 1);
+
+        state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].likes--;
       }
     },
 
@@ -620,6 +644,7 @@ const profileWall = {
 
     try {
 
+
       const response = await axios(
         {
           method: 'POST',
@@ -633,10 +658,14 @@ const profileWall = {
       );
 
         if (response.status === 200) {
-            payload.id = response.data.comment_like;
-            commit('REACT_COMMENT', payload);
-        }
+              payload.id = response.data.comment_like;
+            if (payload.type === 'comment') {
 
+              commit('REACT_COMMENT', payload);
+            } else {
+              commit('REACT_REPLY_COMMENT', payload);
+            }
+        }
     } catch(e) {
 
       // console.log('Actions @LIKE_COMMENT (error): ', e.response);
@@ -650,7 +679,7 @@ const profileWall = {
       const response = await axios(
         {
           method: 'DELETE',
-          url: `/api/auth/comment-likes/${payload.id}/delete?commentId=${payload.comment_id}&action=${payload.action}&userId=${payload.user_id}`,
+          url: `/api/auth/comment-likes/${payload.id}/delete?commentId=${payload.comment_id}&action=${payload.action}&userId=${payload.user_id}&type=${payload.type}`,
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -658,10 +687,15 @@ const profileWall = {
         }
       );
 
-      if (response.status === 200) {
+         if (response.status === 200) {
 
-        commit('REACT_COMMENT', payload);
-      }
+            if (payload.type === 'comment') {
+
+              commit('REACT_COMMENT', payload);
+            } else {
+              commit('REACT_REPLY_COMMENT', payload);
+            }
+        }
 
     } catch(e) {
         // console.log('Actions @UNLIKE_COMMENT (error): ', e.response);

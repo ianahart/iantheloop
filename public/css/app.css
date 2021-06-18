@@ -3742,17 +3742,6 @@ div.about_profile_work__row p {
   margin: 0rem 0 0rem 3.5rem;
   position: relative;
 }
-.reply_comment_posted_date {
-  display: flex;
-  justify-content: space-between;
-  padding-left: 0.5rem;
-  padding-top: 0.5rem;
-}
-.reply_comment_posted_date p {
-  color: gray;
-  font-size: 0.65rem;
-  margin: 0.1rem 0;
-}
 .post_reply_comment_row {
   display: flex;
   align-items: center;
@@ -3779,6 +3768,25 @@ div.about_profile_work__row p {
   color: #42424c;
   font-size: 0.85rem;
   margin: 0.1rem 0;
+}
+.reply_comment_thumbs_icon {
+  position: absolute;
+  right: -4px;
+  bottom: -10px;
+}
+.reply_comment_thumbs_icon svg {
+  background-color: #2b58de;
+  color: #fff;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  padding: 0.1rem;
+}
+#post_reply_comment_likes {
+  position: absolute;
+  right: 12px;
+  bottom: -5px;
+  color: #2b58de;
 }
 .post_reply_comment_profile_container {
   margin-right: 0.5rem;
@@ -3873,17 +3881,14 @@ div.about_profile_work__row p {
   box-sizing: border-box;
   margin-left: 1.75rem;
 }
-.start_reply_thread p:first-of-type {
-  font-size: 0.75rem;
-}
-.start_reply_thread p {
+.start_reply_thread {
   cursor: pointer;
   transition: all 0.25s ease-in-out;
   color: gray;
   font-size: 0.65rem;
   margin: 0.1rem 0;
 }
-.start_reply_thread p:hover {
+.start_reply_thread:hover {
   color: #737373;
 }
 .load_more_replies {
