@@ -21,6 +21,7 @@
 
     props: {
       post: Object,
+
     },
 
     components: {

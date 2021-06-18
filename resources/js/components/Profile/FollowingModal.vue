@@ -66,6 +66,12 @@
         ]
       ),
 
+      ...mapMutations('profileWall',
+        [
+          'RESET_MODULE'
+        ]
+      ),
+
       closeModal(e) {
 
         const modalRef = this.$refs.modal;
@@ -82,8 +88,9 @@
 
       async unFollow() {
 
-
+        this.RESET_MODULE();
         await this.UNFOLLOW();
+
       }
     }
   }

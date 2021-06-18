@@ -197,10 +197,13 @@ export default {
 
     mounted() {
         this.$refs.post.addEventListener("click", this.closeOptionsFallback);
+        this.$nextTick(() => {
+       if (this.lastPostItem === this.post.id) {
 
-        if (this.lastPostItem === this.post.id) {
             this.observer.observe(this.$refs.post);
         }
+        });
+
     },
 
     watch: {

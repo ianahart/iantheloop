@@ -33,9 +33,9 @@
         ]
       ),
 
-      updateFollowStats () {
+      async updateFollowStats () {
 
-        this.UPDATE_FOLLOW_STATS();
+        await this.UPDATE_FOLLOW_STATS();
       } ,
     }
   }

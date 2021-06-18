@@ -3,7 +3,7 @@
     <p v-if="!hasCurUserLiked" @click="emitLike(postComment)">Like</p>
     <p @click="emitUnlike(postComment)" id="unlike_post_comment" v-if="hasCurUserLiked">Unlike</p>
     <span></span>
-    <p @click="emitReply(postComment)">Reply</p>
+    <p @click="emitReplyPopup">Reply</p>
     <p>{{ postComment.posted_date }}</p>
   </div>
 </template>
@@ -40,8 +40,8 @@
         this.$emit('unlike', commentLike);
       },
 
-      emitReply(comment) {
-        this.$emit('reply', comment);
+      emitReplyPopup() {
+        this.$emit('replypopup');
       }
     }
   }

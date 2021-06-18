@@ -67,3 +67,6 @@ Route::delete('/auth/comments/{commentID}/delete', [CommentController::class, 'd
 Route::get('/auth/posts/{postId}/comments/show', [CommentController::class, 'show'])->middleware('auth:api');
 Route::post('/auth/comment-likes/store', [CommentLikeController::class, 'store'])->middleware('auth:api');
 Route::delete('/auth/comment-likes/{commentLikeId}/delete', [CommentLikeController::class, 'delete'])->middleware('auth:api');
+Route::post('/auth/comments/reply/store', [CommentController::class, 'replyStore'])->middleware('auth:api');
+Route::get('/auth/posts/{postId}/comments/reply/show', [CommentController::class, 'showReply'])->middleware('auth:api');
+Route::delete('/auth/comments/reply/{commentID}/delete', [CommentController::class, 'deleteReply'])->middleware('auth:api');

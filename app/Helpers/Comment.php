@@ -80,23 +80,28 @@ class Comment
 
       $MAX_LIMIT = 5;
       $TIME_THRESHOLD = NULL;
+      $query = NULL;
+      $TIME_THRESHOLD = $this->makeTimeThreshold();
 
-      $date = new DateTime();
-      $date->format('YYYY-MM-DD hh:mm:ss');
-      $timestamp = $date->format('U');
+      if (empty($this->commentId)) {
 
-      $timestamp = $timestamp - 300;
+        $query = CommentModel::where('post_id', '=', $this->postId)
+          ->where('user_id', '=', $this->userId)->whereNull('reply_to_comment_id');
+      } else {
 
-      $TIME_THRESHOLD = $date->setTimestamp($timestamp);
+        $query = CommentModel::where('post_id', '=', $this->postId)
+          ->where('user_id', '=', $this->userId)
+          ->where('reply_to_comment_id', '=', $this->commentId);
+      }
 
-      $query = CommentModel::where('post_id', '=', $this->postId)
-        ->where('user_id', '=', $this->userId);
 
       $numOfComments = $query->where('created_at', '>', $TIME_THRESHOLD)->count();
 
       if ($numOfComments >= $MAX_LIMIT) {
+        $error = empty($this->commentId) ? 'Maximum of 5 comments on the same post per 5 minutes.' :
+          'Maximum of 5 replies on the same comment per 5 minutes.';
 
-        throw new CommentMaxLimitException('Maximum of 5 comments on the same post per 5 minutes.', 400);
+        throw new CommentMaxLimitException($error, 400);
       }
 
       $commentModel = new CommentModel();
@@ -104,14 +109,25 @@ class Comment
       $commentModel->post_id = $this->postId;
       $commentModel->user_id = $this->userId;
       $commentModel->comment_text = $this->commentText;
+      $commentModel->reply_to_comment_id = empty($this->commentId) ? NULL : $this->commentId;
 
       $commentModel->save();
       $latestComment = $commentModel->refresh();
 
       $latestComment->profile_picture = $latestComment->user->profile->profile_picture;
-      $latestComment->author_name = $this->formatName($latestComment->user->full_name);
+      $latestComment->full_name = $this->formatName($latestComment->user->full_name);
       $latestComment->posted_date = 'Just Posted';
       $latestComment->commentLikes;
+
+      if (!empty($this->commentId)) {
+
+        $latestComment->type = 'reply';
+      } else {
+
+        $latestComment->reply_comments = [];
+        $latestComment->reply_comments_count = 0;
+        $latestComment->type = 'normal';
+      }
 
       unset($latestComment->user);
 
@@ -140,7 +156,12 @@ class Comment
     return trim($fullName);
   }
 
-  public function deleteComment()
+  /*
+  *Delete a comment and all of its replies or if it is a reply (singular) delete reply
+  *@param String $type
+  *@return void
+  */
+  public function deleteComment(String $type)
   {
     try {
 
@@ -154,7 +175,15 @@ class Comment
       }
       unset($comment->post);
 
-      $comment->delete();
+      if ($type === 'comment') {
+        CommentModel::where('reply_to_comment_id', '=', $this->commentId)->delete();
+        $comment->delete();
+      }
+
+      if ($type === 'reply_comment') {
+
+        $comment->delete();
+      }
     } catch (Exception $e) {
 
       $this->error = $e->getMessage();
@@ -163,41 +192,64 @@ class Comment
 
   /*
   *fetch more comments for the specified post
-  *@void
-  *@return void
+  *@param String $action
+  *@return array
   */
-  public function refillComments()
+  public function refillComments(String $action)
   {
 
     try {
 
-      $comments = CommentModel::where('post_id', '=', $this->postId)
-        ->where('id', '<', $this->lastComment)
-        ->orderBy('id', 'DESC')
-        ->paginate($this->getMaxLimit());
+      if ($action === 'reply') {
+        $comments = CommentModel::where('post_id', '=', $this->postId)
+          ->whereNotNull('reply_to_comment_id')
+          ->where('reply_to_comment_id', '=', $this->commentId)
+          ->where('id', '<', $this->lastComment)
+          ->orderBy('id', 'DESC')
+          ->paginate($this->getMaxLimit());
+      }
+
+      if ($action === 'comment') {
+        $comments = CommentModel::where('post_id', '=', $this->postId)
+          ->where('id', '<', $this->lastComment)
+          ->whereNull('reply_to_comment_id')
+          ->orderBy('id', 'DESC')
+          ->paginate($this->getMaxLimit());
+      }
 
       if ($comments->count() <= 0 || is_null($comments)) {
 
-        throw new Exception('All comments for this post have been loaded');
+        $msg = $action === 'reply' ? 'All replies have been loaded' : 'All comments have been loaded';
+        throw new Exception($msg);
       }
 
       $commentsArray = [];
 
       foreach ($comments as $comment) {
 
-        $comment->profile_picture = $comment
-          ->user
-          ->profile
-          ->profile_picture;
-        $comment->full_name = $this->formatName($comment->user->full_name);
-        $comment->posted_date = $this->createPostedDate($comment->created_at);
-        $comment->commentLikes;
+        $this->buildComment($comment);
+
+        if ($action === 'comment') {
+          $replyComments = CommentModel::where('reply_to_comment_id', '=', $comment->id)
+            ->orderBy('id', 'DESC')
+            ->paginate($this->getMaxLimit());
+
+          $comment->reply_comments_count = $replyComments->total();
+          $replies = [];
+
+          for ($i = 0; $i < count($replyComments); $i++) {
+            $this->buildComment($replyComments[$i]);
+
+            unset($replyComments[$i]->user);
+            array_push($replies, $replyComments[$i]);
+          }
+          $comment->reply_comments = $replies;
+        }
 
         unset($comment->user);
 
         array_push($commentsArray, $comment->toArray());
       }
-
       return $commentsArray;
     } catch (Exception $e) {
 
@@ -221,8 +273,6 @@ class Comment
 
     return $formattedDate;
   }
-
-  // does the current user like it? how to show that
 
   public function addCommentLike()
   {
@@ -299,5 +349,39 @@ class Comment
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
+  }
+
+
+  /*
+  *Create an offset date
+  *@param void
+  *@return DateTime
+  */
+  private function makeTimeThreshold()
+  {
+    $date = new DateTime();
+    $date->format('YYYY-MM-DD hh:mm:ss');
+    $timestamp = $date->format('U');
+
+    $timestamp = $timestamp - 300;
+
+    return  $date->setTimestamp($timestamp);
+  }
+
+  /*
+  *Build comment with additional fields for presentation
+  *@param object $comment
+  *@return void
+  */
+
+  function buildComment(object $comment)
+  {
+    $comment->profile_picture = $comment
+      ->user
+      ->profile
+      ->profile_picture;
+    $comment->full_name = $this->formatName($comment->user->full_name);
+    $comment->posted_date = $this->createPostedDate($comment->created_at);
+    $comment->commentLikes;
   }
 }

@@ -173,21 +173,34 @@ class Posts
         $post->postLikes;
         $comments = $post->comments()
           ->orderBy('id', 'DESC')
+          ->whereNull('reply_to_comment_id')
           ->paginate($COMMENT_LIMIT);
 
         $post->last_comment = $comments[count($comments) - 1];
         $postComments = [];
 
         foreach ($comments as $comment) {
-
-          $comment->full_name = $this->formatName($comment->user->full_name);
-          $comment->profile_picture = $comment->user->profile->profile_picture;
-          $comment->posted_date = $this->createPostedDate($comment->created_at);
+          $this->applyDisplayFields($comment);
           $comment->commentLikes;
+
+          $replyComments = $comment
+            ->where('reply_to_comment_id', '=', $comment->id)
+            ->orderBy('id', 'DESC')
+            ->paginate($COMMENT_LIMIT);
+
+          foreach ($replyComments as $replyComment) {
+            $this->applyDisplayFields($replyComment);
+            unset($replyComment->user);
+          }
+
+          $comment->reply_comments = $replyComments->toArray()['data'];
+          $comment->reply_comments_count = $replyComments->total();
 
           unset($comment->user);
           array_push($postComments, $comment);
         }
+
+
         $post->post_comments = $postComments;
         $post->comments_count = $post->comments()->count();
         $postsCollection[] = $post->toArray();
@@ -392,5 +405,17 @@ class Posts
 
     $bucket = new AmazonS3($filename, null);
     $bucket->deleteFromBucket();
+  }
+
+  /*
+  * delete file belonging to post from amazon s3
+  * @param object $comment
+  * @return void
+  */
+  private function applyDisplayFields(object $comment)
+  {
+    $comment->full_name = $this->formatName($comment->user->full_name);
+    $comment->profile_picture = $comment->user->profile->profile_picture;
+    $comment->posted_date = $this->createPostedDate($comment->created_at);
   }
 }

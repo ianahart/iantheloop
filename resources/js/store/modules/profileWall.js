@@ -25,6 +25,7 @@ const initialState = () => {
     posts: [],
     postErrors: [],
     commentErrors:[],
+    replyErrors: [],
     flaggedOptions:[
       {id: 0, reasonText: 'Violence', selected: false},
       {id: 1, reasonText: 'Nudity', selected: false},
@@ -267,6 +268,20 @@ const profileWall = {
       state.posts[index].comments_count++;
     },
 
+    SET_REPLY_COMMENT: (state, { reply_comment }) => {
+
+        const index = state.posts.findIndex((post) => post.id === reply_comment.post_id);
+        const commentIndex = state.posts[index].post_comments.findIndex((postComment) => postComment.id === reply_comment.reply_to_comment_id);
+
+        if (!Object.keys(state.posts[index].post_comments[commentIndex]).includes('reply_comments')) {
+
+          state.posts[index].post_comments[commentIndex].reply_comments = [];
+            return;
+        }
+
+      state.posts[index].post_comments[commentIndex].reply_comments.unshift(reply_comment);
+      state.posts[index].post_comments[commentIndex].reply_comments_count++;
+    },
 
     SET_COMMENT_ERROR:(state, payload) =>{
 
@@ -328,6 +343,32 @@ const profileWall = {
         state.posts[postIndex].post_comments[commentIndex].comment_likes.splice(index, 1);
         state.posts[postIndex].post_comments[commentIndex].likes--;
       }
+    },
+
+    SET_REPLY_ERRORS: (state, payload) => {
+
+      if (payload.action === 'set') {
+        state.replyErrors.push(payload);
+        return;
+      } else {
+        const error = state.replyErrors.findIndex((error) => error.commentId === payload.commentId);
+        state.replyErrors.splice(error, 1);
+      }
+    },
+
+    SET_REFILL_REPLIES: (state, { replyComments, postId, commentRepliedTo }) => {
+
+      const post = state.posts.findIndex(post => post.id === postId);
+      const postComment = state.posts[post].post_comments.findIndex(comment => comment.id === commentRepliedTo);
+      state.posts[post].post_comments[postComment].reply_comments.push(...replyComments);
+    },
+
+    DELETE_REPLY_COMMENT: (state, payload) => {
+      const post = state.posts.findIndex(post => post.id === payload.postID);
+      const comment = state.posts[post].post_comments.findIndex(postComment => postComment.id === payload.replyID);
+      const replyComment = state.posts[post].post_comments[comment].reply_comments.findIndex(replyComment => replyComment.id === payload.commentID);
+
+      state.posts[post].post_comments[comment].reply_comments.splice(replyComment, 1);
     },
   },
 
@@ -510,6 +551,7 @@ const profileWall = {
       );
 
       commit('SET_COMMENT', response.data);
+
       commit('SET_REQUEST_FINISHED', true);
     } catch(e) {
       commit('SET_COMMENT_ERROR', { response: e.response, post_id: payload.post_id });
@@ -524,7 +566,7 @@ const profileWall = {
       const response = await axios(
         {
           method: 'DELETE',
-          url: `/api/auth/comments/${payload.commentID}/delete?uid=${payload.userID}`,
+          url: `/api/auth/comments/${payload.commentID}/delete?uid=${payload.userID}&type=${payload.type}`,
           headers: {
              'Accept': 'application/json',
              'Content-Type': 'application/json',
@@ -604,7 +646,7 @@ const profileWall = {
   async UNLIKE_COMMENT( {state, commit}, payload) {
 
     try {
-      console.log('This is the payload: ', payload);
+
       const response = await axios(
         {
           method: 'DELETE',
@@ -624,8 +666,87 @@ const profileWall = {
     } catch(e) {
         // console.log('Actions @UNLIKE_COMMENT (error): ', e.response);
     }
-  }
+  },
+
+  async ADD_REPLY_COMMENT({ state, commit }, payload) {
+
+    try {
+
+      const response = await axios(
+        {
+          method: 'POST',
+          url: '/api/auth/comments/reply/store',
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type': 'application/json',
+          },
+
+          data: payload,
+        }
+      );
+
+      commit('SET_REPLY_COMMENT', response.data);
+      commit('SET_REQUEST_FINISHED', true);
+    } catch(e) {
+
+      const { error } = e.response.data
+
+      commit('SET_REPLY_ERRORS', { error, commentId: payload.reply_to_comment_id, action: 'set' })
+      commit('SET_REQUEST_FINISHED', true);
+    };
+  },
+
+  async REFILL_REPLIES({ state, commit }, payload) {
+
+    try {
+
+      const response = await axios(
+        {
+          method: 'GET',
+          url: `/api/auth/posts/${payload.post_id}/comments/reply/show?last=${payload.last_reply_comment_id}&replyTo=${payload.comment_id}`,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+
+      commit('SET_REFILL_REPLIES', response.data);
+
+    } catch (e) {
+
+      console.log('action: @REFILL_REPLIES Error: ', e.response);
+    }
+  },
+
+  async DELETE_REPLY_COMMENT({ state, commit }, payload) {
+
+    try {
+
+      const response = await axios(
+        {
+          method: 'DELETE',
+          url: `/api/auth/comments/reply/${payload.commentID}/delete?=uid=${payload.userID}&type=${payload.type}`,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 200) {
+
+        commit('DELETE_REPLY_COMMENT', payload);
+      };
+
+    } catch (e) {
+
+      console.log('DELETE_REPLY_COMMENT--action--error: ', e.response);
+    }
+  },
  }
 };
 
 export default profileWall;
+
+

@@ -1,7 +1,7 @@
 <template>
     <div v-if="dataLoaded" class="profile__container">
         <Modal />
-        <div class="profile_component__wrapper">
+        <div ref="profile" class="profile_component__wrapper">
             <Header />
             <ProfileStats />
             <Dashboard />

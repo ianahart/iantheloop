@@ -38,6 +38,7 @@
       return {
         observer: null,
         debounceID: '',
+        threshold: document.documentElement.clientWidth <= 700 ? '0.1' : '0.7',
       }
     },
 
@@ -48,7 +49,11 @@
 
     mounted () {
 
+
+
       this.setupObserver();
+
+
     },
 
     beforeDestroy() {
@@ -93,7 +98,7 @@
         const options = {
            root: null,
            rootMargin: '0px',
-           threshold: 1.0,
+           threshold: this.threshold,
         };
 
         this.observer = new IntersectionObserver(this.onElementObserved, options);
@@ -104,16 +109,33 @@
 
         entries.forEach((entry) => {
 
-          if (entry.intersectionRatio > 0.75) {
 
-            let seenId = entry.target.attributes['data-id'].value;
+
+
+          if (entry.intersectionRatio >= this.threshold || entry.isIntersecting) {
+             let seenId = entry.target.attributes['data-id'].value;
+
             this.SET_POST_SEEN(parseInt(seenId));
 
             this.debounce(() => {
 
               this.loadMore();
             }, 400);
-          }
+
+
+  }
+          // if (entry.isIntersecting) {
+
+          //   let seenId = entry.target.attributes['data-id'].value;
+
+          //   this.SET_POST_SEEN(parseInt(seenId));
+
+          //   this.debounce(() => {
+
+          //     this.loadMore();
+          //   }, 400);
+
+          // }
         });
       },
 

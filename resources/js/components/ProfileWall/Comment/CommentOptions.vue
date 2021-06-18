@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="getUserId === postComment.user_id || getUserId === getProfileOwner"
+    v-if="getUserId === comment.user_id || getUserId === getProfileOwner"
     @click="togglePopup"
     class="comment_options_container"
   >
@@ -14,7 +14,7 @@
     >
       <p
         v-if="commentOptionsOpen"
-        @click="emitDelete(postComment)"
+        @click="emitDelete(comment)"
         ref="btn"
       >
         Delete
@@ -37,7 +37,7 @@
     name: 'CommentOptions',
 
     props: {
-      postComment: Object,
+      comment: Object,
     },
 
     components: {
@@ -76,6 +76,7 @@
     methods: {
 
       emitDelete(comment) {
+
         this.$emit('delete', comment);
       },
 

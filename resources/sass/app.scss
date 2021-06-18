@@ -16,10 +16,23 @@
     display: inline-block;
 }
 
+.profile_image_rel_xs {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+}
 .profile_image_rel_md {
     border-radius: 50%;
     height: 75px;
     width: 75px;
+    display: inline-block;
+}
+
+.default_profile_image_rel_xs {
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
     display: inline-block;
 }
 
@@ -76,4 +89,67 @@
     width: 200px;
     top: 0;
     display: inline-block;
+}
+
+.post_comment_form_container {
+    box-sizing: border-box;
+    padding: 0.2rem;
+    display: flex;
+    align-items: center;
+
+    img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+    }
+
+    svg {
+        color: $themePink;
+        background-color: $themeLightBlue;
+    }
+
+    input {
+        flex-grow: 2;
+        margin: 0 0.2rem;
+        height: 35px;
+        border-radius: 8px;
+        border: none;
+        border: 1px solid $mainInputBorder;
+        outline: none;
+
+        &:focus {
+            border: 2px solid $themeLightBlue;
+        }
+    }
+
+    button {
+        color: #fff;
+        background-color: $themeLightBlue;
+        border: none;
+        border-radius: 8px;
+        height: 35px;
+        padding: 0.2rem 0.3rem;
+        cursor: pointer;
+        transition: all 0.3s ease-out;
+
+        &:hover {
+            background-color: $themeBlue;
+        }
+    }
+}
+
+.post_comment_error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+        color: $primaryWhite;
+        text-align: center;
+        margin: 0.1rem;
+        font-size: 0.8rem;
+        padding: 0.3rem;
+        border-radius: 8px;
+        background-color: rgba(255, 0, 51, 0.8);
+    }
 }

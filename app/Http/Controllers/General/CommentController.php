@@ -73,15 +73,7 @@ class CommentController extends Controller
     public function delete(Request $request, string $commentID)
     {
         try {
-
-            $comment = new Comment;
-
-            $comment->setUserId(intval($request->query('uid')));
-            $comment->setCommentId(intval($commentID));
-
-            $comment->deleteComment();
-
-            $error = $comment->getError();
+            $error = $this->initCommentProcess($request, $commentID);
 
             if (gettype($error) === 'string') {
                 throw new Exception($error);
@@ -123,7 +115,7 @@ class CommentController extends Controller
             $comment->setPostId(intval($postID));
             $comment->setLastComment(intval($request->query('last')));
 
-            $comments = $comment->refillComments();
+            $comments = $comment->refillComments('comment');
 
             $error = $comment->getError();
 
@@ -150,5 +142,172 @@ class CommentController extends Controller
                     404
                 );
         }
+    }
+
+    /*
+    *store a reply to a comment
+    *@param StoreCommentRequest $request
+    *@param void
+    *@return JsonResponse
+    */
+
+    public function replyStore(StoreCommentRequest $request)
+    {
+
+        try {
+
+            $validated = $request->validated();
+
+            if (!$validated) {
+                throw new Exception();
+            }
+
+            $comment = new Comment;
+
+            $comment->setPostId($request->all()['post_id']);
+            $comment->setUserId($request->all()['user_id']);
+            $comment->setCommentId($request->all()['reply_to_comment_id']);
+            $comment->setCommentText($request->all()['input']);
+
+            $latestComment = $comment->addComment();
+
+            $error = $comment->getError();
+
+            if (gettype($error) === 'string') {
+
+                throw new Exception($error, $comment->getCode());
+            }
+
+
+
+            error_log(print_r($request->all(), true));
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Success',
+                        'reply_comment' => $latestComment,
+                    ],
+                    201
+                );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Something went wrong, Bad Request',
+                        'error' => $e->getMessage()
+                    ],
+                    400
+                );
+        }
+    }
+
+    /*
+    *retrieve more reply comments that are older than the one specified
+    *@param $request
+    *@param String $postId
+    *@return JsonResponse
+    */
+
+    public function showReply(Request $request, String $postId)
+    {
+
+        try {
+
+            $commentRepliedTo = intval($request->query('replyTo'));
+
+            $comment = new Comment;
+
+            $comment->setPostId(intval($postId));
+            $comment->setLastComment(intval($request->query('last')));
+            $comment->setCommentId($commentRepliedTo);
+
+            $replyComments = $comment->refillComments('reply');
+
+            $error = $comment->getError();
+
+            if (gettype($error) === 'string') {
+                throw new ModelNotFoundException($error);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Success',
+                        'replyComments' => $replyComments,
+                        'postId' => intval($postId),
+                        'commentRepliedTo' => $commentRepliedTo,
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Comments not found or Comments all loaded',
+                        'error' => $e->getMessage()
+                    ],
+                    404
+                );
+        }
+    }
+
+    /*
+    *Delete a reply comment if owner of the reply comment or if it is posted on the user's wall
+    *@param Request $request
+    *@param String  $commentID
+    *@return JsonResponse
+    */
+    public function deleteReply(Request $request, String $commentID)
+    {
+        try {
+
+            $error = $this->initCommentProcess($request, $commentID);
+
+            if (gettype($error) === 'string') {
+                throw new Exception($error);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'reply successfully deleted',
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Forbidden action',
+                        'error' => $e->getMessage(),
+                        'intercept' => false
+                    ],
+                    403
+                );
+        }
+    }
+
+    /*
+    * Cleans up duplicate code needed in both @delete and @deleteReply
+    *@param Request $request
+    *@param String $commentID
+    *@return String|NULL
+    */
+    private function initCommentProcess(Request $request, String $commentID)
+    {
+
+        $comment = new Comment;
+
+        $comment->setUserId(intval($request->query('uid')));
+        $comment->setCommentId(intval($commentID));
+
+        $comment->deleteComment($request->query('type'));
+
+        $error = $comment->getError();
+
+        return $error;
     }
 }
