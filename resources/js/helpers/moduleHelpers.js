@@ -191,4 +191,7 @@ export function prepareEditFile(form, files, target) {
    return value;
 }
 
+export function getElementIndex(container, elementProp, target) {
 
+     return container.findIndex(element => element[elementProp] === target );
+}

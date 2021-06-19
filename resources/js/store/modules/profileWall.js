@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { getElementIndex } from '../../helpers/moduleHelpers.js';
 
 const initialState = () => {
 
@@ -57,12 +58,11 @@ const profileWall = {
   mutations: {
 
     SET_FLAGGED_OPTION: (state, payload) => {
-      const index = state.flaggedOptions.findIndex(flaggedOption => flaggedOption.id === payload.option.id);
-      state.flaggedOptions[index].selected = payload.action === 'selected' ? true : false;
+       const index = getElementIndex(state.flaggedOptions, 'id', payload.option.id);
+       state.flaggedOptions[index].selected = payload.action === 'selected' ? true : false;
     },
 
     SET_POSTS: (state, payload) => {
-
       if (payload.posts !== null && payload.more_records) {
 
         state.posts.push(...payload.posts);
@@ -75,14 +75,11 @@ const profileWall = {
     },
 
     SET_POST_SEEN: (state, seenId) => {
-
-        const postIndex = state.posts.findIndex((post) => post.id === seenId);
-
+        const postIndex = getElementIndex(state.posts, 'id', seenId);
         state.posts[postIndex].seen = true;
     },
 
     SET_POST: (state, payload) => {
-
       payload.new_post.seen = false;
       payload.new_post.post_likes = [];
       payload.new_post.post_comments = [];
@@ -91,12 +88,10 @@ const profileWall = {
     },
 
     SET_POSTS_LOADED: (state, payload) => {
-
       state.postsLoaded = payload;
     },
 
     RESET_POST_ERRORS: (state) => {
-
       state.postErrors = [];
     },
 
@@ -142,35 +137,28 @@ const profileWall = {
     },
 
     SET_POST_ERROR: (state, payload) => {
-
        state.postErrors.push(payload);
     },
 
     SET_POST_ERRORS: (state, payload) => {
-
       for (let error in payload) {
-
         state.postErrors.push(...payload[error]);
       }
 
     },
 
     SET_POST_INPUT_TEXT: (state, text) => {
-
         state.postInputText = text;
         state.postInputTextLength = state.postInputText.trim().length;
     },
 
     SET_INITIAL_POST_INPUT_TEXT: (state, payload) => {
-
       const currentUser = `Want to share your thoughts, ${state.currentUserFirstName}?`;
       const userViewed = `Write something to ${payload.viewUserFirstName}...`;
-
       state.postInputPlaceholder = parseInt(payload.baseProfileUserId) === payload.currentUserId ? currentUser : userViewed;
     },
 
     OPEN_MODAL: (state, payload) => {
-
       state.modalIsOpen = true;
       state.activeModal = payload.modal;
 
@@ -180,7 +168,6 @@ const profileWall = {
     },
 
     CLOSE_MODAL: (state) => {
-
       state.modalIsOpen = false;
       state.activeModal = '';
       state.activeFlagPostId = null;
@@ -205,18 +192,16 @@ const profileWall = {
     },
 
     DELETE_POST: (state, postDelId) => {
-      const delIndex = state.posts.findIndex(post => post.id === postDelId);
+      const delIndex = getElementIndex(state.posts, 'id', postDelId);
       state.posts.splice(delIndex, 1);
     },
 
     RESPONSE_ERROR: (state) => {
-
       state.responseError = true;
     },
 
-
     LIKE_POST:(state, { new_like }) => {
-      const postIndex = state.posts.findIndex((post) => post.id === new_like.post_id);
+      const postIndex =  getElementIndex(state.posts, 'id', new_like.post_id);
 
       state.posts[postIndex].post_likes =  [];
       state.posts[postIndex].post_likes.push(new_like);
@@ -224,27 +209,22 @@ const profileWall = {
     },
 
     UNLIKE_POST: (state, payload) => {
-
-      const postIndex = state.posts.findIndex(post => post.id === payload.post_id);
-      const likeIndex = state.posts[postIndex].post_likes.findIndex(lk => lk.id === payload.id);
+      const postIndex = getElementIndex(state.posts, 'id',payload.post_id);
+      const likeIndex = getElementIndex(state.posts[postIndex].post_likes, 'id',payload.id);
 
       state.posts[postIndex].post_likes.splice(likeIndex, 1);
     },
 
     SET_ALREADY_FLAGGED_ERROR: (state, payload) => {
-
       state.alreadyFlaggedError = payload;
     },
 
     CLEAR_ALREADY_FLAGGED_ERROR:(state) => {
-
       state.alreadyFlaggedError = '';
     },
 
     RESET_FLAGGED_OPTIONS: (state) => {
-
       state.flaggedOptions.forEach((flaggedOption) => {
-
         flaggedOption.selected = false;
       });
     },
@@ -254,13 +234,11 @@ const profileWall = {
     },
 
     SET_COMMENT: (state, { latest_comment }) => {
-
-      const index = state.posts.findIndex(post => post.id === latest_comment.post_id);
+      const index = getElementIndex(state.posts, 'id', latest_comment.post_id);
       if (!Object.keys(state.posts[index]).includes('post_comments')) {
-
-        state.posts[index].post_comments = [];
-        state.posts[index].post_comments.unshift(latest_comment);
-        state.posts[index].comments_count++;
+          state.posts[index].post_comments = [];
+          state.posts[index].post_comments.unshift(latest_comment);
+          state.posts[index].comments_count++;
 
         return;
       }
@@ -269,32 +247,28 @@ const profileWall = {
     },
 
     SET_REPLY_COMMENT: (state, { reply_comment }) => {
-
-        const index = state.posts.findIndex((post) => post.id === reply_comment.post_id);
-        const commentIndex = state.posts[index].post_comments.findIndex((postComment) => postComment.id === reply_comment.reply_to_comment_id);
+        const index = getElementIndex(state.posts, 'id', reply_comment.post_id);
+        const commentIndex = getElementIndex(state.posts[index].post_comments, 'id', reply_comment.reply_to_comment_id);
 
         if (!Object.keys(state.posts[index].post_comments[commentIndex]).includes('reply_comments')) {
-
-          state.posts[index].post_comments[commentIndex].reply_comments = [];
+            state.posts[index].post_comments[commentIndex].reply_comments = [];
             return;
         }
-
-      state.posts[index].post_comments[commentIndex].reply_comments.unshift(reply_comment);
-      state.posts[index].post_comments[commentIndex].reply_comments_count++;
+        state.posts[index].post_comments[commentIndex].reply_comments.unshift(reply_comment);
+        state.posts[index].post_comments[commentIndex].reply_comments_count++;
     },
 
     SET_COMMENT_ERROR:(state, payload) =>{
 
       if (payload.response.status === 422) {
+          const [ error ] = payload.response.data.errors.input;
 
-        const [ error ] = payload.response.data.errors.input;
-
-        state.commentErrors.push(
-          {
-            message: error,
-            post_id: payload.post_id
-          }
-        )
+          state.commentErrors.push(
+            {
+              message: error,
+              post_id: payload.post_id
+            }
+          );
       } else if (payload.response.status > 399 && payload.response.status < 422) {
         state.commentErrors.push(
           {
@@ -306,65 +280,53 @@ const profileWall = {
     },
 
     SET_REQUEST_FINISHED: (state, payload) => {
-
       state.requestFinished = payload;
     },
 
     RESET_COMMENT_ERRORS: (state) => {
-
       state.commentErrors = [];
     },
 
     DELETE_COMMENT: (state, payload) => {
-      const postIndex = state.posts.findIndex((post) => post.id === payload.postID);
-      const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.commentID);
+      const postIndex = getElementIndex(state.posts, 'id', payload.postID);
+      const commentIndex = getElementIndex(state.posts[postIndex].post_comments, 'id', payload.commentID);
+
       state.posts[postIndex].post_comments.splice(commentIndex, 1);
     },
 
     REFILL_COMMENTS: (state, payload) => {
-
       state.posts[payload.postIndex].post_comments.push(...payload.post_comments);
     },
 
     SET_COMMENTS_LOADED:(state, payload) => {
-
       state.commentsLoaded = payload;
     },
 
     REACT_COMMENT: (state, payload) => {
+      const postIndex = getElementIndex(state.posts, 'id', payload.post_id);
+      const commentIndex = getElementIndex(state.posts[postIndex].post_comments, 'id', payload.comment_id);
 
-        const postIndex = state.posts.findIndex((post) => post.id === payload.post_id);
-        const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.comment_id);
-
-        if (payload.action === 'like') {
-          state.posts[postIndex].post_comments[commentIndex].comment_likes.push(payload);
-          state.posts[postIndex].post_comments[commentIndex].likes++;
-        } else {
-          const index = state.posts[postIndex].post_comments[commentIndex].comment_likes.findIndex((like) => like.id === payload.id)
-          state.posts[postIndex].post_comments[commentIndex].comment_likes.splice(index, 1);
-          state.posts[postIndex].post_comments[commentIndex].likes--;
+      if (payload.action === 'like') {
+        state.posts[postIndex].post_comments[commentIndex].comment_likes.push(payload);
+        state.posts[postIndex].post_comments[commentIndex].likes++;
+      } else {
+        const index = getElementIndex(state.posts[postIndex].post_comments[commentIndex].comment_likes, 'id', payload.id);
+        state.posts[postIndex].post_comments[commentIndex].comment_likes.splice(index, 1);
+        state.posts[postIndex].post_comments[commentIndex].likes--;
       }
     },
 
-
-
-
     REACT_REPLY_COMMENT: (state, payload) => {
-
-        const postIndex = state.posts.findIndex((post) => post.id === payload.post_id);
-       const commentIndex = state.posts[postIndex].post_comments.findIndex((comment) => comment.id === payload.parent_id);
-       const replyCommentIndex = state.posts[postIndex].post_comments[commentIndex].reply_comments.findIndex(reply => reply.id === payload.comment_id);
+       const postIndex =  getElementIndex(state.posts, 'id', payload.post_id);
+       const commentIndex =  getElementIndex(state.posts[postIndex].post_comments, 'id', payload.parent_id);
+       const replyCommentIndex =  getElementIndex(state.posts[postIndex].post_comments[commentIndex].reply_comments, 'id', payload.comment_id);
 
       if (payload.action === 'like') {
-        state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.push(payload);
-        state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].likes++;
+         state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.push(payload);
+         state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].likes++;
       } else  {
-
-        const index = state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.findIndex((like) => like.id === payload.id)
-
-
-       state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.splice(index, 1);
-
+        const index =  getElementIndex(state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes, 'id', payload.id);
+        state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].comment_likes.splice(index, 1);
         state.posts[postIndex].post_comments[commentIndex].reply_comments[replyCommentIndex].likes--;
       }
     },
@@ -375,23 +337,21 @@ const profileWall = {
         state.replyErrors.push(payload);
         return;
       } else {
-        const error = state.replyErrors.findIndex((error) => error.commentId === payload.commentId);
+        const error = getElementIndex(state.replyErrors, 'commentId', payload.commentId);
         state.replyErrors.splice(error, 1);
       }
     },
 
     SET_REFILL_REPLIES: (state, { replyComments, postId, commentRepliedTo }) => {
-
-      const post = state.posts.findIndex(post => post.id === postId);
-      const postComment = state.posts[post].post_comments.findIndex(comment => comment.id === commentRepliedTo);
+      const post = getElementIndex(state.posts, 'id', postId);
+      const postComment = getElementIndex(state.posts[post].post_comments, 'id', commentRepliedTo);
       state.posts[post].post_comments[postComment].reply_comments.push(...replyComments);
     },
 
     DELETE_REPLY_COMMENT: (state, payload) => {
-      const post = state.posts.findIndex(post => post.id === payload.postID);
-      const comment = state.posts[post].post_comments.findIndex(postComment => postComment.id === payload.replyID);
-      const replyComment = state.posts[post].post_comments[comment].reply_comments.findIndex(replyComment => replyComment.id === payload.commentID);
-
+      const post = getElementIndex(state.posts, 'id', payload.postID);
+      const comment = getElementIndex( state.posts[post].post_comments, 'id', payload.replyID);
+      const replyComment = getElementIndex( state.posts[post].post_comments[comment].reply_comments, 'id', payload.commentID);
       state.posts[post].post_comments[comment].reply_comments.splice(replyComment, 1);
     },
   },
@@ -454,7 +414,6 @@ const profileWall = {
             }
           }
         );
-
           commit('SET_POSTS', response.data);
           commit('SET_POSTS_LOADED', true);
       } catch(e){
@@ -478,7 +437,7 @@ const profileWall = {
         );
           commit('DELETE_POST', payload.id);
       } catch (e) {
-        commit('RESPONSE_ERROR');
+          commit('RESPONSE_ERROR');
       }
     },
 
@@ -501,9 +460,8 @@ const profileWall = {
           }
         );
 
-       commit('LIKE_POST', response.data);
+         commit('LIKE_POST', response.data);
       } catch (e) {
-
         console.log(e.response);
       }
     },
@@ -523,7 +481,7 @@ const profileWall = {
             data: payload,
           }
           )
-        commit('UNLIKE_POST', payload);
+         commit('UNLIKE_POST', payload);
       } catch(e) {
 
       }
@@ -548,9 +506,7 @@ const profileWall = {
             },
           }
         );
-
-        commit('FLAG_POST_FINISHED', true);
-
+          commit('FLAG_POST_FINISHED', true);
     } catch (e) {
 
           commit('SET_ALREADY_FLAGGED_ERROR', e.response.data.error);
@@ -573,9 +529,7 @@ const profileWall = {
           data: payload,
         }
       );
-
       commit('SET_COMMENT', response.data);
-
       commit('SET_REQUEST_FINISHED', true);
     } catch(e) {
       commit('SET_COMMENT_ERROR', { response: e.response, post_id: payload.post_id });
@@ -597,7 +551,6 @@ const profileWall = {
           }
         }
       );
-
       if (response.status === 200) {
 
         commit('DELETE_COMMENT', payload);
@@ -611,8 +564,7 @@ const profileWall = {
   async REFILL_COMMENTS ({ state, commit }, payload) {
 
     try {
-
-      const postIndex = state.posts.findIndex(post => post.id === payload);
+      const postIndex = getElementIndex( state.posts, 'id', payload);
       const lastComment = state.posts[postIndex].post_comments[state.posts[postIndex].post_comments.length - 1];
 
       const response = await axios(
@@ -658,7 +610,7 @@ const profileWall = {
       );
 
         if (response.status === 200) {
-              payload.id = response.data.comment_like;
+            payload.id = response.data.comment_like;
             if (payload.type === 'comment') {
 
               commit('REACT_COMMENT', payload);
@@ -686,17 +638,13 @@ const profileWall = {
           },
         }
       );
-
          if (response.status === 200) {
-
             if (payload.type === 'comment') {
-
               commit('REACT_COMMENT', payload);
             } else {
               commit('REACT_REPLY_COMMENT', payload);
             }
         }
-
     } catch(e) {
         // console.log('Actions @UNLIKE_COMMENT (error): ', e.response);
     }
@@ -718,13 +666,10 @@ const profileWall = {
           data: payload,
         }
       );
-
       commit('SET_REPLY_COMMENT', response.data);
       commit('SET_REQUEST_FINISHED', true);
     } catch(e) {
-
       const { error } = e.response.data
-
       commit('SET_REPLY_ERRORS', { error, commentId: payload.reply_to_comment_id, action: 'set' })
       commit('SET_REQUEST_FINISHED', true);
     };
@@ -744,11 +689,8 @@ const profileWall = {
           }
         }
       );
-
       commit('SET_REFILL_REPLIES', response.data);
-
     } catch (e) {
-
       console.log('action: @REFILL_REPLIES Error: ', e.response);
     }
   },
@@ -767,14 +709,10 @@ const profileWall = {
           },
         }
       );
-
       if (response.status === 200) {
-
         commit('DELETE_REPLY_COMMENT', payload);
       };
-
     } catch (e) {
-
       console.log('DELETE_REPLY_COMMENT--action--error: ', e.response);
     }
   },
