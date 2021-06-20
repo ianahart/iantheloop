@@ -10,6 +10,7 @@ const initialState = () => {
     responseError: false,
     flagPostFinished: false,
     requestFinished: false,
+    initialFilter: true,
     morePosts: true,
     postInputTextLength: null,
     activeFlagPostId: null,
@@ -354,6 +355,16 @@ const profileWall = {
       const replyComment = getElementIndex( state.posts[post].post_comments[comment].reply_comments, 'id', payload.commentID);
       state.posts[post].post_comments[comment].reply_comments.splice(replyComment, 1);
     },
+
+    SET_INITIAL_FILTER: (state, payload) => {
+
+      state.initialFilter = payload;
+    },
+
+    RESET_POSTS: (state, payload) => {
+      state.lastPostItem = 0;
+      state.posts = [];
+    },
   },
 
   actions: {
@@ -398,24 +409,41 @@ const profileWall = {
       }
     },
 
-    async LOAD_POSTS ({ state, commit }, payload) {
+    async LOAD_POSTS ({ state, rootGetters, commit }, payload) {
 
       try {
+
+        let filters = rootGetters['profileWallSettings/getFilters'].length ? rootGetters['profileWallSettings/getFilters'] : '';
+
+        if (filters !== '') {
+          filters = encodeURIComponent(JSON.stringify(filters));
+
+          if (state.initialFilter) {
+            state.lastPostItem = 0;
+            state.morePosts = true;
+          }
+        }
 
         let response;
 
         response = await axios(
           {
             method: 'GET',
-            url: `/api/auth/posts?subjectId=${payload}&lastPost=${state.lastPostItem}`,
+            url: `/api/auth/posts?subjectId=${payload}&lastPost=${state.lastPostItem}&filters=${filters}`,
             headers: {
               'Accept' : 'application/json',
               'Content-Type': 'application/json',
             }
           }
         );
-          commit('SET_POSTS', response.data);
+
+          if (filters !== '' && state.initialFilter) {
+            commit('RESET_POSTS');
+            commit('SET_INITIAL_FILTER', false);
+          }
           commit('SET_POSTS_LOADED', true);
+          commit('SET_POSTS', response.data);
+
       } catch(e){
         commit('SET_POSTS_LOADED', false);
       }
@@ -691,7 +719,7 @@ const profileWall = {
       );
       commit('SET_REFILL_REPLIES', response.data);
     } catch (e) {
-      console.log('action: @REFILL_REPLIES Error: ', e.response);
+      // console.log('action: @REFILL_REPLIES Error: ', e.response);
     }
   },
 
@@ -713,7 +741,7 @@ const profileWall = {
         commit('DELETE_REPLY_COMMENT', payload);
       };
     } catch (e) {
-      console.log('DELETE_REPLY_COMMENT--action--error: ', e.response);
+      // console.log(e.response);
     }
   },
  }

@@ -138,28 +138,54 @@ class Posts
     $this->newPost = $this->enhancePosts([$this->newPost]);
   }
 
-  public function findPosts()
+  /*
+  * find all posts for a given profile wall
+  * @param Mixed String|NULL $filters
+  * @return void
+  */
+
+  public function findPosts(Mixed $filters)
   {
 
     try {
+
       // how many models to be returned from the database
       $limit = 3;
+      $formattedFilters = [];
 
-      if ($this->lastPostItem === 0) {
+      if (!is_null($filters)) {
+        $filters = json_decode($filters, true);
 
-        $posts = $this->user::find($this->subjectUserId)
-          ->posts()
-          ->latest()
-          ->paginate($limit);
-      } else {
-
-        $posts = $this->user::find($this->subjectUserId)
-          ->posts()
-          ->where('id', '<', $this->lastPostItem)
-          ->orderBy('id', 'DESC')
-          ->paginate($limit);
+        foreach ($filters as $outerIndex => $filter) {
+          $key = array_key_first($filter);
+          $formattedFilters[$key] = $filter[$key];
+        }
       }
 
+      if ($this->lastPostItem === 0) {
+        if (is_null($filters)) {
+          $posts = $this->user::find($this->subjectUserId)
+            ->posts()
+            ->latest()
+            ->paginate($limit);
+          error_log(print_r('LOADING INITIAL POSTS::::::', true));
+        } else {
+          $posts = $this->filterPosts($formattedFilters, $limit, 'initialReq');
+        }
+      } else {
+
+        if (count($formattedFilters) > 0) {
+
+          $posts = $this->filterPosts($formattedFilters, $limit, 'subseqReq');
+        } else {
+
+          $posts = $this->user::find($this->subjectUserId)
+            ->posts()
+            ->where('id', '<', $this->lastPostItem)
+            ->orderBy('id', 'DESC')
+            ->paginate($limit);
+        }
+      }
       if ($posts->total() <= 0) {
 
         throw new ModelNotFoundException('all records fetched');
@@ -418,5 +444,57 @@ class Posts
     $comment->full_name = $this->formatName($comment->user->full_name);
     $comment->profile_picture = $comment->user->profile->profile_picture;
     $comment->posted_date = $this->createPostedDate($comment->created_at);
+  }
+
+  /*
+  * filter posts by the provided array contents
+  * @param array $filters
+  * @param int $limit
+  * @param string $type
+  * @return Illuminate\Pagination\LengthAwarePaginator Object
+  */
+
+  private function filterPosts(array $filters, int $limit, string $type)
+  {
+
+    $postedBy = strtolower($filters['posted_by']);
+
+    $query = NULL;
+
+    if ($postedBy === 'you') {
+
+      $query = ['author_user_id', '=', $this->currentUserId];
+    }
+    if ($postedBy === 'others') {
+
+      $query =  ['author_user_id', '!=', $this->currentUserId];
+    }
+
+    $posts = $postedBy === 'anyone' ? $this
+      ->user::find($this->subjectUserId)
+      ->posts() : $this->user::find($this->subjectUserId)
+      ->posts()
+      ->where(...$query);
+
+    if ($type === 'initialReq') {
+
+      $filteredPosts = $posts
+        ->whereMonth('created_at', '=', $filters['go_to_month'])
+        ->whereYear('created_at', '=', $filters['go_to_year'])
+        ->latest()
+        ->paginate($limit);
+    }
+
+    if ($type === 'subseqReq') {
+
+      $filteredPosts = $posts
+        ->where('id', '<', $this->lastPostItem)
+        ->whereMonth('created_at', '=', $filters['go_to_month'])
+        ->whereYear('created_at', '=', $filters['go_to_year'])
+        ->orderBy('id', 'DESC')
+        ->paginate($limit);
+    }
+
+    return $filteredPosts;
   }
 }

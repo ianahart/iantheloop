@@ -9,6 +9,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Models\User;
 use App\Models\Post;
 use App\Helpers\Posts;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class PostController extends Controller
@@ -103,12 +104,14 @@ class PostController extends Controller
             $subjectUserId = $request->query('subjectId');
             $lastPostItem = $request->query('lastPost');
 
+
             $post = new Posts($this->user, $this->post);
 
             $post->setSubjectUserId(intval($subjectUserId));
             $post->setLastPostItem(intval($lastPostItem));
+            $post->setCurrentUserId(JWTAuth::user()->id);
 
-            $post->findPosts();
+            $post->findPosts($request->query('filters'));
 
             if ($post->getException() === 'all records fetched') {
 

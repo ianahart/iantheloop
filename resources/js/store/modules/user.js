@@ -183,17 +183,11 @@ const user = {
         ).then((response) => {
 
           if (response.status === 200) {
-
             commit('SET_TOKEN', response.data.access_token);
         }
         })
 
       } catch (e) {
-
-        /**
-         *
-         * Handled by axios interceptors
-         */
       }
     },
 

@@ -7,6 +7,11 @@
       :viewUserFirstName="viewUserFirstName"
       :currentUserProfilePic="currentUserProfilePic"
      />
+     <WallSettings
+      v-if="currentUserId === parseInt(this.baseProfile.user_id)"
+      :currentUserId="currentUserId"
+      :subjectUserId="baseProfile.user_id"
+     />
      <Posts
       :subjectUserId="baseProfile.user_id"
       :currentUserProfilePic="currentUserProfilePic"
@@ -24,6 +29,7 @@
 
   import FormTrigger from './Post/FormTrigger.vue';
   import Posts from './Post/Posts.vue';
+  import WallSettings from './WallSettings.vue';
 
   export default {
 
@@ -33,10 +39,10 @@
 
       FormTrigger,
       Posts,
+      WallSettings,
     },
 
     props: {
-
       baseProfile: Object,
       currUserFollowing: Boolean,
       currentUserId: Number,
@@ -48,18 +54,6 @@
     beforeDestroy () {
       this.RESET_MODULE();
     },
-
-
-    computed: {
-
-
-    },
-
-      mounted () {
-
-
-    },
-
 
     methods: {
       ...mapMutations('profileWall',

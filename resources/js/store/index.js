@@ -20,11 +20,12 @@ import profileAbout from './modules/profile/profileAbout.js';
 import profileEdit from './modules/profile/profileEdit.js';
 import network from './modules/network.js';
 import profileWall from './modules/profileWall.js';
+import profileWallSettings from './modules/profileWallSettings.js';
 
 Vue.use(Vuex);
-
 export default new Vuex.Store(
   {
+
 
     state: {
 
@@ -61,6 +62,7 @@ export default new Vuex.Store(
       profileEdit,
       network,
       profileWall,
+      profileWallSettings,
     },
   }
 );

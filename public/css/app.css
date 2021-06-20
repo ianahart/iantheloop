@@ -4078,6 +4078,165 @@ div.about_profile_work__row p {
   width: 100%;
   margin-top: 2rem;
 }
+.profile_wall_settings_container {
+  margin: 0 auto;
+  width: 80%;
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  background-color: #f2f2f2;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+@media (max-width: 600px) {
+.profile_wall_settings_container {
+    width: 100%;
+}
+}
+.profile_wall_settings_trigger_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+.profile_wall_settings_trigger_container h2 {
+  font-size: 1.2rem;
+  color: #44444f;
+  font-family: "Secular One", sans-serif;
+}
+.profile_wall_settings_filter_active {
+  background-color: #4bb543;
+}
+.profile_wall_settings_filter_active:hover {
+  background-color: #45a63d;
+}
+.profile_wall_settings_filter_active svg {
+  color: #f2f2f2;
+}
+.profile_wall_settings_filter_active p {
+  color: #f2f2f2;
+}
+.profile_wall_settings_filter_inactive {
+  background-color: #59646e;
+}
+.profile_wall_settings_filter_inactive:hover {
+  background-color: #4e5760;
+}
+.profile_wall_settings_filter_inactive svg {
+  color: #fff;
+}
+.profile_wall_settings_filter_inactive p {
+  color: #fff;
+}
+.profile_wall_settings_trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.25s ease-out;
+}
+.profile_wall_settings_trigger p {
+  margin: 0.1rem;
+  margin-left: 0.5rem;
+}
+.profile_wall_settings_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-left: 7rem;
+  box-sizing: border-box;
+}
+.profile_wall_settings_header h2 {
+  font-size: 1.1rem;
+  color: #474752;
+  font-family: "Secular One", sans-serif;
+}
+.profile_wall_settings_close {
+  margin-left: 10rem;
+}
+.profile_wall_settings_close svg {
+  height: 30px;
+  width: 30px;
+  color: #474752;
+}
+.profile_wall_settings_divider {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0.3rem 0;
+}
+.profile_wall_settings_info {
+  box-sizing: border-box;
+  padding: 0.5rem;
+}
+.profile_wall_settings_info h4 {
+  margin: 0.1rem;
+  color: #4e5760;
+  font-size: 1rem;
+  font-family: "Open Sans", sans-serif;
+  letter-spacing: 0.5px;
+}
+.profile_wall_settings_info p {
+  margin: 0.1rem;
+  font-size: 0.8rem;
+  color: gray;
+  font-family: "Open Sans", sans-serif;
+}
+.posted_by_filter_container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.posted_by_filter_container h4 {
+  margin-top: 1.2rem;
+  color: #474752;
+  font-size: 1rem;
+}
+.go_to_date_filter_container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.go_to_date_filter_container h4 {
+  margin-top: 1.2rem;
+  color: #474752;
+  font-size: 1rem;
+}
+.profile_wall_settings_filter_btns {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.profile_wall_settings_filter_btns button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  width: 100px;
+  transition: all 0.25s ease-out;
+  height: 35px;
+}
+.profile_wall_settings_filter_btns button:hover {
+  opacity: 0.7;
+}
+.profile_wall_settings_filter_btns button:first-of-type {
+  background-color: #e5e5e5;
+  margin-right: 0.5rem;
+}
+.profile_wall_settings_filter_btns button:last-of-type {
+  background-color: #4d4faf;
+  color: #fff;
+  margin-left: 0.5rem;
+}
+#profile_wall_settings_feedback {
+  text-align: right;
+  margin-right: 1.5rem;
+}
+@media (max-width: 600px) {
+.profile_wall_settings_header {
+    margin-left: 3rem;
+}
+}
 .profile_wall__container {
   box-sizing: border-box;
   margin: 2rem auto 3rem auto;

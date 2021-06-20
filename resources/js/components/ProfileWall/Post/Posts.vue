@@ -48,16 +48,10 @@
     },
 
     mounted () {
-
-
-
       this.setupObserver();
-
-
     },
 
     beforeDestroy() {
-
       this.observer.disconnect();
       clearTimeout(this.debounceID);
     },
@@ -72,6 +66,7 @@
           'lastPostItem',
         ]
       ),
+      ...mapState('profileWallSettings', ['filtersShowing']),
     },
 
     methods: {
@@ -108,34 +103,13 @@
     onElementObserved(entries) {
 
         entries.forEach((entry) => {
-
-
-
-
           if (entry.intersectionRatio >= this.threshold || entry.isIntersecting) {
              let seenId = entry.target.attributes['data-id'].value;
-
             this.SET_POST_SEEN(parseInt(seenId));
-
             this.debounce(() => {
-
               this.loadMore();
-            }, 400);
-
-
-  }
-          // if (entry.isIntersecting) {
-
-          //   let seenId = entry.target.attributes['data-id'].value;
-
-          //   this.SET_POST_SEEN(parseInt(seenId));
-
-          //   this.debounce(() => {
-
-          //     this.loadMore();
-          //   }, 400);
-
-          // }
+            }, 400)
+            }
         });
       },
 
