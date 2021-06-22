@@ -1,7 +1,10 @@
 <template>
   <transition name="fade" appear>
     <nav class="navbar__mobile">
-      <CloseIcon />
+      <div id="navbar__mobile_close_btn" @click="closeMenu">
+         <CloseIcon />
+      </div>
+
       <div class="navigation__links_container">
         <LogoName
           theme="light"
@@ -14,6 +17,9 @@
           v-if="isLoggedIn"
           rootStyle="nav__links__mobile"
         />
+        <Notifications
+          v-if="isLoggedIn && notificationsAreOpen"
+        />
       </div>
     </nav>
   </transition>
@@ -22,14 +28,14 @@
 
 <script>
 
-  import { mapGetters } from 'vuex';
+  import { mapState, mapGetters, mapMutations } from 'vuex';
 
   import AuthNavigationLinks from './AuthNavigationLinks';
   import CloseIcon from '../Icons/CloseIcon';
   import HamburgerIcon from '../Icons/HamburgerIcon'
   import LogoName from '../Icons/LogoName';
   import NavigationLinks from './NavigationLinks';
-
+  import Notifications from '../Notifications/Notifications.vue';
   export default {
 
     name: 'NavbarMobile',
@@ -44,19 +50,37 @@
       HamburgerIcon,
       LogoName,
       NavigationLinks,
+      Notifications,
     },
 
     computed: {
 
+      ...mapState('navigation',
+        [
+          'notificationsAreOpen'
+        ]
+      ),
+
       ...mapGetters('user',
           [
             'isLoggedIn',
+            'getUserId',
           ]
       )
     },
 
     methods: {
+      ...mapMutations('navigation',
+        [
+          'CLOSE_NOTIFICATIONS'
+        ]
+      ),
 
+       closeMenu () {
+
+        this.$store.commit('hamburgerMenu/HIDE_MENU', false);
+        this.CLOSE_NOTIFICATIONS();
+      }
     }
   };
 
@@ -83,12 +107,12 @@
     box-shadow: 0px 0px 9px 3px rgba(41,41,41,.25);
 
 
-    div {
-      display: flex;
-      justify-content: center;
-      text-align: center;
-      margin: 0 auto;
-    }
+    // div {
+    //   display: flex;
+    //   justify-content: center;
+    //   text-align: center;
+    //   margin: 0 auto;
+    // }
     }
 
     .nav__links__mobile {
@@ -125,6 +149,10 @@
     align-items: center;
   }
 
-
+#navbar__mobile_close_btn {
+  display:flex;
+  justify-content: flex-start;
+  margin-left: 0.5rem;
+}
 
 </style>

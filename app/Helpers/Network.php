@@ -19,11 +19,9 @@ class Network
   public int $curIndex;
   public mixed $exception;
   private string $userId;
-  public int $listCount;
+  public int $lastCollectionItem;
   public string $ownerProfilePic;
   private array $queryFields;
-
-
 
   public function __construct(object $stat, object $profile, object $user)
   {
@@ -42,6 +40,11 @@ class Network
   {
 
     return $this->userProfiles;
+  }
+
+  public function getListCount()
+  {
+    return $this->listCount;
   }
 
   public function setUserProfiles($userProfiles)
@@ -68,10 +71,10 @@ class Network
     $this->curIndex = $curIndex;
   }
 
-  public function getListCount()
+  public function getLastCollectionItem()
   {
 
-    return $this->listCount;
+    return $this->lastCollectionItem;
   }
 
   public function getOwnerProfilePic()
@@ -144,7 +147,7 @@ class Network
     try {
 
 
-      $perPage = 2;
+      $perPage = 3;
 
       $followingIDs = NULL;
 
@@ -154,13 +157,16 @@ class Network
         ->select($this->queryFields[0], $this->queryFields[1])
         ->first();
 
-      $networkList = $stats->{$this->queryFields[0]};
-
       $this->listCount = $stats->{$this->queryFields[1]};
 
-      if (is_null($networkList) || count($networkList) === 0) {
-        return;
+      if ($this->listCount <= 0) {
+        $msg = $this->queryFields[0] === 'following' ? 'This user does not have anyone following them yet' : 'This user does not have any followers yet';
+        throw new Exception($msg);
       }
+
+      $networkList = $stats->{$this->queryFields[0]};
+
+      $this->lastCollectionItem = array_key_last($networkList);
 
       if ($currentUserId !== $this->userId) {
 
@@ -170,8 +176,16 @@ class Network
       }
 
       $followingIDs = array_keys($networkList);
-      /**TO TEST ALL OF LIST COMMENT BELOW**/
-      $followingIDs = array_slice($followingIDs, $this->curIndex, $perPage);
+
+      if (intval($this->curIndex) === 0) {
+        $followingIDs = array_slice($followingIDs, $this->curIndex, $perPage);
+      } else {
+
+        $index = array_search(strval($this->curIndex), $followingIDs);
+
+        $followingIDs = array_slice($followingIDs, $index + 1, $perPage);
+      }
+
 
       foreach ($followingIDs as $key => $value) {
 
@@ -213,8 +227,6 @@ class Network
         $followTime = $this->followingMetaData[$i]['timestamp'];
 
         $this->userProfiles[$i]['follow_time'] = $this->formatFollowTime($followTime);
-
-
 
         $this->userProfiles[$i]['curUserFollowing'] = isset($this->followingMetaData[$i]['curUserFollowing']) ? true : false;
       }

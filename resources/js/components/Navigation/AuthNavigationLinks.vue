@@ -1,31 +1,33 @@
 
 <template>
   <ul :class="rootStyle">
-    <li
-      v-for="(authNavigationLink, index) in authNavigationLinks"
-      :key="index"
-    >
+    <li v-for="(authNavigationLink, index) in authNavigationLinks" :key="index">
       <router-link
-       @click.native="hideMenu"
-      :to="{name: authNavigationLink.component}"
+        @click.native="hideMenu"
+        :to="{ name: authNavigationLink.component }"
       >
         {{ authNavigationLink.linkText }}
       </router-link>
     </li>
     <li>
       <MessagesIcon
-        :className="!isMenuVisible ? 'messages__icon_dark' : 'messages__icon_light'"
+        :className="
+          !isMenuVisible ? 'messages__icon_dark' : 'messages__icon_light'
+        "
       />
     </li>
-    <li>
+    <li class="navbar_notificatons_listitem" @click="toggleNotifications">
       <NotificationsIcon
-        :className="!isMenuVisible ? 'notifications__icon_dark' : 'notifications__icon_light'"
+        :className="
+          !isMenuVisible
+            ? 'notifications__icon_dark'
+            : 'notifications__icon_light'
+        "
       />
     </li>
     <li>
       <!-- If user has profile pic show <img> of user profile pic -->
-      <ProfileIcon
-      location="nav"/>
+      <ProfileIcon location="nav" />
     </li>
   </ul>
 </template>
@@ -36,51 +38,48 @@
 
 
 <script>
+import { mapState, mapMutations } from "vuex";
 
-  import { mapState } from 'vuex';
+import MessagesIcon from "./LinkIcons/MessagesIcon";
+import NotificationsIcon from "./LinkIcons/NotificationsIcon";
+import ProfileIcon from "./LinkIcons/ProfileIcon";
 
-  import MessagesIcon from './LinkIcons/MessagesIcon';
-  import NotificationsIcon from './LinkIcons/NotificationsIcon';
-  import ProfileIcon from './LinkIcons/ProfileIcon';
+export default {
+  name: "NavigationLinks",
 
-  export default {
+  components: {
+    MessagesIcon,
+    NotificationsIcon,
+    ProfileIcon,
+  },
 
-    name: 'NavigationLinks',
+  props: {
+    rootStyle: String,
+  },
 
-    components: {
-      MessagesIcon,
-      NotificationsIcon,
-      ProfileIcon,
+  computed: {
+    ...mapState("navigation", ["authNavigationLinks"]),
+    ...mapState("hamburgerMenu", ["isMenuVisible"]),
+  },
+
+  methods: {
+    ...mapMutations("navigation", ["TOGGLE_NOTIFICATIONS"]),
+
+    hideMenu() {
+      if (this.isMenuVisible) {
+        this.$store.commit("hamburgerMenu/HIDE_MENU", false);
+      }
     },
 
-    props: {
-      rootStyle: String,
+    toggleNotifications() {
+      this.TOGGLE_NOTIFICATIONS();
     },
-
-    computed: {
-      ...mapState('navigation',
-        [
-          'authNavigationLinks'
-        ]
-      ),
-     ...mapState('hamburgerMenu',['isMenuVisible']),
-    },
-
-    methods: {
-
-      hideMenu () {
-
-        if (this.isMenuVisible) {
-
-          this.$store.commit('hamburgerMenu/HIDE_MENU', false);
-        }
-      },
-    }
-  }
-
-
+  },
+};
 </script>
 
 <style lang="scss">
-
+.navbar_notificatons_listitem {
+  cursor: pointer;
+}
 </style>

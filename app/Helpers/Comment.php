@@ -278,8 +278,6 @@ class Comment
   {
     try {
 
-      // type either 'comment' or 'reply';
-
       $userLikedAlready = CommentLikeModel::where('user_id', '=', $this->commentLike['user_id'])
         ->where('comment_id', '=', $this->commentLike['comment_id'])
         ->first();

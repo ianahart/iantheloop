@@ -86,7 +86,7 @@ class Statistics
   * @param void
   * @return void
   */
-  public function  checkCurrUserFollowing()
+  public function checkCurrUserFollowing()
   {
     try {
 

@@ -207,6 +207,7 @@ return [
         'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
         'FlaggedPosts' => 'App\Helpers\FlaggedPosts::class',
+        'FollowRequest' => 'App\Helpers\FollowRequest::class',
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
         'Http' => Illuminate\Support\Facades\Http::class,

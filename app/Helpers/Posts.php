@@ -149,7 +149,7 @@ class Posts
 
     try {
 
-      // how many models to be returned from the database
+
       $limit = 3;
       $formattedFilters = [];
 

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Helpers\AmazonS3;
 use App\Helpers\Statistics;
+use App\Helpers\FollowRequest;
 use App\Http\Requests\StoreMultipleForm;
 use App\Http\Requests\EditProfileRequest;
 use App\Models\Stat;
@@ -83,12 +84,20 @@ class ProfileController extends Controller
                 $currUserFollowing = false;
             }
 
+            $followRequest = new FollowRequest;
+
+            $followRequest->setRequesterUserId($currentUserId);
+            $followRequest->setReceiverUserId($profile['user_id']);
+
+            $currentUserHasRequested = $followRequest->checkRequestExists();
+
             return response()->json(
                 [
                     'msg' => 'success',
                     'profile' => $profile,
                     'stats' => $stat,
                     'currUserFollowing' => $currUserFollowing,
+                    'currUserHasRequested' => $currentUserHasRequested,
                 ],
                 200
             );
@@ -638,7 +647,7 @@ class ProfileController extends Controller
     * @param object $profile
     * @return void
     */
-    // 2021-05-11 00:52:15
+
     private function makeUpdates(object $profile)
     {
 
@@ -689,7 +698,7 @@ class ProfileController extends Controller
         switch ($key) {
 
             case 'background_picture':
-                error_log(print_r($profile->profile_filename . ' ASDKLASDSADS', true));
+
                 if (!is_null($profile->background_filename) && !empty($profile->background_filename)) {
 
                     $this->deletePrevFile($profile->background_filename);

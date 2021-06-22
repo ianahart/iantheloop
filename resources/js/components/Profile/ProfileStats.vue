@@ -17,8 +17,11 @@
       </div>
       <div class="profile_stats__buttons">
         <FollowBtn
-          v-if="currentUserId !== parseInt($route.params.id) && !currUserFollowing"
+          v-if="currentUserId !== parseInt($route.params.id) && currentUserNoActions"
           :stats="profileStats"
+        />
+        <RequestedBtn
+          v-if="currentUserId !== parseInt($route.params.id) && currentUserRequested"
         />
         <FollowingBtn
           v-if="currUserFollowing"
@@ -41,6 +44,7 @@
   import Following from './Following.vue';
   import FollowingBtn from './FollowingBtn.vue';
   import FollowingModal from './FollowingModal.vue';
+  import RequestedBtn from './RequestedBtn.vue';
 
   export default {
 
@@ -57,8 +61,8 @@
       Following,
       FollowingBtn,
       FollowingModal,
+      RequestedBtn,
     },
-
 
     computed: {
 
@@ -67,7 +71,8 @@
           'currentUserId',
           'profileStats',
           'currUserFollowing',
-          'isModalOpen'
+          'isModalOpen',
+          'followStatus',
         ]
       ),
 
@@ -76,6 +81,14 @@
           'getBaseProfile'
         ]
       ),
+
+      currentUserNoActions () {
+        return !this.currUserFollowing && !this.followStatus;
+      },
+
+      currentUserRequested () {
+         return this.followStatus.length && this.followStatus.toLowerCase() === 'requested';
+      }
     },
   }
 </script>

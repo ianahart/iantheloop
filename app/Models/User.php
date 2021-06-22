@@ -103,4 +103,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(CommentLike::class, 'user_id');
     }
+
+    public function followRequests()
+    {
+        return $this->hasMany(FollowRequest::class, 'requester_user_id');
+    }
+
+    public function followReceives()
+    {
+        return $this->hasMany(FollowRequest::class, 'receiver_user_id');
+    }
 }

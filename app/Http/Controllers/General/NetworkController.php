@@ -44,16 +44,18 @@ class NetworkController extends Controller
             $index = $request->query('index');
             $userList = $this->getUserList($queryFields, $userId, $page, $index);
 
-            if (array_key_exists('error', $userList)) {
+            if (array_key_exists('exception', $userList)) {
 
-                throw new Exception('User not found.');
+                throw new Exception($userList['exception']);
             }
+
 
             return response()
                 ->json(
                     [
                         'msg' => 'Success',
                         'profiles' => $userList['profiles'],
+                        'last_collection_item' => $userList['last_collection_item'],
                         'list_count' => $userList['list_count'],
                         'owner_profile_pic' => $userList['owner_profile_pic'],
                         'owner_name' => $userList['owner_name'],
@@ -89,9 +91,9 @@ class NetworkController extends Controller
             $index = $request->query('index');
             $userList = $this->getUserList($queryFields, $userId, $page, $index);
 
-            if (array_key_exists('error', $userList)) {
+            if (array_key_exists('exception', $userList)) {
 
-                throw new Exception('User not found.');
+                throw new Exception($userList['exception']);
             }
 
             return response()
@@ -99,6 +101,7 @@ class NetworkController extends Controller
                     [
                         'msg' => 'Success',
                         'profiles' => $userList['profiles'],
+                        'last_collection_item' => $userList['last_collection_item'],
                         'list_count' => $userList['list_count'],
                         'owner_profile_pic' => $userList['owner_profile_pic'],
                         'owner_name' => $userList['owner_name'],
@@ -129,55 +132,61 @@ class NetworkController extends Controller
 
     private function getUserList($queryFields, $userId, $page, $index)
     {
-        try {
 
-            $userNetwork = new Network($this->stat, $this->profile, $this->user);
+        $userList = [];
 
-            $userNetwork->setUserId($userId);
+        $userNetwork = new Network($this->stat, $this->profile, $this->user);
 
-            $userNetwork->setQueryFields($queryFields);
-            $userNetwork->setCurIndex($index);
-            $userNetwork->setPage($page);
-            $userNetwork->setUserProfiles([]);
+        $userNetwork->setUserId($userId);
 
-            $userExists = $userNetwork->checkUserExists();
+        $userNetwork->setQueryFields($queryFields);
+        $userNetwork->setCurIndex($index);
+        $userNetwork->setPage($page);
+        $userNetwork->setUserProfiles([]);
 
-            if (!$userExists) {
+        $userExists = $userNetwork->checkUserExists();
 
-                throw new Exception('User not Found');
-            }
+        if (!$userExists) {
 
-            $userNetwork->queryOwnerProfilePic();
-            $ownerProfilePic = $userNetwork->getOwnerProfilePic();
+            return  ['exception' => 'User not found'];
+        }
 
-            $userNetwork->pluckFollowingMetaData();
+        $userNetwork->queryOwnerProfilePic();
+        $ownerProfilePic = $userNetwork->getOwnerProfilePic();
 
+        $userNetwork->pluckFollowingMetaData();
+        $exception = $userNetwork->getException();
+
+        if (isset($exception)) {
+
+            return ['exception' => $exception];
+        }
+
+        $lastCollectionItem = $userNetwork->getLastCollectionItem();
+
+
+        if ($lastCollectionItem !== $index) {
+
+            $userNetwork->makeUserList();
             $listCount = $userNetwork->getListCount();
+        }
 
+        $exception = $userNetwork->getException();
 
-            if ($listCount > 0) {
+        if (isset($exception)) {
 
-                $userNetwork->makeUserList();
-            }
+            return ['exception' => $exception];
+        }
 
-            $exception = $userNetwork->getException();
+        $profiles = $userNetwork->getProfiles();
 
-            if (isset($exception)) {
-
-                throw new Exception($exception);
-            }
-
-            $profiles = $userNetwork->getProfiles();
-
-            return [
+        return
+            [
                 'profiles' => $profiles,
+                'last_collection_item' => $lastCollectionItem,
                 'list_count' => $listCount,
                 'owner_profile_pic' => $ownerProfilePic,
-                'owner_name' => $userExists->full_name
+                'owner_name' => $userExists->full_name,
             ];
-        } catch (Exception $e) {
-
-            return ['error' => $e->getMessage()];
-        }
     }
 }

@@ -6,7 +6,7 @@
       :ownerFullName="ownerFullName"
       network="Following"
     />
-
+    <p v-if="userError.length" class="no_following_msg">{{ userError }}</p>
     <section v-if="listCount > 0" class="following_main_content__container">
       <div class="following_main_content__heading"></div>
       <NetworkList
@@ -23,190 +23,158 @@
 
 
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Header from "../components/Network/Header.vue";
+import NetworkList from "../components/Network/NetworkList.vue";
 
-  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-  import Header from '../components/Network/Header.vue';
-  import NetworkList from '../components/Network/NetworkList.vue';
+export default {
+  name: "Following",
 
-  export default {
+  components: {
+    Header,
+    NetworkList,
+  },
 
-    name: 'Following',
+  props: {},
 
-    components: {
-      Header,
-      NetworkList,
-    },
+  data() {
+    return {
+      debounceID: "",
+    };
+  },
 
-    props: {
+  created() {
+    this.RESET_MODULE();
+    this.setUserId(this.$route.params.id);
+  },
 
-    },
+  async mounted() {
+    await this.loadFollowingList();
 
-    data () {
+    if (this.error) {
+      this.$router.push({
+        name: "NotFound",
+        query: { status: `${encodeURI("Could not find the user")}` },
+      });
+    }
+  },
 
-      return {
-        debounceID: '',
-      }
-    },
+  beforeDestroy() {
+    window.clearTimeout(this.bounceID);
+  },
 
-    created () {
+  computed: {
+    ...mapState("network", [
+      "isDataLoaded",
+      "ownerProfilePic",
+      "error",
+      "listCount",
+      "ownerFullName",
+      "networkList",
+      "userId",
+      "userError",
+    ]),
 
+    ...mapGetters("network", ["endOfList"]),
+  },
+
+  watch: {
+    "$route.params.id": function () {
       this.RESET_MODULE();
       this.setUserId(this.$route.params.id);
+      this.loadFollowingList();
+    },
+  },
+
+  methods: {
+    ...mapMutations("network", ["SET_USER_ID", "RESET_MODULE"]),
+
+    ...mapActions("network", ["GET_FOLLOWING"]),
+
+    setUserId(userId) {
+      this.SET_USER_ID(userId);
     },
 
-    async mounted () {
-
-        await this.loadFollowingList();
-
-        if (this.error) {
-
-          this.$router.push({ name: 'NotFound', query: { status: `${encodeURI('Could not find the user')}` } });
-        }
+    loadMore() {
+      this.debounce(async () => {
+        await this.GET_FOLLOWING();
+      }, 400);
     },
 
-    beforeDestroy() {
-
-      window.clearTimeout(this.bounceID);
+    async loadFollowingList() {
+      await this.GET_FOLLOWING();
     },
-
-
-
-    computed: {
-
-      ...mapState('network',
-        [
-          'isDataLoaded',
-          'ownerProfilePic',
-          'error',
-          'listCount',
-          'ownerFullName',
-          'networkList',
-          'userId',
-        ]
-      ),
-
-      ...mapGetters('network',
-        [
-          'endOfList'
-        ]
-      ),
-    },
-
-
-    watch: {
-
-        "$route.params.id": function() {
-
-            this.RESET_MODULE();
-            this.setUserId(this.$route.params.id);
-            this.loadFollowingList();
-        }
-    },
-
-    methods: {
-
-      ...mapMutations('network',
-        [
-          'SET_USER_ID',
-          'RESET_MODULE',
-        ]
-      ),
-
-      ...mapActions('network',
-        [
-          'GET_FOLLOWING'
-        ]
-      ),
-
-      setUserId (userId) {
-
-        this.SET_USER_ID(userId);
-      },
-
-      loadMore () {
-
-          this.debounce(async () => {
-
-          await this.GET_FOLLOWING();
-          }, 400);
-
-      },
-
-      async loadFollowingList() {
-
-
-          await this.GET_FOLLOWING();
-
-
-      },
-      debounce(fn, delay = 1000) {
-
+    debounce(fn, delay = 1000) {
       return ((...args) => {
-
-        clearTimeout(this.debounceID)
+        clearTimeout(this.debounceID);
 
         this.debounceID = setTimeout(() => {
+          this.debounceID = null;
 
-          this.debounceID = null
-
-          fn(...args)
-        }, delay)
-      })()
+          fn(...args);
+        }, delay);
+      })();
     },
-    }
-  }
-
+  },
+};
 </script>
 
 <style lang="scss">
+.following_page__container {
+  box-sizing: border-box;
+  background-color: lighten($primaryGray, 2);
+  height: 100%;
+  width: 100%;
+}
 
-  .following_page__container {
-    box-sizing: border-box;
-    background-color: lighten($primaryGray, 2);
-    height: 100%;
-    width: 100%;
-  }
+.following_main_content__container {
+  max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid $mainInputBorder;
+  border-radius: 8px;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  margin: 1rem auto 3rem auto;
+  min-height: 400px;
+}
 
-  .following_main_content__container {
-    max-width: 900px;
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid $mainInputBorder;
+.following_main_content__heading {
+  // background-color: $themeLightBlue;
+  background-color: rgba(72, 74, 164, 0.7);
+  height: 50px;
+  width: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.following_main_content_load_more {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem auto;
+
+  button {
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
     border-radius: 8px;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-    margin: 1rem auto 3rem auto;
-    min-height: 400px;
-  }
+    height: 30px;
+    color: $primaryWhite;
+    background-color: lighten($themeLightBlue, 3);
+    width: 120px;
+    font-size: 0.85rem;
 
-  .following_main_content__heading {
-    // background-color: $themeLightBlue;
-    background-color: rgba(72,74,164, 0.7);
-    height: 50px;
-    width: 100%;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-
-  .following_main_content_load_more {
-    display: flex;
-    justify-content: center;
-    margin: 2.5rem auto;
-
-    button {
-      box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-      border: none;
-      cursor: pointer;
-      padding: 0.2rem 0.4rem;
-      border-radius: 8px;
-      height: 30px;
-      color: $primaryWhite;
-      background-color: lighten($themeLightBlue, 3);
-      width: 120px;
-      font-size: 0.85rem;
-
-      &:hover {
-        background-color: darken($themeLightBlue, 5);
-      }
+    &:hover {
+      background-color: darken($themeLightBlue, 5);
     }
   }
+}
+
+.no_following_msg {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 3rem;
+  color: gray;
+  font-style: italic;
+}
 </style>

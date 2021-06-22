@@ -10,6 +10,22 @@ export default {
     name: "Home",
 
 
+    created () {
+
+    },
+
+    mounted () {
+
+    },
+
+    computed: {
+
+    },
+
+    methods: {
+
+    },
+
 };
 </script>
 

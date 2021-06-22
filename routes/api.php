@@ -19,7 +19,7 @@ use App\Http\Controllers\General\PostController;
 use App\Http\Controllers\General\PostLikeController;
 use App\Http\Controllers\General\FlaggedPostController;
 use App\Http\Controllers\General\CommentLikeController;
-
+use App\Http\Controllers\General\FollowRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,3 +70,6 @@ Route::delete('/auth/comment-likes/{commentLikeId}/delete', [CommentLikeControll
 Route::post('/auth/comments/reply/store', [CommentController::class, 'replyStore'])->middleware('auth:api');
 Route::get('/auth/posts/{postId}/comments/reply/show', [CommentController::class, 'showReply'])->middleware('auth:api');
 Route::delete('/auth/comments/reply/{commentID}/delete', [CommentController::class, 'deleteReply'])->middleware('auth:api');
+Route::post('/auth/follow-requests/store', [FollowRequestController::class, 'store'])->middleware('auth:api');
+Route::get('/auth/follow-requests/index', [FollowRequestController::class, 'index'])->middleware('auth:api');
+Route::delete('/auth/follow-requests/{requestId}/delete', [FollowRequestController::class, 'delete'])->middleware('auth:api');

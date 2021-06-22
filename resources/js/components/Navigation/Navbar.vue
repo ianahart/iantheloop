@@ -34,7 +34,6 @@
 
       this.onResize();
     },
-
     mounted () {
 
       window.addEventListener('resize', this.onResize);
@@ -60,21 +59,24 @@
             'CLOSE_PROFILE_DROPDOWN'
           ]
         ),
+        ...mapMutations('navigation',
+          [
+            'CLOSE_NOTIFICATIONS'
+          ]
+        ),
 
       onResize () {
 
         if (window.innerWidth <= 600) {
-
           this.$store.commit('hamburgerMenu/SHOW_MENU_ICON', true);
-
           this.CLOSE_PROFILE_DROPDOWN(false);
+          this.CLOSE_NOTIFICATIONS();
         }
 
         if (window.innerWidth >= 600) {
-
           this.$store.commit('hamburgerMenu/HIDE_MENU_ICON', false);
-
           this.$store.commit('hamburgerMenu/HIDE_MENU', false);
+          this.CLOSE_NOTIFICATIONS();
 
 
         }

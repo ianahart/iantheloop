@@ -2395,6 +2395,13 @@ body {
 .following_main_content_load_more button:hover {
   background-color: #404292;
 }
+.no_following_msg {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 3rem;
+  color: gray;
+  font-style: italic;
+}
 .followers_page__container {
   box-sizing: border-box;
   background-color: #f7f7f7;
@@ -2437,6 +2444,13 @@ body {
 }
 .followers_main_content_load_more button:hover {
   background-color: #404292;
+}
+.no_followers_msg {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 3rem;
+  color: gray;
+  font-style: italic;
 }
 .about_profile__container {
   box-sizing: border-box;
@@ -2858,6 +2872,19 @@ div.about_profile_work__row p {
   width: 18px;
   pointer-events: none;
   color: #d9d9d9;
+}
+.profile_stats_requested_btn button {
+  background-color: transparent;
+  border: 1px solid #c4c4c4;
+  cursor: pointer;
+  height: 30px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  color: gray;
+  transition: 0.5s ease-out;
+}
+.profile_stats_requested_btn button:hover {
+  background-color: #efefef;
 }
 .profile_stats__buttons {
   display: flex;
@@ -3417,6 +3444,10 @@ div.about_profile_work__row p {
     justify-content: center;
 }
 }
+#notification___icon {
+  pointer-events: none;
+  cursor: pointer;
+}
 .create_profile__icon {
   width: 25px;
   height: 25px;
@@ -3449,6 +3480,9 @@ div.about_profile_work__row p {
   right: 2px;
   pointer-events: none;
 }
+.navbar_notificatons_listitem {
+  cursor: pointer;
+}
 /*
   IMPORTS
 */
@@ -3464,65 +3498,72 @@ div.about_profile_work__row p {
   width: 75px;
   height: 60px;
 }
-.logged_in_nav {
+.follow_request_container {
+  margin: 0.7rem 0;
+}
+.follow_request_inner_content {
+  display: flex;
+  align-items: center;
+}
+.follow_request_profile_picture_container {
+  margin-right: 0.3rem;
+}
+.follow_request_profile_picture_container img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+.follow_request_profile_picture_container svg {
+  color: #fb4d70;
+  background-color: #4d4faf;
+  height: 28px;
+  width: 28px;
+}
+.follow_request_name p {
+  font-size: 0.75rem;
+  color: #f4f4f4;
+}
+.follow_request_name p em {
+  font-size: 0.65rem;
+  color: #f4f4f4;
+}
+#follow_request_sent_date {
+  font-size: 0.75rem;
+  color: gray;
+  margin: 0.1rem 0;
+  display: flex;
+  justify-content: flex-start;
+}
+.follow_request_divider {
+  width: 70%;
+  margin: 0.5rem auto;
+  border-bottom: 1px solid gray;
+}
+.follow_request_actions {
+  display: flex;
+  align-items: center;
+}
+.follow_request_actions button {
+  margin: 0 0.4rem;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  border: none;
+  border-radius: 8px;
+}
+.follow_request_actions button:first-of-type {
+  color: #45a63d;
   background-color: transparent;
+  border: 1px solid #45a63d;
 }
-.logged_in_nav a {
-  color: #3b3b44;
-}
-.default_nav {
-  background-color: #3b3b44;
-}
-.default_nav a {
-  color: #fcfcfc;
-}
-.navbar__desktop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.1rem 0.7rem;
-}
-.navbar__desktop p {
-  margin: 1rem auto;
-  text-align: center;
-}
-.logo__container {
-  display: flex;
-  justify-content: space-between;
-}
-.nav__links__desktop {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  width: 80%;
-  margin-bottom: 0;
-}
-.nav__links__desktop li {
-  margin: 0 0.5rem;
-  list-style-type: none;
-}
-.nav__links__desktop li:first-of-type {
-  margin-right: auto;
-}
-.nav__links__desktop a {
-  font-size: 0.85rem;
-  font-family: "Secular One", sans-serif;
-  letter-spacing: 0.1rem;
-  font-weight: 100;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: all 0.25s ease-in-out;
-}
-.nav__links__desktop a:hover {
-  border-bottom: 3px solid #fb4d70;
-}
-.nav__links__desktop a:first-of-type {
-  margin-right: auto;
+.follow_request_actions button:last-of-type {
+  color: #f2f2f2;
+  background-color: transparent;
+  border: 1px solid #e8e8e8;
 }
 @media (max-width: 600px) {
-.logo__container {
-    width: 90%;
+.follow_request_inner_content {
+    flex-direction: column;
+    align-items: normal;
 }
 }
 /*
@@ -4282,6 +4323,98 @@ div.about_profile_work__row p {
 
 
 
+#nav_notifications_container {
+  background-color: rgba(50, 50, 50, 0.9);
+  box-shadow: 0px 0px 11px 1px black;
+  border-radius: 8px;
+  position: absolute;
+  top: 50px;
+  right: 60px;
+  z-index: 19;
+  box-sizing: border-box;
+  padding: 0.7rem;
+}
+.nav_notifications_close {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0.3rem;
+  margin-top: 0.5rem;
+}
+.nav_notifications_close svg {
+  width: 25px;
+  height: 25px;
+  color: #fff;
+}
+@media (max-width: 600px) {
+.nav_notifications_container {
+    width: 95%;
+    margin: 0 auto;
+    top: 350x;
+    right: 1px;
+}
+}
+.logged_in_nav {
+  background-color: transparent;
+}
+.logged_in_nav a {
+  color: #3b3b44;
+}
+.default_nav {
+  background-color: #3b3b44;
+}
+.default_nav a {
+  color: #fcfcfc;
+}
+.navbar__desktop {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.1rem 0.7rem;
+}
+.navbar__desktop p {
+  margin: 1rem auto;
+  text-align: center;
+}
+.logo__container {
+  display: flex;
+  justify-content: space-between;
+}
+.nav__links__desktop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  width: 80%;
+  margin-bottom: 0;
+}
+.nav__links__desktop li {
+  margin: 0 0.5rem;
+  list-style-type: none;
+}
+.nav__links__desktop li:first-of-type {
+  margin-right: auto;
+}
+.nav__links__desktop a {
+  font-size: 0.85rem;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: 0.1rem;
+  font-weight: 100;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.25s ease-in-out;
+}
+.nav__links__desktop a:hover {
+  border-bottom: 3px solid #fb4d70;
+}
+.nav__links__desktop a:first-of-type {
+  margin-right: auto;
+}
+@media (max-width: 600px) {
+.logo__container {
+    width: 90%;
+}
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s;
 }
@@ -4296,12 +4429,6 @@ div.about_profile_work__row p {
   width: 100%;
   z-index: 17;
   box-shadow: 0px 0px 9px 3px rgba(41, 41, 41, 0.25);
-}
-.navbar__mobile div {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  margin: 0 auto;
 }
 .nav__links__mobile {
   display: flex;
@@ -4331,6 +4458,11 @@ div.about_profile_work__row p {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+#navbar__mobile_close_btn {
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 0.5rem;
 }
 .sign__out__icon {
   width: 25px;

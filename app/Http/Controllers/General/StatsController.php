@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\Statistics;
 use App\Models\Stat;
+use App\Helpers\FollowRequest;
 use Exception;
 
 
@@ -24,14 +25,18 @@ class StatsController extends Controller
     {
         try {
 
-
-
             $viewingUserId = $request->all()['viewingUserId'];
+            $requestId = $request->all()['requestId'];
+            $followRequest = new FollowRequest;
+
+            $followRequest->setReceiverUserId($viewingUserId);
+            $followRequest->removeFollowRequest(intval($requestId));
+
 
             $currentUserStat = Stat::where('user_id', '=', $userId)->first();
             $viewingUserStat = Stat::where('user_id', '=', $viewingUserId)->first();
 
-            $statisticSubject = new Statistics($viewingUserStat, $currentUserStat,);
+            $statisticSubject = new Statistics($viewingUserStat, $currentUserStat);
             $statisticUser = new Statistics($currentUserStat, $viewingUserStat);
 
             $statisticUser->setUserList($currentUserStat->following);
@@ -45,10 +50,6 @@ class StatsController extends Controller
             $statisticSubject->setListCount($viewingUserStat->followers_count);
             $statisticSubject->setNotifications($viewingUserStat->notifications);
             $statisticSubject->setStatus('followed');
-
-            // $statisticUser->removeFollow();
-            // $statisticSubject->removeFollow();
-
 
             $statisticUser->addFollow();
             $statisticSubject->addFollow();
@@ -68,12 +69,12 @@ class StatsController extends Controller
             $viewingUserStat->save();
             $currentUserStat->save();
 
+
             return response()
                 ->json(
                     [
                         'msg' => 'user followed',
                         'stats' => $viewingUserStat,
-                        'currUserFollowing' => true,
                     ],
                     200
                 );
@@ -155,17 +156,5 @@ class StatsController extends Controller
                     400
                 );
         }
-    }
-
-    private function setStatisticProps($obj, $user, $subject)
-    {
-        $obj->setUser($user);
-        $obj->setSubject($subject);
-        $obj->setFollowers($subject->followers);
-        $obj->setFollowing($user->following);
-        $obj->setFollowersCount($subject->followers_count);
-        $obj->setFollowingCount($user->following_count);
-        $obj->setUserNotifications($user->notifications);
-        $obj->setSubjectNotifications($subject->notifications);
     }
 }
