@@ -215,6 +215,7 @@ return [
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
+        'LoginThrottle' => 'App\Helpers\LoginThrottle::class',
         'Mail' => Illuminate\Support\Facades\Mail::class,
         'Network' => 'App\Helpers\Network::class',
         'Notification' => Illuminate\Support\Facades\Notification::class,

@@ -8,7 +8,10 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers\Status;
+use App\Helpers\LoginThrottle;
+use Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 
 class LoginController extends Controller
@@ -25,13 +28,36 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
+        try {
 
-        $email = $request->form['email'];
-        $password = $request->form['password'];
+            $email = $request->form['email'];
+            $password = $request->form['password'];
 
-        $user = User::where('email', '=', $email)->first();
 
-        if ($user) {
+            $loginThrottle = new LoginThrottle;
+
+            $loginThrottle->setClientIp($request->ip());
+            $loginThrottle->setUserAgent($request->header('user_agent'));
+            $loginThrottle->setCreatedSeconds(time());
+
+            $timePassed = $loginThrottle->checkTimePassed();
+
+            if ($timePassed) {
+                $loginThrottle->clearLoginAttempts();
+            }
+
+            $maxLoginAttempts = $loginThrottle->countLoginAttempts();
+
+            if ($maxLoginAttempts) {
+                throw new Exception('You have been locked out for 15 minutes for too many login attempts');
+            }
+
+
+            $user = User::where('email', '=', $email)->first();
+
+            if (!$user) {
+                throw new Exception('Sorry, we couldn\'t find an account with that email.');
+            }
 
             if (Hash::check($password, $user->password)) {
 
@@ -40,7 +66,6 @@ class LoginController extends Controller
                 JWTAuth::factory()->setTTL($TLL);
 
                 $payload = JWTAuth::attempt($request->form);
-
 
                 $this->updateStatus();
 
@@ -57,29 +82,20 @@ class LoginController extends Controller
                     200
                 );
             } else {
-
-                $errorPassword = 'Sorry, that password isn\'t right.';
-
-                return response()->json(
-                    [
-                        'password' =>
-                        [
-                            'errors' => $errorPassword,
-                        ],
-                        'formSubmitted' => false,
-                    ],
-                    400
-                );
+                throw new Exception('The provided credentials are invalid.');
             }
-        } else {
+        } catch (Exception $e) {
 
-            $errorEmail = 'Sorry, we couldn\'t find an account with that email.';
+            if (!$maxLoginAttempts) {
+
+                $loginThrottle->recordLoginAttempt();
+            }
 
             return response()->json(
                 [
-                    'email' =>
+                    'password' =>
                     [
-                        'errors' => $errorEmail
+                        'errors' => $e->getMessage(),
                     ],
                     'formSubmitted' => false,
                 ],
@@ -88,11 +104,11 @@ class LoginController extends Controller
         }
     }
 
-    /*
-     * update authentication column
-     * @param void
-     * @return void
-     */
+    // /*
+    //  * update authentication column
+    //  * @param void
+    //  * @return void
+    //  */
 
     private function updateStatus()
     {
