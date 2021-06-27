@@ -27,8 +27,8 @@ class RegisterRequest extends FormRequest
     {
         return [
 
-            'formData.firstName' => ['required', 'min:2', 'max:40', 'regex:/^[a-zA-Z\s]+$/'],
-            'formData.lastName' => ['required', 'min:2', 'max:80', 'regex:/^[a-zA-Z\s]+$/'],
+            'formData.firstName' => ['required', 'min:2', 'max:40', 'regex:/^[a-zA-Z .]+$/'],
+            'formData.lastName' => ['required', 'min:2', 'max:80', 'regex:/^[a-zA-Z .]+$/'],
             'formData.email' => 'required|email',
             'formData.password' => ['required', 'confirmed', 'min:6', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/'],
             'formData.password_confirmation' => 'required|min:6',
