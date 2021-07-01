@@ -168,7 +168,6 @@ class Posts
             ->posts()
             ->latest()
             ->paginate($limit);
-          error_log(print_r('LOADING INITIAL POSTS::::::', true));
         } else {
           $posts = $this->filterPosts($formattedFilters, $limit, 'initialReq');
         }

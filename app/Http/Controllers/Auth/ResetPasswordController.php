@@ -72,7 +72,7 @@ class ResetPasswordController extends Controller
                     [
                         'error' => 'The link has expired please return to forgot password page'
                     ],
-                    401
+                    404
                 );
             }
 

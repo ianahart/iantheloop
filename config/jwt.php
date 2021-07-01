@@ -119,7 +119,8 @@ return [
     | systems in place to revoke the token if necessary.
     |
     */
-
+    /** USE 2 FOR TESTING */
+    // 'refresh_ttl' => env('JWT_REFRESH_TTL', 2),
     'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
 
 
@@ -237,7 +238,7 @@ return [
     |
     */
 
-    'blacklist_grace_period' => env('JWT_BLACKLIST_GRACE_PERIOD', 0),
+    'blacklist_grace_period' => env('JWT_BLACKLIST_GRACE_PERIOD', 30),
 
     /*
     |--------------------------------------------------------------------------

@@ -175,16 +175,16 @@ const profileWall = {
     },
 
     CURRENT_USER_NAME: (state, payload) => {
-      state.currentUserFullName = payload
-        .split(' ')
-        .map((word) => {
 
-          return word.substr(0, 1).toUpperCase() + word.substr(1);
-        })
-        .join(' ');
+      if (payload !== null && payload !== undefined) {
+        state.currentUserFullName = payload
+            .split(' ')
+            .map((word) =>  word.substr(0, 1).toUpperCase() + word.substr(1))
+            .join(' ');
+          let firstName = payload.split(' ')[0];
+          state.currentUserFirstName = firstName.substr(0, 1).toUpperCase() + firstName.substr(1);
+      }
 
-      let firstName = payload.split(' ')[0];
-      state.currentUserFirstName = firstName.substr(0, 1).toUpperCase() + firstName.substr(1);
     },
 
     RESET_MODULE: (state) => {
@@ -405,7 +405,7 @@ const profileWall = {
 
       } catch (e) {
 
-        commit('SET_POST_ERRORS', e.response.data.errors);
+        commit('SET_POST_ERROR', e.response.data.errors);
       }
     },
 
@@ -584,8 +584,10 @@ const profileWall = {
         commit('DELETE_COMMENT', payload);
       }
     } catch(e) {
+
      // returns a 403
      // setup later on
+
     }
   },
 

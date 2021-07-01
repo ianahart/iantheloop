@@ -22,6 +22,10 @@ const notifications = {
 
   mutations: {
 
+   RESET_NOTIFICATIONS_MODULE: (state) => {
+
+     Object.assign(state, initialState());
+    },
     SET_FOLLOW_REQUESTS: (state, payload) => {
 
       state.followRequests = payload;

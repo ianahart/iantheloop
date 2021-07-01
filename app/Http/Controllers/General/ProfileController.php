@@ -519,7 +519,7 @@ class ProfileController extends Controller
                     'intercept' => false,
                     'error' => $e->getMessage()
                 ],
-                401
+                403
             );
         }
     }

@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 const initialState = () => {
 
   return {
@@ -7,7 +8,8 @@ const initialState = () => {
     jwtToken: localStorage.getItem('user'),
     statusToggledBtn: null,
     statusError: '',
-    status: JSON.parse(localStorage.getItem('user'))?.status,
+    status: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).status : 'online',
+    isUserLoggedIn: false,
   }
 };
 
@@ -67,7 +69,7 @@ const user = {
 
        if (state.jwtToken) {
 
-        // return JSON.parse(state.jwtToken).status;
+
         return state.status;
       }
     }
@@ -92,12 +94,10 @@ const user = {
     },
 
     SET_TOKEN(state,payload) {
-
       state.jwtToken = payload;
 
       localStorage.setItem('user', payload);
-      const user = JSON.parse(localStorage.getItem('user'));
-      state.status = user.status;
+      state.status = JSON.parse(payload).status;
     },
 
     REMOVE_TOKEN(state) {
@@ -144,7 +144,9 @@ const user = {
 
               'Accept': 'application/json',
               'Content-Type': 'application/json',
-            }
+            },
+
+            data: token,
           }
         );
 
@@ -154,19 +156,20 @@ const user = {
         }
       } catch (e) {
 
-        console.log(e);
+
       }
     },
 
-    async REFRESH_TOKEN({ commit, getters }) {
 
-      try {
+  async REFRESH_TOKEN({ commit, getters }) {
+
+
 
         let response;
 
        const token = getters.getToken;
 
-        response = await axios(
+        return await axios(
           {
             method: 'POST',
             url: '/api/auth/token/refresh',
@@ -180,16 +183,30 @@ const user = {
               token,
             },
           }
-        ).then((response) => {
-
-          if (response.status === 200) {
-            commit('SET_TOKEN', response.data.access_token);
-        }
-        })
-
-      } catch (e) {
-      }
+        );
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
        async UPDATE_USER_STATUS({ commit, getters }) {
 

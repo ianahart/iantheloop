@@ -24,7 +24,7 @@ class UserController extends Controller
 
             if (JWTAuth::user()->id !== intval($userId)) {
 
-                throw new Exception('User is unauthorized to make this request');
+                throw new Exception('User is forbidden from making this request');
             }
 
             $userStatus = new Status($userId);
@@ -59,7 +59,7 @@ class UserController extends Controller
                         'intercept' => false,
                         'status_updated' => false,
                     ],
-                    401
+                    403
                 );
         }
     }

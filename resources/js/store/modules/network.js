@@ -66,13 +66,13 @@ const network = {
     },
 
     SET_ERROR: (state, payload) => {
-
-      if (payload.status === 404 && payload.data.error.toLowerCase() === 'user not found') {
-        state.error = true;
-      } else if (payload.status === 404) {
-        state.userError = payload.data.error;
+      if (payload) {
+          if (payload.status === 404 && payload.data.error.toLowerCase() === 'user not found') {
+            state.error = true;
+          } else if (payload.status === 404) {
+            state.userError = payload.data.error;
+          }
       }
-
     },
 
   },
@@ -100,10 +100,11 @@ const network = {
         commit('SET_DATA_LOADED');
 
       } catch (e) {
-        console.log(e.response);
-        commit('SET_ERROR', e.response);
-        commit('SET_DATA_LOADED');
 
+        if (e.response.status !== 403 || e.response.status !== 429) {
+          commit('SET_ERROR', e.response);
+          commit('SET_DATA_LOADED');
+        }
       }
     },
 
@@ -130,12 +131,12 @@ const network = {
 
       } catch (e) {
 
-        commit('SET_ERROR', e.response);
-        commit('SET_DATA_LOADED');
-
+        if (e.response.status !== 403 || e.response.status !== 429) {
+          commit('SET_ERROR', e.response);
+          commit('SET_DATA_LOADED');
+        }
       }
     },
-
   }
 };
 

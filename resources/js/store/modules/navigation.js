@@ -46,26 +46,7 @@ const navigation = {
   },
 
   actions: {
-    async FETCH_FOLLOW_REQUESTS({ state, commit }, payload) {
 
-      try {
-
-        const response = await axios(
-          {
-            method: 'GET',
-            url: `/api/auth/follow-requests/index?userId=${payload}`,
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            }
-          }
-        );
-
-      } catch (e) {
-
-
-      }
-    }
   }
 }
 

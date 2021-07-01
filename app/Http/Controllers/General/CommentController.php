@@ -73,7 +73,14 @@ class CommentController extends Controller
     public function delete(Request $request, string $commentID)
     {
         try {
+
+
             $error = $this->initCommentProcess($request, $commentID);
+
+            if (1 === 1) {
+                throw new Exception('asdasdasdasdas this some error');
+            }
+
 
             if (gettype($error) === 'string') {
                 throw new Exception($error);

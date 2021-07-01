@@ -169,7 +169,7 @@ const profile = {
 
       } catch (e) {
 
-        commit('SET_FETCH_ERROR', e.response.data.msg);
+        // commit('SET_FETCH_ERROR', e.response.data.msg);
       }
     },
 

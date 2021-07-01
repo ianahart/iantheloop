@@ -39,7 +39,9 @@ export default {
     },
 
     async mounted() {
-        await this.fetchBaseProfileData(this.$route.params.id);
+
+    await this.fetchBaseProfileData(this.$route.params.id);
+
     },
 
     beforeDestroy() {
@@ -96,7 +98,8 @@ export default {
 
         ...mapGetters('user',
             [
-              'getProfilePic'
+              'getProfilePic',
+              'getToken',
             ]
         ),
 
@@ -134,12 +137,10 @@ export default {
         },
 
         async fetchBaseProfileData(profileId) {
+
             await this.FETCH_BASE_PROFILE_DATA(profileId);
-
             let currentUserFullname =  JSON.parse(localStorage.getItem('user'))?.name;
-
             this.CURRENT_USER_NAME(currentUserFullname);
-
             this.setInitialPostInputText();
         },
 

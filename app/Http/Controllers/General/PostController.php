@@ -62,10 +62,10 @@ class PostController extends Controller
                 ->json(
                     [
                         'msg' => 'request failed',
-                        'error' => $e->getMessage(),
+                        'errors' => $e->getMessage(),
                         'intercept' => false,
                     ],
-                    401
+                    403
                 );
         }
     }

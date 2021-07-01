@@ -54,6 +54,7 @@ export default {
 
   watch: {
     isLoggedIn() {
+
       if (this.isLoggedIn) {
         this.fetchFollowRequests();
       }

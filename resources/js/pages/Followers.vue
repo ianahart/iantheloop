@@ -65,6 +65,7 @@ export default {
 
   beforeDestroy() {
     window.clearTimeout(this.bounceID);
+
   },
 
   watch: {
@@ -109,10 +110,7 @@ export default {
       try {
         await this.GET_FOLLOWERS();
       } catch (e) {
-        console.log(
-          "pages/Followers.vue @loadFollowersList() Error: ",
-          e.message
-        );
+
       }
     },
 
