@@ -136,7 +136,6 @@ class ForgotPasswordController extends Controller
 
         $data = [
             'user_id' => $id,
-
         ];
         $customClaims = JWTFactory::customClaims($data);
 

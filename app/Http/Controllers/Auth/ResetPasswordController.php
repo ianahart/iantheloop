@@ -25,7 +25,7 @@ class ResetPasswordController extends Controller
 
         try {
 
-            $userId = $this->getUser($request->resetToken);
+
 
             $rules = [
                 'password' => [
@@ -49,6 +49,7 @@ class ResetPasswordController extends Controller
                     422
                 );
             }
+
 
             $passwordReset = $this->getPasswordReset($request->resetToken);
 
@@ -139,7 +140,7 @@ class ResetPasswordController extends Controller
         $TLL = 86400;
 
         $passwordReset  = PasswordReset::where('token', '=', $token)->first();
-        error_log(print_r($passwordReset, true));
+
         $timestamp = date_timestamp_get($passwordReset->created_at);
 
         $timeElapsed = time() - $timestamp;
@@ -148,7 +149,7 @@ class ResetPasswordController extends Controller
 
             $isValid = false;
         }
-        error_log(print_r($isValid, true));
+
         return $isValid;
     }
 
