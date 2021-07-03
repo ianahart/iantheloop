@@ -29,7 +29,7 @@ class LoginController extends Controller
     public function store(Request $request)
     {
         try {
-            error_log(print_r(JWTAuth::user(), true));
+
             $email = $request->form['email'];
             $password = $request->form['password'];
 
@@ -63,7 +63,7 @@ class LoginController extends Controller
 
                 $TLL = 60;
                 $payload = JWTAuth::attempt($request->form);
-                error_log(print_r($payload, true));
+
 
                 $this->updateStatus();
 

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 use App\Helpers\Status;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 
@@ -80,20 +79,6 @@ class refreshTokenController extends Controller
                 403
             );
         }
-
-        /*first login token from header*/
-
-        /*first login refresh token from refresh endpoint*/
-
-
-        /*second login token from header*/
-
-        /*second login refresh token from refresh endpoint*/
-
-
-        // conclusion: on the second login refresh it is still using the refresh token from the first login
-        //------------------------------------------------------------------------------------------------//
-
     }
 
 
