@@ -99,7 +99,7 @@ class ForgotPasswordController extends Controller
         try {
 
             $token = $this->generateToken($user->id);
-            error_log(print_r($token, true));
+
             /**Change $URL later for Production**/
             $URL = '/reset-password/create?token=' . $token;
 
@@ -159,7 +159,7 @@ class ForgotPasswordController extends Controller
     {
 
         try {
-            error_log(print_r($token, true));
+
             $passwordReset =  new PasswordReset();
 
             $passwordReset->email = $email;
