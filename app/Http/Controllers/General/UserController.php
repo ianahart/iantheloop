@@ -8,6 +8,7 @@ use App\Helpers\Status;
 use Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+
 class UserController extends Controller
 {
     /*
@@ -16,6 +17,7 @@ class UserController extends Controller
   * @param string $userId
   * @return void
   */
+
 
     public function updateUserStatus(Request $request, string $userId)
     {

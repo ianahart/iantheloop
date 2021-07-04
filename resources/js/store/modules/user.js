@@ -186,28 +186,6 @@ const user = {
         );
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        async UPDATE_USER_STATUS({ commit, getters }) {
 
       try {
