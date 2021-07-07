@@ -49,7 +49,7 @@ class GeneralDetailsRequest extends FormRequest
         return array_merge(
             [
 
-                'generalDetails.town' => ['nullable', 'regex:/^[\pL\s\-]+$/u'],
+                'generalDetails.town' => ['nullable'],
                 'generalDetails.display_name' => ['required', 'alpha_num', 'max:50'],
                 'generalDetails.phone' => ['nullable', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
             ],
@@ -74,7 +74,6 @@ class GeneralDetailsRequest extends FormRequest
         return array_merge(
             [
 
-                'generalDetails.town.regex' => 'Letters, spaces, and hyphens allowed',
                 'generalDetails.display_name.alpha_num' => 'Letters and numbers allowed',
                 'generalDetails.display_name.max' => 'Maximum of 50 characters',
                 'generalDetails.display_name.required' => 'Please provide a display name',

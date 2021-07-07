@@ -270,9 +270,7 @@ class ProfileController extends Controller
         try {
 
             $validated = $request->validated();
-
             if ($validated) {
-
                 $this->restructureFormData($request->all());
 
                 $token = $request->header('Authorization');
@@ -539,6 +537,7 @@ class ProfileController extends Controller
             if ($validated) {
 
                 $this->editedData = $request->all();
+
                 $exclude = ['data', '_method', 'background_pic_prev', 'profile_pic_prev'];
 
                 $this->removeMetaData($exclude);
@@ -606,7 +605,6 @@ class ProfileController extends Controller
         }
 
         $interests = $this->editedData['interests'];
-
         for ($i = 0; $i < count($interests); $i++) {
             $interests[$i]['name'] = strtolower(
                 trim($interests[$i]['name'])

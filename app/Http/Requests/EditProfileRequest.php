@@ -29,6 +29,7 @@ class EditProfileRequest extends FormRequest
      */
     public function rules()
     {
+
         $customValidator = new CustomValidator($this->all());
         $customValidator->setFormName('');
         $customValidator->generateLinkRules();
@@ -36,7 +37,7 @@ class EditProfileRequest extends FormRequest
         return array_merge(
             [
                 // general
-                'town' => ['nullable', 'regex:/^[\pL\s\-]+$/u'],
+                'town' => ['nullable'],
                 'display_name' => ['required', 'alpha_num', 'max:50'],
                 'phone' => ['nullable', 'regex:/^([0-9\s\-\+\(\)]*)$/', 'min:10'],
                 //general
@@ -45,9 +46,9 @@ class EditProfileRequest extends FormRequest
                 'interests.*.name' => ['nullable', 'max:75', 'min:2', 'regex:/(^[A-Za-z0-9 ]+$)+/'],
                 //about
                 //work
-                'company' => ['nullable', 'max:100', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
-                'position' => ['nullable', 'max:50', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
-                'work_city' => ['nullable', 'max:100', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
+                'company' => ['nullable', 'max:100'],
+                'position' => ['nullable', 'max:50'],
+                'work_city' => ['nullable', 'max:100'],
                 'description' => ['nullable', 'max:300', 'regex:/^[\.a-zA-Z0-9,!? ]*$/'],
                 //work
                 //pictures
@@ -73,7 +74,6 @@ class EditProfileRequest extends FormRequest
         return array_merge(
             [
                 //general
-                'town.regex' => 'Letters, spaces, and hyphens allowed',
                 'display_name.alpha_num' => 'Letters and numbers allowed',
                 'display_name.max' => 'Maximum of 50 characters',
                 'display_name.required' => 'Please provide a display name',
@@ -89,11 +89,8 @@ class EditProfileRequest extends FormRequest
                 //about
                 // work
                 'company.max' => 'The maximum number of characters for the company is (100) characters',
-                'company.regex' => 'Please use only letters, numbers, spaces, and punctuation',
                 'position.max' => 'The maximum number of characters for the position is (50) characters',
-                'position.regex' => 'Please use only letters, numbers, spaces, and punctuation',
                 'work_city.max' => 'The maximum number of characters for the city/town is (100) characters',
-                'work_city.regex' => 'Please use only letters, numbers, spaces, and punctuation',
                 'description.regex' => 'Please use only letters, numbers, spaces, and punctuation',
                 'description.max' => 'The maximum number of characters for the description is (300)',
                 //work
