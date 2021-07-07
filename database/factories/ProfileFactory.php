@@ -20,6 +20,25 @@ class ProfileFactory extends Factory
      *
      * @return array
      */
+
+    /**
+     * Indicate that the user is suspended.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function fullMedia()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'background_picture' => 'https://hart-looped.s3.amazonaws.com/60a6c999541f0test_image.jpg',
+                'background_filename' => 'test_image.jpg',
+                'profile_picture' => 'https://hart-looped.s3.amazonaws.com/60a6c999541f0test_image_md.png',
+                'profile_filename' => 'test_image_md.png',
+            ];
+        });
+    }
+
+
     public function definition()
     {
         return [
@@ -59,9 +78,9 @@ class ProfileFactory extends Factory
             'month_to' => '',
             'year_to' => '',
             'profile_picture' => null,
-            'profile_filename' => '',
+            'profile_filename' => null,
             'background_picture' => null,
-            'background_filename' => '',
+            'background_filename' => null,
             'work_currently' => '',
         ];
     }

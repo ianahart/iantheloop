@@ -172,6 +172,7 @@ class ProfileControllerTest extends TestCase
                 ]
             );
 
+
         $response->assertStatus(200);
         $this->assertTrue($response->getData()->isUpdated);
 
@@ -254,5 +255,51 @@ class ProfileControllerTest extends TestCase
 
         $response->assertStatus(403);
         $this->assertEquals('User not allowed to edit another user\'s profile', $response->getData()->error);
+    }
+
+    /** @test */
+    public function it_retrieves_profile_data_for_about_section()
+    {
+
+        $user = User::factory()
+            ->has(
+                Profile::factory()
+                    ->fullMedia()
+            )
+            ->create();
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->getJson(
+                '/api/auth/profile/' . $user->profile->id . '/about',
+                []
+            );
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'msg',
+            'profile' => array_keys($user->profile->ToArray()),
+        ]);
+    }
+
+    /** @test */
+    public function it_returns_not_found_if_no_profile()
+    {
+        $user = User::factory()
+            ->has(Profile::factory())
+            ->create(
+                [
+                    'id' => 7
+                ]
+            );
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->getJson(
+                '/api/auth/profile/' . strval(6) . '/about',
+                []
+            );
+        $response->assertStatus(404);
+        $this->assertEquals('Profile details were not found', $response->getData()->msg);
     }
 }
