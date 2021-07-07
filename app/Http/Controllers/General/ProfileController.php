@@ -494,7 +494,7 @@ class ProfileController extends Controller
 
             $profile = Profile::where('id', '=', $profileId)->first();
 
-            if ($profile->user_id !== JWTAuth::user()->id) {
+            if (intval($profile->user_id) !== intval(JWTAuth::user()->id)) {
 
                 throw new Exception('User not allowed to edit another user\'s profile');
             }

@@ -77,11 +77,6 @@ class CommentController extends Controller
 
             $error = $this->initCommentProcess($request, $commentID);
 
-            if (1 === 1) {
-                throw new Exception('asdasdasdasdas this some error');
-            }
-
-
             if (gettype($error) === 'string') {
                 throw new Exception($error);
             }

@@ -16,6 +16,12 @@ class FlaggedPost extends Model
     ];
 
 
+    protected $casts = [
+
+        'user_id' => 'integer'
+    ];
+
+
     public function user()
     {
 

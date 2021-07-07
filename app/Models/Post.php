@@ -10,6 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
+
         'post_text',
         'photo_filename',
         'video_filename',

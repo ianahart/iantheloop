@@ -8,11 +8,15 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Profile;
+
+
 
 
 
@@ -180,5 +184,75 @@ class ProfileControllerTest extends TestCase
             )
         );
         $this->assertNotEquals('somethingchanged03', $user->profile->display_name);
+    }
+
+    /** @test */
+    public function it_retrieves_the_users_profile_data_for_editing()
+    {
+        $users = User::factory()
+            ->has(Profile::factory())
+            ->count(3)
+            ->state(new Sequence(
+                ['password' => Hash::make('Password123$')],
+
+            ))
+            ->create();
+
+        JWTAuth::attempt(['email' => $users[1]->email, 'password' => 'Password123$']);
+        $token = JWTAuth::fromUser($users[1]);
+        JWTAuth::setToken($token);
+
+        $response = $this
+            ->actingAs($users[1], 'api')
+            ->getJson(
+                '/api/auth/profile/' . strval($users[1]->profile->id) . '/edit',
+                []
+            );
+
+        $response->assertStatus(200);
+        $this->assertEquals($users[1]->id, $response->getData()->data->user_id);
+        $response->assertJsonStructure(
+            [
+                'data' => [
+                    'id',
+                    'user_id',
+                    'background_picture',
+                    'profile_picture',
+                    'profile_filename',
+                    'background_filename',
+                    'company',
+                    'interests',
+                    'bio',
+                    'town',
+                ],
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_will_not_retrieve_the_users_profile_data_for_editing_if_not_curr_user()
+    {
+        $users = User::factory()
+            ->count(2)
+            ->has(Profile::factory())
+            ->create(
+                [
+                    'password' => Hash::make('Password123$')
+                ]
+            );
+
+        JWTAuth::attempt(
+            [
+                'email' => $users[0]->email,
+                'password' => 'Password123$'
+            ]
+        );
+        $token = JWTAuth::fromUser($users[0]);
+        JWTAuth::setToken($token);
+
+        $response = $this->actingAs($users[0], 'api')->getJson('/api/auth/profile/' . $users[1]->profile->id . '/edit', []);
+
+        $response->assertStatus(403);
+        $this->assertEquals('User not allowed to edit another user\'s profile', $response->getData()->error);
     }
 }

@@ -17,6 +17,12 @@ class Comment extends Model
         'is_edited',
     ];
 
+    protected $casts = [
+
+        'user_id' => 'integer'
+    ];
+
+
     public function user()
     {
 

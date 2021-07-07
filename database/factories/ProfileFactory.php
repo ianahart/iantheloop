@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Profile;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 class ProfileFactory extends Factory
 {
@@ -23,7 +24,7 @@ class ProfileFactory extends Factory
     {
         return [
             'gender' => 'female',
-            'user_id' => '',
+            'user_id' => User::factory(),
             'birth_day' => '',
             'birth_month' => '',
             'birth_year' => '',

@@ -43,6 +43,7 @@ class Profile extends Model
         'links' => 'array',
         'interests' => 'array',
         'work_currently' => 'boolean',
+        'user_id' => 'integer'
     ];
 
 
