@@ -337,6 +337,7 @@ class Posts
 
     $subjectName = $this->appendSubjectName();
 
+
     foreach ($posts as $post) {
 
       $post['post_posted'] = $this->createPostedDate($post['created_at']);

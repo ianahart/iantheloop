@@ -38,6 +38,7 @@ class PostController extends Controller
 
             if ($validated) {
 
+
                 $formData = $request->all();
 
                 foreach ($formData as $key => $val) {

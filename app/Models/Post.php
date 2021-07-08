@@ -10,7 +10,8 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
-
+        'subject_user_id',
+        'author_user_id',
         'post_text',
         'photo_filename',
         'video_filename',
@@ -24,6 +25,8 @@ class Post extends Model
 
     protected $casts = [
         'like_records' => 'array',
+        'subject_user_id' => 'integer',
+        'author_user_id' => 'integer',
     ];
 
     public function user()

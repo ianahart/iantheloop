@@ -22,7 +22,7 @@ class ProfileFactory extends Factory
      */
 
     /**
-     * Indicate that the user is suspended.
+     * A profile will have both a pro pic and a bg pic.
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
