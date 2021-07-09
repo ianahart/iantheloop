@@ -194,7 +194,7 @@ class PostController extends Controller
                     200
                 );
         } catch (Exception $e) {
-            error_log(print_r($e->getMessage(), true));
+
 
             return response()
                 ->json(

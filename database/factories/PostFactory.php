@@ -31,7 +31,7 @@ class PostFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'photo_link' => 'https://hart-looped.s3.amazonaws.com/60a6c999541f0test_image.jpg',
-                'photo_filename' => 'test_image.jpg',
+                'photo_filename' => 'posts/test_image.jpg',
             ];
         });
     }
@@ -46,7 +46,7 @@ class PostFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'video_link' => 'https://hart-looped.s3.amazonaws.com/posts/1622899494sample_video_3mb.mp4',
-                'video_filename' => '1622899494sample_video_3mb.mp4',
+                'video_filename' => 'posts/1622899494sample_video_3mb.mp4',
             ];
         });
     }

@@ -385,7 +385,7 @@ class Posts
 
       $post->delete();
     } catch (Exception $e) {
-      error_log(print_r($e->getMessage(), true));
+
       $this->exception = $e->getMessage();
     }
   }
