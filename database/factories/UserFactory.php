@@ -21,6 +21,22 @@ class UserFactory extends Factory
      *
      * @return array
      */
+
+    /**
+     * Indicate that the user is has created a profile.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function userProfileCreated()
+    {
+        return $this
+            ->state(function (array $attributes) {
+                return [
+                    'profile_created' => true,
+                ];
+            });
+    }
+
     public function definition()
     {
 
@@ -37,6 +53,7 @@ class UserFactory extends Factory
             'password' => $this->faker->password(10),
             'remember_token' => Str::random(10),
             'is_logged_in' => false,
+            'profile_created' => false,
         ];
     }
 

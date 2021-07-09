@@ -15,6 +15,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Profile;
+use App\Models\Stat;
 
 
 
@@ -301,5 +302,81 @@ class ProfileControllerTest extends TestCase
             );
         $response->assertStatus(404);
         $this->assertEquals('Profile details were not found', $response->getData()->msg);
+    }
+
+    /** @test */
+    public function it_returns_base_profile_and_profile_stats()
+    {
+        $subjectUser = User::factory()
+            ->userProfileCreated()
+            ->create(
+                [
+                    'id' => 7
+                ]
+            );
+
+        $relatedUsers = ['following' => [], 'followers' => []];
+        $notifications = [];
+
+        foreach (User::factory()->count(5)->create() as  $index => $relatedUser) {
+
+            foreach ($relatedUser->getAttributes() as $key => $value) {
+                if (!in_array($key, ['id', 'full_name', 'created_at'])) {
+
+                    unset($relatedUser[$key]);
+                }
+            }
+
+            $relation = $index % 2 === 0 ?  'following' : 'followers';
+            $notifications[$relatedUser->full_name] =
+
+                [
+                    'name' => $relatedUser->full_name,
+                    'timestamp' => time(),
+                    'notification' => $relation === 'following' ? 'You started following ' . $relatedUser->full_name : $relatedUser->full_name . ' has started following you.',
+                ];
+
+
+            $relatedUsers[$relation][$relatedUser->id] = $relatedUser;
+        }
+
+        Profile::factory()->for($subjectUser)->create(
+            [
+                'profile_picture' => 'https://hart-looped.s3.amazonaws.com/60a6c999541f0weatherman_pro_2.jpeg',
+                'profile_filename' => '60a6c999541f0weatherman_pro_2.jpeg',
+                'background_picture' => 'https://hart-looped.s3.amazonaws.com/60a6c87f300ceweatherman_bg-2.jpeg',
+                'background_filename' => '60a6c87f300ceweatherman_bg-2.jpeg',
+            ]
+        );
+        Stat::factory()
+            ->for($subjectUser)
+            ->create(
+                [
+                    'name' => $subjectUser->full_name,
+                    'profile_id' => $subjectUser->profile->id,
+                    'following' => json_encode($relatedUsers['following']),
+                    'followers' => json_encode($relatedUsers['followers']),
+                    'notifications' => json_encode($notifications),
+                    'following_count' => count($relatedUsers['following']),
+                    'followers_count' => count($relatedUsers['followers']),
+                ]
+            );
+
+        $response = $this
+            ->actingAs($subjectUser, 'api')
+            ->getJson(
+                '/api/auth/profile/' . $subjectUser->id,
+                []
+            );
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'msg',
+            'profile',
+            'currUserFollowing',
+            'currUserHasRequested',
+        ]);
+        $this->assertSame(json_encode($relatedUsers['following']), $response->getData()->stats->following);
+        $this->assertSame(json_encode($relatedUsers['followers']), $response->getData()->stats->followers);
     }
 }

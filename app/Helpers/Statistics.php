@@ -154,7 +154,6 @@ class Statistics
       $this->listCount = $this->listCount - 1;
     } catch (Exception $e) {
 
-      error_log(print_r($e->getMessage()));
 
       $this->exception = $e->getMessage();
     }
@@ -174,8 +173,6 @@ class Statistics
         'timestamp' => $this->timestamp,
       ];
     } catch (Exception $e) {
-
-      error_log(print_r($e->getMessage()));
 
       $this->exception = $e->getMessage();
     }
