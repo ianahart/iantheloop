@@ -74,7 +74,6 @@ class CommentController extends Controller
     {
         try {
 
-
             $error = $this->initCommentProcess($request, $commentID);
 
             if (gettype($error) === 'string') {
