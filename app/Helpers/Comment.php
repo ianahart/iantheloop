@@ -88,7 +88,6 @@ class Comment
         $query = CommentModel::where('post_id', '=', $this->postId)
           ->where('user_id', '=', $this->userId)->whereNull('reply_to_comment_id');
       } else {
-
         $query = CommentModel::where('post_id', '=', $this->postId)
           ->where('user_id', '=', $this->userId)
           ->where('reply_to_comment_id', '=', $this->commentId);
