@@ -292,4 +292,150 @@ class CommentControllerTest extends TestCase
         $response->assertStatus(404);
         $response->assertJsonFragment(['error' => 'All comments have been loaded']);
     }
+
+    /** @test */
+    public function it_retrieves_reply_comments_for_a_comment()
+    {
+        $users = User::factory()
+            ->has(Profile::factory()->fullMedia())
+            ->count(2)
+            ->create();
+
+        $post = Post::factory()->create();
+
+        $commentRepliedTo = Comment::factory()->for($post)->create(
+            [
+                'user_id' => $users[0]->id,
+                'post_id' => $post->id,
+                'id' => 1,
+            ]
+        );
+
+        Comment::factory()
+            ->count(9)
+            ->state(
+                new Sequence(
+                    ['user_id' => 1],
+                    ['user_id' => 2],
+                )
+            )
+            ->for($post)
+            ->create(
+                [
+                    'post_id' => 1,
+                    'reply_to_comment_id' => $commentRepliedTo->id,
+                ]
+            );
+
+        $lastReplyCommentId = $post->comments->count();
+
+        $paginationChunks = [];
+        $returnedReplyToIds = [];
+
+        for ($i = 0; $i < round($post->comments->count() / 3); $i++) {
+            if ($i > 0) {
+                $lastReplyCommentId = $lastReplyCommentId - 3;
+            }
+            $response = $this
+                ->actingAs($users[0], 'api')
+                ->getJson(
+                    '/api/auth/posts/' .
+                        $post->id .
+                        '/comments/reply/show?last=' .
+                        $lastReplyCommentId . '&replyTo=' .
+                        $post->comments[0]->id,
+                    []
+                );
+
+            $response->assertStatus(200);
+
+            array_push($paginationChunks, count($response->getData()->replyComments));
+            array_push($returnedReplyToIds, ...array_map(fn ($replyComment) =>
+            intval($replyComment->reply_to_comment_id), $response->getData()->replyComments));
+        }
+
+        $this->assertSame(
+            [3, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1],
+            array_merge(
+                $paginationChunks,
+                $returnedReplyToIds
+            )
+        );
+    }
+
+    /** @test */
+    public function it_returns_a_message_if_all_reply_comments_are_loaded()
+    {
+        $user = User::factory()
+            ->create();
+
+        $post = Post::factory()
+            ->create(['id' => 2]);
+
+        Profile::factory()
+            ->for($user)
+            ->create();
+
+        $commentRepliedTo = Comment::factory()
+            ->for($post)
+            ->create(
+                [
+                    'id' => 1,
+                    'user_id' => $user->id,
+                    'post_id' => $post->id
+                ]
+            );
+
+        Comment::factory()
+            ->for($post)
+            ->create(
+                [
+                    'user_id' => $user->id,
+                    'post_id' => $post->id,
+                    'reply_to_comment_id' => $commentRepliedTo->id,
+                ]
+            );
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->getJson(
+                '/api/auth/posts/' .
+                    $post->id .
+                    '/comments/reply/show?last=' .
+                    $post->comments[count($post->comments) - 1] .
+                    '&replyTo=' .
+                    $commentRepliedTo->id,
+                []
+            );
+
+        $response->assertStatus(404);
+        $response->assertJsonFragment(
+            [
+                'error' => 'All replies have been loaded'
+            ]
+        );
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Delete Reply Comment Payload:
+// Array
+// (
+//     [uid] => 17
+//     [type] => reply_comment
+// )
+
+
+# Delete Reply Comment Endpoint:
+// url: `/api/auth/comments/reply/${payload.commentID}/delete?=uid=${payload.userID}&type=reply_comment
