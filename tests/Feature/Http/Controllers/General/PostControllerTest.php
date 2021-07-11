@@ -11,6 +11,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Profile;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
@@ -191,5 +192,92 @@ class PostControllerTest extends TestCase
                 'error' => 'Post not found'
             ]
         );
+    }
+
+    /** @test */
+    public function it_returns_posts_for_a_users_profile()
+    {
+        $subjectUser = User::factory()->has(Profile::factory()->fullMedia())->create();
+
+        $users = User::factory()
+            ->count(9)
+            ->has(Profile::factory()->fullMedia())
+            ->create();
+
+        foreach ($users as $key => $user) {
+
+            Post::factory()
+                ->for($subjectUser)
+                ->state(
+                    [
+                        'author_user_id' => $user->id,
+                        'created_at' => round($key % 2 === 0) ?
+                            '2021-07-11 20:04:39' : '2021-06-11 20:04:39',
+                    ]
+                )
+                ->create();
+        }
+
+        foreach ($subjectUser->posts as $key => $post) {
+            $mainComment = Comment::factory()
+                ->for($post)
+                ->create(
+                    [
+                        'user_id' => $post->author_user_id,
+                        'reply_to_comment_id' => null
+                    ]
+                );
+            Comment::factory()
+                ->for($post)
+                ->create(
+                    [
+                        'user_id' => $post->author_user_id,
+                        'reply_to_comment_id' => $mainComment->id
+                    ]
+                );
+        }
+
+        $lastPost = $subjectUser->posts->last()->id;
+        $responses = [];
+
+        for ($i = 0; $i < 3; $i++) {
+            if ($i > 0) {
+                $lastPost = $lastPost - 3;
+            }
+
+            $response = $this
+                ->actingAs($subjectUser, 'api')
+                ->getJson(
+                    '/api/auth/posts?subjectId=' .
+                        $subjectUser->id .
+                        '&lastPost=' .
+                        $lastPost .
+                        '&filters=',
+                    []
+                );
+
+            $response->assertStatus(200);
+            array_push($responses, $response->getData()->posts);
+        }
+
+        $postIDsOrder = [];
+        foreach ($responses as $index => $response) {
+            array_push($postIDsOrder, ...array_map(fn ($column) => $column->id, $response));
+        }
+
+        $this->assertEquals(
+            13,
+            $responses[0][1]->post_comments[0]->id
+        );
+        $this->assertEquals(
+            13,
+            intval(
+                $responses[0][1]
+                    ->post_comments[0]
+                    ->reply_comments[0]
+                    ->reply_to_comment_id
+            )
+        );
+        $this->assertSame([8, 7, 6, 5, 4, 3, 2, 1], $postIDsOrder);
     }
 }

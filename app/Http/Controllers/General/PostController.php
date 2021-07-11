@@ -122,6 +122,7 @@ class PostController extends Controller
             if ($moreRecords) {
 
                 $posts = $post->getPosts();
+
                 $lastPostItem = $post->getLastPostItem();
             } else {
 
