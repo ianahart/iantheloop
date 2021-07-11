@@ -6,11 +6,9 @@ use App\Http\Controllers\General\CommentController;
 use App\Http\Requests\StoreCommentRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 use JMac\Testing\Traits\AdditionalAssertions;
 use App\Models\Comment;
-use App\Models\CommentLike;
 use App\Models\Post;
 use App\Models\Profile;
 use App\Models\User;
@@ -366,6 +364,7 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function it_returns_a_message_if_all_reply_comments_are_loaded()
     {
+
         $user = User::factory()
             ->create();
 
@@ -415,27 +414,184 @@ class CommentControllerTest extends TestCase
             ]
         );
     }
+    /** @test */
+    public function it_stores_a_reply_comment_on_a_post()
+    {
+        $this->assertActionUsesFormRequest(CommentController::class, 'store', StoreCommentRequest::class);
+
+        $user = User::factory()->has(Post::factory())
+            ->create();
+
+        Profile::factory()
+            ->fullMedia()
+            ->for($user)
+            ->create();
+
+        Comment::factory()
+            ->count(2)
+            ->state(
+                new Sequence(
+                    [
+                        'id' => 1,
+                        'reply_to_comment_id' => null
+                    ],
+                    [
+                        'id' => 2,
+                        'reply_to_comment_id' => 1
+                    ],
+                )
+            )
+            ->for($user->posts[0])
+            ->create();
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->postJson(
+                '/api/auth/comments/reply/store',
+                [
+                    'post_id' => $user->posts[0]->id,
+                    'user_id' => $user->id,
+                    'reply_to_comment_id' => $user->posts[0]->comments[0]->id,
+                    'input' => $this->faker()->text(35),
+                ]
+            );
+
+        $response->assertStatus(201);
+        $this->assertEquals(
+            $user->posts[0]->id,
+            intval($response->getData()->reply_comment->post_id)
+        );
+
+        $this->assertEquals(
+            $user->id,
+            $response->getData()->reply_comment->user_id
+        );
+
+        $this->assertEquals(
+            $user->posts[0]->comments[0]->id,
+            intval($response->getData()->reply_comment->reply_to_comment_id)
+        );
+    }
+
+    /** @test */
+    public function it_deletes_a_reply_comment_if_user_is_author_or_subject()
+    {
+        $subjectUser = User::factory()
+            ->create(
+                [
+                    'id' => 1
+                ]
+            );
+
+        $replyCommentAuthor = User::factory()
+            ->create(
+                [
+                    'id' => 2
+                ]
+            );
+        $postAuthorUser =  User::factory()
+            ->create(
+                ['id' => 5]
+            );
+
+        Post::factory()
+            ->for($subjectUser)
+            ->has(
+                Comment::factory()
+                    ->count(3)
+                    ->state(
+                        new Sequence(
+                            ['reply_to_comment_id' => null],
+                            ['reply_to_comment_id' => 1, 'user_id' => $subjectUser->id],
+                            ['reply_to_comment_id' => 1, 'user_id' => $replyCommentAuthor->id],
+                            []
+                        )
+                    )
+
+            )
+            ->create(
+                [
+                    'subject_user_id' => $subjectUser->id,
+                    'author_user_id' => $postAuthorUser->id,
+                ]
+            );
+
+
+        $responses = [];
+
+        foreach ([$subjectUser, $replyCommentAuthor] as $key => $user) {
+
+            $response = $this
+                ->actingAs($user, 'api')
+                ->deleteJson(
+                    '/api/auth/comments/reply/' .
+                        $subjectUser
+                            ->posts[0]->comments[$key === 0 ? 1 : $key + 1]->id .
+                        '/delete?=uid' . $user->id .
+                        '&type=reply_comment',
+                    []
+                );
+
+            $response->assertStatus(200);
+            $responses[] = strval($response->getStatusCode()) . ' ' . $response->getData()->msg;
+        }
+
+        $this->assertSame(
+            $responses,
+            [
+                '200 reply successfully deleted',
+                '200 reply successfully deleted',
+            ]
+        );
+
+        $subjectUser->refresh();
+
+        $this->assertNull($subjectUser->posts[0]->comments[0]->reply_to_comment_id);
+        $this->assertCount(1, $subjectUser->posts[0]->comments);
+    }
+
+    /** @test */
+    public function it_will_not_delete_a_reply_comment_if_not_authorized()
+    {
+        [$subjectUser, $unAuthorizedUser] = User::factory()
+            ->count(2)
+            ->has(Profile::factory())
+            ->create();
+
+        Post::factory()
+            ->for($subjectUser)
+            ->has(Comment::factory()->count(2)->state(new Sequence(
+                ['reply_to_comment_id' => null, 'user_id' => $subjectUser->id],
+                ['reply_to_comment_id' => 1, 'user_id' => $subjectUser->id],
+            )))
+            ->create(
+                [
+                    'subject_user_id' => $subjectUser->id,
+                    'author_user_id' => $subjectUser->id
+                ]
+            );
+
+        $response = $this
+            ->actingAs($unAuthorizedUser, 'api')
+            ->deleteJson(
+                '/api/auth/comments/reply/' .
+                    $subjectUser
+                        ->posts[0]->comments[1]->id .
+                    '/delete?=uid' . $unAuthorizedUser->id .
+                    '&type=reply_comment',
+                []
+            );
+        $response->assertStatus(403);
+        $response->assertJsonFragment(
+            [
+                'error' => 'Forbidden action: cannot delete comment that is not yours'
+            ]
+        );
+
+        $subjectUser->refresh();
+        $this->assertCount(
+            2,
+            $subjectUser->posts->first()->comments
+        );
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Delete Reply Comment Payload:
-// Array
-// (
-//     [uid] => 17
-//     [type] => reply_comment
-// )
-
-
-# Delete Reply Comment Endpoint:
-// url: `/api/auth/comments/reply/${payload.commentID}/delete?=uid=${payload.userID}&type=reply_comment

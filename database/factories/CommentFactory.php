@@ -17,6 +17,24 @@ class CommentFactory extends Factory
     protected $model = Comment::class;
 
     /**
+     * a comment that is a reply to another comment
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function replyComment()
+    {
+        return $this
+            ->state(
+                function (array $attributes) {
+                    return [
+                        'id' => 2,
+                        'reply_to_comment_id' => 1,
+                    ];
+                }
+            );
+    }
+
+    /**
      * Define the model's default state.
      *
      * @return array
