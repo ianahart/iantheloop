@@ -53,8 +53,9 @@ class FlaggedPosts
       $flaggedPost = new FlaggedPost();
 
       $flaggedPost->post_id = $this->postId;
-      $flaggedPost->user_id = $this->userId;
 
+
+      $flaggedPost->user_id = $this->userId;
       $this->formatReasons();
       $flaggedPost->reasons = $this->reasons;
 

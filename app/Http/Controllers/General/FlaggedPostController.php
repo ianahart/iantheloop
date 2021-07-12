@@ -23,6 +23,7 @@ class FlaggedPostController extends Controller
 
             $flaggedPost = new FlaggedPosts;
 
+
             $flaggedPost->setUserId($request->all()['user_id']);
             $flaggedPost->setPostId($request->all()['post_id']);
             $flaggedPost->setFlaggedData($request->all()['reasons']);

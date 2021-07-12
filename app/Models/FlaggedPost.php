@@ -11,7 +11,7 @@ class FlaggedPost extends Model
 
     protected $fillable = [
         'user_id',
-        'pos_id',
+        'post_id',
         'reasons'
     ];
 
