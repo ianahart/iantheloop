@@ -30,6 +30,7 @@ class CommentLikeController extends Controller
             if (gettype($error) === 'string') {
                 throw new Exception($error);
             }
+
             return response()
                 ->json(
                     [
