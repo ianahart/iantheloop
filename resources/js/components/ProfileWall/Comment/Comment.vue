@@ -58,6 +58,7 @@
           :replyComment="firstReplyComment"
           :originalComment="postComment.id"
           :currentUserId="getUserId"
+          :currentUserName="userName"
         />
      </div>
      <div v-if="!shouldReplyThreadStart"  class="xs_spacer_top post_reply_comments_wrapper">
@@ -67,6 +68,7 @@
           :replyComment="replyComment"
           :originalComment="postComment.id"
           :currentUserId="getUserId"
+          :currentUserName="userName"
         />
      </div>
      <div class="sm_spacer">

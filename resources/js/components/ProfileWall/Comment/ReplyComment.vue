@@ -60,6 +60,7 @@
       replyComment: Object,
       currentUserId: Number,
       originalComment: Number,
+      currentUserName: String,
     },
 
     components: {
@@ -91,7 +92,7 @@
                  await this.LIKE_COMMENT(
                   {
                     user_id: this.currentUserId,
-                    liked_by: comment.full_name.toLowerCase(),
+                    liked_by: this.currentUserName.toLowerCase(),
                     comment_id: comment.id,
                     post_id: comment.post_id,
                     type: 'reply',
