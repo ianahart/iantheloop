@@ -39,7 +39,6 @@ class PostLikeController extends Controller
             $postLikes->addLikeToPost();
             $newLike = $postLikes->getNewLike();
 
-
             return response()
                 ->json(
                     [
@@ -64,18 +63,22 @@ class PostLikeController extends Controller
     /*
     * Delete a like on the post by the current user
     * @param Request $request
+    * @param string $id
     * @return JsonResponse
     */
-    public function delete(Request $request)
+    public function delete(Request $request, string $id)
     {
 
         try {
 
             $postLikes = new PostLikes($this->postLike, $this->post);
 
-            $postLikes->setPostLikeToDel($request->all());
-
-
+            $postLikes->setPostLikeToDel(
+                [
+                    'id' => $id,
+                    'user_id' => $request->query('userId')
+                ]
+            );
 
             $postLikes->deletePostLike();
 

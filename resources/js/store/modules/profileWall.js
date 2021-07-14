@@ -497,16 +497,14 @@ const profileWall = {
     async UNLIKE_POST({ state, commit }, payload) {
 
       try {
-
         let response = await axios(
           {
             method: 'DELETE',
-            url: `/api/auth/post-likes/${payload.id}/delete`,
+            url: `/api/auth/post-likes/${payload.id}/delete?userId=${payload.user_id}`,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            data: payload,
           }
           )
          commit('UNLIKE_POST', payload);

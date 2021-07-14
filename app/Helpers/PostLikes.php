@@ -102,8 +102,6 @@ class PostLikes
       $post->save();
 
       $like->delete();
-
-      error_log(print_r($like->post, true));
     } catch (Exception $e) {
 
       $this->exception = $e->getMessage();
