@@ -27,6 +27,7 @@ class StatsController extends Controller
 
             $viewingUserId = $request->all()['viewingUserId'];
             $requestId = $request->all()['requestId'];
+
             $followRequest = new FollowRequest;
 
             $followRequest->setReceiverUserId($viewingUserId);
