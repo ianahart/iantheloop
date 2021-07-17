@@ -30,6 +30,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    height:50px;
 
     p {
       color: $primaryWhite;
@@ -50,6 +51,7 @@
 
     .footer {
       flex-direction: column;
+      height: 17.5%;
     }
   }
 

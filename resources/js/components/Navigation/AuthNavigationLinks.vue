@@ -26,7 +26,7 @@
       />
     </li>
     <li>
-      <!-- If user has profile pic show <img> of user profile pic -->
+
       <ProfileIcon location="nav" />
     </li>
   </ul>

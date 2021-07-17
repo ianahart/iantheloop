@@ -22,6 +22,7 @@ import network from './modules/network.js';
 import profileWall from './modules/profileWall.js';
 import profileWallSettings from './modules/profileWallSettings.js';
 import notifications from './modules/notifications.js';
+import messenger from './modules/messenger.js';
 
 Vue.use(Vuex);
 export default new Vuex.Store(
@@ -65,6 +66,7 @@ export default new Vuex.Store(
       profileWall,
       profileWallSettings,
       notifications,
+      messenger,
     },
   }
 );

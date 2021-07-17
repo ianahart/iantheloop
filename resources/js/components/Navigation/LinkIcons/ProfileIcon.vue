@@ -42,6 +42,12 @@
           'getStatus',
         ]
       ),
+
+      ...mapState('messenger',
+          [
+            'isMessengerOpen',
+          ]
+        ),
     },
 
     methods: {
@@ -52,7 +58,17 @@
         ]
       ),
 
+      ...mapMutations('messenger',
+          [
+            'CLOSE_MESSENGER'
+          ]
+        ),
+
       toggleDropdown () {
+
+        if (this.isMessengerOpen) {
+          this.CLOSE_MESSENGER();
+        }
 
         this.TOGGLE_PROFILE_DROPDOWN();
       }

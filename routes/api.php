@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\Messenger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ use App\Http\Controllers\General\PostLikeController;
 use App\Http\Controllers\General\FlaggedPostController;
 use App\Http\Controllers\General\CommentLikeController;
 use App\Http\Controllers\General\FollowRequestController;
+use App\Http\Controllers\General\MessengerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,3 +75,4 @@ Route::delete('/auth/comments/reply/{commentID}/delete', [CommentController::cla
 Route::post('/auth/follow-requests/store', [FollowRequestController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/follow-requests/index', [FollowRequestController::class, 'index'])->middleware('auth:api');
 Route::delete('/auth/follow-requests/{requestId}/delete', [FollowRequestController::class, 'delete'])->middleware('auth:api');
+Route::get('/auth/messenger/{userId}/show', [MessengerController::class, 'show'])->middleware('auth:api');

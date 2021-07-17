@@ -12,6 +12,7 @@ use Exception;
 
 class Comment
 {
+
   const MAX_LIMIT = 3;
 
   private array $commentLike;

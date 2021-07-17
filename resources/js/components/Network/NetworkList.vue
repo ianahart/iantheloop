@@ -1,5 +1,5 @@
 <template>
-  <div class="network_list__container">
+  <divs class="network_list__container">
       <NetworkListItem
         v-for="networkListItem in networkList"
         :key="networkListItem.user_id"
@@ -7,7 +7,7 @@
         :userId="userId"
         :network="network"
       />
-  </div>
+  </divs>
 </template>
 
 

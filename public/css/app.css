@@ -430,6 +430,12 @@ h2 {
   color: #3b3b44;
 }
 
+.icon__xsm__light {
+  width: 20px;
+  height: 20px;
+  color: #fcfcfc;
+}
+
 .icon__sm__light {
   width: 24px;
   cursor: pointer;
@@ -4607,12 +4613,164 @@ div.about_profile_work__row p {
     top: 300px;
 }
 }
+.messenger_trigger {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: #4c4c57;
+  padding: 0.5rem;
+  position: fixed;
+  right: -38px;
+  top: 125px;
+  text-align: center;
+  height: 30px;
+  border-radius: 0.25rem;
+  transform: rotate(-90deg);
+  transition: all 0.3s ease-out;
+}
+.messenger_trigger:hover {
+  background-color: #42424c;
+}
+.messenger_trigger h3 {
+  color: #fcfcfc;
+  letter-spacing: 0.01rem;
+  margin: 0;
+  margin-left: 0.3rem;
+  font-family: "Secular One", sans-serif;
+}
+@media (max-width: 600px) {
+.messenger_trigger {
+    top: 100px;
+    z-index: 35;
+}
+}
+.messenger_header_container h4 {
+  font-weight: 100;
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+}
+.messenger_header {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.messenger_actions {
+  display: flex;
+  align-items: center;
+}
+.messenger_actions svg {
+  margin: 0 0.3rem;
+}
+.filter_contacts {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.contacts_options {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.messenger_header_separator {
+  border-top: 1px solid #767676;
+  margin: 0.3rem 0;
+}
+.contact_profile_picture {
+  position: relative;
+}
+.contact_profile_picture img {
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+}
+.contact_profile_picture svg {
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  background-color: #484aa4;
+  color: #fb4d70;
+}
+.contact_profile_picture .messenger_online_indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 2px solid black;
+  position: absolute;
+  bottom: 6px;
+  right: 0;
+}
+.contact_profile_picture .messenger_online_indicator_online {
+  background-color: limegreen;
+}
+.contact_profile_picture .messenger_online_indicator_offline {
+  background-color: gray;
+}
+.messenger_contact_list_item {
+  box-sizing: border-box;
+  display: flex;
+  padding: 0.1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.1rem auto;
+  border-radius: 8px;
+  transition: all 0.1ss ease-out;
+  cursor: pointer;
+}
+.messenger_contact_list_item:hover {
+  background-color: #2f2f36;
+}
+.messenger_contact_list_item h5 {
+  margin: 0.1rem 0;
+  flex-grow: 1;
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+  padding-left: 0.2rem;
+  font-size: 0.65rem;
+  font-weight: 100;
+}
+.messenger_contact_list_item h5:hover {
+  color: #fff;
+}
+
+.messenger-enter-active, .messenger-leave-active {
+  transition: all 0.3s ease-out;
+}
+.messenger-enter, .messenger-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}
+.messenger_container {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  top: 200px;
+  height: 500px;
+  min-height: 400px;
+  width: 200px;
+  position: fixed;
+  z-index: 30;
+  background-color: #3b3b44;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #fcfcfc;
+  bottom: 50px;
+  border-radius: 8px;
+  right: 0;
+  box-shadow: 0px 0px 11px 1px black;
+}
+@media (max-width: 600px) {
+.messenger_container {
+    bottom: 115px;
+    height: 300px;
+}
+}
 .footer {
   background-color: #333333;
   flex-shrink: 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 50px;
 }
 .footer p {
   color: #fcfcfc;
@@ -4630,5 +4788,6 @@ div.about_profile_work__row p {
 @media (max-width: 600px) {
 .footer {
     flex-direction: column;
+    height: 17.5%;
 }
 }

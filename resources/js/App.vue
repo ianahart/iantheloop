@@ -7,17 +7,21 @@
       />
       <router-view></router-view>
     </div>
+    <MessengerTrigger
+        v-if="getProfileStatus"
+    />
+    <MessengerContainer
+        v-if="getProfileStatus && isMessengerOpen"
+    />
     <Footer />
 </div>
 </template>
 
 <script>
-/*
-SASS
-*/
+
 import '../sass/app.scss';
 
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
 
@@ -26,16 +30,12 @@ export default {
     name: "App",
 
     components: {
-
         Navbar: () => import("./components/Navigation/Navbar.vue"),
         ProfileDropdown: () => import('./components/Dropdowns/ProfileDropdown.vue'),
+        MessengerTrigger: () => import('./components/messenger/MessengerTrigger.vue'),
+        MessengerContainer: () => import('./components/messenger/MessengerContainer.vue'),
         Footer: () => import('./components/Footer.vue'),
     },
-
-    mounted() {
-
-    },
-
 
     computed: {
 
@@ -44,6 +44,16 @@ export default {
                 'isProfileDropdownOpen'
             ]
           ),
+        ...mapState('messenger',
+           [
+               'isMessengerOpen',
+           ]
+         ),
+      ...mapGetters('user',
+            [
+                'getProfileStatus'
+            ]
+        ),
     },
 
     methods: {
