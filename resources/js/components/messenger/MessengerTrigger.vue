@@ -38,7 +38,7 @@
       ...mapState('messenger',
         [
           'isMessengerOpen',
-          'contacts_count',
+          'contactsCount',
           'contacts',
         ]
       ),
@@ -62,7 +62,7 @@
 
               this.TOGGLE_MESSENGER();
 
-              if (this.isMessengerOpen && this.contacts_count !== this.contacts.length) {
+              if (this.isMessengerOpen && this.contactsCount !== this.contacts.length) {
                 await this.GET_MESSENGER_CONTACTS();
               };
           } catch (err) {
@@ -83,7 +83,7 @@
     padding: 0.5rem;
     position: fixed;
     right: -38px;
-    top: 125px;
+    top: 20%;
     text-align: center;
     height: 30px;
     border-radius: 0.25rem;
@@ -104,8 +104,11 @@
 
 @media (max-width:600px) {
   .messenger_trigger {
-    top: 100px;
+    top: 17%;
+    left: -45px;
+    right:unset;
     z-index: 35;
+    transform: rotate(90deg);
   }
 }
 </style>

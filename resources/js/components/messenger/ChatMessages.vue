@@ -1,11 +1,6 @@
 <template>
-  <div v-if="contacts.length" class="messenger_contacts_list">
-    <MessengerContact
-      v-for="contact in getContacts"
-      :key="contact.id"
-      :contact="contact"
-    />
-
+  <div class="chat_messages_container">
+      <p class="chat_message">Messages go here</p>
   </div>
 </template>
 
@@ -13,38 +8,23 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import MessengerContact from './MessengerContact.vue';
-
   export default {
 
-    name: 'MessengerContacts',
+    name: 'ChatMessages',
     props: {
 
     },
     components: {
-      MessengerContact,
+
     },
-
     data () {
-
       return {
 
       }
     },
-
-
     computed: {
-      ...mapState('messenger',
-        [
-          'contacts'
-        ]
-      ),
-      ...mapGetters('messenger',
-        [
-          'getContacts'
-        ]),
-    },
 
+    },
     methods: {
 
     }
@@ -53,10 +33,14 @@
 
 <style lang="scss">
 
-  .messenger_contacts_list {
+  .chat_messages_container {
     box-sizing: border-box;
-    min-height: 375px;
-    max-height: 400px;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0.4rem;
+    min-height: 200px;
+    max-height: 275px;
+    box-sizing: border-box;
     overflow-y: auto;
 
            &::-webkit-scrollbar {
@@ -73,10 +57,14 @@
       }
   }
 
-  @media(max-width:600px) {
-    .messenger_contacts_list {
-          max-height: 275px;
-          min-height: 0;
+  .chat_message {
+    font-weight: 100;
+    font-size: 0.65rem;;
+  }
+
+  @media(max-width: 600px) {
+    .chat_messages_container {
+      max-height: 240px;
     }
   }
 

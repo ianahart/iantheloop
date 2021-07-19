@@ -1,5 +1,5 @@
 <template>
-  <div class="contact_profile_picture">
+  <div @click="goToProfile(userId)" class="contact_profile_picture">
     <img v-if="profilePicture" :src="profilePicture" :alt="alt" />
     <DefaultProfileIcon
       v-else
@@ -22,6 +22,7 @@
       profilePicture: String,
       alt: String,
       status: String,
+      userId: Number,
     },
     components: {
       DefaultProfileIcon,
@@ -46,6 +47,11 @@
 
     methods: {
 
+      goToProfile(userId) {
+          if (this.$route.params.id !== userId) {
+            this.$router.push({ name: 'Profile', params: { id: userId }});
+          }
+      }
     },
   }
 </script>
@@ -54,6 +60,7 @@
 
   .contact_profile_picture {
     position:relative;
+    cursor: pointer;
 
     img {
       border-radius: 50%;

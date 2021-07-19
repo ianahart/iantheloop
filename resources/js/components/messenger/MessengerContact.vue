@@ -1,9 +1,10 @@
 <template>
-  <div @click="goToProfile(contact)" class="messenger_contact_list_item">
+  <div @click="openChatWindow(contact)" class="messenger_contact_list_item">
     <ProfilePicture
       :profilePicture="contact.profile.profile_picture"
       :alt="contact.full_name"
       :status="contact.status"
+      :userId="contact.id"
     />
     <h5>{{ contact.formatted_name }}</h5>
   </div>
@@ -30,18 +31,18 @@
 
       }
     },
-
-    mounted() {
-      console.log('Single Contact: ', this.contact);
-    },
-
     computed: {
 
     },
 
     methods: {
-      goToProfile(contact) {
-        this.$router.push({ name: 'Profile', params: { id: contact.id }});
+      ...mapMutations('messenger',
+        [
+          'OPEN_CHAT_WINDOW'
+        ]
+      ),
+      openChatWindow(contact) {
+        this.OPEN_CHAT_WINDOW(contact);
       }
     }
   }
