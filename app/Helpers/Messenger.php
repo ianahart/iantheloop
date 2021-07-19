@@ -34,6 +34,12 @@ class Messenger
 
       $currentUser = User::find($this->curUserId);
 
+      if (is_null($currentUser->stat->following) || is_null($currentUser->stat->followers)) {
+
+        throw new Exception('No contacts available yet');
+      }
+
+
       $this->contacts =  User::whereIn(
         'id',
         array_intersect(
@@ -55,7 +61,7 @@ class Messenger
       }
     } catch (Exception $e) {
 
-      $this->error = $e->getMessage;
+      $this->error = $e->getMessage();
     }
   }
 

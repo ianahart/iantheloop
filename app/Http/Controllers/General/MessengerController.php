@@ -26,8 +26,10 @@ class MessengerController extends Controller
 
             $messenger->aggregateContacts();
 
-            if (!is_null($messenger->getError())) {
-                throw new Exception('Not found');
+            $exception = $messenger->getError();
+
+            if (!is_null($exception)) {
+                throw new Exception($exception);
             }
 
             return response()
@@ -44,7 +46,7 @@ class MessengerController extends Controller
                 ->json(
                     [
                         'msg' => 'No contacts available',
-                        'errors' => [$e->getMessage()]
+                        'errors' => $e->getMessage(),
                     ],
                     404
                 );
