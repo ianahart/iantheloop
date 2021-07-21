@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\User;
+use App\Models\Message;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+
+Broadcast::channel('chat.{conversationId}', function ($user, $conversationId) {
+
+    $message = Message::where('conversation_id', '=', $conversationId)->first();
+
+    return $user->id === $message->sender_user_id || $message->recipient_user_id;
 });

@@ -118,4 +118,19 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(FollowRequest::class, 'receiver_user_id');
     }
+
+    // public function messages()
+    // {
+    //     return $this->hasMany(Message::class, 'recipient_user_id');
+    // }
+
+    public function recipientMessages()
+    {
+        return $this->hasMany(Message::class, 'recipient_user_id');
+    }
+
+    public function senderMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_user_id');
+    }
 }

@@ -75,4 +75,6 @@ Route::delete('/auth/comments/reply/{commentID}/delete', [CommentController::cla
 Route::post('/auth/follow-requests/store', [FollowRequestController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/follow-requests/index', [FollowRequestController::class, 'index'])->middleware('auth:api');
 Route::delete('/auth/follow-requests/{requestId}/delete', [FollowRequestController::class, 'delete'])->middleware('auth:api');
+Route::get('/auth/messages/{recipientId}/show', [MessengerController::class, 'showChatMessages'])->middleware('auth:api');
+Route::post('/auth/messages', [MessengerController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/messenger/{userId}/show', [MessengerController::class, 'show'])->middleware('auth:api');
