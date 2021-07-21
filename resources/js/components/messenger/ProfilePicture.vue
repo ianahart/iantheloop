@@ -5,7 +5,7 @@
       v-else
       className="default_profile_image_rel_sm"
     />
-    <div :class="`messenger_online_indicator ${this.onlineIndicator}`"></div>
+    <div v-if="status" :class="`messenger_online_indicator ${this.onlineIndicator}`"></div>
   </div>
 </template>
 

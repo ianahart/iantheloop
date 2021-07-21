@@ -32,17 +32,30 @@
       }
     },
     computed: {
-
+      ...mapState('messenger',
+        [
+          'isChatWindowOpen'
+        ]
+      ),
     },
 
     methods: {
       ...mapMutations('messenger',
         [
-          'OPEN_CHAT_WINDOW'
+          'OPEN_CHAT_WINDOW',
+          'CLOSE_CHAT_WINDOW',
+          'RELOAD_CHAT_WINDOW'
         ]
       ),
       openChatWindow(contact) {
-        this.OPEN_CHAT_WINDOW(contact);
+        this.RELOAD_CHAT_WINDOW();
+
+        if (this.isChatWindowOpen) {
+
+          this.CLOSE_CHAT_WINDOW();
+
+        }
+          this.OPEN_CHAT_WINDOW(contact);
       }
     }
   }

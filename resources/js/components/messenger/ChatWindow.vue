@@ -24,7 +24,10 @@
     </div>
     <div class="chat_window_divider"></div>
     <div class="chat_window_content">
-      <ChatMessages />
+      <ChatMessages
+        v-if="chatMessagesLoaded"
+        :chatMessages="chatMessages"
+      />
       <div class="chat_message_input">
         <input
           @change="recordChatMessage($event, getChatWindowUser)"
@@ -59,10 +62,32 @@
     },
 
 
+
+    async mounted() {
+
+      await this.getChatMessages();
+
+      Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+      Echo.private(`chat.${this.chatMessages[0]['conversation_id']}`)
+      .listen('MessageSent', (e) => {
+        console.log('Broadcasted: ', e);
+          this.ADD_CHAT_MESSAGE(e.message);
+      });
+    },
+
+
+    beforeDestroy() {
+      /** Research How To Do:*/
+      //Echo.leaveChannel
+      // when switching to another chat window
+    },
+
     computed: {
       ...mapState('messenger',
         [
-          'chatMessage'
+          'chatMessage',
+          'chatMessages',
+          'chatMessagesLoaded',
         ]
       ),
       ...mapGetters('messenger',
@@ -74,6 +99,8 @@
         [
           'getUserId',
           'userName',
+          'getToken'
+
         ]
       ),
       chatWindowUserStatus () {
@@ -86,29 +113,34 @@
         [
           'CLOSE_CHAT_WINDOW',
           'RECORD_CHAT_MESSAGE',
+          'RESET_CHAT_MESSAGE_DATA',
+          'ADD_CHAT_MESSAGE',
         ]
       ),
       ...mapActions('messenger',
         [
-          'SEND_CHAT_MESSAGE'
+          'SEND_CHAT_MESSAGE',
+          'GET_CHAT_MESSAGES',
         ]
       ),
+
+      async getChatMessages() {
+        await this.GET_CHAT_MESSAGES();
+      },
 
        recordChatMessage(e, user) {
         const message = {
           recipient: {
-            recipientID: user.id,
-            recipientName: user.formatted_name,
-            message: e.target.value,
+            recipient_user_id: user.id,
+            recipient_name: user.formatted_name,
           },
           sender: {
-            senderID: this.getUserId,
-            senderName: this.userName,
+            sender_user_id: this.getUserId,
+            sender_name: this.userName,
+            message: e.target.value,
           },
         }
         this.RECORD_CHAT_MESSAGE(message);
-
-
       },
 
       async sendChatMessage() {
@@ -116,6 +148,7 @@
       },
       closeChatWindow() {
         this.CLOSE_CHAT_WINDOW();
+        this.RESET_CHAT_MESSAGE_DATA();
       }
     }
   }

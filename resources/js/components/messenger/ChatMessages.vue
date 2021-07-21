@@ -1,6 +1,11 @@
 <template>
-  <div class="chat_messages_container">
-      <p class="chat_message">Messages go here</p>
+  <div v-if="chatMessagesLoaded" class="chat_messages_container">
+    <ChatMessage
+      v-for="chatMessage in chatMessages"
+      :key="chatMessage.id"
+      :chatMessageData="chatMessage"
+      :curUserId="getUserId"
+   />
   </div>
 </template>
 
@@ -8,22 +13,34 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
+  import ChatMessage from './ChatMessage.vue';
+
   export default {
 
     name: 'ChatMessages',
     props: {
-
+      chatMessages: Array,
     },
     components: {
-
+      ChatMessage,
     },
     data () {
       return {
 
       }
     },
-    computed: {
 
+    computed: {
+      ...mapState('messenger',
+        [
+           'chatMessagesLoaded'
+        ]
+      ),
+      ...mapGetters('user',
+        [
+          'getUserId'
+        ]
+      ),
     },
     methods: {
 
@@ -55,11 +72,6 @@
           border-radius: 20px;
           border: 3px solid darken($primaryBlack, 10);
       }
-  }
-
-  .chat_message {
-    font-weight: 100;
-    font-size: 0.65rem;;
   }
 
   @media(max-width: 600px) {

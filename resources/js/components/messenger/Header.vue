@@ -75,9 +75,10 @@
           'TOGGLE_FILTER_BOX_VISIBILITY'
         ]
       ),
+
       toggleFilterBox () {
         this.TOGGLE_FILTER_BOX_VISIBILITY();
-      }
+      },
     },
   }
 </script>

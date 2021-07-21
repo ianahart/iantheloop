@@ -10,6 +10,8 @@
     <p class="no_contacts_explanation" v-if="getServerErrors.length">A contact is someone that you are following and they are following you back.</p>
       <ChatWindow
         v-if="isChatWindowOpen"
+        :key="chatWindowReload"
+
       />
   </div>
   </transition>
@@ -56,6 +58,7 @@
           'contactsCount',
           'messengerLoaded',
           'isChatWindowOpen',
+          'chatWindowReload'
         ]
       ),
       ...mapGetters('messenger',
