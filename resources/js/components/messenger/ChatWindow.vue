@@ -61,25 +61,23 @@
       ChatMessages,
     },
 
-
+ // add a field to messages called TYPE initial|conversation
+ // when first opening up chat window
 
     async mounted() {
-
       await this.getChatMessages();
 
       Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
-      Echo.private(`chat.${this.chatMessages[0]['conversation_id']}`)
+      Echo.private(`chat.${this.conversationId}`)
       .listen('MessageSent', (e) => {
         console.log('Broadcasted: ', e);
           this.ADD_CHAT_MESSAGE(e.message);
       });
     },
 
-
     beforeDestroy() {
-      /** Research How To Do:*/
-      //Echo.leaveChannel
-      // when switching to another chat window
+      Echo.leave(`chat.${this.conversationId}`);
+      this.SET_CONVERSATION_ID(null);
     },
 
     computed: {
@@ -88,6 +86,7 @@
           'chatMessage',
           'chatMessages',
           'chatMessagesLoaded',
+          'conversationId',
         ]
       ),
       ...mapGetters('messenger',
@@ -115,6 +114,7 @@
           'RECORD_CHAT_MESSAGE',
           'RESET_CHAT_MESSAGE_DATA',
           'ADD_CHAT_MESSAGE',
+          'SET_CONVERSATION_ID',
         ]
       ),
       ...mapActions('messenger',

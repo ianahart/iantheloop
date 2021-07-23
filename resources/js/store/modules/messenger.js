@@ -10,6 +10,7 @@ const initialState = () => {
     chatWindowReload: 0,
     chatWindowReloadTimes: 0,
     contactsCount: null,
+    conversationId: null,
     chatWindowUserId: null,
     isMessengerOpen: false,
     isChatWindowOpen: false,
@@ -54,16 +55,14 @@ const messenger = {
   mutations: {
 
 
+    SET_CONVERSATION_ID(state, payload) {
+      state.conversationId = payload;
+    },
+
     RELOAD_CHAT_WINDOW(state) {
       state.chatWindowReload++
       state.chatWindowReloadTimes = state.chatWindowReloadTimes + 1;
     },
-
-
-
-
-
-
 
     SET_CHAT_MESSAGES_LOADED(state, payload) {
       state.chatMessagesLoaded = payload;
@@ -146,6 +145,7 @@ const messenger = {
 
     ADD_CHAT_MESSAGE(state, message) {
       state.chatMessages = [message, ...state.chatMessages];
+      // state.conversationId =
     }
   },
 
@@ -196,6 +196,7 @@ const messenger = {
 
         if (response.status === 200) {
           commit('SET_CHAT_MESSAGES', response.data.chat_messages);
+          commit('SET_CONVERSATION_ID', response.data.conversation_id);
           commit('SET_CHAT_MESSAGES_LOADED', true);
         }
 
@@ -216,13 +217,12 @@ const messenger = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
               },
-              data: state.chatMessage,
+              data: { chat_message: state.chatMessage, conversation_id: state.conversationId },
             }
           );
 
-          console.log('@action messenger.js SEND_CHAT_MESSAGE SUCC', response);
           if (response.status === 200) {
-            // commit('ADD_CHAT_MESSAGE', response.data.message);
+            commit('SET_CONVERSATION_ID', response.data.conversation_id);
             commit('RESET_CHAT_MESSAGE_DATA');
           }
 

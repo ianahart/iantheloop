@@ -45,9 +45,10 @@
 
     },
 
-
-
     beforeDestroy() {
+      if (this.conversationId !== null) {
+        Echo.leave(`chat.${this.conversationId}`);
+      }
        this.RESET_MESSENGER_MODULE();
     },
 
@@ -58,7 +59,8 @@
           'contactsCount',
           'messengerLoaded',
           'isChatWindowOpen',
-          'chatWindowReload'
+          'chatWindowReload',
+          'conversationId',
         ]
       ),
       ...mapGetters('messenger',
