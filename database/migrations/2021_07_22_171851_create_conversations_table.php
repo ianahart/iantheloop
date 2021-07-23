@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddConversationIdToMessages extends Migration
+class CreateConversationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class AddConversationIdToMessages extends Migration
      */
     public function up()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            if (!Schema::hasColumn('messages', 'conversation_id')) {
-                $table->string('conversation_id')->nullable();
-            }
+        Schema::create('conversations', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('participants')->nullable();
         });
     }
 
@@ -27,8 +27,6 @@ class AddConversationIdToMessages extends Migration
      */
     public function down()
     {
-        Schema::table('messages', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('conversations');
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
-use App\Models\User;
-use App\Models\Message;
+use App\Models\Conversation;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +17,9 @@ use App\Models\Message;
 
 Broadcast::channel('chat.{conversationId}', function ($user, $conversationId) {
 
-    $message = Message::where('conversation_id', '=', $conversationId)->first();
+    $conversation = Conversation::find($conversationId);
 
-    return $user->id === $message->sender_user_id || $message->recipient_user_id;
+    [$userOne, $userTwo] = explode(' ', $conversation->participants);
+
+    return $user->id === intval($userOne) || intval($userTwo);
 });

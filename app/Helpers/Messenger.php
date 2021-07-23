@@ -5,8 +5,9 @@ namespace App\Helpers;
 use App\Events\MessageSent;
 use App\Models\User;
 use App\Models\Message;
+use App\Models\Conversation;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
+
 
 use Exception;
 use DateTime;
@@ -23,7 +24,8 @@ class Messenger
   private string $error;
   private object $contacts;
   private $newMessage;
-  private array $chatMessages;
+  private array $chatMessages = [];
+  private int $conversationId;
 
   public function __construct(int $curUserId)
   {
@@ -55,6 +57,11 @@ class Messenger
     return $this->chatMessages;
   }
 
+  public function getConversationId()
+  {
+    return $this->conversationId;
+  }
+
   private function makeReadableDate()
   {
     $date = new DateTime();
@@ -63,7 +70,13 @@ class Messenger
     return $date->format('g:ia m/j/Y');
   }
 
-  public function storeNewMessage()
+  /*
+  *Stores a new Message and then broadcasts that message
+  *@param int $conversationId
+  */
+
+
+  public function storeNewMessage(int $conversationId)
   {
     try {
 
@@ -83,24 +96,7 @@ class Messenger
 
       $message->message_sent = $this->makeReadableDate();
 
-
-      $existingConversation = Message::whereIn(
-        'recipient_user_id',
-        [$message->sender_user_id, $message->recipient_user_id]
-      )
-        ->whereIn(
-          'sender_user_id',
-          [$message->sender_user_id, $message->recipient_user_id]
-        )
-        ->first();
-
-      if (is_null($existingConversation)) {
-
-        $message['conversation_id'] = Str::uuid();
-      } else {
-
-        $message['conversation_id'] = $existingConversation->conversation_id;
-      }
+      $message->conversation_id = $conversationId;
 
       $message->save();
 
@@ -111,6 +107,8 @@ class Messenger
       $message['sender_name'] = $currentUser->formatted_name;
 
       broadcast(new MessageSent($message, $currentUser));
+
+      $this->conversationId = $message->conversation_id;
     } catch (Exception $e) {
 
       $this->error = $e->getMessage();
@@ -161,20 +159,34 @@ class Messenger
     try {
 
 
-      $sixMonthsAgo = time() - (264289 * 60);
+      $structureOne = implode(' ', array_reverse(explode(' ', strval($this->curUserId) . ' ' . strval($recipientId))));
+      $structureTwo = strval($this->curUserId) . ' ' . strval($recipientId);
 
-      $sixMonthsAgo = Carbon::createFromTimestamp($sixMonthsAgo);
-      $sixMonthsAgo = Carbon::createFromFormat('Y-m-d H:i:s', $sixMonthsAgo);
+      $conversations = Conversation::whereIn('participants', [$structureOne, $structureTwo])
+        ->first();
 
-      $results = Message::OrderBy('messages.created_at', 'DESC')
-        ->whereIn('recipient_user_id', [$recipientId, $this->curUserId])
-        ->whereIn('sender_user_id', [$this->curUserId, $recipientId])
-        ->join('users', 'messages.sender_user_id', 'users.id')
-        ->join('profiles', 'messages.sender_user_id', '=', 'profiles.user_id')
-        ->select('messages.*',  'profiles.profile_picture')
-        ->get();
+      if (is_null($conversations)) {
+        $this->createConversationRecord($recipientId);
+        return;
+      } else {
 
-      $this->chatMessages = $results->count() === 0 ? [] : $results->toArray();
+        $sixMonthsAgo = time() - (264289 * 60);
+
+        $sixMonthsAgo = Carbon::createFromTimestamp($sixMonthsAgo);
+        $sixMonthsAgo = Carbon::createFromFormat('Y-m-d H:i:s', $sixMonthsAgo);
+
+        $results = Message::OrderBy('messages.created_at', 'DESC')
+          ->whereIn('recipient_user_id', [$recipientId, $this->curUserId])
+          ->whereIn('sender_user_id', [$this->curUserId, $recipientId])
+          ->join('users', 'messages.sender_user_id', 'users.id')
+          ->join('profiles', 'messages.sender_user_id', '=', 'profiles.user_id')
+          ->select('messages.*',  'profiles.profile_picture')
+          ->get();
+
+        $this->conversationId = $conversations->id;
+
+        $this->chatMessages = $results->count() === 0 ? [] : $results->toArray();
+      }
     } catch (Exception $e) {
 
       $this->error = $e->getMessage();
@@ -200,5 +212,27 @@ class Messenger
         explode(' ', $contact->full_name)
       )
     );
+  }
+  /*
+  * Store a new Conversation record
+  * @param string $recipientId
+  * @return void
+  */
+  private function createConversationRecord($recipientId)
+  {
+    try {
+
+      $conversation = new Conversation();
+
+      $conversation->participants = strval($recipientId) . ' ' . strval($this->curUserId);
+
+      $conversation->save();
+
+      $conversation = $conversation->refresh();
+      $this->conversationId = $conversation->id;
+    } catch (Exception $e) {
+
+      $this->error = $e->getMessage();
+    }
   }
 }

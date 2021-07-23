@@ -29,8 +29,6 @@ window.Echo = new Echo({
     encrypted: true,
     // forceTLS: true, --- for production
     forceTLS: false,
-    // it uses /broadcasting/auth endpoint as default
-    // authEndpoint : 'http://localhost:8000/api/auth/messages/broadcast',
     wsHost: window.location.hostname,
     wsPort: 6001,
     disableStats: true,

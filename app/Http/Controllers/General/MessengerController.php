@@ -66,20 +66,22 @@ class MessengerController extends Controller
 
             $messenger = new Messenger(JWTAuth::user()->id);
 
-            $chatMessages = $messenger->aggregateChatMessages($recipientId);
+            $messenger->aggregateChatMessages($recipientId);
+
+            $conversationId = $messenger->getConversationId();
+
             $exception = $messenger->getError();
 
             if (!is_null($exception)) {
                 throw new Exception($exception);
             }
 
-
-
             return response()
                 ->json(
                     [
                         'msg' => 'success',
                         'chat_messages' => $messenger->getChatMessages(),
+                        'conversation_id' => $conversationId,
                     ],
                     200
                 );
@@ -106,17 +108,26 @@ class MessengerController extends Controller
 
         try {
 
-            $messenger = new Messenger($request['sender']['sender_user_id']);
-            $messenger->setNewMessage($request->all());
+            $messenger = new Messenger($request->all()['chat_message']['sender']['sender_user_id']);
 
-            $messenger->storeNewMessage();
+            $messenger->setNewMessage($request->all()['chat_message']);
 
-            // $exception = $messenger->getError();
-            // if (!is_null($exception)) {
-            //     throw new Exception($exception);
-            // }
+            $messenger->storeNewMessage(intval($request->all()['conversation_id']));
 
-            return response()->json(['msg' => 'broadcasting'], 200);
+
+            $exception = $messenger->getError();
+            if (!is_null($exception)) {
+                throw new Exception($exception);
+            }
+            $conversationId = $messenger->getConversationId();
+            return response()
+                ->json(
+                    [
+                        'msg' => 'broadcasting',
+                        'conversation_id' => $conversationId,
+                    ],
+                    200
+                );
         } catch (Exception $e) {
 
             return response()

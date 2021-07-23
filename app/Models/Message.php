@@ -21,12 +21,8 @@ class Message extends Model
     protected $casts = [
         'recipient_user_id' => 'integer',
         'sender_user_id' => 'integer',
+        'conversation_id' => 'integer',
     ];
-
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class, 'recipient_user_id');
-    // }
 
     public function recipientUser()
     {
@@ -37,5 +33,10 @@ class Message extends Model
     public function senderUser()
     {
         return $this->belongsTo(User::class, 'sender_user_id');
+    }
+
+    public function conversation()
+    {
+        return $this->belongsTo(Message::class, 'conversation_id');
     }
 }
