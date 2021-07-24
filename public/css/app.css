@@ -4937,6 +4937,13 @@ div.about_profile_work__row p {
   margin: 0 auto;
   margin-bottom: 0.1rem;
 }
+.chat_message_input p {
+  margin: 0.1rem 0;
+  text-align: left;
+  font-size: 0.5rem;
+  color: gray;
+  font-weight: 100;
+}
 .chat_message_input input {
   border-radius: 8px;
   border: none;

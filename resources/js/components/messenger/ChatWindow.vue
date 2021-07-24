@@ -34,9 +34,11 @@
         :chatMessages="chatMessages"
       />
       <div class="chat_message_input">
+        <p v-if=" parseInt(this.recipientUserId) === parseInt(getUserId) && isTyping" class="typing_listener">{{ typingUser }} is typing something...</p>
         <input
           @change="recordChatMessage($event, getChatWindowUser)"
           @keyup.enter="sendChatMessage"
+          @keydown="listenForTyping"
           :value="chatMessage.recipient.message"
           placeholder="Write a message..."
           type="text"
@@ -66,6 +68,16 @@
       ChatMessages,
     },
 
+    data () {
+      return {
+        debounceID: '',
+        typingID: '',
+        isTyping: false,
+        recipientUserId: '',
+        typingUser: '',
+      }
+    },
+
     async mounted() {
       await this.getChatMessages();
 
@@ -74,7 +86,20 @@
       .listen('MessageSent', (e) => {
         console.log('Broadcasted: ', e);
           this.ADD_CHAT_MESSAGE(e.message);
-      });
+      })
+      .listenForWhisper('typing', (e) => {
+        this.isTyping = e.isTyping;
+        this.recipientUserId = e.recipientUserId;
+        this.typingUser = e.user;
+
+        clearTimeout(this.typingID);
+        this.typingID = setTimeout(() => {
+          this.isTyping = false;
+          this.recipientUserId = '';
+          this.typingUser = '';
+
+        }, 600);
+        });
     },
 
     beforeDestroy() {
@@ -82,6 +107,8 @@
       this.SET_TOTAL_CHAT_MESSAGES(0);
       this.SET_MORE_CHAT_MESSAGES_BTN(false);
       this.SET_CONVERSATION_ID(null);
+      clearTimeout(this.debounceID);
+      clearTimeout(this.typingID);
     },
 
     computed: {
@@ -111,6 +138,11 @@
         return this.getChatWindowUser.status === 'online' ? 'Active now' : 'Not active';
       },
 
+      senderFirstName() {
+        const name = this.userName.split(' ')[0];
+        return name[0].toUpperCase() + name.slice(1).toLowerCase();
+      },
+
     },
     methods: {
       ...mapMutations('messenger',
@@ -131,6 +163,24 @@
         ]
       ),
 
+      listenForTyping(e) {
+        if (e.keyCode === 13) {
+          return;
+        }
+        let channel = Echo.private(`chat.${this.conversationId}`);
+        this.typingID = setTimeout(() => {
+            this.isTyping = true;
+            channel.whisper('typing',
+            {
+              user: this.senderFirstName,
+              isTyping: this.isTyping,
+              recipientUserId: this.getChatWindowUser.id,
+            }
+          );
+
+        }, 300);
+      },
+
       async getChatMessages() {
         await this.GET_CHAT_MESSAGES();
       },
@@ -147,11 +197,15 @@
             message: e.target.value,
           },
         }
+        clearTimeout(this.typingID);
         this.RECORD_CHAT_MESSAGE(message);
       },
 
       async sendChatMessage() {
-               await this.SEND_CHAT_MESSAGE();
+
+        clearTimeout(this.typingID);
+        await this.SEND_CHAT_MESSAGE();
+        this.isTyping = false;
       },
       closeChatWindow() {
         this.CLOSE_CHAT_WINDOW();
@@ -260,6 +314,13 @@
   }
 
   .chat_message_input {
+    p {
+      margin: 0.1rem 0;
+      text-align: left;
+      font-size: 0.5rem;
+      color: gray;
+      font-weight: 100;
+    }
     box-sizing: border-box;
     padding: 0.1rem 0.3rem;
     margin: 0 auto;

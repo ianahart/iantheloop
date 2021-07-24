@@ -206,7 +206,7 @@ class Messenger
         }
 
         $this->conversationId = $conversations->id;
-        error_log(print_r($results->total(), true));
+
         $this->chatMessages = ['total' => $results->toArray()['total'], 'chat_messages' => $results->toArray()['data']];
       }
     } catch (Exception $e) {
