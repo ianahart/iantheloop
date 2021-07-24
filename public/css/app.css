@@ -4867,6 +4867,16 @@ div.about_profile_work__row p {
     max-height: 240px;
 }
 }
+.load-more-chat-messages-enter-active {
+  transition: all 0.2s ease;
+}
+.load-more-chat-messages-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.load-more-chat-messages-enter, .load-more-chat-messages-leave-to {
+  transform: translateX(-30px);
+  opacity: 0;
+}
 .messenger_chat_window {
   border-radius: 8px;
   box-sizing: border-box;
@@ -4949,6 +4959,24 @@ div.about_profile_work__row p {
   color: #efefef;
   font-style: italic;
   font-size: 0.65rem;
+}
+.load_more_chat_messages_btn {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.3rem 0;
+}
+.load_more_chat_messages_btn button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: gray;
+  font-size: 0.7rem;
+  transition: all 0.3 ease-out;
+}
+.load_more_chat_messages_btn button:hover {
+  color: #8d8d8d;
 }
 @media (max-width: 600px) {
 .messenger_chat_window {

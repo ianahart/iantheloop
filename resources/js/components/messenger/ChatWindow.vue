@@ -24,6 +24,11 @@
     </div>
     <div class="chat_window_divider"></div>
     <div class="chat_window_content">
+      <transition name="load-more-chat-messages" appear>
+        <div v-if="loadChatMessagesBtn" class="load_more_chat_messages_btn">
+          <button @click="loadMoreChatMessages">Older Messages...</button>
+        </div>
+      </transition>
       <ChatMessages
         v-if="chatMessagesLoaded"
         :chatMessages="chatMessages"
@@ -61,9 +66,6 @@
       ChatMessages,
     },
 
- // add a field to messages called TYPE initial|conversation
- // when first opening up chat window
-
     async mounted() {
       await this.getChatMessages();
 
@@ -77,6 +79,8 @@
 
     beforeDestroy() {
       Echo.leave(`chat.${this.conversationId}`);
+      this.SET_TOTAL_CHAT_MESSAGES(0);
+      this.SET_MORE_CHAT_MESSAGES_BTN(false);
       this.SET_CONVERSATION_ID(null);
     },
 
@@ -87,6 +91,7 @@
           'chatMessages',
           'chatMessagesLoaded',
           'conversationId',
+          'loadChatMessagesBtn',
         ]
       ),
       ...mapGetters('messenger',
@@ -115,6 +120,8 @@
           'RESET_CHAT_MESSAGE_DATA',
           'ADD_CHAT_MESSAGE',
           'SET_CONVERSATION_ID',
+          'SET_MORE_CHAT_MESSAGES_BTN',
+          'SET_TOTAL_CHAT_MESSAGES',
         ]
       ),
       ...mapActions('messenger',
@@ -149,12 +156,47 @@
       closeChatWindow() {
         this.CLOSE_CHAT_WINDOW();
         this.RESET_CHAT_MESSAGE_DATA();
+      },
+
+      async loadMoreChatMessages(e) {
+        this.debounce(async() => {
+
+          await this.getChatMessages();
+        }, 300);
+
+      },
+
+      debounce(fn, delay = 400) {
+          return ((...args) => {
+              clearTimeout(this.debounceID);
+
+              this.debounceID = setTimeout(() => {
+                  this.debounceID = null;
+
+                  fn(...args);
+              }, delay);
+          })();
       }
     }
   }
 </script>
 
 <style lang="scss">
+
+    .load-more-chat-messages-enter-active {
+      transition: all .2s ease;
+
+    }
+    .load-more-chat-messages-leave-active {
+      transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .load-more-chat-messages-enter, .load-more-chat-messages-leave-to {
+      transform: translateX(-30px);
+      opacity: 0;
+    }
+
+
+
   .messenger_chat_window {
     border-radius: 8px;
     box-sizing: border-box;
@@ -236,6 +278,27 @@
         font-size: 0.65rem;
       }
     }
+  }
+
+  .load_more_chat_messages_btn {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.3rem 0;
+
+    button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: gray;
+      font-size: 0.7rem;
+      transition: all 0.3 ease-out;
+      &:hover {
+        color: lighten(gray, 5);
+      }
+    }
+
   }
 
   @media(max-width:600px) {

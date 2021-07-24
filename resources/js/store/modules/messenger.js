@@ -10,9 +10,11 @@ const initialState = () => {
     chatWindowReload: 0,
     chatWindowReloadTimes: 0,
     contactsCount: null,
+    totalChatMessages: 0,
     conversationId: null,
     chatWindowUserId: null,
     isMessengerOpen: false,
+    loadChatMessagesBtn: false,
     isChatWindowOpen: false,
     isFilterBoxVisible: false,
     chatMessagesLoaded: false,
@@ -32,6 +34,10 @@ const messenger = {
   state: initialState(),
 
   getters: {
+    getLastChatMessage(state) {
+      return state.chatMessages[state.chatMessages.length - 1];
+
+    },
     getServerErrors(state) {
       return state.errors.filter(error => error.type == 'server');
     },
@@ -54,6 +60,13 @@ const messenger = {
 
   mutations: {
 
+    SET_TOTAL_CHAT_MESSAGES(state, payload) {
+      state.totalChatMessages = payload;
+    },
+
+    SET_MORE_CHAT_MESSAGES_BTN(state, payload) {
+      state.loadChatMessagesBtn = payload;
+    },
 
     SET_CONVERSATION_ID(state, payload) {
       state.conversationId = payload;
@@ -145,7 +158,7 @@ const messenger = {
 
     ADD_CHAT_MESSAGE(state, message) {
       state.chatMessages = [message, ...state.chatMessages];
-      // state.conversationId =
+
     }
   },
 
@@ -179,29 +192,40 @@ const messenger = {
       }
     },
 
-    async GET_CHAT_MESSAGES({ state, commit }) {
+    async GET_CHAT_MESSAGES({ state, commit, getters }) {
 
       try {
 
+        let { id, created_at } = state.chatMessages && state.chatMessages.length ? getters.getLastChatMessage : {id: '', created_at: ''};
+
         const response = await axios({
           method: 'GET',
-          url: `/api/auth/messages/${state.chatWindowUserId}/show`,
+          url: `/api/auth/messages/${state.chatWindowUserId}/show?id=${id}&createdAt=${created_at}`,
           headers: {
             'Accept' : 'application/json',
             'Content-Type': 'application/json',
           }
         });
 
-        console.log('@action messenger.js GET_CHAT_MESSAGES SUCC: ', response);
-
         if (response.status === 200) {
+
           commit('SET_CHAT_MESSAGES', response.data.chat_messages);
+          commit('SET_TOTAL_CHAT_MESSAGES', response.data.total);
           commit('SET_CONVERSATION_ID', response.data.conversation_id);
           commit('SET_CHAT_MESSAGES_LOADED', true);
+
+          if (state.totalChatMessages === 0) {
+             commit('SET_MORE_CHAT_MESSAGES_BTN', false);
+          }
         }
 
       } catch(e) {
         console.log('@action messenger.js GET_CHAT_MESSAGES ERROR', e.response);
+        if (e.response.data.error === 'All messages loaded') {
+            commit('SET_MORE_CHAT_MESSAGES_BTN', false);
+            commit('SET_TOTAL_CHAT_MESSAGES', 0);
+            commit('SET_CONVERSATION_ID', e.response.data.conversation_id);
+        }
       }
     },
 

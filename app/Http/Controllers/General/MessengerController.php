@@ -57,18 +57,27 @@ class MessengerController extends Controller
     /*
     *It retrieves all the messages for the current user's current chat conversation
     * @param Request $request
+    * @param string $recipientId
     * @return JsonResponse
     */
-    public function showChatMessages(string $recipientId)
+    public function showChatMessages(Request $request, string $recipientId)
     {
 
         try {
 
             $messenger = new Messenger(JWTAuth::user()->id);
 
+            $messenger->setMetaData(
+                [
+                    'last_message' => $request->query('id'),
+                    'created_at' => $request->query('createdAt')
+                ]
+            );
+
             $messenger->aggregateChatMessages($recipientId);
 
             $conversationId = $messenger->getConversationId();
+
 
             $exception = $messenger->getError();
 
@@ -80,7 +89,8 @@ class MessengerController extends Controller
                 ->json(
                     [
                         'msg' => 'success',
-                        'chat_messages' => $messenger->getChatMessages(),
+                        'chat_messages' => $messenger->getChatMessages()['chat_messages'],
+                        'total' => $messenger->getChatMessages()['total'],
                         'conversation_id' => $conversationId,
                     ],
                     200
@@ -91,7 +101,8 @@ class MessengerController extends Controller
                 ->json(
                     [
                         'msg' => 'something went wrong',
-                        'error' => $e->getMessage()
+                        'error' => $e->getMessage(),
+                        'conversation_id' => $messenger->getConversationId()
                     ],
                     404
                 );

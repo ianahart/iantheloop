@@ -7,18 +7,15 @@ use App\Models\User;
 use App\Models\Message;
 use App\Models\Conversation;
 use Illuminate\Support\Carbon;
-
-
 use Exception;
 use DateTime;
 use DateTimeZone;
 
 
-
-
-
 class Messenger
 {
+
+  const MESSAGE_LIMIT = 15;
 
   private int $curUserId;
   private string $error;
@@ -26,6 +23,7 @@ class Messenger
   private $newMessage;
   private array $chatMessages = [];
   private int $conversationId;
+  private array $metaData;
 
   public function __construct(int $curUserId)
   {
@@ -45,6 +43,11 @@ class Messenger
   public function getContacts()
   {
     return $this->contacts;
+  }
+
+  public function setMetaData($metaData)
+  {
+    $this->metaData = $metaData;
   }
 
   public function getNewMessage()
@@ -74,7 +77,6 @@ class Messenger
   *Stores a new Message and then broadcasts that message
   *@param int $conversationId
   */
-
 
   public function storeNewMessage(int $conversationId)
   {
@@ -158,7 +160,6 @@ class Messenger
 
     try {
 
-
       $structureOne = implode(' ', array_reverse(explode(' ', strval($this->curUserId) . ' ' . strval($recipientId))));
       $structureTwo = strval($this->curUserId) . ' ' . strval($recipientId);
 
@@ -166,26 +167,47 @@ class Messenger
         ->first();
 
       if (is_null($conversations)) {
+
         $this->createConversationRecord($recipientId);
+        $this->chatMessages = ['total' => 0, 'chat_messages' => []];
         return;
       } else {
 
         $sixMonthsAgo = time() - (264289 * 60);
-
         $sixMonthsAgo = Carbon::createFromTimestamp($sixMonthsAgo);
         $sixMonthsAgo = Carbon::createFromFormat('Y-m-d H:i:s', $sixMonthsAgo);
 
-        $results = Message::OrderBy('messages.created_at', 'DESC')
+        $results = NULL;
+
+        $query = Message::OrderBy('messages.created_at', 'DESC')
+          ->orderBy('messages.id', 'DESC')
           ->whereIn('recipient_user_id', [$recipientId, $this->curUserId])
-          ->whereIn('sender_user_id', [$this->curUserId, $recipientId])
-          ->join('users', 'messages.sender_user_id', 'users.id')
-          ->join('profiles', 'messages.sender_user_id', '=', 'profiles.user_id')
-          ->select('messages.*',  'profiles.profile_picture')
-          ->get();
+          ->whereIn('sender_user_id', [$this->curUserId, $recipientId]);
+
+        if (
+          empty($this->metaData['last_message']) && $this->metaData['last_message'] !== ''
+          || empty($this->metaData['created_at'])
+          && $this->metaData['last_message'] !== ''
+        ) {
+
+          $results = $query
+            ->join('users', 'messages.sender_user_id', 'users.id')
+            ->join('profiles', 'messages.sender_user_id', '=', 'profiles.user_id')
+            ->select('messages.*',  'profiles.profile_picture')
+            ->paginate(self::MESSAGE_LIMIT);
+        } else {
+
+          $results = $query
+            ->where('messages.id', '<', $this->metaData['last_message'])
+            ->join('users', 'messages.sender_user_id', 'users.id')
+            ->join('profiles', 'messages.sender_user_id', '=', 'profiles.user_id')
+            ->select('messages.*',  'profiles.profile_picture')
+            ->paginate(self::MESSAGE_LIMIT);
+        }
 
         $this->conversationId = $conversations->id;
-
-        $this->chatMessages = $results->count() === 0 ? [] : $results->toArray();
+        error_log(print_r($results->total(), true));
+        $this->chatMessages = ['total' => $results->toArray()['total'], 'chat_messages' => $results->toArray()['data']];
       }
     } catch (Exception $e) {
 

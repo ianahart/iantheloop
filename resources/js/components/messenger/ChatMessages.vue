@@ -1,5 +1,10 @@
 <template>
-  <div v-if="chatMessagesLoaded" class="chat_messages_container">
+  <div
+    v-if="chatMessagesLoaded"
+    ref="chatMessageContainer"
+    class="chat_messages_container"
+    @scroll="emitChatWindowScroll"
+  >
     <ChatMessage
       v-for="chatMessage in chatMessages"
       :key="chatMessage.id"
@@ -33,7 +38,8 @@
     computed: {
       ...mapState('messenger',
         [
-           'chatMessagesLoaded'
+           'chatMessagesLoaded',
+           'loadChatMessagesBtn'
         ]
       ),
       ...mapGetters('user',
@@ -44,6 +50,25 @@
     },
     methods: {
 
+      ...mapMutations('messenger',
+        [
+          'SET_MORE_CHAT_MESSAGES_BTN'
+        ]
+      ),
+
+      emitChatWindowScroll(e) {
+        const leeway = 20;
+
+        if (Math.abs(e.target.scrollTop) + this.$refs.chatMessageContainer.clientHeight + leeway  >= e.target.scrollHeight) {
+            if (!this.loadChatMessagesBtn) {
+                this.SET_MORE_CHAT_MESSAGES_BTN(true);
+            }
+        } else {
+          if (this.loadChatMessagesBtn) {
+               this.SET_MORE_CHAT_MESSAGES_BTN(false);
+          }
+        }
+      },
     }
   }
 </script>
