@@ -2,21 +2,18 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
-use App\Models\Message;
 
-class MessageSent implements ShouldBroadcast
+class UserStatusChanged implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-
-    public $message;
     public $user;
 
     /**
@@ -24,9 +21,8 @@ class MessageSent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Message $message, User $user)
+    public function __construct(User $user)
     {
-        $this->message = $message;
         $this->user = $user;
     }
 
@@ -37,8 +33,11 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        $this->message->profile_picture = $this->user->profile->profile_picture;
-        return ['message' => $this->message];
+        return [
+            'logged_in_as' => $this->user->id,
+            'name' => $this->user->full_name,
+            'status' => $this->user->status,
+        ];
     }
 
     /**
@@ -48,7 +47,6 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-
-        return new PrivateChannel('chat.' . $this->message->conversation_id);
+        return new PresenceChannel('userstatus');
     }
 }

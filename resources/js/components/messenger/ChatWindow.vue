@@ -84,7 +84,6 @@
       Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
       Echo.private(`chat.${this.conversationId}`)
       .listen('MessageSent', (e) => {
-        console.log('Broadcasted: ', e);
           this.ADD_CHAT_MESSAGE(e.message);
       })
       .listenForWhisper('typing', (e) => {

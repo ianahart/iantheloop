@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\User;
+use App\Models\Profile;
+use App\Events\UserStatusChanged;
 use App\Helpers\Status;
 use App\Helpers\LoginThrottle;
 use Exception;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 
 
@@ -70,6 +73,7 @@ class LoginController extends Controller
 
                 $jwt = $this->createNewToken($payload, $TLL, $user);
 
+                broadcast(new UserStatusChanged($user));
 
                 return response()->json(
                     [

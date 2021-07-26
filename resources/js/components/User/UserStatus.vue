@@ -47,29 +47,25 @@
     },
 
     computed: {
-
-
       indicatorStyle () {
-
         return this.status === 'online' ? 'user_status_indicator_online' : 'user_status_indicator_offline';
       },
-
       toggleBtn() {
 
         return this.status === 'online' ? 'status_toggle_btn_online' : 'status_toggle_btn_offline';
       },
-
       toggleBorder () {
-
         return this.status === 'online' ? 'status_toggle_btn_container_online' : 'status_toggle_btn_container_offline';
       },
 
-
-
+      ...mapGetters('user',
+        [
+          'getStatus'
+        ]
+      ),
       ...mapState('user',
         [
         'statusToggledBtn',
-        // 'status',
         ]
       ),
     },
@@ -107,9 +103,16 @@
 
           this.TOGGLE_STATUS_BTN();
 
+
           this.debounce(async() => {
 
             await this.UPDATE_USER_STATUS();
+
+            if (this.getStatus === 'online') {
+              Echo.join('userstatus');
+            } else {
+              Echo.leave('userstatus');
+            }
           }, 400);
         }
     },

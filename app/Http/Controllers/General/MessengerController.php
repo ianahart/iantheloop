@@ -5,7 +5,6 @@ namespace App\Http\Controllers\General;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\Messenger;
-use App\Events\MessageSent;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
 
@@ -24,6 +23,7 @@ class MessengerController extends Controller
     public function show(Request $request, string $userId)
     {
         try {
+
             $messenger = new Messenger($userId);
 
             $messenger->aggregateContacts();

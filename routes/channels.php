@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
-use App\Models\Conversation;
+use App\Broadcasting\ChatChannel;
+use App\Broadcasting\UserStatusChannel;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +19,5 @@ use App\Models\Conversation;
 */
 
 
-Broadcast::channel('chat.{conversationId}', function ($user, $conversationId) {
-
-    $conversation = Conversation::find($conversationId);
-
-    [$userOne, $userTwo] = explode(' ', $conversation->participants);
-
-    return $user->id === intval($userOne) || intval($userTwo);
-});
+Broadcast::channel('chat.{conversation}', ChatChannel::class);
+Broadcast::channel('userstatus', UserStatusChannel::class);

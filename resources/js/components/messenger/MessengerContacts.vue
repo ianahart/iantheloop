@@ -32,7 +32,6 @@
       }
     },
 
-
     computed: {
       ...mapState('messenger',
         [

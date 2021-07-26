@@ -21,7 +21,7 @@
 
 import '../sass/app.scss';
 
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
 
@@ -35,6 +35,13 @@ export default {
         MessengerTrigger: () => import('./components/messenger/MessengerTrigger.vue'),
         MessengerContainer: () => import('./components/messenger/MessengerContainer.vue'),
         Footer: () => import('./components/Footer.vue'),
+    },
+
+
+    mounted() {
+        if (this.getStatus === 'online') {
+            this.initUserStatusChannel();
+        }
     },
 
     computed: {
@@ -51,14 +58,35 @@ export default {
          ),
       ...mapGetters('user',
             [
-                'getProfileStatus'
+                'getProfileStatus',
+                'getStatus',
+                'getToken',
             ]
         ),
     },
 
     methods: {
-
+        ...mapMutations('messenger',
+            [
+                'UPDATE_CONTACT_STATUS'
+            ]
+        ),
+      initUserStatusChannel() {
+            Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+            Echo.join('userstatus')
+            .joining((user) => {
+              this.UPDATE_CONTACT_STATUS({...user, status: 'online'});
+            })
+            .leaving((user) => {
+              this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});
+            })
+            .error((error) => {
+                console.log('Channel Error: ', error);
+            });
+      },
     },
+
+
 };
 </script>
 

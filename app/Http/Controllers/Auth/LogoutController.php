@@ -25,9 +25,9 @@ class LogoutController extends Controller
 
         $token = str_replace('Bearer ', '', $header);
 
-        JWTAuth::setToken($token)->invalidate();
-
         $this->updateIsLoggedIn();
+
+        JWTAuth::setToken($token)->invalidate();
 
         return response()->json(
             [

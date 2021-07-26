@@ -26,7 +26,7 @@
 
 <script>
 
-  import { mapActions, mapMutations, mapState } from 'vuex';
+  import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
   import Header from '../components/Login/Header.vue';
   import InputFieldLg from '../components/forms/inputs/InputFieldLg.vue';
@@ -50,6 +50,7 @@
       }
     },
 
+
     beforeDestroy() {
 
       this.RESET_LOGIN_MODULE();
@@ -64,6 +65,12 @@
           'formSubmitted',
         ]
       ),
+      ...mapGetters('user',
+        [
+          'getToken',
+          'getUserId'
+        ]
+      ),
     },
 
     methods: {
@@ -73,7 +80,6 @@
           'RESET_MODULE',
         ]
       ),
-
       ...mapMutations('login',
         [
           'UPDATE_FIELD',
@@ -81,14 +87,16 @@
           'RESET_LOGIN_MODULE'
         ],
       ),
-
       ...mapMutations('user',
           [
-
             'SET_AUTH_STATUS',
           ]
         ),
-
+      ...mapMutations('messenger',
+        [
+          'UPDATE_CONTACT_STATUS'
+        ]
+      ),
       ...mapActions('login',
         [
           'SUBMIT_FORM',
@@ -106,11 +114,8 @@
       checkEmptyInputs() {
 
         this.form.forEach(({ field, value }) => {
-
           if (value.trim().length <= 0) {
-
             const error = field + ' is required';
-
             this.UPDATE_FIELD({field, value, error})
           }
         })
@@ -119,21 +124,33 @@
       async submitForm () {
 
         this.CLEAR_ERROR_MSGS();
-
         this.checkEmptyInputs();
 
         if (!this.hasErrors) {
-
           await this.SUBMIT_FORM();
         }
 
         if (this.formSubmitted) {
-
           this.SET_AUTH_STATUS(true);
+          this.trackUserStatus();
           this.RESET_LOGIN_MODULE();
           this.$router.push({ name: 'Home' });
         }
       },
+
+      trackUserStatus() {
+        Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+        Echo.join('userstatus')
+            .joining((user) => {
+              this.UPDATE_CONTACT_STATUS({...user, status: 'online'});
+            })
+            .leaving((user) => {
+              this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});
+            })
+            .error((error) => {
+              console.log('Channel Error: ', error);
+            });
+      }
     },
   }
 
@@ -169,7 +186,6 @@
   }
 
  .login__button__container {
-
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -177,7 +193,6 @@
    margin: 3rem auto;
 
    button {
-
      width: 150px;
    }
  }

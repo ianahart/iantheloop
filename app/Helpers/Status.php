@@ -3,6 +3,7 @@
 
 namespace App\Helpers;
 
+
 use App\Models\User;
 use Exception;
 
@@ -46,6 +47,7 @@ class Status
             'status' => $userStatus
           ]
         );
+
 
       $this->userStatus = $userStatus;
     } catch (Exception $e) {

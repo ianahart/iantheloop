@@ -186,7 +186,7 @@ const user = {
         );
     },
 
-       async UPDATE_USER_STATUS({ commit, getters }) {
+       async UPDATE_USER_STATUS({ getters, rootGetters, state, commit }) {
 
       try {
 
@@ -212,6 +212,22 @@ const user = {
         );
 
           commit('SYNC_NEW_STATUS', response.data);
+
+          const fullName = rootGetters['user/userName']
+          .split(' ')
+          .map(name => name.slice(0, 1)
+          .toUpperCase() + name.slice(1)
+          .toLowerCase())
+          .join(' ');
+
+          const user = {
+            id:  rootGetters['user/getUserId'],
+            full_name: fullName,
+            status: rootGetters['user/getStatus'],
+          };
+
+          commit('messenger/UPDATE_CONTACT_STATUS', {user, status: rootGetters['user/getStatus']}, { root: true });
+
 
       } catch (e) {
 

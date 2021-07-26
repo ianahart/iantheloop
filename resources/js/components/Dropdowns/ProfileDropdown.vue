@@ -198,8 +198,15 @@
         await this.LOGOUT();
 
         this.CLOSE_PROFILE_DROPDOWN(false);
+        this.leaveUserStatusChannel();
 
         this.$router.push({ name: 'Login' });
+      },
+
+      leaveUserStatusChannel() {
+        Echo.leave('userstatus', (user) => {
+          this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});
+        });
       },
 
       dropDownClickAway(e) {

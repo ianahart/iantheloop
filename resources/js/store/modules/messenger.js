@@ -60,6 +60,14 @@ const messenger = {
 
   mutations: {
 
+    UPDATE_CONTACT_STATUS(state, { user, status }) {
+      const contact = state.contacts.findIndex(contact => contact.id === user.id);
+
+      if (contact > -1) {
+        state.contacts[contact].status  = status;
+      }
+    },
+
     SET_TOTAL_CHAT_MESSAGES(state, payload) {
       state.totalChatMessages = payload;
     },
@@ -254,10 +262,7 @@ const messenger = {
         console.log('@action messenger.js SEND_CHAT_MESSAGE ERROR',e.response);
       }
     },
-
   }
-
-
 };
 
 export default messenger;
