@@ -14,7 +14,7 @@
 
 <script>
 
-  import { mapState, mapMutations, mapActions } from 'vuex';
+  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
   import PlusPlainIcon from '../Icons/PlusPlainIcon.vue';
   import CloseIcon from '../Icons/CloseIcon.vue';
 
@@ -42,6 +42,7 @@
           'contacts',
         ]
       ),
+      ...mapGetters('user', ['getUserId', 'getToken']),
     },
 
     methods: {
@@ -63,13 +64,23 @@
               this.TOGGLE_MESSENGER();
 
               if (this.isMessengerOpen && this.contactsCount !== this.contacts.length) {
+
+                this.listenForNotifications();
                 await this.GET_MESSENGER_CONTACTS();
               };
           } catch (err) {
 
             console.log('MessengerTrigger.vue: ', err);
           }
-        }
+        },
+
+        listenForNotifications() {
+          Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+          Echo.private(`unreadmessage.${this.getUserId}`)
+          .notification((notification) => {
+          console.log('Notification: ', notification);
+        });
+      },
     },
   }
 </script>

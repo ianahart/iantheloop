@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Broadcast;
 use App\Broadcasting\ChatChannel;
 use App\Broadcasting\UserStatusChannel;
+use App\Broadcasting\NotificationChannel;
 
 
 
@@ -21,3 +22,4 @@ use App\Broadcasting\UserStatusChannel;
 
 Broadcast::channel('chat.{conversation}', ChatChannel::class);
 Broadcast::channel('userstatus', UserStatusChannel::class);
+Broadcast::channel('unreadmessage.{userId}', NotificationChannel::class);

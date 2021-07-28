@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,6 +26,17 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
     ];
+
+    /**
+     * The channels the user receives notification broadcasts on.
+     *
+     * @return string
+     */
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'unreadmessage.' . $this->id;
+    }
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -118,11 +130,6 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(FollowRequest::class, 'receiver_user_id');
     }
-
-    // public function messages()
-    // {
-    //     return $this->hasMany(Message::class, 'recipient_user_id');
-    // }
 
     public function recipientMessages()
     {

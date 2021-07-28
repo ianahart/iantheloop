@@ -41,11 +41,9 @@
 
       }
     },
-    created() {
-
-    },
 
     beforeDestroy() {
+
       if (this.conversationId !== null) {
         Echo.leave(`chat.${this.conversationId}`);
       }
