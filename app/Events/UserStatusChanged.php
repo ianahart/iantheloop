@@ -33,6 +33,7 @@ class UserStatusChanged implements ShouldBroadcast
      */
     public function broadcastWith()
     {
+
         return [
             'logged_in_as' => $this->user->id,
             'name' => $this->user->full_name,

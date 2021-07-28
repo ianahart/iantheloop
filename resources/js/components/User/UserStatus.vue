@@ -60,7 +60,8 @@
 
       ...mapGetters('user',
         [
-          'getStatus'
+          'getStatus',
+          'getToken',
         ]
       ),
       ...mapState('user',
@@ -85,6 +86,13 @@
           'SET_INITIAL_TOGGLE_VALUE',
         ]
       ),
+
+      ...mapMutations('messenger',
+        [
+          'UPDATE_CONTACT_STATUS',
+        ]
+      ),
+
       debounce(fn, delay = 1000) {
 
       return ((...args) => {
@@ -105,16 +113,26 @@
 
 
           this.debounce(async() => {
-
             await this.UPDATE_USER_STATUS();
-
             if (this.getStatus === 'online') {
-              Echo.join('userstatus');
+              this.listenForUserStatusChange();
             } else {
               Echo.leave('userstatus');
             }
           }, 400);
-        }
+        },
+        listenForUserStatusChange() {
+          Echo.join('userstatus')
+            .joining((user) => {
+              this.UPDATE_CONTACT_STATUS({...user, status: 'online' });
+            })
+            .leaving((user) => {
+              this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});
+            })
+            .error((error) => {
+              console.log('Channel Error: ', error);
+            });
+        },
     },
   }
 </script>

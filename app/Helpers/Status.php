@@ -3,7 +3,7 @@
 
 namespace App\Helpers;
 
-
+use App\Events\UserStatusChanged;
 use App\Models\User;
 use Exception;
 
@@ -48,6 +48,8 @@ class Status
           ]
         );
 
+      $user = User::find($this->currentUserId);
+      broadcast(new UserStatusChanged($user));
 
       $this->userStatus = $userStatus;
     } catch (Exception $e) {

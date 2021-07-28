@@ -94,7 +94,7 @@
         ),
       ...mapMutations('messenger',
         [
-          'UPDATE_CONTACT_STATUS'
+          'UPDATE_CONTACT_STATUS',
         ]
       ),
       ...mapActions('login',
@@ -140,9 +140,10 @@
 
       trackUserStatus() {
         Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
-        Echo.join('userstatus')
+        Echo.join('userstatus').here((user) => {
+        })
             .joining((user) => {
-              this.UPDATE_CONTACT_STATUS({...user, status: 'online'});
+              this.UPDATE_CONTACT_STATUS({...user, status: 'online' });
             })
             .leaving((user) => {
               this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});

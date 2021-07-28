@@ -60,7 +60,9 @@ const messenger = {
 
   mutations: {
 
+
     UPDATE_CONTACT_STATUS(state, { user, status }) {
+
       const contact = state.contacts.findIndex(contact => contact.id === user.id);
 
       if (contact > -1) {

@@ -188,6 +188,13 @@
           ]
         ),
 
+      ...mapMutations('messenger',
+          [
+          'UPDATE_CONTACT_STATUS',
+          'CHECK_PAGE'
+          ]
+        ),
+
       closeDropdown () {
 
         this.CLOSE_PROFILE_DROPDOWN(false);
@@ -197,16 +204,22 @@
 
         await this.LOGOUT();
 
-        this.CLOSE_PROFILE_DROPDOWN(false);
         this.leaveUserStatusChannel();
+        this.leaveNotificationChannel();
+        this.CLOSE_PROFILE_DROPDOWN(false);
+
 
         this.$router.push({ name: 'Login' });
       },
 
       leaveUserStatusChannel() {
         Echo.leave('userstatus', (user) => {
-          this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});
+          this.UPDATE_CONTACT_STATUS({...user, status: 'offline' });
         });
+      },
+
+      leaveNotificationChannel() {
+        Echo.leave(`unreadmessage.${this.getUserId}`);
       },
 
       dropDownClickAway(e) {

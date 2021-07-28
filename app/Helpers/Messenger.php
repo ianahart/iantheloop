@@ -6,6 +6,7 @@ use App\Events\MessageSent;
 use App\Models\User;
 use App\Models\Message;
 use App\Models\Conversation;
+use App\Notifications\UnreadMessage;
 use Illuminate\Support\Carbon;
 use Exception;
 use DateTime;
@@ -110,9 +111,25 @@ class Messenger
 
       broadcast(new MessageSent($message, $currentUser));
 
+      $unreadMessage = collect($message)
+        ->filter(function ($value, $key) {
+          if (in_array($key, ['recipient_user_id', 'sender_user_id', 'recipient_name', 'sender_name'])) {
+            return $value;
+          }
+        })->toArray();
+
+      $recipient = User::find($unreadMessage['recipient_user_id']);
+      $unreadMessage['status'] = $recipient->status;
+
+      if ($unreadMessage['status'] === 'offline') {
+        $recipient->notify(new UnreadMessage($unreadMessage));
+      }
+
+
+
       $this->conversationId = $message->conversation_id;
     } catch (Exception $e) {
-
+      error_log(print_r($e->getLine(), true));
       $this->error = $e->getMessage();
     }
   }

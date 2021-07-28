@@ -102,6 +102,7 @@
     },
 
     beforeDestroy() {
+
       Echo.leave(`chat.${this.conversationId}`);
       this.SET_TOTAL_CHAT_MESSAGES(0);
       this.SET_MORE_CHAT_MESSAGES_BTN(false);
