@@ -122,14 +122,13 @@ class Messenger
       $unreadMessage['status'] = $recipient->status;
 
       if ($unreadMessage['status'] === 'offline') {
+
         $recipient->notify(new UnreadMessage($unreadMessage));
       }
 
-
-
       $this->conversationId = $message->conversation_id;
     } catch (Exception $e) {
-      error_log(print_r($e->getLine(), true));
+
       $this->error = $e->getMessage();
     }
   }
@@ -162,7 +161,12 @@ class Messenger
         ->orderBy('status', 'DESC')
         ->get();
 
+
+      $notifications = $this->countNotifications($currentUser);
+
       foreach ($this->contacts as $key => $contact) {
+        $contact->unread_messages_count = array_key_exists($contact->id, $notifications) ?
+          $notifications[$contact->id] : 0;
 
         $this->capitalize($contact);
       }
@@ -186,7 +190,7 @@ class Messenger
       if (is_null($conversations)) {
 
         $this->createConversationRecord($recipientId);
-        $this->chatMessages = ['total' => 0, 'chat_messages' => []];
+        $this->chatMessages = ['total' => 0, 'chat_messages' => [], 'notifications_read' => false];
         return;
       } else {
 
@@ -224,7 +228,11 @@ class Messenger
 
         $this->conversationId = $conversations->id;
 
-        $this->chatMessages = ['total' => $results->toArray()['total'], 'chat_messages' => $results->toArray()['data']];
+        $this->chatMessages = [
+          'total' => $results->toArray()['total'],
+          'chat_messages' => $results->toArray()['data'],
+          'notifications_read' => $this->markUnreadMessagesAsRead($recipientId),
+        ];
       }
     } catch (Exception $e) {
 
@@ -273,5 +281,50 @@ class Messenger
 
       $this->error = $e->getMessage();
     }
+  }
+
+  /*
+  * Count current user's notifications by sender
+  * @param User $user
+  * @return array;
+  */
+
+  private function countNotifications(User $user)
+  {
+    $data = $user->notifications()
+      ->where('type', '=', 'App\Notifications\UnreadMessage')
+      ->pluck('data');
+
+    $notifications = [];
+
+    foreach ($data as $key => $value) {
+
+      if (!array_key_exists($value['sender_user_id'], $notifications)) {
+        $notifications[$value['sender_user_id']] = 1;
+      } else {
+        $notifications[$value['sender_user_id']] = $notifications[$value['sender_user_id']] + 1;
+      }
+    }
+    return $notifications;
+  }
+
+  /*
+  * Mark unread messages of the current user from the recipient
+  * @param string $recipientId
+  * @return void
+  */
+  private function markUnreadMessagesAsRead(string $recipientId)
+  {
+
+    $currentUser = User::find($this->curUserId);
+
+    $notifications = $currentUser
+      ->notifications()
+      ->where('type', '=', 'App\Notifications\UnreadMessage')
+      ->whereIn('data->sender_user_id', [$recipientId])
+      ->whereIn('data->recipient_user_id', [$this->curUserId])
+      ->delete();
+
+    return $notifications > 0 ? true : false;
   }
 }

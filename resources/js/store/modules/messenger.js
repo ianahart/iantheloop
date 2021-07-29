@@ -60,6 +60,11 @@ const messenger = {
 
   mutations: {
 
+    UPDATE_UNREAD_MESSAGE_COUNT(state, unreadMessage) {
+      const contact = state.contacts.findIndex(contact => contact.id === unreadMessage.sender_user_id);
+      state.contacts[contact].unread_messages_count++;
+    },
+
 
     UPDATE_CONTACT_STATUS(state, { user, status }) {
 
@@ -168,7 +173,13 @@ const messenger = {
 
     ADD_CHAT_MESSAGE(state, message) {
       state.chatMessages = [message, ...state.chatMessages];
+    },
 
+    CLEAR_NOTIFICATIONS(state, { sender, notificationsRead }) {
+      const contact = state.contacts.findIndex(contact => contact.id === sender);
+      if (notificationsRead) {
+        state.contacts[contact].unread_messages_count = 0;
+      }
     }
   },
 
@@ -218,9 +229,9 @@ const messenger = {
         });
 
         if (response.status === 200) {
-
           commit('SET_CHAT_MESSAGES', response.data.chat_messages);
           commit('SET_TOTAL_CHAT_MESSAGES', response.data.total);
+          commit('CLEAR_NOTIFICATIONS', { sender: state.chatWindowUserId, notificationsRead: response.data.notifications_read });
           commit('SET_CONVERSATION_ID', response.data.conversation_id);
           commit('SET_CHAT_MESSAGES_LOADED', true);
 
@@ -230,7 +241,6 @@ const messenger = {
         }
 
       } catch(e) {
-        console.log('@action messenger.js GET_CHAT_MESSAGES ERROR', e.response);
         if (e.response.data.error === 'All messages loaded') {
             commit('SET_MORE_CHAT_MESSAGES_BTN', false);
             commit('SET_TOTAL_CHAT_MESSAGES', 0);

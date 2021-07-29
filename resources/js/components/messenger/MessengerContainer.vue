@@ -43,7 +43,7 @@
     },
 
     beforeDestroy() {
-
+      Echo.leave(`unreadmessage.${this.getUserId}`);
       if (this.conversationId !== null) {
         Echo.leave(`chat.${this.conversationId}`);
       }
@@ -64,6 +64,11 @@
       ...mapGetters('messenger',
         [
           'getServerErrors',
+        ]
+      ),
+      ...mapGetters('user',
+        [
+          'getUserId'
         ]
       ),
     },

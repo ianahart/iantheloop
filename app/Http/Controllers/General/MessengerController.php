@@ -91,6 +91,7 @@ class MessengerController extends Controller
                         'msg' => 'success',
                         'chat_messages' => $messenger->getChatMessages()['chat_messages'],
                         'total' => $messenger->getChatMessages()['total'],
+                        'notifications_read' => $messenger->getChatMessages()['notifications_read'],
                         'conversation_id' => $conversationId,
                     ],
                     200

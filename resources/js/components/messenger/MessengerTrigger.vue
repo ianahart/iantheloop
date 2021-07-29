@@ -48,7 +48,8 @@
     methods: {
       ...mapMutations('messenger',
         [
-          'TOGGLE_MESSENGER'
+          'TOGGLE_MESSENGER',
+          'UPDATE_UNREAD_MESSAGE_COUNT'
         ]
       ),
      ...mapActions('messenger',
@@ -76,9 +77,13 @@
 
         listenForNotifications() {
           Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+
           Echo.private(`unreadmessage.${this.getUserId}`)
           .notification((notification) => {
-          console.log('Notification: ', notification);
+
+            if (this.isMessengerOpen) {
+              this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
+            }
         });
       },
     },

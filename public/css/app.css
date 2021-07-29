@@ -3820,7 +3820,6 @@ div.about_profile_work__row p {
 }
 .messenger_contact_list_item h5 {
   margin: 0.1rem 0;
-  flex-grow: 1;
   text-align: center;
   font-family: "Open Sans", sans-serif;
   padding-left: 0.2rem;
@@ -3829,6 +3828,27 @@ div.about_profile_work__row p {
 }
 .messenger_contact_list_item h5:hover {
   color: #fff;
+}
+.messenger_contact_name {
+  position: relative;
+  flex-grow: 1;
+}
+.messenger_contact_unread_messages_count {
+  position: absolute;
+  background-color: #ff0033;
+  color: #fcfcfc;
+  right: 95%;
+  top: -15px;
+  margin: 0;
+  font-size: 0.6rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .messenger_contacts_list {
   box-sizing: border-box;
