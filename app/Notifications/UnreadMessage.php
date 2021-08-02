@@ -70,9 +70,7 @@ class UnreadMessage extends Notification implements ShouldQueue
      */
     public function toBroadcast($notifiable)
     {
-        if ($notifiable->status === 'offline') {
-            return (new BroadcastMessage($this->message));
-        }
+        return (new BroadcastMessage($this->message));
     }
 
     /**
@@ -85,3 +83,5 @@ class UnreadMessage extends Notification implements ShouldQueue
         return 'broadcast.message';
     }
 }
+
+// if sender's chat window is open on current user dont show message notificaiton

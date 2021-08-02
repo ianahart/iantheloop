@@ -40,6 +40,7 @@
           'isMessengerOpen',
           'contactsCount',
           'contacts',
+          'chatWindowUserId'
         ]
       ),
       ...mapGetters('user', ['getUserId', 'getToken']),
@@ -80,7 +81,12 @@
 
           Echo.private(`unreadmessage.${this.getUserId}`)
           .notification((notification) => {
-
+            console.log(notification);
+            if (this.chatWindowUserId !== notification.sender_user_id) {
+              console.log('store notification');
+            } else {
+              console.log('online');
+            }
             if (this.isMessengerOpen) {
               this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
             }
@@ -98,7 +104,7 @@
     background-color: lighten($primaryBlack, 7);
     padding: 0.5rem;
     position: fixed;
-    right: -38px;
+    right: -46px;
     top: 20%;
     text-align: center;
     height: 30px;

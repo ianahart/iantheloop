@@ -176,6 +176,7 @@ const messenger = {
     },
 
     CLEAR_NOTIFICATIONS(state, { sender, notificationsRead }) {
+
       const contact = state.contacts.findIndex(contact => contact.id === sender);
       if (notificationsRead) {
         state.contacts[contact].unread_messages_count = 0;

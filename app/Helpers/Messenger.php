@@ -113,7 +113,16 @@ class Messenger
 
       $unreadMessage = collect($message)
         ->filter(function ($value, $key) {
-          if (in_array($key, ['recipient_user_id', 'sender_user_id', 'recipient_name', 'sender_name'])) {
+          if (in_array(
+            $key,
+            [
+              'recipient_user_id',
+              'sender_user_id',
+              'recipient_name',
+              'sender_name',
+              'profile_picture'
+            ]
+          )) {
             return $value;
           }
         })->toArray();
@@ -121,8 +130,7 @@ class Messenger
       $recipient = User::find($unreadMessage['recipient_user_id']);
       $unreadMessage['status'] = $recipient->status;
 
-      if ($unreadMessage['status'] === 'offline') {
-
+      if (intval($recipient->cur_chat_window_user_id) !== intval($message['sender_user_id'])) {
         $recipient->notify(new UnreadMessage($unreadMessage));
       }
 
@@ -233,6 +241,11 @@ class Messenger
           'chat_messages' => $results->toArray()['data'],
           'notifications_read' => $this->markUnreadMessagesAsRead($recipientId),
         ];
+
+        $curUser = User::find($this->curUserId);
+
+        $curUser->cur_chat_window_user_id = intval($recipientId);
+        $curUser->save();
       }
     } catch (Exception $e) {
 
@@ -293,6 +306,7 @@ class Messenger
   {
     $data = $user->notifications()
       ->where('type', '=', 'App\Notifications\UnreadMessage')
+      ->whereNull('read_at')
       ->pluck('data');
 
     $notifications = [];
@@ -323,7 +337,7 @@ class Messenger
       ->where('type', '=', 'App\Notifications\UnreadMessage')
       ->whereIn('data->sender_user_id', [$recipientId])
       ->whereIn('data->recipient_user_id', [$this->curUserId])
-      ->delete();
+      ->update(['read_at' => now()]);
 
     return $notifications > 0 ? true : false;
   }

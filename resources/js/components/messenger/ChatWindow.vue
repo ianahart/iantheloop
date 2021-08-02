@@ -101,8 +101,13 @@
         });
     },
 
-    beforeDestroy() {
-
+    async beforeDestroy() {
+      await this.UPDATE_USER_COLUMN(
+        {
+           curUserId: this.getUserId,
+           column: 'cur_chat_window_user_id',
+           value: 0
+      });
       Echo.leave(`chat.${this.conversationId}`);
       this.SET_TOTAL_CHAT_MESSAGES(0);
       this.SET_MORE_CHAT_MESSAGES_BTN(false);
@@ -160,6 +165,11 @@
         [
           'SEND_CHAT_MESSAGE',
           'GET_CHAT_MESSAGES',
+        ]
+      ),
+      ...mapActions('user',
+        [
+          'UPDATE_USER_COLUMN'
         ]
       ),
 
