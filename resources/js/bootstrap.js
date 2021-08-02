@@ -28,6 +28,7 @@ window.Echo = new Echo({
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     encrypted: true,
     // forceTLS: true, --- for production
+    authEndpoint: '/broadcasting/auth',
     forceTLS: false,
     wsHost: window.location.hostname,
     wsPort: 6001,
@@ -37,5 +38,23 @@ window.Echo = new Echo({
       headers: {
         Authorization: `Bearer ${token}`,
       }
-    }
+    },
+     authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                })
+                .then(response => {
+
+                    callback(false, response.data);
+                })
+                .catch(error => {
+                  console.log('bootstrap.js: ', error);
+                    callback(true, error);
+                });
+            }
+        };
+    },
 });

@@ -61,6 +61,7 @@ export default function setup(store) {
 
   const originalRequest = error.config;
 
+
   if (error.response.status === 403 || error.response.status === 429) {
       cleanUpAndLogout(store);
       userLoggedOut = true;
@@ -77,6 +78,7 @@ export default function setup(store) {
           }).then(token => {
 
             originalRequest.headers['Authorization'] = 'Bearer ' + token;
+
             return axios(originalRequest);
           }).catch(err => {
             return Promise.reject(err);
