@@ -3506,6 +3506,7 @@ div.about_profile_work__row p {
 }
 .follow_request_container {
   margin: 0.7rem 0;
+  padding: 0.5rem;
 }
 .follow_request_inner_content {
   display: flex;
@@ -3534,16 +3535,11 @@ div.about_profile_work__row p {
   color: #f4f4f4;
 }
 #follow_request_sent_date {
-  font-size: 0.75rem;
-  color: gray;
+  font-size: 0.7rem;
+  color: darkgray;
   margin: 0.1rem 0;
   display: flex;
   justify-content: flex-start;
-}
-.follow_request_divider {
-  width: 70%;
-  margin: 0.5rem auto;
-  border-bottom: 1px solid gray;
 }
 .follow_request_actions {
   display: flex;
@@ -4632,7 +4628,7 @@ div.about_profile_work__row p {
 
 
 #nav_notifications_container {
-  background-color: rgba(50, 50, 50, 0.9);
+  background-color: #3b3b44;
   box-shadow: 0px 0px 11px 1px black;
   border-radius: 8px;
   position: absolute;
@@ -4640,11 +4636,15 @@ div.about_profile_work__row p {
   right: 60px;
   z-index: 19;
   box-sizing: border-box;
-  padding: 0.7rem;
+  min-width: 250px;
+}
+#nav_notifications_container h5 {
+  text-align: center;
+  margin: 0.1rem 0;
+  color: #fcfcfc;
+  letter-spacing: 0rem;
 }
 .nav_notifications_close {
-  display: flex;
-  justify-content: flex-end;
   margin-right: 0.3rem;
   margin-top: 0.5rem;
 }
@@ -4653,12 +4653,171 @@ div.about_profile_work__row p {
   height: 25px;
   color: #fff;
 }
+.nav_notifications_header {
+  display: flex;
+  align-items: center;
+}
+.nav_notifications_header h4 {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0.1rem 0;
+  color: #fcfcfc;
+}
+.notifications_divider {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0.5rem auto;
+  border-bottom: 2px solid #323232;
+}
+@media (max-width: 600px) {
+#nav_notifications_container {
+    right: 20px;
+}
+}
 @media (max-width: 600px) {
 .nav_notifications_container {
     width: 95%;
     margin: 0 auto;
     top: 350x;
     right: 1px;
+}
+}
+.nav_notification_user_picture {
+  box-sizing: border-box;
+}
+.nav_notification_user_picture img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+.nav_notification_user_picture svg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #484aa4;
+  color: #fb4d70;
+}
+.nav_message_notification {
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+}
+.nav_message_notification_content {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+}
+.nav_message_notification_content p {
+  margin-left: 0.1rem;
+  font-size: 0.8rem;
+  font-family: "Open Sans", sans-serif;
+  margin: 1rem auto;
+  text-align: center;
+  color: #dcdcdc;
+}
+.nav_message_notification_content p span {
+  font-weight: bold;
+  font-family: "Secular One", sans-serif;
+}
+.nav_message_notification_actions {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  padding-top: 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+.nav_message_notification_actions svg {
+  height: 18px;
+  border: 2px solid #484aa4;
+  border-radius: 0.25rem;
+  padding: 2px;
+  color: #fb4d70;
+}
+.nav_message_notification_actions svg:hover {
+  color: #6466bb;
+  background-color: #2f2f36;
+}
+.nav_read_messages {
+  background-color: transparent;
+}
+.nav_unread_messages {
+  background-color: #2f2f36;
+}
+.unread_notification_identifier {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: #a9a5a5;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+.nav_message_notifications_container {
+  background-color: rgba(50, 50, 50, 0.9);
+  box-shadow: 0px 0px 11px 1px black;
+  border-radius: 8px;
+  position: absolute;
+  top: 50px;
+  right: 60px;
+  z-index: 19;
+  box-sizing: border-box;
+  min-width: 250px;
+  max-width: 350px;
+  min-height: 200px;
+  max-height: 275px;
+  overflow-y: auto;
+}
+.nav_message_notifications_container::-webkit-scrollbar {
+  width: 12px;
+}
+.nav_message_notifications_container::-webkit-scrollbar-track {
+  background: #232329;
+  border-radius: 8px;
+}
+.nav_message_notifications_container::-webkit-scrollbar-thumb {
+  background-color: #fb4d70;
+  border-radius: 20px;
+  border: 3px solid #232329;
+}
+.nav_message_notifications_container h5 {
+  text-align: center;
+  margin: 0.1rem 0;
+  color: #fcfcfc;
+  letter-spacing: 0rem;
+}
+.nav_message_notifications_header {
+  display: flex;
+  align-items: center;
+}
+.nav_message_notifications_header h4 {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0.1rem 0;
+  color: #fcfcfc;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: 0.03rem;
+}
+.nav_message_notifications_divider {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 auto;
+  border-bottom: 2px solid #323232;
+}
+.nav_message_notifications_close {
+  margin-right: 0.3rem;
+  margin-top: 0.5rem;
+}
+.nav_message_notifications_close svg {
+  width: 25px;
+  height: 25px;
+  color: #fff;
+}
+@media (max-width: 600px) {
+.nav_message_notifications_container {
+    right: 20px;
+    max-width: 250px;
 }
 }
 .logged_in_nav {
@@ -4779,7 +4938,7 @@ div.about_profile_work__row p {
   background-color: #4c4c57;
   padding: 0.5rem;
   position: fixed;
-  right: -38px;
+  right: -46px;
   top: 20%;
   text-align: center;
   height: 30px;

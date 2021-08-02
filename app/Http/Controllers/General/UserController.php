@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Helpers\Status;
 use Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\User;
 
 
 class UserController extends Controller
@@ -62,6 +63,41 @@ class UserController extends Controller
                         'status_updated' => false,
                     ],
                     403
+                );
+        }
+    }
+
+    /*
+  * update a given column on the user"
+  * @param Request $request
+  * @param string $userId
+  * @return void
+  */
+    public function updateColumn(Request $request, $userId)
+    {
+        try {
+
+            $curUser = User::find($userId);
+            $column = $request->all()['column'];
+            $curUser->$column = $request->all()['value'];
+
+            $curUser->save();
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success'
+                    ],
+                    204
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to update',
+                        'error' => $e->getMessage()
+                    ],
+                    400
                 );
         }
     }

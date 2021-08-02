@@ -22,6 +22,7 @@ use App\Http\Controllers\General\FlaggedPostController;
 use App\Http\Controllers\General\CommentLikeController;
 use App\Http\Controllers\General\FollowRequestController;
 use App\Http\Controllers\General\MessengerController;
+use App\Http\Controllers\General\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Route::patch('/auth/stats/unfollow/{userId}/update', [StatsController::class, 'u
 Route::get('/auth/network/following/show/{userId}', [NetworkController::class, 'showFollowing'])->middleware('auth:api');
 Route::get('/auth/network/followers/show/{userId}', [NetworkController::class, 'showFollowers'])->middleware('auth:api');
 Route::patch('/auth/user/status/{userId}/update', [UserController::class, 'updateUserStatus'])->middleware('auth:api');
+Route::patch('/auth/user/{userId}/update', [UserController::class, 'updateColumn'])->middleware('auth:api');
 Route::post('/auth/posts/store', [PostController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/posts', [PostController::class, 'index'])->middleware('auth:api');
 Route::delete('/auth/posts/{id}/delete', [PostController::class, 'delete'])->middleware('auth:api');
@@ -78,3 +80,5 @@ Route::delete('/auth/follow-requests/{requestId}/delete', [FollowRequestControll
 Route::get('/auth/messages/{recipientId}/show', [MessengerController::class, 'showChatMessages'])->middleware('auth:api');
 Route::post('/auth/messages', [MessengerController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/messenger/{userId}/show', [MessengerController::class, 'show'])->middleware('auth:api');
+Route::get('/auth/user/notifications/{userId}/show', [NotificationController::class, 'show'])->middleware('auth:api');
+Route::patch('/auth/user/notifications/{userId}/update', [NotificationController::class, 'update'])->middleware('auth:api');

@@ -1,8 +1,13 @@
 <template>
-  <div v-if="followRequests.length" id="nav_notifications_container">
-    <div @click="closeNotifications" class="nav_notifications_close">
-      <CloseIcon />
-    </div>
+  <div id="nav_notifications_container">
+    <header class="nav_notifications_header">
+      <h4>Notifications</h4>
+      <div @click="closeNotifications" class="nav_notifications_close">
+        <CloseIcon />
+      </div>
+    </header>
+    <div class="notifications_divider"></div>
+    <h5>Follow Requests</h5>
     <FollowRequest
       v-for="followRequest in followRequests"
       :key="followRequest.id"
@@ -10,6 +15,8 @@
       @acceptrequest="handleAcceptRequest"
       @denyrequest="handleDenyRequest"
     />
+    <div class="notifications_divider"></div>
+    <h5>Interactions</h5>
   </div>
 </template>
 
@@ -55,7 +62,7 @@ export default {
 
 <style lang="scss">
 #nav_notifications_container {
-  background-color: rgba(50, 50, 50, 0.9);
+  background-color: $primaryBlack;
   box-shadow: 0px 0px 11px 1px black;
   border-radius: 8px;
   position: absolute;
@@ -63,12 +70,17 @@ export default {
   right: 60px;
   z-index: 19;
   box-sizing: border-box;
-  padding: 0.7rem;
+  min-width: 250px;
+
+  h5 {
+    text-align: center;
+    margin: 0.1rem 0;
+    color: $primaryWhite;
+    letter-spacing: 0rem;
+  }
 }
 
 .nav_notifications_close {
-  display: flex;
-  justify-content: flex-end;
   margin-right: 0.3rem;
   margin-top: 0.5rem;
   svg {
@@ -77,6 +89,34 @@ export default {
     color: #fff;
   }
 }
+
+.nav_notifications_header {
+    display: flex;
+    align-items: center;
+
+    h4 {
+      flex-grow: 1;
+      text-align: center;
+      margin: 0.1rem 0;
+      color: $primaryWhite;
+    }
+}
+
+.notifications_divider {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0.5rem auto;
+  border-bottom: 2px solid #323232;
+}
+
+
+@media (max-width:600px) {
+  #nav_notifications_container {
+    right: 20px;
+  }
+}
+
+
 @media (max-width: 600px) {
   .nav_notifications_container {
     width: 95%;

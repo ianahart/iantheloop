@@ -64,7 +64,11 @@
             'CLOSE_NOTIFICATIONS'
           ]
         ),
-
+       ...mapMutations('notifications',
+        [
+          'CLOSE_MESSAGE_NOTIFICATIONS'
+        ]
+      ),
       onResize () {
 
         if (window.innerWidth <= 600) {
@@ -77,6 +81,7 @@
           this.$store.commit('hamburgerMenu/HIDE_MENU_ICON', false);
           this.$store.commit('hamburgerMenu/HIDE_MENU', false);
           this.CLOSE_NOTIFICATIONS();
+          this.CLOSE_MESSAGE_NOTIFICATIONS();
 
 
         }

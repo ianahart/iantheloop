@@ -234,8 +234,26 @@ const user = {
 
         commit('SET_STATUS_ERROR', e.response.data.error);
       }
-    }
+    },
 
+ async UPDATE_USER_COLUMN({ getters, rootGetters, state, commit }, payload) {
+
+      try {
+        response = await axios(
+          {
+            method: 'PATCH',
+            url: `/api/auth/user/${payload.curUserId}/update`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            data: payload,
+          }
+        );
+      } catch (e) {
+        console.log(e.response)
+      }
+    }
   }
 };
 

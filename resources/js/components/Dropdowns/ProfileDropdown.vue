@@ -208,8 +208,10 @@
         this.leaveNotificationChannel();
         this.CLOSE_PROFILE_DROPDOWN(false);
 
+        console.log('ProfileDropdown.vue: logout() line 210 Clear Notifications from state');
 
         this.$router.push({ name: 'Login' });
+
       },
 
       leaveUserStatusChannel() {

@@ -20,6 +20,9 @@
         <Notifications
           v-if="isLoggedIn && notificationsAreOpen"
         />
+        <MessageNotifications
+          v-if="isLoggedIn && messageNotificationsAreOpen"
+        />
       </div>
     </nav>
   </transition>
@@ -36,6 +39,8 @@
   import LogoName from '../Icons/LogoName';
   import NavigationLinks from './NavigationLinks';
   import Notifications from '../Notifications/Notifications.vue';
+  import MessageNotifications from '../Notifications/MessageNotifications.vue';
+
   export default {
 
     name: 'NavbarMobile',
@@ -51,6 +56,7 @@
       LogoName,
       NavigationLinks,
       Notifications,
+      MessageNotifications,
     },
 
     computed: {
@@ -60,7 +66,11 @@
           'notificationsAreOpen'
         ]
       ),
-
+      ...mapState('notifications',
+        [
+          'messageNotificationsAreOpen'
+        ]
+      ),
       ...mapGetters('user',
           [
             'isLoggedIn',
@@ -75,11 +85,16 @@
           'CLOSE_NOTIFICATIONS'
         ]
       ),
-
+     ...mapMutations('notifications',
+        [
+          'CLOSE_MESSAGE_NOTIFICATIONS'
+        ]
+      ),
        closeMenu () {
 
         this.$store.commit('hamburgerMenu/HIDE_MENU', false);
         this.CLOSE_NOTIFICATIONS();
+        this.CLOSE_MESSAGE_NOTIFICATIONS();
       }
     }
   };
@@ -105,14 +120,6 @@
     width: 100%;
     z-index: 17;
     box-shadow: 0px 0px 9px 3px rgba(41,41,41,.25);
-
-
-    // div {
-    //   display: flex;
-    //   justify-content: center;
-    //   text-align: center;
-    //   margin: 0 auto;
-    // }
     }
 
     .nav__links__mobile {

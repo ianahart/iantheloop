@@ -23,7 +23,6 @@
         <button @click="emitDenyRequest(followRequest)">Deny</button>
       </div>
     </div>
-    <div class="follow_request_divider"></div>
   </div>
 </template>
 
@@ -71,6 +70,7 @@ export default {
 <style lang="scss">
 .follow_request_container {
   margin: 0.7rem 0;
+  padding: 0.5rem;
 }
 
 .follow_request_inner_content {
@@ -106,17 +106,11 @@ export default {
 }
 
 #follow_request_sent_date {
-  font-size: 0.75rem;
-  color: gray;
+  font-size: 0.7rem;
+  color: darkgray;
   margin: 0.1rem 0;
   display: flex;
   justify-content: flex-start;
-}
-
-.follow_request_divider {
-  width: 70%;
-  margin: 0.5rem auto;
-  border-bottom: 1px solid gray;
 }
 
 .follow_request_actions {

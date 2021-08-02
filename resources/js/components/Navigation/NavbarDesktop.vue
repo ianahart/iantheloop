@@ -6,8 +6,7 @@
         :className="
           isMenuIconVisible && isLoggedIn
             ? 'hamburger__menu__icon_dark'
-            : 'hamburger__menu__icon_light'
-        "
+            : 'hamburger__menu__icon_light'"
       />
     </div>
     <p v-if="isMenuIconVisible">&nbsp;</p>
@@ -20,6 +19,7 @@
       rootStyle="nav__links__desktop"
     />
     <Notifications v-if="isLoggedIn && notificationsAreOpen" />
+    <MessageNotifications v-if="isLoggedIn && messageNotificationsAreOpen" />
   </nav>
 </template>
 
@@ -32,6 +32,7 @@ import HamburgerIcon from "../Icons/HamburgerIcon";
 import LogoName from "../Icons/LogoName";
 import NavigationLinks from "./NavigationLinks";
 import Notifications from "../Notifications/Notifications.vue";
+import MessageNotifications from '../Notifications/MessageNotifications.vue';
 
 export default {
   name: "NavbarDesktop",
@@ -44,6 +45,7 @@ export default {
     LogoName,
     NavigationLinks,
     Notifications,
+    MessageNotifications,
   },
 
   async mounted() {
@@ -65,6 +67,7 @@ export default {
     ...mapGetters("user", ["isLoggedIn", "getUserId"]),
 
     ...mapState("navigation", ["navigationLinks", "notificationsAreOpen"]),
+    ...mapState("notifications", ["messageNotificationsAreOpen"]),
     ...mapState("hamburgerMenu", ["isMenuIconVisible"]),
 
     navBGC() {

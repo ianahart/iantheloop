@@ -21,7 +21,7 @@
 
 import '../sass/app.scss';
 
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
 
@@ -39,9 +39,16 @@ export default {
 
 
     mounted() {
+
         if (this.getStatus === 'online') {
             this.initUserStatusChannel();
+            console.log('App.vue: mounted() line 45 FetchNotifications');
+
         }
+    },
+
+    beforeDestroy() {
+        console.log('App.vue: beforedDestroy() line 50 Clear Notifications from state');
     },
 
     computed: {
@@ -71,6 +78,7 @@ export default {
                 'UPDATE_CONTACT_STATUS',
             ]
         ),
+
       initUserStatusChannel() {
             Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
             Echo.join('userstatus')

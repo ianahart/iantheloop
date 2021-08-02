@@ -134,7 +134,9 @@
           this.SET_AUTH_STATUS(true);
           this.trackUserStatus();
           this.RESET_LOGIN_MODULE();
+
           this.$router.push({ name: 'Home' });
+          console.log('Login.vue line 137: FetchNotifications');
         }
       },
 

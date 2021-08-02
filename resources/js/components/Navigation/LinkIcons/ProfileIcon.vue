@@ -48,6 +48,16 @@
             'isMessengerOpen',
           ]
         ),
+     ...mapState('navigation',
+        [
+          'notificationsAreOpen'
+        ]
+      ),
+      ...mapState('notifications',
+        [
+          'messageNotificationsAreOpen'
+        ]
+      ),
     },
 
     methods: {
@@ -57,7 +67,16 @@
           'CLOSE_PROFILE_DROPDOWN'
         ]
       ),
-
+      ...mapMutations('notifications',
+        [
+          'CLOSE_MESSAGE_NOTIFICATIONS'
+        ]
+      ),
+      ...mapMutations('navigation',
+        [
+          'CLOSE_NOTIFICATIONS'
+        ]
+      ),
       ...mapMutations('messenger',
           [
             'CLOSE_MESSENGER'
@@ -67,7 +86,11 @@
       toggleDropdown () {
 
         if (this.isMessengerOpen) {
-          this.CLOSE_MESSENGER();
+            this.CLOSE_MESSENGER();
+        }
+        if (this.messageNotificationsAreOpen || this.notificationsAreOpen) {
+            this.CLOSE_NOTIFICATIONS();
+            this.CLOSE_MESSAGE_NOTIFICATIONS();
         }
 
         this.TOGGLE_PROFILE_DROPDOWN();
