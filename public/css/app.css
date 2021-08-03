@@ -4715,11 +4715,17 @@ div.about_profile_work__row p {
   font-family: "Open Sans", sans-serif;
   margin: 1rem auto;
   text-align: center;
-  color: #dcdcdc;
 }
 .nav_message_notification_content p span {
   font-weight: bold;
   font-family: "Secular One", sans-serif;
+}
+#nav_message_notification_read_at {
+  position: absolute;
+  top: 40px;
+  font-size: 0.65rem;
+  color: #fb4d70;
+  margin-top: 1rem;
 }
 .nav_message_notification_actions {
   box-sizing: border-box;
@@ -4741,9 +4747,13 @@ div.about_profile_work__row p {
 }
 .nav_read_messages {
   background-color: transparent;
+  color: #B6B4C1;
+  font-style: italic;
 }
 .nav_unread_messages {
   background-color: #2f2f36;
+  color: #dcdcdc;
+  font-style: normal;
 }
 .unread_notification_identifier {
   height: 8px;

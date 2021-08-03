@@ -38,15 +38,16 @@ class UserNotification
     return $this->notifications;
   }
 
-  public function retrieveByType()
+  public function messageNotifications()
   {
     try {
-      // if type is App\Notifications\UnreadMessage use distinct()
+
       $currentUser = User::find($this->user);
+
 
       $this->notifications = $currentUser
         ->notifications()
-
+        ->orderBy('read_at', 'DESC')
         ->distinct('data->sender_user_id')
         ->where('data->recipient_user_id', '=', $this->user)
         ->where('type', '=', $this->type)
@@ -56,46 +57,54 @@ class UserNotification
             'data->sender_name as sender_name',
             'data->recipient_user_id as recipient_user_id',
             'data->profile_picture as profile_picture',
-
           ],
-        )
+        )->limit(5)
         ->get();
 
       foreach ($this->notifications as $notification) {
 
         $notification->notification_id = bin2hex(random_bytes(16));
 
-        $total = $currentUser
-          ->notifications()
-          ->where('data->sender_user_id', '=', $notification->sender_user_id)
-          ->whereNull('read_at')
-          ->count();
-
-
         $latestReadNotification = $currentUser->notifications()
-          ->orderBy('read_at', 'DESC')
           ->where('data->sender_user_id', '=', $notification->sender_user_id)
-          ->whereNotNull('read_at')
-          ->limit(1)
-          ->latest()
-          ->get();
-        error_log(print_r($latestReadNotification->read_at, true));
-        // if (count($latestReadNotification->read_at) > 0) {
-        //   $notification->latest_read_at =  'date';
-        //   // error_log(print_r($notification->latest_read_at->read_at, true));
-        // }
+          ->latest('created_at')
+          ->first();
+
+        if (isset($latestReadNotification->data) && !is_null($latestReadNotification->read_at)) {
+          if (intval($notification->sender_user_id) === intval($latestReadNotification->data['sender_user_id'])) {
+
+            $dateTime = new DateTime($latestReadNotification->read_at);
+            $notification->latest_read_at = $dateTime->format('U');
 
 
-
-        // $notification->new_notifications = isset($notification->latest_read_at) ? false : true;
-
-
-        $notification->new_notifications = $total > 0 ? true : false;
+            $notification->latest_read_at = $this->makeReadAt($notification->latest_read_at);
+          }
+        } else {
+          $notification->latest_read_at = NULL;
+        }
+        $notification->new_notifications = !is_null($notification->latest_read_at) ? false : true;
       }
 
-
-
       $this->notifications = count($this->notifications->toArray()) > 0 ? $this->notifications->toArray() : [];
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
+  }
+
+  public function deleteMessageNotifications(string $senderId)
+  {
+    try {
+
+      $currentUser = User::find($this->user);
+
+      if ($currentUser) {
+
+        $currentUser
+          ->notifications()
+          ->where('type', '=', $this->type)
+          ->where('data->sender_user_id', '=', $senderId)
+          ->delete();
+      }
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
@@ -107,53 +116,68 @@ class UserNotification
 
       $currentUser = User::find($this->user);
 
-      // if ($currentUser) {
-      //   $currentUser
-      //     ->unreadNotifications()
-      //     ->where('data->sender_user_id', '=', $senderId)
-      //     ->update(
-      //       [
-      //         'read_at' => now()
-      //       ]
-      //     );
-      // }
-      $this->makeReadAt();
-
-
-
-
-
-      // return read at date
-      // if new_notifications is true turn to false
-      // when false, show read_at date in component
+      if ($currentUser) {
+        $currentUser
+          ->unreadNotifications()
+          ->where('data->sender_user_id', '=', $senderId)
+          ->update(
+            [
+              'read_at' => now()
+            ]
+          );
+      }
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
   }
 
-  private function makeReadAt()
+  private function makeReadAt(string $timestamp)
   {
-    // $date = new DateTime();
-    // $timezone = new DateTimeZone('America/New_York');
-    // $date->setTimezone($timezone);
-    // $readAt = $date->format('h:i:a m/d/Y');
-    // error_log(print_r($readAt, true));
 
     $epochs = [
-      ['name' => 'year', 'value' => 31536000],
-      ['name' => 'month', 'value' => 2592000],
-      ['name' => 'day', 'value' => 86400],
-      ['name' => 'hour', 'value' => 3600],
-      ['name' => 'minute', 'value' => 60],
       ['name' => 'second', 'value' => 1],
+      ['name' => 'minute', 'value' => 60],
+      ['name' => 'hour', 'value' => 60 * 60],
+      ['name' => 'day', 'value' => 60 * 60 * 24],
+      ['name' => 'month', 'value' => date("t") === '31' ? 86400 * 31 : 86400 * 30],
+      ['name' => 'year', 'value' => 31104000],
     ];
+    $message = '';
+    $threshold = NULL;
+    $group = NULL;
+    $ago = time() - $timestamp;
 
+    foreach ($epochs as $key => $epoch) {
 
-    // error_log(print_r($epochs, true));
+      if ($ago >= $epoch['value'] && $epoch['name'] === 'year') {
+        $group = $epoch;
+        break;
+      }
+
+      if (
+        $ago >= $epoch['value'] && $ago < $epochs[$key + 1]['value']
+      ) {
+        $group = $epoch;
+        $threshold = $epochs[$key + 1];
+        break;
+      }
+    }
+
+    if ($group['name'] === 'year') {
+
+      $time = round($ago / $group['value']);
+    } else {
+
+      $elapsed = round(($threshold['value'] - $ago) / $group['value']);
+      $time = round($threshold['value'] / $group['value']) - $elapsed;
+    }
+
+    $isPlural = $time === floatval(1) ? '' : 's';
+    $message = 'Read ' . $time . ' ' . $group['name'] . $isPlural . ' ' . 'ago';
+
+    return $message;
   }
 }
-
-
 
 
 
@@ -174,10 +198,3 @@ class UserNotification
 #5. )For either Mark as Read and Delete buttons, if the messenger component
 #is open remove unread_message_count from that sender_user_id in the contacts state in messenger.js
 #6. ) if notifications in pop up are over 2 months old delete
-
-//today
-// yesterday
-// 2 days ago
-// 3 days ago
-
-// if 30 days ago -- a month ago

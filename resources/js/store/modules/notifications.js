@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getElementIndex } from '../../helpers/moduleHelpers';
 
 const initialState = () => {
 
@@ -47,7 +48,7 @@ const notifications = {
       state.messageNotificationsLoaded = payload;
     },
 
-    SET_NOTIFICATIONS(state, { notifications }) {
+    SET_MESSAGE_NOTIFICATIONS(state, { notifications }) {
       state.notifications = [...state.notifications, ...notifications];
     },
 
@@ -56,8 +57,14 @@ const notifications = {
     },
 
     MARK_NOTIFICATION_AS_READ(state, payload) {
-      const index = state.notifications.findIndex(notification => notification.sender_user_id === payload.sender_user_id);
+      const index = getElementIndex(state.notifications, 'sender_user_id', payload.sender_user_id);
       state.notifications[index].new_notifications = false;
+      state.notifications[index].latest_read_at = 'Read Just now';
+    },
+
+    DELETE_MESSAGE_NOTIFICATIONS(state, sender) {
+      const index = getElementIndex(state.notifications, 'sender_user_id', sender);
+      state.notifications.splice(index, 1);
     },
   },
 
@@ -106,14 +113,14 @@ const notifications = {
       }
     },
 
-    async FETCH_NOTIFICATIONS({ state, rootGetters, commit }, type) {
+    async FETCH_MESSAGE_NOTIFICATIONS({ state, rootGetters, commit }, type) {
 
       try {
 
         const response = await axios(
           {
             method: 'GET',
-            url: `/api/auth/user/notifications/${rootGetters['user/getUserId']}/show?type=App/Notifications/UnreadMessage`,
+            url: `/api/auth/user/notifications/messages/${rootGetters['user/getUserId']}/show?type=App/Notifications/UnreadMessage`,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -121,7 +128,7 @@ const notifications = {
           }
         );
           if (response.status === 200) {
-            commit('SET_NOTIFICATIONS', response.data);
+            commit('SET_MESSAGE_NOTIFICATIONS', response.data);
             commit('MESSAGE_NOTIFICATIONS_LOADED', true);
           }
       } catch(e) {
@@ -130,13 +137,13 @@ const notifications = {
       }
     },
 
-    async UPDATE_NOTIFICATIONS({ state, commit }, payload) {
+    async UPDATE_MESSAGE_NOTIFICATIONS({ state, commit }, payload) {
 
       try {
 
         const response = await axios({
           method: 'PATCH',
-          url: `/api/auth/user/notifications/${payload.recipient}/update`,
+          url: `/api/auth/user/notifications/messages/${payload.recipient}/update`,
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -144,12 +151,32 @@ const notifications = {
           data: { sender: payload.sender, type: payload.type },
         });
 
-
-         console.log('notifications.js: UPDATE_NOTIFICATIONS() line 135 Success:', response);
       } catch(e) {
-         console.log('notifications.js: UPDATE_NOTIFICATIONS() line 135 Error:', e.response);
+        //  console.log('notifications.js: UPDATE_MESSAGE_NOTIFICATIONS() line 155 Error:', e.response);
       }
     },
+
+    async DELETE_MESSAGE_NOTIFICATIONS ({ state, commit }, payload) {
+      try {
+
+        const response = await axios(
+          {
+            method: 'DELETE',
+            url:`/api/auth/user/notifications/messages/${payload.recipient}/delete?sender=${payload.sender}&type=${payload.type}`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application.json',
+            },
+          }
+        );
+          console.log('notifications.js: DELETE_MESSAGE_NOTIFICATIONS() line 155 Error:', response);
+          if (response.status === 200) {
+            commit('DELETE_MESSAGE_NOTIFICATIONS', payload.sender);
+          }
+      } catch(e) {
+        console.log('notifications.js: DELETE_MESSAGE_NOTIFICATIONS() line 155 Error:', e.response);
+      }
+    }
   }
 }
 

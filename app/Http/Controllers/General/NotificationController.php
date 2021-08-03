@@ -16,13 +16,13 @@ class NotificationController extends Controller
     * @return JsonResponse
     */
 
-    public function show(Request $request, string $userId)
+    public function showMessageNotifications(Request $request, string $userId)
     {
         try {
             $notification = new UserNotification($userId);
             $notification->setType($request->query('type'));
 
-            $notification->retrieveByType();
+            $notification->messageNotifications();
 
             if (!is_null($notification->getError())) {
                 throw new Exception($notification->getError());
@@ -54,7 +54,7 @@ class NotificationController extends Controller
     * @param string $userId
     * @return JsonResponse
     */
-    public function update(Request $request, $userId)
+    public function updateMessageNotifications(Request $request, $userId)
     {
         try {
 
@@ -71,16 +71,53 @@ class NotificationController extends Controller
                 ->json(
                     [
                         'msg' => 'success',
-                        'data' => ['sender_user_id' => $request->all()['sender'], '']
                     ],
-                    200
+                    204
 
                 );
         } catch (Exception $e) {
             return response()
                 ->json(
                     [
-                        'msg' => 'Unable to finish Database Operation',
+                        'msg' => 'Unable to update notifications',
+                        'error' => $e->getMessage()
+                    ],
+                    500
+                );
+        }
+    }
+
+    /*
+    *Delete notifications from the sender
+    * @param Request $request
+    * @param string $userId
+    * @return JsonResponse
+    */
+    public function deleteMessageNotifications(Request $request, string $userId)
+    {
+        try {
+
+            $notification = new UserNotification($userId);
+            $notification->setType($request->all()['type']);
+
+            $notification->deleteMessageNotifications($request->all()['sender']);
+
+            if (!is_null($notification->getError())) {
+                throw new Exception($notification->getError());
+            }
+
+            return response()->json(
+                [
+                    'msg' => 'success'
+                ],
+                200
+            );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to delete notifications',
                         'error' => $e->getMessage()
                     ],
                     500

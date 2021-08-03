@@ -69,7 +69,7 @@
       ),
       ...mapActions('notifications',
           [
-            'FETCH_NOTIFICATIONS'
+            'FETCH_MESSAGE_NOTIFICATIONS'
           ]
       ),
 
@@ -78,7 +78,7 @@
       },
 
       async fetchNotifications(type) {
-          await this.FETCH_NOTIFICATIONS(type)
+          await this.FETCH_MESSAGE_NOTIFICATIONS(type)
       },
     },
   }

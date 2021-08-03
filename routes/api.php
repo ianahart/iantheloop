@@ -80,5 +80,6 @@ Route::delete('/auth/follow-requests/{requestId}/delete', [FollowRequestControll
 Route::get('/auth/messages/{recipientId}/show', [MessengerController::class, 'showChatMessages'])->middleware('auth:api');
 Route::post('/auth/messages', [MessengerController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/messenger/{userId}/show', [MessengerController::class, 'show'])->middleware('auth:api');
-Route::get('/auth/user/notifications/{userId}/show', [NotificationController::class, 'show'])->middleware('auth:api');
-Route::patch('/auth/user/notifications/{userId}/update', [NotificationController::class, 'update'])->middleware('auth:api');
+Route::get('/auth/user/notifications/messages/{userId}/show', [NotificationController::class, 'showMessageNotifications'])->middleware('auth:api');
+Route::patch('/auth/user/notifications/messages/{userId}/update', [NotificationController::class, 'updateMessageNotifications'])->middleware('auth:api');
+Route::delete('/auth/user/notifications/messages/{userId}/delete', [NotificationController::class, 'deleteMessageNotifications'])->middleware('auth:api');

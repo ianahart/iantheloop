@@ -5,6 +5,7 @@
     :class="`nav_message_notification ${notificationStyle}`"
   >
     <div class="nav_message_notification_content">
+      <p v-if="notification.latest_read_at !== null" id="nav_message_notification_read_at">{{ notification.latest_read_at }}</p>
       <div v-if="notification.new_notifications" class="unread_notification_identifier"></div>
       <UserPicture
         :src="notification.profile_picture"
@@ -81,19 +82,20 @@
 
       ...mapMutations('notifications',
         [
-          'MARK_NOTIFICATION_AS_READ'
+          'MARK_NOTIFICATION_AS_READ',
         ]
       ),
 
       ...mapMutations('messenger',
         [
-          'CLEAR_NOTIFICATIONS'
+          'CLEAR_NOTIFICATIONS',
         ]
       ),
 
       ...mapActions('notifications',
         [
-          'UPDATE_NOTIFICATIONS'
+          'UPDATE_MESSAGE_NOTIFICATIONS',
+          'DELETE_MESSAGE_NOTIFICATIONS',
         ]
       ),
 
@@ -111,7 +113,7 @@
 
       async markReadNotification(notification) {
         this.MARK_NOTIFICATION_AS_READ(notification);
-        await this.UPDATE_NOTIFICATIONS(
+        await this.UPDATE_MESSAGE_NOTIFICATIONS(
           {
             sender: notification.sender_user_id,
             recipient: notification.recipient_user_id,
@@ -119,25 +121,33 @@
           }
         );
 
-        if (this.isMessengerOpen) {
-          this.CLEAR_NOTIFICATIONS(
-            {
-              sender: parseInt(notification.sender_user_id),
-              notificationsRead: true
-            });
-        }
+        this.clearMessengerNotifications(notification);
       },
 
-      removeNotification(notification) {
-        // delete
-        console.log(`Removing notification from ${notification.sender_name}`);
+      clearMessengerNotifications(notification) {
+           if (this.isMessengerOpen) {
+            this.CLEAR_NOTIFICATIONS(
+              {
+                sender: parseInt(notification.sender_user_id),
+                notificationsRead: true
+              });
+            }
+      },
+
+      async removeNotification(notification) {
+
+        await this.DELETE_MESSAGE_NOTIFICATIONS(
+          {
+            sender: notification.sender_user_id,
+            recipient: notification.recipient_user_id,
+            type: 'App/Notifications/UnreadMessage',
+          }
+        );
+          this.clearMessengerNotifications(notification);
       }
     },
   }
-
-
 </script>
-
 
 <style lang="scss">
   .nav_message_notification {
@@ -158,7 +168,6 @@
       font-family: 'Open Sans', sans-serif;
       margin: 1rem auto;
       text-align: center;
-      color: #dcdcdc;
 
       span {
         font-weight: bold;
@@ -167,7 +176,13 @@
     }
   }
 
-
+  #nav_message_notification_read_at {
+    position: absolute;
+    top: 40px;
+    font-size: 0.65rem;
+    color: $themePink;
+    margin-top: 1rem;
+  }
 
   .nav_message_notification_actions {
     box-sizing: border-box;
@@ -187,16 +202,18 @@
         color: lighten($themeLightBlue, 10);
         background-color: darken($primaryBlack, 5);
       }
-
-
     }
   }
   .nav_read_messages {
     background-color: transparent;
+    color: #B6B4C1;
+    font-style: italic;
   }
 
   .nav_unread_messages {
       background-color: darken($primaryBlack, 5);
+      color: #dcdcdc;
+      font-style: normal;
   }
   .unread_notification_identifier {
     height: 8px;
