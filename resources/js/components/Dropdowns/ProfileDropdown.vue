@@ -194,6 +194,11 @@
           'CHECK_PAGE'
           ]
         ),
+        ...mapMutations('notifications',
+          [
+            'SET_NAV_ALERTS'
+          ]
+        ),
 
       closeDropdown () {
 
@@ -207,9 +212,7 @@
         this.leaveUserStatusChannel();
         this.leaveNotificationChannel();
         this.CLOSE_PROFILE_DROPDOWN(false);
-
-        console.log('ProfileDropdown.vue: logout() line 210 Clear Notifications from state');
-
+        this.SET_NAV_ALERTS({ nav_interaction_alerts: false, nav_message_alerts: false });
         this.$router.push({ name: 'Login' });
 
       },

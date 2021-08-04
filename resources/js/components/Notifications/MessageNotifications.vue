@@ -20,6 +20,9 @@
         :notification="notification"
       />
     </div>
+    <div v-if="currentPageMessages !== 'end'" class="paginate_message_notifications">
+      <button @click="loadMoreNotifications('App/Notifications/UnreadMessage')">More notifications...</button>
+    </div>
   </div>
 </template>
 
@@ -39,14 +42,21 @@
       MessageNotification,
     },
 
+    data() {
+      return {
+        timerID: '',
+      }
+    },
 
     async mounted() {
-      await this.fetchNotifications('App\Notifications\UnreadMessage');
+      await this.fetchNotifications('App/Notifications/UnreadMessage');
     },
 
     beforeDestroy() {
         this.CLEAR_MESSAGE_NOTIFICATIONS();
         this.MESSAGE_NOTIFICATIONS_LOADED(false);
+        this.SET_CURRENT_PAGE_MESSAGES('reset');
+        clearTimeout(this.timerID);
     },
 
     computed: {
@@ -54,6 +64,7 @@
           [
             'messageNotificationsLoaded',
             'notifications',
+            'currentPageMessages'
           ]
       ),
     },
@@ -65,6 +76,7 @@
           'CLOSE_MESSAGE_NOTIFICATIONS',
           'MESSAGE_NOTIFICATIONS_LOADED',
           'CLEAR_MESSAGE_NOTIFICATIONS',
+          'SET_CURRENT_PAGE_MESSAGES',
         ]
       ),
       ...mapActions('notifications',
@@ -72,6 +84,24 @@
             'FETCH_MESSAGE_NOTIFICATIONS'
           ]
       ),
+
+      debounce(fn, delay = 400) {
+          return ((...args) => {
+              clearTimeout(this.debounceID);
+
+              this.debounceID = setTimeout(() => {
+                  this.debounceID = null;
+
+                  fn(...args);
+              }, delay);
+          })();
+      },
+
+      async loadMoreNotifications(type) {
+        this.debounce(async () => {
+          await this.FETCH_MESSAGE_NOTIFICATIONS(type);
+        }, 350);
+      },
 
       closeMessageNotifications() {
           this.CLOSE_MESSAGE_NOTIFICATIONS();
@@ -153,6 +183,28 @@
         color: #fff;
     }
   }
+
+  .paginate_message_notifications {
+    box-sizing: border-box;
+    margin: 0.5rem 0 1rem 0;
+    display: flex;
+    justify-content: center;
+
+    button {
+      color: $themePink;
+      font-style: italic;
+      letter-spacing: 0.030rem;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      font-family: 'Open Sans', sans-serif;
+
+      &:hover {
+        color: lighten(gray, 5);
+      }
+    }
+  }
+
 
   @media (max-width:600px) {
     .nav_message_notifications_container{

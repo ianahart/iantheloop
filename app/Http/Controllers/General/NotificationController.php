@@ -19,10 +19,11 @@ class NotificationController extends Controller
     public function showMessageNotifications(Request $request, string $userId)
     {
         try {
+
             $notification = new UserNotification($userId);
             $notification->setType($request->query('type'));
 
-            $notification->messageNotifications();
+            $notification->messageNotifications($request->query('page'));
 
             if (!is_null($notification->getError())) {
                 throw new Exception($notification->getError());
@@ -32,6 +33,7 @@ class NotificationController extends Controller
                     [
                         'msg' => 'success',
                         'notifications' => $notification->getNotifications(),
+                        'current_page_messages' => $notification->getCurrentPageMessages(),
                     ],
                     200
                 );
@@ -118,6 +120,43 @@ class NotificationController extends Controller
                 ->json(
                     [
                         'msg' => 'Unable to delete notifications',
+                        'error' => $e->getMessage()
+                    ],
+                    500
+                );
+        }
+    }
+
+    /*
+    *Show notification alerts in the navigation
+    * @param Request $request
+    * @param string $userId
+    * @return JsonResponse
+    */
+
+    public function showNotificationAlerts(Request $request, string $userId)
+    {
+        try {
+            $notification = new UserNotification($userId);
+            $notification->setType($request->query('type'));
+
+            $currentAlerts = $notification->notificationAlerts();
+
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success',
+                        'nav_interaction_alerts' => false,
+                        'nav_message_alerts' => $currentAlerts
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to load notification alerts',
                         'error' => $e->getMessage()
                     ],
                     500

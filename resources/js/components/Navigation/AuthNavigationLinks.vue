@@ -14,6 +14,7 @@
         :className="
           !isMenuVisible ? 'messages__icon_dark' : 'messages__icon_light'"
       />
+      <span v-if="navMessageAlerts" class="navbar_notification_messages_alerts">&#43;</span>
     </li>
     <li class="navbar_notificatons_listitem" @click.stop="toggleNotifications">
       <NotificationsIcon
@@ -22,9 +23,9 @@
             ? 'notifications__icon_dark'
             : 'notifications__icon_light'"
       />
+      <span v-if="navInteractionAlerts" class="navbar_notification_interactions_alerts">&#43;</span>
     </li>
     <li>
-
       <ProfileIcon location="nav" />
     </li>
   </ul>
@@ -57,7 +58,7 @@ export default {
 
   computed: {
     ...mapState("navigation", ["authNavigationLinks", "notificationsAreOpen"]),
-    ...mapState("notifications", ["messageNotificationsAreOpen"]),
+    ...mapState("notifications", ["messageNotificationsAreOpen", 'navInteractionAlerts', 'navMessageAlerts']),
     ...mapState("hamburgerMenu", ["isMenuVisible"]),
     ...mapState("profileDropdown", ['isProfileDropdownOpen']),
   },
@@ -117,7 +118,24 @@ export default {
 </script>
 
 <style lang="scss">
-.navbar_notificatons_listitem {
-  cursor: pointer;
-}
+  .navbar_notificatons_listitem {
+    cursor: pointer;
+    position: relative;
+  }
+
+
+  .navbar_notification_messages_alerts,
+  .navbar_notification_interactions_alerts {
+    position: absolute;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background-color: $themePink;
+    color: $primaryWhite;
+    top: -7px;
+    right:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>

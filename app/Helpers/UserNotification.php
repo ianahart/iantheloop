@@ -3,19 +3,20 @@
 namespace App\Helpers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
+
 
 use Exception;
 use DateTime;
-use DateTimeZone;
+
 
 class UserNotification
 {
-
+  const PAG_LIMIT = 3;
   private string $type;
   private int $user;
   private string $error;
   private array|object $notifications;
+  private int|string $currentPageMessages;
 
 
   public function __construct(int $user)
@@ -33,24 +34,28 @@ class UserNotification
     return isset($this->error) ? $this->error : NULL;
   }
 
+  public function getCurrentPageMessages()
+  {
+    return $this->currentPageMessages;
+  }
+
   public function getNotifications()
   {
     return $this->notifications;
   }
 
-  public function messageNotifications()
+
+  public function messageNotifications(string|null $page)
   {
     try {
 
       $currentUser = User::find($this->user);
 
-
       $this->notifications = $currentUser
         ->notifications()
-        ->orderBy('read_at', 'DESC')
-        ->distinct('data->sender_user_id')
         ->where('data->recipient_user_id', '=', $this->user)
         ->where('type', '=', $this->type)
+        ->distinct('data->sender_user_id')
         ->select(
           [
             'data->sender_user_id as sender_user_id',
@@ -58,34 +63,44 @@ class UserNotification
             'data->recipient_user_id as recipient_user_id',
             'data->profile_picture as profile_picture',
           ],
-        )->limit(5)
-        ->get();
+        )
+        ->paginate(self::PAG_LIMIT);
 
-      foreach ($this->notifications as $notification) {
+      $this->currentPageMessages = $this->notifications->currentPage();
 
-        $notification->notification_id = bin2hex(random_bytes(16));
+      if ($this->currentPageMessages > $this->notifications->lastPage()) {
+        $this->currentPageMessages = 'end';
+        $this->notifications = [];
+        return;
+      }
+
+      $this->notifications = $this->notifications->toArray()['data'];
+
+      foreach ($this->notifications as &$notification) {
+
+        $notification['notification_id'] = bin2hex(random_bytes(16));
 
         $latestReadNotification = $currentUser->notifications()
-          ->where('data->sender_user_id', '=', $notification->sender_user_id)
+          ->where('data->sender_user_id', '=', $notification['sender_user_id'])
           ->latest('created_at')
           ->first();
 
         if (isset($latestReadNotification->data) && !is_null($latestReadNotification->read_at)) {
-          if (intval($notification->sender_user_id) === intval($latestReadNotification->data['sender_user_id'])) {
+          if (intval($notification['sender_user_id']) === intval($latestReadNotification->data['sender_user_id'])) {
 
             $dateTime = new DateTime($latestReadNotification->read_at);
-            $notification->latest_read_at = $dateTime->format('U');
+            $notification['latest_read_at'] = $dateTime->format('U');
 
-
-            $notification->latest_read_at = $this->makeReadAt($notification->latest_read_at);
+            $notification['latest_read_at'] = $this->makeReadAt($notification['latest_read_at']);
           }
         } else {
-          $notification->latest_read_at = NULL;
+          $notification['latest_read_at'] = NULL;
         }
-        $notification->new_notifications = !is_null($notification->latest_read_at) ? false : true;
+        $notification['new_notifications'] = !is_null($notification['latest_read_at']) ? false : true;
+        $notification['created_at'] = $latestReadNotification->created_at;
       }
 
-      $this->notifications = count($this->notifications->toArray()) > 0 ? $this->notifications->toArray() : [];
+      $this->notifications = count($this->notifications) > 0 ? $this->notifications : [];
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
@@ -177,24 +192,13 @@ class UserNotification
 
     return $message;
   }
+
+  public function notificationAlerts(): bool
+  {
+    $currentUser = User::find($this->user);
+
+    $newAlerts = $currentUser->notifications()->where('type', '=', $this->type)->whereNull('read_at')->first();
+
+    return is_null($newAlerts) ? false : true;
+  }
 }
-
-
-
-
-
-
-
-
-
-#Steps
-
-#1.) render data to messages popup -- DONE
-#2.) Show Mark Read Button And Delete Button -- DONE
-#3. ) If Mark Read button is clicked send update request to update all unread --DONE
-#messages for that sender_user_id to read_at and hide the Mark Read button and Keep the Delete Button Visible --DONE
-#4. ) If Delete button is clicked send a delete request to delete all unread or read_at messages from the sender_user_id
-# Hide the delete message
-#5. )For either Mark as Read and Delete buttons, if the messenger component
-#is open remove unread_message_count from that sender_user_id in the contacts state in messenger.js
-#6. ) if notifications in pop up are over 2 months old delete

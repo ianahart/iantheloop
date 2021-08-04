@@ -6,8 +6,12 @@ const initialState = () => {
   return {
     followRequests: [],
     notifications: [],
+    currentPageMessages: null,
     messageNotificationsAreOpen: false,
     messageNotificationsLoaded: false,
+    navMessageAlerts: false,
+    navInteractionAlerts: false,
+    serverError: '',
   }
 };
 
@@ -22,7 +26,9 @@ const notifications = {
   },
 
   mutations: {
-
+   SET_SERVER_ERROR(state, payload) {
+    state.serverError = payload;
+   },
    RESET_NOTIFICATIONS_MODULE: (state) => {
      Object.assign(state, initialState());
     },
@@ -31,9 +37,26 @@ const notifications = {
       state.followRequests = payload;
     },
 
+    SET_CURRENT_PAGE_MESSAGES(state, payload) {
+       if (payload === 'end') {
+        state.currentPageMessages = payload;
+        return;
+      }  else if (payload === 'reset') {
+        state.currentPageMessages = 1;
+      } else {
+        state.currentPageMessages = payload + 1;
+      }
+    },
+
     SET_REMOVE_REQUEST: (state, payload) => {
       const deniedRequest = state.followRequests.findIndex(request => request.id === payload.requestId);
       state.followRequests.splice(deniedRequest, 1);
+    },
+
+    SET_NAV_ALERTS(state, { nav_interaction_alerts, nav_message_alerts }) {
+      state.navInteractionAlerts = nav_interaction_alerts;
+      state.navMessageAlerts = nav_message_alerts;
+
     },
 
     TOGGLE_MESSAGE_NOTIFICATIONS(state) {
@@ -117,10 +140,11 @@ const notifications = {
 
       try {
 
+
         const response = await axios(
           {
             method: 'GET',
-            url: `/api/auth/user/notifications/messages/${rootGetters['user/getUserId']}/show?type=App/Notifications/UnreadMessage`,
+            url: `/api/auth/user/notifications/messages/${rootGetters['user/getUserId']}/show?page=${state.currentPageMessages}&type=${type}`,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -129,6 +153,7 @@ const notifications = {
         );
           if (response.status === 200) {
             commit('SET_MESSAGE_NOTIFICATIONS', response.data);
+            commit('SET_CURRENT_PAGE_MESSAGES', response.data.current_page_messages);
             commit('MESSAGE_NOTIFICATIONS_LOADED', true);
           }
       } catch(e) {
@@ -169,12 +194,33 @@ const notifications = {
             },
           }
         );
-          console.log('notifications.js: DELETE_MESSAGE_NOTIFICATIONS() line 155 Error:', response);
           if (response.status === 200) {
             commit('DELETE_MESSAGE_NOTIFICATIONS', payload.sender);
           }
       } catch(e) {
         console.log('notifications.js: DELETE_MESSAGE_NOTIFICATIONS() line 155 Error:', e.response);
+      }
+    },
+
+    async FETCH_NAV_NOTIFICATION_ALERTS({ state, commit }, payload) {
+      try {
+        const response = await axios(
+          {
+            method: 'GET',
+            url: `/api/auth/user/notifications/alerts/${payload.userId}/show?type=${payload.type}`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+
+        if (response.status === 200) {
+          commit('SET_NAV_ALERTS', response.data);
+        }
+      } catch(e) {
+        console.log('notifications.js:FETCH_NAV_NOTIFICATION_ALERTS line 200 Error:', e.response);
+        commit('SET_SERVER_ERROR', e.response.data.error);
       }
     }
   }

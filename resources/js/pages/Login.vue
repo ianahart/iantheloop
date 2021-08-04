@@ -102,6 +102,11 @@
           'SUBMIT_FORM',
         ]
       ),
+      ...mapActions('notifications',
+        [
+          'FETCH_NAV_NOTIFICATION_ALERTS'
+        ]
+      ),
 
       clearRegistration() {
 
@@ -136,7 +141,7 @@
           this.RESET_LOGIN_MODULE();
 
           this.$router.push({ name: 'Home' });
-          console.log('Login.vue line 137: FetchNotifications');
+          await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
         }
       },
 

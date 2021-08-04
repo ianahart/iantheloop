@@ -38,17 +38,15 @@ export default {
     },
 
 
-    mounted() {
-
+    async mounted() {
         if (this.getStatus === 'online') {
             this.initUserStatusChannel();
-            console.log('App.vue: mounted() line 45 FetchNotifications');
-
+            await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
         }
     },
 
     beforeDestroy() {
-        console.log('App.vue: beforedDestroy() line 50 Clear Notifications from state');
+        this.SET_NAV_ALERTS({ nav_interaction_alerts: false, nav_message_alerts: false });
     },
 
     computed: {
@@ -68,6 +66,7 @@ export default {
                 'getProfileStatus',
                 'getStatus',
                 'getToken',
+                'getUserId',
             ]
         ),
     },
@@ -76,6 +75,16 @@ export default {
         ...mapMutations('messenger',
             [
                 'UPDATE_CONTACT_STATUS',
+            ]
+        ),
+        ...mapMutations('notifications',
+            [
+                'SET_NAV_ALERTS'
+            ]
+        ),
+        ...mapActions('notifications',
+            [
+                'FETCH_NAV_NOTIFICATION_ALERTS'
             ]
         ),
 

@@ -3488,6 +3488,21 @@ div.about_profile_work__row p {
 }
 .navbar_notificatons_listitem {
   cursor: pointer;
+  position: relative;
+}
+.navbar_notification_messages_alerts,
+.navbar_notification_interactions_alerts {
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background-color: #fb4d70;
+  color: #fcfcfc;
+  top: -7px;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /*
   IMPORTS
@@ -4823,6 +4838,24 @@ div.about_profile_work__row p {
   width: 25px;
   height: 25px;
   color: #fff;
+}
+.paginate_message_notifications {
+  box-sizing: border-box;
+  margin: 0.5rem 0 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+.paginate_message_notifications button {
+  color: #fb4d70;
+  font-style: italic;
+  letter-spacing: 0.03rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-family: "Open Sans", sans-serif;
+}
+.paginate_message_notifications button:hover {
+  color: #8d8d8d;
 }
 @media (max-width: 600px) {
 .nav_message_notifications_container {

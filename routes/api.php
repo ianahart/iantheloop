@@ -83,3 +83,4 @@ Route::get('/auth/messenger/{userId}/show', [MessengerController::class, 'show']
 Route::get('/auth/user/notifications/messages/{userId}/show', [NotificationController::class, 'showMessageNotifications'])->middleware('auth:api');
 Route::patch('/auth/user/notifications/messages/{userId}/update', [NotificationController::class, 'updateMessageNotifications'])->middleware('auth:api');
 Route::delete('/auth/user/notifications/messages/{userId}/delete', [NotificationController::class, 'deleteMessageNotifications'])->middleware('auth:api');
+Route::get('/auth/user/notifications/alerts/{userId}/show', [NotificationController::class, 'showNotificationAlerts'])->middleware('auth:api');
