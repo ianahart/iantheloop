@@ -7,13 +7,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\User;
 
-class UnreadMessage extends Notification implements ShouldQueue
+
+class UnreadMessage extends Notification
 {
     use Queueable;
 
     protected $message;
+
 
     /**
      * Create a new notification instance.
@@ -70,7 +71,9 @@ class UnreadMessage extends Notification implements ShouldQueue
      */
     public function toBroadcast($notifiable)
     {
-        return (new BroadcastMessage($this->message));
+        return (new BroadcastMessage($this->message))
+            ->onConnection('sync')
+            ->onQueue('broadcasts');
     }
 
     /**
@@ -83,5 +86,3 @@ class UnreadMessage extends Notification implements ShouldQueue
         return 'broadcast.message';
     }
 }
-
-// if sender's chat window is open on current user dont show message notificaiton

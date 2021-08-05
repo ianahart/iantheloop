@@ -81,12 +81,7 @@
 
           Echo.private(`unreadmessage.${this.getUserId}`)
           .notification((notification) => {
-            console.log(notification);
-            if (this.chatWindowUserId !== notification.sender_user_id) {
-              console.log('store notification');
-            } else {
-              console.log('online');
-            }
+
             if (this.isMessengerOpen) {
               this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
             }

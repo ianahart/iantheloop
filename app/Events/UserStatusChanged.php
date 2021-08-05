@@ -15,7 +15,19 @@ class UserStatusChanged implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $user;
+    /**
+     * The name of the queue connection to use when broadcasting the event.
+     *
+     * @var string
+     */
+    public $connection = 'sync';
 
+    /**
+     * The name of the queue on which to place the broadcasting job.
+     *
+     * @var string
+     */
+    public $queue = 'default';
     /**
      * Create a new event instance.
      *
