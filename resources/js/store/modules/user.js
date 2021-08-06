@@ -239,7 +239,7 @@ const user = {
  async UPDATE_USER_COLUMN({ getters, rootGetters, state, commit }, payload) {
 
       try {
-        response = await axios(
+        const response = await axios(
           {
             method: 'PATCH',
             url: `/api/auth/user/${payload.curUserId}/update`,
@@ -251,7 +251,7 @@ const user = {
           }
         );
       } catch (e) {
-        console.log(e.response)
+        console.log(e)
       }
     }
   }

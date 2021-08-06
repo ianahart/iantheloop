@@ -41,6 +41,7 @@ export default {
     async mounted() {
         if (this.getStatus === 'online') {
             this.initUserStatusChannel();
+            this.initInteractionChannel();
             await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
         }
     },
@@ -100,6 +101,17 @@ export default {
             .error((error) => {
                 console.log('Channel Error: ', error);
             });
+      },
+
+      initInteractionChannel() {
+          console.log('App.vue: Line 106: Subscribed to InteractionChannel...');
+          Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+          Echo.private(`notifications.${this.getUserId}`)
+          .notification((notification) => {
+              if (notification.type === 'broadcast.interaction') {
+                console.log('App.vue: Line 106: Interaction: ', notification);
+              }
+        });
       },
     },
 

@@ -88,9 +88,10 @@ class UserController extends Controller
                     [
                         'msg' => 'success'
                     ],
-                    204
+                    200
                 );
         } catch (Exception $e) {
+            error_log(print_r($e->getMessage(), true));
             return response()
                 ->json(
                     [

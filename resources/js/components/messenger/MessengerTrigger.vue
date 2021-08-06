@@ -79,10 +79,10 @@
         listenForNotifications() {
           Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
 
-          Echo.private(`unreadmessage.${this.getUserId}`)
+          Echo.private(`notifications.${this.getUserId}`)
           .notification((notification) => {
-
-            if (this.isMessengerOpen) {
+            console.log(notification);
+            if (this.isMessengerOpen && notification.type === 'broadcast.message') {
               this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
             }
         });

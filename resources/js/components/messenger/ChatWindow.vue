@@ -108,6 +108,7 @@
            column: 'cur_chat_window_user_id',
            value: 0
       });
+
       Echo.leave(`chat.${this.conversationId}`);
       this.SET_TOTAL_CHAT_MESSAGES(0);
       this.SET_MORE_CHAT_MESSAGES_BTN(false);
@@ -174,6 +175,7 @@
       ),
 
       listenForTyping(e) {
+        clearTimeout(this.typingID);
         if (e.keyCode === 13) {
           return;
         }
@@ -187,7 +189,6 @@
               recipientUserId: this.getChatWindowUser.id,
             }
           );
-
         }, 300);
       },
 

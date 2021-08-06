@@ -34,7 +34,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function receivesBroadcastNotificationsOn()
     {
-        return 'unreadmessage.' . $this->id;
+        return 'notifications.' . $this->id;
     }
 
 

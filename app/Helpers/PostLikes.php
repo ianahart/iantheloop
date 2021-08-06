@@ -3,7 +3,8 @@
 namespace App\Helpers;
 
 use Exception;
-
+use App\Notifications\Interaction;
+use App\Models\User;
 
 class PostLikes
 {
@@ -80,6 +81,22 @@ class PostLikes
       $post->likes = $post->likes + 1;
 
       $post->save();
+      $post->refresh();
+
+      $recipient = User::find($post->subject_user_id);
+      $newLikeProfilePicture =  User::find($newLike->user_id)->profile->profile_picture;
+
+      $interaction = [
+        'sender_name' => $newLike->liker_name,
+        'recipient_name' => $this->formatName($recipient->full_name),
+        'sender_user_id' => $newLike->user_id,
+        'recipient_user_id' => $recipient->id,
+        'post_id' => $post->id,
+        'sender_profile_picture' => $newLikeProfilePicture,
+        'text' => $newLike->liker_name . ' liked your post.',
+      ];
+
+      $recipient->notify(new Interaction($interaction));
     } catch (Exception $e) {
 
       $this->exception = $e->getMessage();
@@ -106,5 +123,16 @@ class PostLikes
 
       $this->exception = $e->getMessage();
     }
+  }
+
+  private function formatName(string $name): string
+  {
+
+    $parts = explode(' ', $name);
+
+    return implode(' ', array_map(function ($part) {
+
+      return strtoupper(substr($part, 0, 1)) . strtolower(substr($part, 1));
+    }, $parts));
   }
 }

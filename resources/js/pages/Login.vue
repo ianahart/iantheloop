@@ -127,7 +127,6 @@
       },
 
       async submitForm () {
-
         this.CLEAR_ERROR_MSGS();
         this.checkEmptyInputs();
 
@@ -139,9 +138,9 @@
           this.SET_AUTH_STATUS(true);
           this.trackUserStatus();
           this.RESET_LOGIN_MODULE();
-
           this.$router.push({ name: 'Home' });
           await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
+          this.trackUserInteraction();
         }
       },
 
@@ -149,16 +148,28 @@
         Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
         Echo.join('userstatus').here((user) => {
         })
-            .joining((user) => {
-              this.UPDATE_CONTACT_STATUS({...user, status: 'online' });
-            })
-            .leaving((user) => {
-              this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});
-            })
-            .error((error) => {
-              console.log('Channel Error: ', error);
-            });
-      }
+          .joining((user) => {
+            this.UPDATE_CONTACT_STATUS({...user, status: 'online' });
+          })
+          .leaving((user) => {
+            this.UPDATE_CONTACT_STATUS({...user, status: 'offline'});
+          })
+          .error((error) => {
+            console.log('Channel Error: ', error);
+          });
+      },
+          trackUserInteraction() {
+          console.log('Login.vue: Line 161: Subscribed to InteractionChannel...');
+          Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+          Echo.private(`notifications.${this.getUserId}`)
+          .notification((notification) => {
+            if (notification.type === 'broadcast.interaction') {
+                console.log('App.vue: Line 106: Interaction: ', notification);
+              }
+
+        });
+      },
+
     },
   }
 
