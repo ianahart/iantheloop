@@ -209,6 +209,7 @@ return [
         'File' => Illuminate\Support\Facades\File::class,
         'FlaggedPosts' => 'App\Helpers\FlaggedPosts::class',
         'FollowRequest' => 'App\Helpers\FollowRequest::class',
+        'FormattingUtil' => 'App\Helpers\FormattingUtil::class',
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
         'Http' => Illuminate\Support\Facades\Http::class,

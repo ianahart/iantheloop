@@ -65,6 +65,11 @@
           'formSubmitted',
         ]
       ),
+      ...mapState('messenger',
+        [
+          'isMessengerOpen'
+        ]
+      ),
       ...mapGetters('user',
         [
           'getToken',
@@ -95,6 +100,7 @@
       ...mapMutations('messenger',
         [
           'UPDATE_CONTACT_STATUS',
+          'UPDATE_UNREAD_MESSAGE_COUNT',
         ]
       ),
       ...mapActions('login',
@@ -137,10 +143,11 @@
         if (this.formSubmitted) {
           this.SET_AUTH_STATUS(true);
           this.trackUserStatus();
+          this.initNotificationChannel();
           this.RESET_LOGIN_MODULE();
           this.$router.push({ name: 'Home' });
           await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
-          this.trackUserInteraction();
+
         }
       },
 
@@ -158,15 +165,20 @@
             console.log('Channel Error: ', error);
           });
       },
-          trackUserInteraction() {
-          console.log('Login.vue: Line 161: Subscribed to InteractionChannel...');
+          initNotificationChannel() {
           Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
           Echo.private(`notifications.${this.getUserId}`)
           .notification((notification) => {
-            if (notification.type === 'broadcast.interaction') {
-                console.log('App.vue: Line 106: Interaction: ', notification);
-              }
+             if (notification.type === 'broadcast.message') {
+                  console.log('Login.vue: notification broadcast.message');
+                  this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
+                  return;
+              } else if (notification.type === 'broadcast.interaction') {
+                console.log('Login.vue: Interaction Notification-- ', notification);
 
+              } else {
+                 console.log('Login.vue: Line 106: Notification Not recieved: ');
+              }
         });
       },
 

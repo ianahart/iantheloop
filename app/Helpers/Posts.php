@@ -3,9 +3,14 @@
 namespace App\Helpers;
 
 use App\Helpers\AmazonS3;
+use App\Helpers\FormattingUtil;
+use App\Jobs\ProcessInteraction;
+use App\Models\User;
+
 use DateTime;
 use DateTimeZone;
 use Exception;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Posts
@@ -131,8 +136,31 @@ class Posts
 
       $post->save();
     }
-    $this->newPost = $post->refresh()->toArray();
 
+    $sender = User::find($this->data['author_user_id']);
+
+    $interaction = [
+      'sender_name' => FormattingUtil::capitalize($sender->full_name),
+      'recipient_name' => FormattingUtil::capitalize($post->user->full_name),
+      'sender_user_id' => $sender->id,
+      'recipient_user_id' => $post->user->id,
+      'post_id' => $post->id,
+      'photo_link' => $post->photo_link,
+      'blurb' => FormattingUtil::blurb($post->post_text),
+      'sender_profile_picture' => $sender->profile->profile_picture,
+      'text' =>  FormattingUtil::capitalize($sender->full_name) . ' posted to your wall.',
+    ];
+
+    ProcessInteraction::dispatch($interaction, $post->user);
+
+
+
+
+
+
+
+
+    $this->newPost = $post->refresh()->toArray();
 
     $this->subjectUserId = $this->newPost['subject_user_id'];
     $this->newPost = $this->enhancePosts([$this->newPost]);
@@ -244,23 +272,6 @@ class Posts
   }
 
   /*
-   * format the created_at timestamp and add as a post property
-   * @param  string $timestamp
-   * @return string;
-  */
-  private function createPostedDate(string $timestamp)
-  {
-
-    $date = new DateTime($timestamp);
-
-    $date->setTimezone(new DateTimeZone('America/New_York'));
-
-    $formattedDate = $date->format('M j Y h:i a');
-
-    return $formattedDate;
-  }
-
-  /*
   * retrieve the subject's name to append to post
   * @param  void
   * @return string;
@@ -270,28 +281,9 @@ class Posts
     $user = $this->user::select(['full_name'])
       ->find($this->subjectUserId);
 
-    return $this->formatName($user->full_name);
+    return FormattingUtil::capitalize($user->full_name);
   }
 
-  /*
-  * format a user's name
-  * @param  string $fullName
-  * @return string;
-  */
-  private function formatName(string $fullName)
-  {
-    $formattedName = explode(' ', $fullName);
-
-    $formattedName = array_map(
-      function ($word) {
-
-        return strtoupper(substr($word, 0, 1)) . substr($word, 1);
-      },
-      $formattedName
-    );
-
-    return implode(' ', $formattedName);
-  }
 
   /*
   * retrieve properties from the authors profile to append to a post
@@ -321,7 +313,7 @@ class Posts
 
     unset($author['user']);
 
-    $author['full_name']  = $this->formatName($author['full_name']);
+    $author['full_name']  = FormattingUtil::capitalize($author['full_name']);
 
     return $author;
   }
@@ -340,7 +332,7 @@ class Posts
 
     foreach ($posts as $post) {
 
-      $post['post_posted'] = $this->createPostedDate($post['created_at']);
+      $post['post_posted'] = FormattingUtil::date($post['created_at']);
       $post['subject_name'] = $subjectName;
       $post['seen'] = false;
 
@@ -441,9 +433,9 @@ class Posts
   */
   private function applyDisplayFields(object $comment)
   {
-    $comment->full_name = $this->formatName($comment->user->full_name);
+    $comment->full_name = FormattingUtil::capitalize($comment->user->full_name);
     $comment->profile_picture = $comment->user->profile->profile_picture;
-    $comment->posted_date = $this->createPostedDate($comment->created_at);
+    $comment->posted_date = FormattingUtil::date($comment->created_at);
   }
 
   /*

@@ -8,11 +8,13 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Interaction extends Notification implements ShouldQueue
+
+class Interaction extends Notification
 {
     use Queueable;
 
     protected $interaction;
+    protected $dbQueue;
 
     /**
      * Create a new notification instance.
@@ -34,7 +36,7 @@ class Interaction extends Notification implements ShouldQueue
     {
         return [
             'database',
-            'broadcast'
+            'broadcast',
         ];
     }
 
@@ -71,8 +73,6 @@ class Interaction extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-
-    #UNCOMMENT
 
     public function toDatabase($notifiable)
     {

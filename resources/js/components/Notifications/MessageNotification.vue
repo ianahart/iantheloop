@@ -5,25 +5,25 @@
     :class="`nav_message_notification ${notificationStyle}`"
   >
     <div class="nav_message_notification_content">
-      <p v-if="notification.latest_read_at !== null" id="nav_message_notification_read_at">{{ notification.latest_read_at }}</p>
-      <div v-if="notification.new_notifications" class="unread_notification_identifier"></div>
+      <div v-if="unreadMessage.new_notifications" class="unread_notification_identifier"></div>
       <UserPicture
-        :src="notification.profile_picture"
-        :alt="notification.sender_name"
+        :src="unreadMessage.profile_picture"
+        :alt="unreadMessage.sender_name"
       />
-    <p>You have some unread message(s) from <span>{{ notification.sender_name }}</span></p>
+    <p>You have some unread message(s) from <span>{{ unreadMessage.sender_name }}</span></p>
+     <p v-if="unreadMessage.latest_read_at !== null" id="nav_message_notification_read_at">{{ unreadMessage.latest_read_at }}</p>
     </div>
     <div v-if="isNotificationHovered" class="nav_message_notification_actions">
       <div
-        v-if="notification.new_notifications"
-        @click="markReadNotification(notification)"
+        v-if="unreadMessage.new_notifications"
+        @click="markReadNotification(unreadMessage)"
       >
         <CheckIcon
           className="icon__sm__dark"
         />
       </div>
       <div
-        @click="removeNotification(notification)"
+        @click="removeNotification(unreadMessage)"
       >
         <TrashCanIcon
           className="icon__sm__dark"
@@ -34,12 +34,7 @@
 </template>
 
 <script>
-// new_notifications:true
-// notification_id:"234d47a4405ace49301a03f74ef05f3b"
-// profile_picture:"https://hart-looped.s3.amazonaws.com/60e5cf4a0cf4elesly-2.jpeg"
-// recipient_user_id:"17"
-// sender_name:"Lesly Small"
-// sender_user_id:"53"
+
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
   import UserPicture from './UserPicture.vue';
@@ -49,7 +44,7 @@
   export default {
     name: 'MessageNotification',
     props: {
-      notification: Object,
+      unreadMessage: Object,
     },
     components: {
       UserPicture,
@@ -74,7 +69,7 @@
       ),
 
       notificationStyle() {
-        return this.notification.new_notifications ? 'nav_unread_messages' : 'nav_read_messages';
+        return this.unreadMessage.new_notifications ? 'nav_unread_messages' : 'nav_read_messages';
       }
     },
 
@@ -111,39 +106,39 @@
         }
       },
 
-      async markReadNotification(notification) {
-        this.MARK_NOTIFICATION_AS_READ(notification);
+      async markReadNotification(unreadMessage) {
+        this.MARK_NOTIFICATION_AS_READ(unreadMessage);
         await this.UPDATE_MESSAGE_NOTIFICATIONS(
           {
-            sender: notification.sender_user_id,
-            recipient: notification.recipient_user_id,
+            sender: unreadMessage.sender_user_id,
+            recipient: unreadMessage.recipient_user_id,
             type: 'App/Notifications/UnreadMessage',
           }
         );
 
-        this.clearMessengerNotifications(notification);
+        this.clearMessengerNotifications(unreadMessage);
       },
 
-      clearMessengerNotifications(notification) {
+      clearMessengerNotifications(unreadMessage) {
            if (this.isMessengerOpen) {
             this.CLEAR_NOTIFICATIONS(
               {
-                sender: parseInt(notification.sender_user_id),
+                sender: parseInt(unreadMessage.sender_user_id),
                 notificationsRead: true
               });
             }
       },
 
-      async removeNotification(notification) {
+      async removeNotification(unreadMessage) {
 
         await this.DELETE_MESSAGE_NOTIFICATIONS(
           {
-            sender: notification.sender_user_id,
-            recipient: notification.recipient_user_id,
+            sender: unreadMessage.sender_user_id,
+            recipient: unreadMessage.recipient_user_id,
             type: 'App/Notifications/UnreadMessage',
           }
         );
-          this.clearMessengerNotifications(notification);
+          this.clearMessengerNotifications(unreadMessage);
       }
     },
   }
@@ -162,11 +157,12 @@
     padding-bottom:0;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     p {
       margin-left: 0.1rem;
       font-size: 0.8rem;
       font-family: 'Open Sans', sans-serif;
-      margin: 1rem auto;
+      margin: 0.5rem auto 0.2rem auto;
       text-align: center;
 
       span {
@@ -176,13 +172,14 @@
     }
   }
 
-  #nav_message_notification_read_at {
-    position: absolute;
-    top: 40px;
+ #nav_message_notification_read_at {
+    text-align: left;
+    margin:0;
     font-size: 0.65rem;
     color: $themePink;
-    margin-top: 1rem;
+    margin-bottom: 0.25rem;
   }
+
 
   .nav_message_notification_actions {
     box-sizing: border-box;

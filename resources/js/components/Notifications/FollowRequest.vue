@@ -70,6 +70,7 @@ export default {
 <style lang="scss">
 .follow_request_container {
   margin: 0.7rem 0;
+  margin-bottom: 0;
   padding: 0.5rem;
 }
 
@@ -125,14 +126,14 @@ export default {
     border-radius: 8px;
 
     &:first-of-type {
-      color: darken(#4bb543, 4);
-      background-color: transparent;
-      border: 1px solid darken(#4bb543, 4);
-    }
-    &:last-of-type {
       color: $primaryGray;
       background-color: transparent;
-      border: 1px solid darken($primaryGray, 4);
+      border: 1px solid $themeLightBlue;
+    }
+    &:last-of-type {
+      color: $themePink;
+      background-color: transparent;
+      border: 1px solid darken($themePink, 4);
     }
   }
 }

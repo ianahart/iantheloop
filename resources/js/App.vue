@@ -41,13 +41,15 @@ export default {
     async mounted() {
         if (this.getStatus === 'online') {
             this.initUserStatusChannel();
-            this.initInteractionChannel();
+            this.reInitNotificationChannel();
             await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
         }
     },
 
     beforeDestroy() {
         this.SET_NAV_ALERTS({ nav_interaction_alerts: false, nav_message_alerts: false });
+        this.leave(`notifications.${this.getUserId}`);
+
     },
 
     computed: {
@@ -76,6 +78,7 @@ export default {
         ...mapMutations('messenger',
             [
                 'UPDATE_CONTACT_STATUS',
+                'UPDATE_UNREAD_MESSAGE_COUNT',
             ]
         ),
         ...mapMutations('notifications',
@@ -103,13 +106,18 @@ export default {
             });
       },
 
-      initInteractionChannel() {
-          console.log('App.vue: Line 106: Subscribed to InteractionChannel...');
+      reInitNotificationChannel() {
           Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
           Echo.private(`notifications.${this.getUserId}`)
           .notification((notification) => {
-              if (notification.type === 'broadcast.interaction') {
-                console.log('App.vue: Line 106: Interaction: ', notification);
+                if (notification.type === 'broadcast.message') {
+
+                        this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
+                        return;
+              } else if (notification.type === 'broadcast.interaction') {
+                      console.log('App.vue: Interaction Notification-- ', notification);
+              } else {
+                 console.log('App.vue: Line 106: Notification Not recieved: ');
               }
         });
       },

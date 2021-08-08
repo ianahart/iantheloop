@@ -3,8 +3,10 @@
 namespace App\Helpers;
 
 use Exception;
-use App\Notifications\Interaction;
+
+use App\Jobs\ProcessInteraction;
 use App\Models\User;
+use App\Helpers\FormattingUtil;
 
 class PostLikes
 {
@@ -88,15 +90,17 @@ class PostLikes
 
       $interaction = [
         'sender_name' => $newLike->liker_name,
-        'recipient_name' => $this->formatName($recipient->full_name),
+        'recipient_name' => FormattingUtil::capitalize($recipient->full_name),
         'sender_user_id' => $newLike->user_id,
         'recipient_user_id' => $recipient->id,
         'post_id' => $post->id,
+        'photo_link' => $post->photo_link,
+        'blurb' => FormattingUtil::blurb($post->post_text),
         'sender_profile_picture' => $newLikeProfilePicture,
-        'text' => $newLike->liker_name . ' liked your post.',
+        'text' => $newLike->liker_name . ' liked a post on your wall',
       ];
 
-      $recipient->notify(new Interaction($interaction));
+      ProcessInteraction::dispatch($interaction, $recipient);
     } catch (Exception $e) {
 
       $this->exception = $e->getMessage();
@@ -123,16 +127,5 @@ class PostLikes
 
       $this->exception = $e->getMessage();
     }
-  }
-
-  private function formatName(string $name): string
-  {
-
-    $parts = explode(' ', $name);
-
-    return implode(' ', array_map(function ($part) {
-
-      return strtoupper(substr($part, 0, 1)) . strtolower(substr($part, 1));
-    }, $parts));
   }
 }

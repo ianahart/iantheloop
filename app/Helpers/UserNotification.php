@@ -16,7 +16,7 @@ class UserNotification
   private int $user;
   private string $error;
   private array|object $notifications;
-  private int|string $currentPageMessages;
+  private int|string $currentPage;
 
 
   public function __construct(int $user)
@@ -34,14 +34,37 @@ class UserNotification
     return isset($this->error) ? $this->error : NULL;
   }
 
-  public function getCurrentPageMessages()
+  public function getCurrentPage()
   {
-    return $this->currentPageMessages;
+    return $this->currentPage;
   }
 
   public function getNotifications()
   {
     return $this->notifications;
+  }
+
+  public function interactionNotifications()
+  {
+    try {
+
+      $this->notifications = User::find($this->user)
+        ->notifications()
+        ->where('type', '=', $this->type)
+        ->paginate(self::PAG_LIMIT);
+
+      $this->notifications = array_merge(
+        $this->notifications->toArray()['data'],
+        [
+          [
+            'current_page' => $this->notifications->currentPage(),
+            'last_page' => $this->notifications->lastPage(),
+          ]
+        ]
+      );
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
   }
 
 
@@ -66,10 +89,10 @@ class UserNotification
         )
         ->paginate(self::PAG_LIMIT);
 
-      $this->currentPageMessages = $this->notifications->currentPage();
+      $this->currentPage = $this->notifications->currentPage();
 
-      if ($this->currentPageMessages > $this->notifications->lastPage()) {
-        $this->currentPageMessages = 'end';
+      if ($this->currentPage > $this->notifications->lastPage()) {
+        $this->currentPage = 'end';
         $this->notifications = [];
         return;
       }

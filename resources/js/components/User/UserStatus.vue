@@ -62,6 +62,7 @@
         [
           'getStatus',
           'getToken',
+          'getUserId',
         ]
       ),
       ...mapState('user',
@@ -90,6 +91,7 @@
       ...mapMutations('messenger',
         [
           'UPDATE_CONTACT_STATUS',
+          'UPDATE_UNREAD_MESSAGE_COUNT',
         ]
       ),
 
@@ -116,9 +118,10 @@
             await this.UPDATE_USER_STATUS();
             if (this.getStatus === 'online') {
               this.listenForUserStatusChange();
+              this.reJoinNotificationChannel();
             } else {
               Echo.leave('userstatus');
-            }
+              Echo.leave(`notifications.${this.getUserId}`);            }
           }, 400);
         },
         listenForUserStatusChange() {
@@ -133,6 +136,22 @@
               console.log('Channel Error: ', error);
             });
         },
+        reJoinNotificationChannel() {
+          Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+          Echo.private(`notifications.${this.getUserId}`)
+          .notification((notification) => {
+             if (notification.type === 'broadcast.message') {
+                  console.log('Login.vue: notification broadcast.message');
+                  this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
+                  return;
+              } else if (notification.type === 'broadcast.interaction') {
+                console.log('Login.vue: notification broadcast.intereaction');
+
+              } else {
+                 console.log('Login.vue: Line 106: Notification Not recieved: ');
+              }
+        });
+        }
     },
   }
 </script>

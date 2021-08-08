@@ -61,8 +61,10 @@ const messenger = {
   mutations: {
 
     UPDATE_UNREAD_MESSAGE_COUNT(state, unreadMessage) {
-      const contact = state.contacts.findIndex(contact => contact.id === unreadMessage.sender_user_id);
-      state.contacts[contact].unread_messages_count++;
+      if (state.isMessengerOpen) {
+        const contact = state.contacts.findIndex(contact => contact.id === unreadMessage.sender_user_id);
+        state.contacts[contact].unread_messages_count++;
+      }
     },
 
 

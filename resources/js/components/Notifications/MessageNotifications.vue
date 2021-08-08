@@ -11,13 +11,13 @@
     </header>
     <div class="nav_message_notifications_divider"></div>
     <div
-      v-if="notifications.length > 0"
+      v-if="unreadMessages.length > 0"
       class="nav_message_notifications"
     >
       <MessageNotification
-        v-for="notification in notifications"
-        :key="notification.notification_id"
-        :notification="notification"
+        v-for="unreadMessage in unreadMessages"
+        :key="unreadMessage.notification_id"
+        :unreadMessage="unreadMessage"
       />
     </div>
     <div v-if="currentPageMessages !== 'end'" class="paginate_message_notifications">
@@ -63,7 +63,7 @@
         ...mapState('notifications',
           [
             'messageNotificationsLoaded',
-            'notifications',
+            'unreadMessages',
             'currentPageMessages'
           ]
       ),

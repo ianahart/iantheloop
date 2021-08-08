@@ -97,7 +97,7 @@ class FollowRequest
   private function makeRequestTime()
   {
     $date = new DateTime();
-    $date->setTimezone(new DateTimeZone('America/Detroit'));
+    $date->setTimezone(new DateTimeZone('America/New_York'));
     $fDate = $date->format('g:ia,M jS Y');
 
     return $fDate;

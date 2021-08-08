@@ -67,7 +67,6 @@
 
               if (this.isMessengerOpen && this.contactsCount !== this.contacts.length) {
 
-                this.listenForNotifications();
                 await this.GET_MESSENGER_CONTACTS();
               };
           } catch (err) {
@@ -75,19 +74,7 @@
             console.log('MessengerTrigger.vue: ', err);
           }
         },
-
-        listenForNotifications() {
-          Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
-
-          Echo.private(`notifications.${this.getUserId}`)
-          .notification((notification) => {
-            console.log(notification);
-            if (this.isMessengerOpen && notification.type === 'broadcast.message') {
-              this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
-            }
-        });
-      },
-    },
+    }
   }
 </script>
 

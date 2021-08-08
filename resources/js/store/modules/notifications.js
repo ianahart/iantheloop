@@ -5,10 +5,13 @@ const initialState = () => {
 
   return {
     followRequests: [],
-    notifications: [],
+    interactions: [],
+    unreadMessages: [],
     currentPageMessages: null,
+    interactionPagination: {currentPage:null, lastPage: null},
     messageNotificationsAreOpen: false,
     messageNotificationsLoaded: false,
+    interactionNotificationsLoaded:false,
     navMessageAlerts: false,
     navInteractionAlerts: false,
     serverError: '',
@@ -26,15 +29,27 @@ const notifications = {
   },
 
   mutations: {
+
+    RESET_INTERACTION_NOTIFICATIONS(state) {
+      state.interactions = [];
+    },
+
    SET_SERVER_ERROR(state, payload) {
     state.serverError = payload;
    },
+
    RESET_NOTIFICATIONS_MODULE: (state) => {
      Object.assign(state, initialState());
     },
 
-    SET_FOLLOW_REQUESTS: (state, payload) => {
-      state.followRequests = payload;
+    SET_INTERACTION_PAGINATION(state, { current_page, last_page }) {
+        state.interactionPagination.currentPage = current_page + 1;
+        state.interactionPagination.lastPage = last_page;
+    },
+
+    RESET_INTERACTION_PAGINATION(state, payload) {
+      state.interactionPagination.currentPage = payload.currentPage;
+      state.interactionPagination.lastPage = payload.last_page;
     },
 
     SET_CURRENT_PAGE_MESSAGES(state, payload) {
@@ -48,6 +63,9 @@ const notifications = {
       }
     },
 
+    SET_FOLLOW_REQUESTS: (state, payload) => {
+      state.followRequests = payload;
+    },
     SET_REMOVE_REQUEST: (state, payload) => {
       const deniedRequest = state.followRequests.findIndex(request => request.id === payload.requestId);
       state.followRequests.splice(deniedRequest, 1);
@@ -56,7 +74,6 @@ const notifications = {
     SET_NAV_ALERTS(state, { nav_interaction_alerts, nav_message_alerts }) {
       state.navInteractionAlerts = nav_interaction_alerts;
       state.navMessageAlerts = nav_message_alerts;
-
     },
 
     TOGGLE_MESSAGE_NOTIFICATIONS(state) {
@@ -71,23 +88,31 @@ const notifications = {
       state.messageNotificationsLoaded = payload;
     },
 
+    SET_INTERACTION_NOTIFICATIONS_LOADED(state, payload) {
+      state.interactionNotificationsLoaded = payload;
+    },
+
     SET_MESSAGE_NOTIFICATIONS(state, { notifications }) {
-      state.notifications = [...state.notifications, ...notifications];
+      state.unreadMessages = [...state.unreadMessages, ...notifications];
+    },
+
+    SET_INTERACTION_NOTIFICATIONS(state, { notifications }) {
+      state.interactions = [...state.interactions, ...notifications];
     },
 
     CLEAR_MESSAGE_NOTIFICATIONS(state) {
-      state.notifications = [];
+      state.unreadMessages = [];
     },
 
     MARK_NOTIFICATION_AS_READ(state, payload) {
-      const index = getElementIndex(state.notifications, 'sender_user_id', payload.sender_user_id);
-      state.notifications[index].new_notifications = false;
-      state.notifications[index].latest_read_at = 'Read Just now';
+      const index = getElementIndex(state.unreadMessages, 'sender_user_id', payload.sender_user_id);
+      state.unreadMessages[index].new_notifications = false;
+      state.unreadMessages[index].latest_read_at = 'Read Just now';
     },
 
     DELETE_MESSAGE_NOTIFICATIONS(state, sender) {
-      const index = getElementIndex(state.notifications, 'sender_user_id', sender);
-      state.notifications.splice(index, 1);
+      const index = getElementIndex(state.unreadMessages, 'sender_user_id', sender);
+      state.unreadMessages.splice(index, 1);
     },
   },
 
@@ -140,7 +165,6 @@ const notifications = {
 
       try {
 
-
         const response = await axios(
           {
             method: 'GET',
@@ -158,7 +182,32 @@ const notifications = {
           }
       } catch(e) {
 
-        console.log('notifications.js: FETCH_NOTIFICATIONS() line 84 Error:', e);
+        console.log('notifications.js: FETCH_MESSAGE_NOTIFICATIONS() line 161 Error:', e);
+      }
+    },
+
+    async FETCH_INTERACTION_NOTIFICATIONS({ state, rootGetters, commit }, type) {
+      try {
+
+        const response = await axios(
+          {
+            method: 'GET',
+            url: `/api/auth/user/notifications/interactions/${rootGetters['user/getUserId']}/show?page=${state.interactionPagination.currentPage}&type=${type}`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          commit('SET_INTERACTION_PAGINATION', response.data.interaction_pagination);
+          commit('SET_INTERACTION_NOTIFICATIONS', response.data);
+          commit('SET_INTERACTION_NOTIFICATIONS_LOADED', true);
+        }
+
+      } catch(e) {
+        console.log('notifications.js: FETCH_INTERACTION_NOTIFICATIONS() line 165 Error:', e);
       }
     },
 

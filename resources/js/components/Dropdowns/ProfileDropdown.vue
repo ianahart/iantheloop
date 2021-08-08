@@ -211,7 +211,6 @@
 
         this.leaveUserStatusChannel();
         this.leaveNotificationChannel();
-        this.leaveInteractionChannel();
         this.CLOSE_PROFILE_DROPDOWN(false);
         this.SET_NAV_ALERTS({ nav_interaction_alerts: false, nav_message_alerts: false });
         this.$router.push({ name: 'Login' });
@@ -225,11 +224,7 @@
       },
 
       leaveNotificationChannel() {
-        Echo.leave(`unreadmessage.${this.getUserId}`);
-      },
-
-      leaveInteractionChannel() {
-        Echo.leave(`interaction.${this.getUserId}`);
+        Echo.leave(`notifications.${this.getUserId}`);
       },
 
       dropDownClickAway(e) {

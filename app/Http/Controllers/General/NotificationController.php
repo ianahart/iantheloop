@@ -9,6 +9,61 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+
+
+
+    /*
+    *Show the current user's interaction notifications by type
+    * @param string $userId
+    * @param Request $request
+    * @return JsonResponse
+    */
+
+    public function showInteractionNotifications(Request $request, $userId)
+    {
+        try {
+
+            $notification = new UserNotification($userId);
+            $notification->setType($request->query('type'));
+
+            $notification->interactionNotifications();
+
+            $error = $notification->getError();
+
+            if (!is_null($error)) {
+                throw new Exception($error);
+            }
+
+            $notifications = $notification->getNotifications();
+            $pagination = array_pop($notifications);
+
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success',
+                        'notifications' => $notifications,
+                        'interaction_pagination' => $pagination,
+                    ]
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to retrieve interaction notifications',
+                        'error' => $e->getMessage()
+                    ],
+                    500
+                );
+        }
+    }
+
+
+
+
+
+
+
     /*
     *Show the current user's unread notifications by type
     * @param string $userId
@@ -33,7 +88,7 @@ class NotificationController extends Controller
                     [
                         'msg' => 'success',
                         'notifications' => $notification->getNotifications(),
-                        'current_page_messages' => $notification->getCurrentPageMessages(),
+                        'current_page_messages' => $notification->getCurrentPage(),
                     ],
                     200
                 );

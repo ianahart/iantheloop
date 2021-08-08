@@ -6,6 +6,9 @@ use App\Models\Comment as CommentModel;
 use App\Models\CommentLike as CommentLikeModel;
 use Illuminate\Support\Facades\Auth;
 use App\Exceptions\CommentMaxLimitException;
+use App\Helpers\FormattingUtil;
+use App\Jobs\ProcessInteraction;
+
 use DateTimeZone;
 use DateTime;
 use Exception;
@@ -128,6 +131,22 @@ class Comment
         $latestComment->reply_comments_count = 0;
         $latestComment->type = 'normal';
       }
+
+
+      $interaction = [
+        'sender_name' => FormattingUtil::capitalize($latestComment->full_name),
+        'recipient_name' => FormattingUtil::capitalize($latestComment->post->user->full_name),
+        'sender_user_id' => $latestComment->user_id,
+        'recipient_user_id' => $latestComment->post->subject_user_id,
+        'post_id' => $latestComment->post_id,
+        'photo_link' => $latestComment->post->photo_link,
+        'blurb' => FormattingUtil::blurb($latestComment->comment_text),
+        'sender_profile_picture' => $latestComment->profile_picture,
+        'text' => FormattingUtil::capitalize($latestComment->full_name) . ' commented on a post on your wall.',
+      ];
+
+      ProcessInteraction::dispatch($interaction, $latestComment->post->user);
+
 
       unset($latestComment->user);
 
@@ -257,22 +276,7 @@ class Comment
     }
   }
 
-  /*
-  *make a readable date for the ui
-  *@void
-  *@return void
-  */
-  private function createPostedDate(string $date)
-  {
 
-    $date = new DateTime($date);
-
-    $date->setTimezone(new DateTimeZone('America/New_York'));
-
-    $formattedDate = $date->format('M j Y h:i a');
-
-    return $formattedDate;
-  }
 
   public function addCommentLike(String $type)
   {
@@ -386,7 +390,7 @@ class Comment
       ->profile
       ->profile_picture;
     $comment->full_name = $this->formatName($comment->user->full_name);
-    $comment->posted_date = $this->createPostedDate($comment->created_at);
+    $comment->posted_date = FormattingUtil::date($comment->created_at);
     $comment->commentLikes;
   }
 }

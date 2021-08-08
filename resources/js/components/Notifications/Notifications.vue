@@ -7,16 +7,30 @@
       </div>
     </header>
     <div class="notifications_divider"></div>
-    <h5>Follow Requests</h5>
-    <FollowRequest
-      v-for="followRequest in followRequests"
-      :key="followRequest.id"
-      :followRequest="followRequest"
-      @acceptrequest="handleAcceptRequest"
-      @denyrequest="handleDenyRequest"
-    />
+    <div class="follow_requested_container">
+      <h5>Follow Requests</h5>
+      <FollowRequest
+        v-for="followRequest in followRequests"
+        :key="followRequest.id"
+        :followRequest="followRequest"
+        @acceptrequest="handleAcceptRequest"
+        @denyrequest="handleDenyRequest"
+      />
+    </div>
     <div class="notifications_divider"></div>
-    <h5>Interactions</h5>
+    <div v-if="interactionNotificationsLoaded" class="interaction_notifications_container">
+      <h5>Interactions Container</h5>
+      <Interaction
+        v-for="interaction in interactions"
+        :key="interaction.id"
+        :interaction="interaction"
+      />
+      <div
+        v-if="interactionPagination.currentPage <= interactionPagination.lastPage" class="load_older_interactions_btn"
+      >
+        <button @click="refillInteractions('App/Notifications/Interaction')">More notifications...</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,6 +38,7 @@
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import FollowRequest from "./FollowRequest.vue";
 import CloseIcon from "../Icons/CloseIcon.vue";
+import Interaction from './Interaction.vue';
 
 export default {
   name: "Notifications",
@@ -33,18 +48,45 @@ export default {
   components: {
     FollowRequest,
     CloseIcon,
+    Interaction,
+  },
+
+  data () {
+    return {
+      debounceID: '',
+    }
+  },
+
+  async mounted() {
+    await this.fetchInteractionNotifications('App/Notifications/Interaction');
+  },
+
+  beforeDestroy() {
+    clearTimeout(this.debounceID);
+    this.RESET_INTERACTION_NOTIFICATIONS();
+    this.RESET_INTERACTION_PAGINATION({ currentPage: null, lastPage:null });
   },
 
   computed: {
-    ...mapState("notifications", ["followRequests"]),
+    ...mapState("notifications",
+      [
+        "followRequests",
+        'interactionNotificationsLoaded',
+        'interactions',
+        'interactionPagination'
+        ]
+      ),
   },
 
   methods: {
     ...mapMutations("navigation", ["CLOSE_NOTIFICATIONS"]),
+    ...mapMutations('notifications', ['RESET_INTERACTION_NOTIFICATIONS', 'RESET_INTERACTION_PAGINATION']),
     ...mapActions("profile", ["UPDATE_FOLLOW_STATS"]),
-    ...mapActions("notifications", ["REMOVE_REQUEST"]),
+    ...mapActions("notifications", ["REMOVE_REQUEST", 'FETCH_INTERACTION_NOTIFICATIONS']),
 
     closeNotifications() {
+      this.RESET_INTERACTION_NOTIFICATIONS();
+      this.RESET_INTERACTION_PAGINATION({ currentPage:null, lastPage:null });
       this.CLOSE_NOTIFICATIONS();
     },
 
@@ -56,6 +98,28 @@ export default {
     async handleDenyRequest(payload) {
       await this.REMOVE_REQUEST(payload);
     },
+
+    async fetchInteractionNotifications(type) {
+      await this.FETCH_INTERACTION_NOTIFICATIONS(type);
+    },
+
+    async refillInteractions(type) {
+      this.debounce(async() => {
+        await this.FETCH_INTERACTION_NOTIFICATIONS(type);
+      }, 300);
+    },
+
+    debounce(fn, delay = 400) {
+        return ((...args) => {
+            clearTimeout(this.debounceID);
+
+            this.debounceID = setTimeout(() => {
+                this.debounceID = null;
+
+                fn(...args);
+            }, delay);
+        })();
+      },
   },
 };
 </script>
@@ -71,6 +135,8 @@ export default {
   z-index: 19;
   box-sizing: border-box;
   min-width: 250px;
+  max-width: 350px;
+  min-height: 200px;
 
   h5 {
     text-align: center;
@@ -102,29 +168,82 @@ export default {
     }
 }
 
+.follow_requested_container {
+  box-sizing: border-box;
+  min-height: 100px;
+  max-height: 185px;
+  overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 12px;
+      }
+      &::-webkit-scrollbar-track {
+        background: darken($primaryBlack, 10);
+        border-radius: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: $themePink;
+        border-radius: 20px;
+        border: 3px solid darken($primaryBlack, 10);
+    }
+}
+
 .notifications_divider {
   box-sizing: border-box;
   width: 100%;
-  margin: 0.5rem auto;
+  margin: 0.25rem auto;
   border-bottom: 2px solid #323232;
+}
+
+.interaction_notifications_container {
+  box-sizing: border-box;
+  min-height: 170px;
+  max-height: 250px;
+  overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 12px;
+      }
+      &::-webkit-scrollbar-track {
+        background: darken($primaryBlack, 10);
+        border-radius: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: $themePink;
+        border-radius: 20px;
+        border: 3px solid darken($primaryBlack, 10);
+    }
+}
+
+.load_older_interactions_btn {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  margin: 1.2rem 0 1.5rem 0;
+
+  button {
+    border: none;
+    background-color: transparent;
+    color: #fb4d70;
+    font-style: italic;
+    letter-spacing: 0.03rem;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-family: "Open Sans", sans-serif;
+  }
 }
 
 
 @media (max-width:600px) {
   #nav_notifications_container {
-    right: 20px;
+    right:0;
+    left:0;
+    width:95%;
+    margin:0 auto;
   }
 }
 
-
-@media (max-width: 600px) {
-  .nav_notifications_container {
-    width: 95%;
-    margin: 0 auto;
-    top: 350x;
-    right: 1px;
-  }
-}
 </style>
 
 
