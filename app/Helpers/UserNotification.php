@@ -48,25 +48,31 @@ class UserNotification
   {
     try {
 
-      $this->notifications = User::find($this->user)
+      $results = User::find($this->user)
         ->notifications()
+        ->orderBy('created_at', 'DESC')
         ->where('type', '=', $this->type)
-        ->paginate(self::PAG_LIMIT);
+        ->cursorPaginate(self::PAG_LIMIT);
 
-      $this->notifications = array_merge(
-        $this->notifications->toArray()['data'],
-        [
-          [
-            'current_page' => $this->notifications->currentPage(),
-            'last_page' => $this->notifications->lastPage(),
-          ]
-        ]
-      );
+
+      $arrayNotifications = collect([]);
+
+      foreach ($results->items() as $key => $value) {
+        $newValue = $value->getAttributes();
+        $newValue['data'] = json_decode($newValue['data'], true,);
+
+        $date = new DateTime($newValue['created_at']);
+        $newValue['data']['readable_date'] = $this->makeReadableTime($date->format('U'), 'create');
+
+        $arrayNotifications[] = $newValue;
+      }
+
+      $this->notifications = $arrayNotifications;
+      $this->notifications['next_page_url'] = $results->nextPageUrl();
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
   }
-
 
   public function messageNotifications(string|null $page)
   {
@@ -114,7 +120,7 @@ class UserNotification
             $dateTime = new DateTime($latestReadNotification->read_at);
             $notification['latest_read_at'] = $dateTime->format('U');
 
-            $notification['latest_read_at'] = $this->makeReadAt($notification['latest_read_at']);
+            $notification['latest_read_at'] = $this->makeReadableTime($notification['latest_read_at'], 'read');
           }
         } else {
           $notification['latest_read_at'] = NULL;
@@ -169,7 +175,7 @@ class UserNotification
     }
   }
 
-  private function makeReadAt(string $timestamp)
+  private function makeReadableTime(string $timestamp, string $type): string
   {
 
     $epochs = [
@@ -211,7 +217,9 @@ class UserNotification
     }
 
     $isPlural = $time === floatval(1) ? '' : 's';
-    $message = 'Read ' . $time . ' ' . $group['name'] . $isPlural . ' ' . 'ago';
+    $prefix = $type === 'read' ? 'Read ' : '';
+
+    $message = $prefix . $time . ' ' . $group['name'] . $isPlural . ' ' . 'ago';
 
     return $message;
   }
@@ -223,5 +231,21 @@ class UserNotification
     $newAlerts = $currentUser->notifications()->where('type', '=', $this->type)->whereNull('read_at')->first();
 
     return is_null($newAlerts) ? false : true;
+  }
+
+  public function deleteInteractionNotification(string $id)
+  {
+    try {
+
+      $currentUser = User::find($this->user);
+
+      $currentUser
+        ->notifications()
+        ->where('notifiable_id', '=', $currentUser->id)
+        ->where('id', '=', $id)
+        ->delete();
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
   }
 }

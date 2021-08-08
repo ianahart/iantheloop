@@ -19,14 +19,14 @@
     </div>
     <div class="notifications_divider"></div>
     <div v-if="interactionNotificationsLoaded" class="interaction_notifications_container">
-      <h5>Interactions Container</h5>
+      <h5>Interactions</h5>
       <Interaction
         v-for="interaction in interactions"
         :key="interaction.id"
         :interaction="interaction"
       />
       <div
-        v-if="interactionPagination.currentPage <= interactionPagination.lastPage" class="load_older_interactions_btn"
+    class="load_older_interactions_btn" v-if="interactionCursor !== null"
       >
         <button @click="refillInteractions('App/Notifications/Interaction')">More notifications...</button>
       </div>
@@ -64,7 +64,7 @@ export default {
   beforeDestroy() {
     clearTimeout(this.debounceID);
     this.RESET_INTERACTION_NOTIFICATIONS();
-    this.RESET_INTERACTION_PAGINATION({ currentPage: null, lastPage:null });
+    this.RESET_INTERACTION_CURSOR();
   },
 
   computed: {
@@ -73,20 +73,21 @@ export default {
         "followRequests",
         'interactionNotificationsLoaded',
         'interactions',
-        'interactionPagination'
+        'interactionPagination',
+        'interactionCursor',
         ]
       ),
   },
 
   methods: {
     ...mapMutations("navigation", ["CLOSE_NOTIFICATIONS"]),
-    ...mapMutations('notifications', ['RESET_INTERACTION_NOTIFICATIONS', 'RESET_INTERACTION_PAGINATION']),
+    ...mapMutations('notifications', ['RESET_INTERACTION_NOTIFICATIONS', 'RESET_INTERACTION_CURSOR']),
     ...mapActions("profile", ["UPDATE_FOLLOW_STATS"]),
     ...mapActions("notifications", ["REMOVE_REQUEST", 'FETCH_INTERACTION_NOTIFICATIONS']),
 
     closeNotifications() {
       this.RESET_INTERACTION_NOTIFICATIONS();
-      this.RESET_INTERACTION_PAGINATION({ currentPage:null, lastPage:null });
+      this.RESET_INTERACTION_CURSOR();
       this.CLOSE_NOTIFICATIONS();
     },
 
@@ -141,7 +142,8 @@ export default {
   h5 {
     text-align: center;
     margin: 0.1rem 0;
-    color: $primaryWhite;
+    color: $themePink;
+    font-family: 'Secular One', sans-serif;
     letter-spacing: 0rem;
   }
 }
@@ -196,23 +198,24 @@ export default {
 }
 
 .interaction_notifications_container {
+  padding: 0.5rem;
   box-sizing: border-box;
   min-height: 170px;
   max-height: 250px;
   overflow-y: auto;
 
-      &::-webkit-scrollbar {
-        width: 12px;
-      }
-      &::-webkit-scrollbar-track {
-        background: darken($primaryBlack, 10);
-        border-radius: 8px;
+  &::-webkit-scrollbar {
+      width: 12px;
     }
-    &::-webkit-scrollbar-thumb {
-        background-color: $themePink;
-        border-radius: 20px;
-        border: 3px solid darken($primaryBlack, 10);
-    }
+  &::-webkit-scrollbar-track {
+      background: darken($primaryBlack, 10);
+      border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+      background-color: $themePink;
+      border-radius: 20px;
+      border: 3px solid darken($primaryBlack, 10);
+  }
 }
 
 .load_older_interactions_btn {

@@ -148,7 +148,8 @@
      h5 {
       text-align: center;
       margin: 0.1rem 0;
-      color: $primaryWhite;
+      color: $themePink;
+      font-family: 'Secular One', sans-serif;
       letter-spacing: 0rem;
     }
   }

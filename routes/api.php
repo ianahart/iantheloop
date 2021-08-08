@@ -85,3 +85,4 @@ Route::patch('/auth/user/notifications/messages/{userId}/update', [NotificationC
 Route::delete('/auth/user/notifications/messages/{userId}/delete', [NotificationController::class, 'deleteMessageNotifications'])->middleware('auth:api');
 Route::get('/auth/user/notifications/alerts/{userId}/show', [NotificationController::class, 'showNotificationAlerts'])->middleware('auth:api');
 Route::get('/auth/user/notifications/interactions/{userId}/show', [NotificationController::class, 'showInteractionNotifications'])->middleware('auth:api');
+Route::delete('/auth/user/notifications/interactions/{notificationId}/delete', [NotificationController::class, 'deleteInteractionNotification'])->middleware('auth:api');

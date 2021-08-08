@@ -8,7 +8,7 @@ const initialState = () => {
     interactions: [],
     unreadMessages: [],
     currentPageMessages: null,
-    interactionPagination: {currentPage:null, lastPage: null},
+    interactionCursor: null,
     messageNotificationsAreOpen: false,
     messageNotificationsLoaded: false,
     interactionNotificationsLoaded:false,
@@ -30,6 +30,14 @@ const notifications = {
 
   mutations: {
 
+    SET_INTERACTION_CURSOR(state, payload) {
+      state.interactionCursor = payload;
+    },
+
+    RESET_INTERACTION_CURSOR(state) {
+      state.interactionCursor = null
+    },
+
     RESET_INTERACTION_NOTIFICATIONS(state) {
       state.interactions = [];
     },
@@ -42,15 +50,6 @@ const notifications = {
      Object.assign(state, initialState());
     },
 
-    SET_INTERACTION_PAGINATION(state, { current_page, last_page }) {
-        state.interactionPagination.currentPage = current_page + 1;
-        state.interactionPagination.lastPage = last_page;
-    },
-
-    RESET_INTERACTION_PAGINATION(state, payload) {
-      state.interactionPagination.currentPage = payload.currentPage;
-      state.interactionPagination.lastPage = payload.last_page;
-    },
 
     SET_CURRENT_PAGE_MESSAGES(state, payload) {
        if (payload === 'end') {
@@ -97,7 +96,9 @@ const notifications = {
     },
 
     SET_INTERACTION_NOTIFICATIONS(state, { notifications }) {
-      state.interactions = [...state.interactions, ...notifications];
+      for (let notification in notifications) {
+        state.interactions.push(notifications[notification]);
+      }
     },
 
     CLEAR_MESSAGE_NOTIFICATIONS(state) {
@@ -113,6 +114,11 @@ const notifications = {
     DELETE_MESSAGE_NOTIFICATIONS(state, sender) {
       const index = getElementIndex(state.unreadMessages, 'sender_user_id', sender);
       state.unreadMessages.splice(index, 1);
+    },
+
+    DELETE_INTERACTION_NOTIFICATION(state, payload) {
+      const index = getElementIndex(state.interactions, 'id', payload.id);
+      state.interactions.splice(index, 1);
     },
   },
 
@@ -189,10 +195,12 @@ const notifications = {
     async FETCH_INTERACTION_NOTIFICATIONS({ state, rootGetters, commit }, type) {
       try {
 
+
+
         const response = await axios(
           {
             method: 'GET',
-            url: `/api/auth/user/notifications/interactions/${rootGetters['user/getUserId']}/show?page=${state.interactionPagination.currentPage}&type=${type}`,
+            url: state.interactionCursor === null ? `/api/auth/user/notifications/interactions/${rootGetters['user/getUserId']}/show?cursor=&type=${type}`: state.interactionCursor + '&type='+ type,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -201,7 +209,7 @@ const notifications = {
         );
 
         if (response.status === 200) {
-          commit('SET_INTERACTION_PAGINATION', response.data.interaction_pagination);
+          commit('SET_INTERACTION_CURSOR', response.data.next_page_url);
           commit('SET_INTERACTION_NOTIFICATIONS', response.data);
           commit('SET_INTERACTION_NOTIFICATIONS_LOADED', true);
         }
@@ -268,10 +276,34 @@ const notifications = {
           commit('SET_NAV_ALERTS', response.data);
         }
       } catch(e) {
-        console.log('notifications.js:FETCH_NAV_NOTIFICATION_ALERTS line 200 Error:', e.response);
         commit('SET_SERVER_ERROR', e.response.data.error);
       }
-    }
+    },
+
+    async DELETE_INTERACTION_NOTIFICATION({ state, rootGetters, commit }, payload) {
+      try {
+
+        const response = await axios(
+          {
+            method: 'DELETE',
+            url: `/api/auth/user/notifications/interactions/${payload.id}/delete?userId=${payload.notifiable_id}`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+
+        console.log('notifications.js:DELETE_INTERACTION_NOTIFICATION Success:', response);
+        if (response.status === 200) {
+           commit('DELETE_INTERACTION_NOTIFICATION', payload);
+        }
+
+      } catch(e) {
+        console.log('notifications.js:DELETE_INTERACTION_NOTIFICATION Error:', e.response);
+
+      }
+    },
   }
 }
 

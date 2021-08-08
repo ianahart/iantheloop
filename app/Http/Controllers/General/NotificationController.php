@@ -10,15 +10,12 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
 
-
-
     /*
     *Show the current user's interaction notifications by type
     * @param string $userId
     * @param Request $request
     * @return JsonResponse
     */
-
     public function showInteractionNotifications(Request $request, $userId)
     {
         try {
@@ -35,15 +32,13 @@ class NotificationController extends Controller
             }
 
             $notifications = $notification->getNotifications();
-            $pagination = array_pop($notifications);
-
 
             return response()
                 ->json(
                     [
                         'msg' => 'success',
                         'notifications' => $notifications,
-                        'interaction_pagination' => $pagination,
+                        'next_page_url' => $notifications->pop($notifications['next_page_url']),
                     ]
                 );
         } catch (Exception $e) {
@@ -58,19 +53,12 @@ class NotificationController extends Controller
         }
     }
 
-
-
-
-
-
-
     /*
     *Show the current user's unread notifications by type
     * @param string $userId
     * @param Request $request
     * @return JsonResponse
     */
-
     public function showMessageNotifications(Request $request, string $userId)
     {
         try {
@@ -188,7 +176,6 @@ class NotificationController extends Controller
     * @param string $userId
     * @return JsonResponse
     */
-
     public function showNotificationAlerts(Request $request, string $userId)
     {
         try {
@@ -215,6 +202,44 @@ class NotificationController extends Controller
                         'error' => $e->getMessage()
                     ],
                     500
+                );
+        }
+    }
+
+    /*
+    *Delete a single interaction notification
+    * @param Request $request
+    * @param string $notificationId
+    * @return JsonResponse
+    */
+    public function deleteInteractionNotification(Request $request, string $notificationId)
+    {
+        try {
+
+            $notification = new UserNotification($request->query('userId'));
+            $notification->deleteInteractionNotification($notificationId);
+
+            $error = $notification->getError();
+
+            if (!is_null($error)) {
+                throw new Exception($error);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Interaction notification deleted'
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to delete interaction notification',
+                        'error' => $e->getMessage()
+                    ]
                 );
         }
     }

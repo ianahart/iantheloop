@@ -3520,7 +3520,6 @@ div.about_profile_work__row p {
   height: 60px;
 }
 .follow_request_container {
-  margin: 0.7rem 0;
   margin-bottom: 0;
   padding: 0.5rem;
 }
@@ -3551,9 +3550,9 @@ div.about_profile_work__row p {
   color: #f4f4f4;
 }
 #follow_request_sent_date {
-  font-size: 0.7rem;
-  color: darkgray;
-  margin: 0.1rem 0;
+  font-size: 0.65rem;
+  color: #fb4d70;
+  margin-bottom: 0.25rem 0;
   display: flex;
   justify-content: flex-start;
 }
@@ -4643,11 +4642,81 @@ div.about_profile_work__row p {
 
 
 
-.interaction_container {
-  box-sizing: border-boxs;
+.nav_notification_user_picture {
+  box-sizing: border-box;
 }
-.interaction_container p {
-  font-size: 3rem;
+.nav_notification_user_picture img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+.nav_notification_user_picture svg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #484aa4;
+  color: #fb4d70;
+}
+.interaction_container {
+  box-sizing: border-box;
+  margin: 1rem auto 0 auto;
+}
+.delete_interaction_container {
+  margin-bottom: 0.3rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.delete_interaction_container svg {
+  height: 16px;
+  width: 16px;
+  color: #fa1b48;
+  transition: all 0.2s ease-out;
+}
+.delete_interaction_container svg:hover {
+  color: #fc6684;
+  transform: scale(1.1);
+}
+.interaction_contents {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+}
+.interaction_contents p {
+  font-size: 0.75rem;
+}
+.interaction_contents img {
+  margin: 0 0.2rem;
+}
+.interaction_post_picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+}
+#interaction_sender_text {
+  margin: 0.2rem 0.3rem;
+  color: #efefef;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+#interaction_sender_blurb {
+  font-size: 0.75rem;
+  margin: 0.2rem 0.3rem;
+  color: #efefef;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+#interaction_created_at_date {
+  text-align: left;
+  margin: 0;
+  font-size: 0.65rem;
+  color: #fb4d70;
+  margin-bottom: 0.25rem;
 }
 #nav_notifications_container {
   background-color: #3b3b44;
@@ -4665,7 +4734,8 @@ div.about_profile_work__row p {
 #nav_notifications_container h5 {
   text-align: center;
   margin: 0.1rem 0;
-  color: #fcfcfc;
+  color: #fb4d70;
+  font-family: "Secular One", sans-serif;
   letter-spacing: 0rem;
 }
 .nav_notifications_close {
@@ -4712,6 +4782,7 @@ div.about_profile_work__row p {
   border-bottom: 2px solid #323232;
 }
 .interaction_notifications_container {
+  padding: 0.5rem;
   box-sizing: border-box;
   min-height: 170px;
   max-height: 250px;
@@ -4753,21 +4824,6 @@ div.about_profile_work__row p {
     width: 95%;
     margin: 0 auto;
 }
-}
-.nav_notification_user_picture {
-  box-sizing: border-box;
-}
-.nav_notification_user_picture img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-}
-.nav_notification_user_picture svg {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #484aa4;
-  color: #fb4d70;
 }
 .nav_message_notification {
   box-sizing: border-box;
@@ -4867,7 +4923,8 @@ div.about_profile_work__row p {
 .nav_message_notifications_container h5 {
   text-align: center;
   margin: 0.1rem 0;
-  color: #fcfcfc;
+  color: #fb4d70;
+  font-family: "Secular One", sans-serif;
   letter-spacing: 0rem;
 }
 .nav_message_notifications_header {
