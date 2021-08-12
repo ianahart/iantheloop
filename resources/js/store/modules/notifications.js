@@ -13,7 +13,7 @@ const initialState = () => {
     messageNotificationsLoaded: false,
     interactionNotificationsLoaded:false,
     navMessageAlerts: false,
-    navInteractionAlerts: false,
+    navInteractionAlerts: 0,
     serverError: '',
   }
 };
@@ -119,6 +119,10 @@ const notifications = {
     DELETE_INTERACTION_NOTIFICATION(state, payload) {
       const index = getElementIndex(state.interactions, 'id', payload.id);
       state.interactions.splice(index, 1);
+
+      if (state.navInteractionAlerts > 0) {
+        state.navInteractionAlerts = state.navInteractionAlerts - 1;
+      }
     },
   },
 
@@ -264,7 +268,7 @@ const notifications = {
         const response = await axios(
           {
             method: 'GET',
-            url: `/api/auth/user/notifications/alerts/${payload.userId}/show?type=${payload.type}`,
+            url: `/api/auth/user/notifications/alerts/${payload.userId}/show?type=${btoa(JSON.stringify({ type: payload.type }))}`,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',

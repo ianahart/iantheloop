@@ -3504,6 +3504,15 @@ div.about_profile_work__row p {
   justify-content: center;
   align-items: center;
 }
+.navbar_notification_interactions_alerts {
+  font-size: 0.7rem;
+  font-weight: bold;
+  height: 18px;
+  width: 18px;
+  padding: 0.015rem;
+  top: -11px;
+  font-family: "Secular One", sans-serif;
+}
 /*
   IMPORTS
 */

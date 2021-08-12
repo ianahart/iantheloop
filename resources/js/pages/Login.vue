@@ -146,7 +146,7 @@
           this.initNotificationChannel();
           this.RESET_LOGIN_MODULE();
           this.$router.push({ name: 'Home' });
-          await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
+          await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: ['App/Notifications/UnreadMessage', 'App/Notifications/Interaction'] });
 
         }
       },

@@ -23,7 +23,7 @@
             ? 'notifications__icon_dark'
             : 'notifications__icon_light'"
       />
-      <span v-if="navInteractionAlerts" class="navbar_notification_interactions_alerts">&#43;</span>
+      <span v-if="navInteractionAlerts > 0" class="navbar_notification_interactions_alerts">{{ formattedInteractionAlert }}</span>
     </li>
     <li>
       <ProfileIcon location="nav" />
@@ -37,7 +37,7 @@
 
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 
 import MessagesIcon from "./LinkIcons/MessagesIcon";
 import NotificationsIcon from "./LinkIcons/NotificationsIcon";
@@ -61,6 +61,10 @@ export default {
     ...mapState("notifications", ["messageNotificationsAreOpen", 'navInteractionAlerts', 'navMessageAlerts']),
     ...mapState("hamburgerMenu", ["isMenuVisible"]),
     ...mapState("profileDropdown", ['isProfileDropdownOpen']),
+
+    formattedInteractionAlert() {
+      return this.navInteractionAlerts >= 9 ? `9+` : this.navInteractionAlerts;
+    }
   },
 
   methods: {
@@ -109,10 +113,6 @@ export default {
       }
       this.TOGGLE_MESSAGE_NOTIFICATIONS();
     },
-
-    test() {
-
-    },
   },
 };
 </script>
@@ -137,5 +137,15 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .navbar_notification_interactions_alerts {
+    font-size: 0.7rem;
+    font-weight: bold;
+    height: 18px;
+    width: 18px;
+    padding: 0.015rem;
+    top: -11px;
+    font-family: 'Secular One', sans-serif;
   }
 </style>

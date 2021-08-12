@@ -42,12 +42,12 @@ export default {
         if (this.getStatus === 'online') {
             this.initUserStatusChannel();
             this.reInitNotificationChannel();
-            await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: 'App/Notifications/UnreadMessage' });
+            await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: ['App/Notifications/UnreadMessage', 'App/Notifications/Interaction'] });
         }
     },
 
     beforeDestroy() {
-        this.SET_NAV_ALERTS({ nav_interaction_alerts: false, nav_message_alerts: false });
+        this.SET_NAV_ALERTS({ nav_interaction_alerts: 0, nav_message_alerts: false });
         this.leave(`notifications.${this.getUserId}`);
 
     },

@@ -182,15 +182,16 @@ class NotificationController extends Controller
             $notification = new UserNotification($userId);
             $notification->setType($request->query('type'));
 
-            $currentAlerts = $notification->notificationAlerts();
 
+            $alerts = $notification->notificationAlerts();
+            error_log(print_r($alerts, true));
 
             return response()
                 ->json(
                     [
                         'msg' => 'success',
-                        'nav_interaction_alerts' => false,
-                        'nav_message_alerts' => $currentAlerts
+                        'nav_interaction_alerts' => $alerts['interaction_alerts'],
+                        'nav_message_alerts' => $alerts['message_alerts'],
                     ],
                     200
                 );

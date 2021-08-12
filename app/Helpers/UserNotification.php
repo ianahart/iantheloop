@@ -224,13 +224,27 @@ class UserNotification
     return $message;
   }
 
-  public function notificationAlerts(): bool
+  public function notificationAlerts(): array
   {
     $currentUser = User::find($this->user);
 
-    $newAlerts = $currentUser->notifications()->where('type', '=', $this->type)->whereNull('read_at')->first();
+    [$unreadMessages, $interactions] = $this->formatTypes();
 
-    return is_null($newAlerts) ? false : true;
+    $messageAlerts = $currentUser
+      ->notifications()
+      ->where('type', '=', $unreadMessages)
+      ->whereNull('read_at')
+      ->first();
+
+    $interactionAlerts = $currentUser
+      ->notifications()
+      ->where('type', '=', $interactions)
+      ->count();
+
+    return [
+      'message_alerts' => is_null($messageAlerts) ? false : true,
+      'interaction_alerts' => $interactionAlerts
+    ];
   }
 
   public function deleteInteractionNotification(string $id)
@@ -247,5 +261,16 @@ class UserNotification
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
+  }
+
+  private function formatTypes(): array
+  {
+    $types = json_decode(base64_decode($this->type), true)['type'];
+    return array_map(
+      function ($type) {
+        return str_replace('/', '\\', $type);
+      },
+      $types
+    );
   }
 }
