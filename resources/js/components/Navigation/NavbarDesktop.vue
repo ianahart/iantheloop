@@ -10,6 +10,9 @@
       />
     </div>
     <p v-if="isMenuIconVisible">&nbsp;</p>
+    <InteractionAlert
+      v-if="isLoggedIn && isCurrentInteractionAlertActive"
+    />
     <NavigationLinks
       v-if="!isMenuIconVisible && !isLoggedIn"
       rootStyle="nav__links__desktop"
@@ -25,6 +28,7 @@
 
 
 <script>
+
 import { mapState, mapGetters, mapActions } from "vuex";
 
 import AuthNavigationLinks from "./AuthNavigationLinks";
@@ -33,6 +37,7 @@ import LogoName from "../Icons/LogoName";
 import NavigationLinks from "./NavigationLinks";
 import Notifications from "../Notifications/Notifications.vue";
 import MessageNotifications from '../Notifications/MessageNotifications.vue';
+import InteractionAlert from '../Notifications/InteractionAlert.vue';
 
 export default {
   name: "NavbarDesktop",
@@ -46,6 +51,7 @@ export default {
     NavigationLinks,
     Notifications,
     MessageNotifications,
+    InteractionAlert,
   },
 
   async mounted() {
@@ -67,7 +73,7 @@ export default {
     ...mapGetters("user", ["isLoggedIn", "getUserId"]),
 
     ...mapState("navigation", ["navigationLinks", "notificationsAreOpen"]),
-    ...mapState("notifications", ["messageNotificationsAreOpen"]),
+    ...mapState("notifications", ["messageNotificationsAreOpen", 'isCurrentInteractionAlertActive', 'processQueue']),
     ...mapState("hamburgerMenu", ["isMenuIconVisible"]),
 
     navBGC() {

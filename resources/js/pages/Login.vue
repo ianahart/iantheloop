@@ -1,4 +1,3 @@
-
 <template>
   <div class="login__container">
     <div class="login__form__container">
@@ -103,6 +102,13 @@
           'UPDATE_UNREAD_MESSAGE_COUNT',
         ]
       ),
+      ...mapMutations('notifications',
+        [
+          'SET_CURRENT_INTERACTION_ALERT',
+          'SET_CURRENT_INTERACTION_ALERT_ACTIVE',
+          'PROCESS_ENQUEUE',
+        ]
+      ),
       ...mapActions('login',
         [
           'SUBMIT_FORM',
@@ -170,14 +176,14 @@
           Echo.private(`notifications.${this.getUserId}`)
           .notification((notification) => {
              if (notification.type === 'broadcast.message') {
-                  console.log('Login.vue: notification broadcast.message');
                   this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
                   return;
               } else if (notification.type === 'broadcast.interaction') {
-                console.log('Login.vue: Interaction Notification-- ', notification);
+                  this.SET_CURRENT_INTERACTION_ALERT_ACTIVE(true);
+                  this.SET_CURRENT_INTERACTION_ALERT(notification);
 
               } else {
-                 console.log('Login.vue: Line 106: Notification Not recieved: ');
+                 console.log('Login.vue: Notification Not recieved: ');
               }
         });
       },
@@ -188,6 +194,57 @@
 </script>
 
 <style lang="scss">
+
+  .login__container {
+    box-sizing: border-box;
+    background-image: url('../../assets/login.svg');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+  }
+
+  .login__form__container {
+    width: 448px;
+    margin-bottom: 3rem;
+    box-sizing: border-box;
+    margin-top: 6rem;
+  }
+
+  .login__form {
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    padding: 1rem;
+    background-color: $primaryWhite;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    border-radius: 8px;
+  }
+
+ .login__button__container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   margin: 3rem auto;
+
+   button {
+     width: 150px;
+   }
+ }
+
+ .forgot__password__link {
+   font-size: 0.8rem;
+   text-decoration: none;
+   color: darken($themeDarkGreen, 20);
+
+   &:hover {
+     opacity: 0.7;
+   }
+ }
+
+</style>
 
   .login__container {
     box-sizing: border-box;

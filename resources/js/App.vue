@@ -54,6 +54,7 @@ export default {
 
     computed: {
 
+
         ...mapState('profileDropdown',
             [
                 'isProfileDropdownOpen'
@@ -83,7 +84,9 @@ export default {
         ),
         ...mapMutations('notifications',
             [
-                'SET_NAV_ALERTS'
+                'SET_NAV_ALERTS',
+                'SET_CURRENT_INTERACTION_ALERT',
+                'SET_CURRENT_INTERACTION_ALERT_ACTIVE'
             ]
         ),
         ...mapActions('notifications',
@@ -111,13 +114,13 @@ export default {
           Echo.private(`notifications.${this.getUserId}`)
           .notification((notification) => {
                 if (notification.type === 'broadcast.message') {
-
                         this.UPDATE_UNREAD_MESSAGE_COUNT(notification);
                         return;
               } else if (notification.type === 'broadcast.interaction') {
-                      console.log('App.vue: Interaction Notification-- ', notification);
+                       this.SET_CURRENT_INTERACTION_ALERT(notification);
+                       this.SET_CURRENT_INTERACTION_ALERT_ACTIVE(true);
               } else {
-                 console.log('App.vue: Line 106: Notification Not recieved: ');
+                 console.log('App.vue: Notification Not recieved: ');
               }
         });
       },

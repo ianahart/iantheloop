@@ -4987,6 +4987,63 @@ div.about_profile_work__row p {
     max-width: 250px;
 }
 }
+.notification-alert-enter-active, .notification-alert-leave-active {
+  transition: all 0.3s ease-out;
+}
+.notification-alert-enter, .notification-alert-leave-to {
+  opacity: 0;
+  transform: translateX(-75px);
+}
+.dynamic_interaction_alert {
+  padding: 0.25rem;
+  position: absolute;
+  top: 70px;
+  left: 50px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 11px 1px black;
+  background-color: #3b3b44;
+  width: 275px;
+  border-radius: 8px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.dynamic_interaction_alert svg {
+  color: #fb4d70;
+  width: 20px;
+  height: 20px;
+}
+.dynamic_interaction_alert h3 {
+  font-family: "Secular One", sans-serif;
+  font-weight: bold;
+  color: #fcfcfc;
+  font-size: 0.9rem;
+  margin: 0.1rem 0;
+  text-align: center;
+}
+.dynamic_interaction_alert p {
+  color: #f2f2f2;
+  font-size: 0.75rem;
+  margin: 4rem;
+  text-align: center;
+  font-family: "Open Sans", sans-serif;
+}
+.dynamic_interaction_alert p span {
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+.dismiss_interaction_alert_container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+@media (max-width: 600px) {
+.dynamic_interaction_alert {
+    width: 235px;
+}
+}
 .logged_in_nav {
   background-color: transparent;
 }

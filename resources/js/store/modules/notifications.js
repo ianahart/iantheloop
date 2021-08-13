@@ -7,10 +7,14 @@ const initialState = () => {
     followRequests: [],
     interactions: [],
     unreadMessages: [],
+    alertTimerID: 0,
+    processQueue: ['millie brown', 'adam wayland'],
     currentPageMessages: null,
     interactionCursor: null,
     messageNotificationsAreOpen: false,
     messageNotificationsLoaded: false,
+    currentInteractionAlert: null,
+    isCurrentInteractionAlertActive: false,
     interactionNotificationsLoaded:false,
     navMessageAlerts: false,
     navInteractionAlerts: 0,
@@ -29,6 +33,33 @@ const notifications = {
   },
 
   mutations: {
+
+    PROCESS_ENQUEUE(state, payload) {
+      state.processQueue = [...state.processQueue, ...payload];
+    },
+
+    PROCESS_DEQUEUE(state,payload) {
+      const index = state.processQueue.findIndex(queue => queue.sender_user_id === payload.sender_user_id);
+      state.processQueue.splice(index, 1);
+    },
+
+    SET_CURRENT_INTERACTION_ALERT(state, payload) {
+      const notEmpty = payload !== null && state.currentInteractionAlert !== null;
+
+      if (payload !== null) {
+        state.navInteractionAlerts = state.navInteractionAlerts + 1;
+      }
+
+      if (notEmpty && state.currentInteractionAlert.sender_user_id === payload.sender_user_id) {
+          return;
+        }
+     state.currentInteractionAlert = payload;
+
+    },
+
+    SET_CURRENT_INTERACTION_ALERT_ACTIVE(state, payload) {
+      state.isCurrentInteractionAlertActive = payload;
+    },
 
     SET_INTERACTION_CURSOR(state, payload) {
       state.interactionCursor = payload;
@@ -192,7 +223,7 @@ const notifications = {
           }
       } catch(e) {
 
-        console.log('notifications.js: FETCH_MESSAGE_NOTIFICATIONS() line 161 Error:', e);
+        // console.log('notifications.js: FETCH_MESSAGE_NOTIFICATIONS() line 161 Error:', e);
       }
     },
 
@@ -219,7 +250,7 @@ const notifications = {
         }
 
       } catch(e) {
-        console.log('notifications.js: FETCH_INTERACTION_NOTIFICATIONS() line 165 Error:', e);
+        // console.log('notifications.js: FETCH_INTERACTION_NOTIFICATIONS() line 165 Error:', e);
       }
     },
 
@@ -259,7 +290,7 @@ const notifications = {
             commit('DELETE_MESSAGE_NOTIFICATIONS', payload.sender);
           }
       } catch(e) {
-        console.log('notifications.js: DELETE_MESSAGE_NOTIFICATIONS() line 155 Error:', e.response);
+        // console.log('notifications.js: DELETE_MESSAGE_NOTIFICATIONS() line 155 Error:', e.response);
       }
     },
 
@@ -298,7 +329,7 @@ const notifications = {
           }
         );
 
-        console.log('notifications.js:DELETE_INTERACTION_NOTIFICATION Success:', response);
+
         if (response.status === 200) {
            commit('DELETE_INTERACTION_NOTIFICATION', payload);
         }

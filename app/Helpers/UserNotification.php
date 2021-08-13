@@ -111,6 +111,7 @@ class UserNotification
 
         $latestReadNotification = $currentUser->notifications()
           ->where('data->sender_user_id', '=', $notification['sender_user_id'])
+          ->where('type', '=', 'App\Notifications\UnreadMessage')
           ->latest('created_at')
           ->first();
 
@@ -164,6 +165,7 @@ class UserNotification
         $currentUser
           ->unreadNotifications()
           ->where('data->sender_user_id', '=', $senderId)
+          ->where('type', '=', 'App\Notifications\UnreadMessage')
           ->update(
             [
               'read_at' => now()

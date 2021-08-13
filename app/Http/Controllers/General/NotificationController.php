@@ -184,7 +184,7 @@ class NotificationController extends Controller
 
 
             $alerts = $notification->notificationAlerts();
-            error_log(print_r($alerts, true));
+
 
             return response()
                 ->json(
