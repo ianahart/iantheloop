@@ -40,6 +40,8 @@ class ProcessInteraction implements ShouldQueue
      */
     public function handle()
     {
-        $this->user->notify(new Interaction($this->interaction));
+        if ($this->user->id !== $this->interaction['sender_user_id']) {
+            $this->user->notify(new Interaction($this->interaction));
+        }
     }
 }
