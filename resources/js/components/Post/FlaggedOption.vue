@@ -21,7 +21,7 @@
 
 <script>
 
-  import CloseIcon from '../../Icons/CloseIcon.vue';
+  import CloseIcon from '../Icons/CloseIcon.vue';
 
   export default {
 

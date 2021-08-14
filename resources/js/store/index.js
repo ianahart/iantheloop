@@ -19,7 +19,7 @@ import profile from './modules/profile/profile.js';
 import profileAbout from './modules/profile/profileAbout.js';
 import profileEdit from './modules/profile/profileEdit.js';
 import network from './modules/network.js';
-import profileWall from './modules/profileWall.js';
+import posts from './modules/posts.js';
 import profileWallSettings from './modules/profileWallSettings.js';
 import notifications from './modules/notifications.js';
 import messenger from './modules/messenger.js';
@@ -63,7 +63,7 @@ export default new Vuex.Store(
       profileAbout,
       profileEdit,
       network,
-      profileWall,
+      posts,
       profileWallSettings,
       notifications,
       messenger,

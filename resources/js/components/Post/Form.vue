@@ -98,11 +98,12 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import CloseSolidIcon from '../../Icons/CloseSolidIcon.vue';
-  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
-  import PictureSolidIcon from '../../Icons/PictureSolidIcon.vue';
-  import VideoSolidIcon from '../../Icons/VideoSolidIcon.vue';
-  import VideoPlayer from '../VideoPlayer.vue';
+  import CloseSolidIcon from '../Icons/CloseSolidIcon.vue';
+  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
+  import PictureSolidIcon from '../Icons/PictureSolidIcon.vue';
+  import VideoSolidIcon from '../Icons/VideoSolidIcon.vue';
+  import VideoPlayer from '../ProfileWall/VideoPlayer.vue';
+
 
   export default {
 
@@ -135,7 +136,7 @@
         ]
       ),
 
-      ...mapState('profileWall',
+      ...mapState('posts',
         [
           'modalIsOpen',
           'activeModal',
@@ -152,7 +153,7 @@
 
     methods: {
 
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'CLOSE_MODAL',
           'SET_POST_INPUT_TEXT',
@@ -165,7 +166,7 @@
         ]
       ),
 
-      ...mapActions('profileWall',
+      ...mapActions('posts',
         [
           'CREATE_POST'
         ]

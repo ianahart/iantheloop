@@ -39,7 +39,7 @@ const initialState = () => {
   }
 };
 
-const profileWall = {
+const posts = {
 
   namespaced: true,
 
@@ -747,6 +747,6 @@ const profileWall = {
  }
 };
 
-export default profileWall;
+export default posts;
 
 

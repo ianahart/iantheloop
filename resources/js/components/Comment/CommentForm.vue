@@ -33,7 +33,7 @@
 <script>
 
   import { mapState, mapMutations, mapActions } from 'vuex';
-  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
+  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
 
   export default {
 
@@ -66,7 +66,7 @@
     },
 
     computed: {
-      ...mapState('profileWall',
+      ...mapState('posts',
         [
           'postErrors',
           'commentErrors',
@@ -76,13 +76,13 @@
     },
 
     methods: {
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'RESET_COMMENT_ERRORS',
           'SET_REQUEST_FINISHED',
         ]
       ),
-      ...mapActions('profileWall',
+      ...mapActions('posts',
         [
           'ADD_COMMENT',
         ]

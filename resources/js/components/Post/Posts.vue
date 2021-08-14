@@ -42,9 +42,9 @@
       }
     },
 
-    async created () {
+     created () {
 
-       await this.loadPosts(this.subjectUserId);
+       this.loadInitial(this.subjectUserId);
     },
 
     mounted () {
@@ -58,7 +58,7 @@
 
     computed: {
 
-      ...mapState('profileWall',
+      ...mapState('posts',
         [
           'postsLoaded',
           'morePosts',
@@ -71,13 +71,13 @@
 
     methods: {
 
-      ...mapActions('profileWall',
+      ...mapActions('posts',
         [
           'LOAD_POSTS',
         ]
       ),
 
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'SET_POST_SEEN'
         ]
@@ -107,7 +107,8 @@
              let seenId = entry.target.attributes['data-id'].value;
             this.SET_POST_SEEN(parseInt(seenId));
             this.debounce(() => {
-              this.loadMore();
+              // this.loadMore();
+              this.loadSubsequent();
             }, 400)
             }
         });
@@ -128,23 +129,34 @@
       })()
       },
 
-      async loadMore () {
-        try {
 
-          await this.LOAD_POSTS(this.subjectUserId);
-        } catch(e) {
-
-        }
+      loadInitial(subjectUserId) {
+        this.$emit('loadinitial', subjectUserId);
       },
 
-      async loadPosts (subjectUserId) {
-        try {
+      loadSubsequent() {
+        this.$emit('loadsubsequent', this.subjectUserId);
+      },
 
-          await this.LOAD_POSTS(subjectUserId);
-        } catch (e) {
 
-        }
-      }
+
+      // async loadMore () {
+      //   try {
+
+      //     await this.LOAD_POSTS(this.subjectUserId);
+      //   } catch(e) {
+
+      //   }
+      // },
+
+      // async loadPosts (subjectUserId) {
+      //   try {
+
+      //     await this.LOAD_POSTS(subjectUserId);
+      //   } catch (e) {
+
+      //   }
+      // }
     },
   }
 

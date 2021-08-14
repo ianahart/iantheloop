@@ -90,7 +90,7 @@ export default {
             ]
         ),
 
-        ...mapState('profileWall',
+        ...mapState('posts',
            [
             'currentUserFirstName'
            ]
@@ -117,7 +117,7 @@ export default {
             ]
         ),
 
-        ...mapMutations("profileWall",
+        ...mapMutations("posts",
             [
                 "CURRENT_USER_NAME",
                 'CURRENT_USER_FIRST_NAME',
@@ -133,7 +133,7 @@ export default {
 
         clearProfileWallState() {
 
-            this.$store.commit('profileWall/RESET_MODULE');
+            this.$store.commit('posts/RESET_MODULE');
         },
 
         async fetchBaseProfileData(profileId) {

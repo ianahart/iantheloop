@@ -87,10 +87,10 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
+  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
   import CommentInteractions from './CommentInteractions.vue';
   import CommentOptions from './CommentOptions.vue';
-  import ThumbsUpSolidIcon from '../../Icons/ThumbsUpSolidIcon.vue';
+  import ThumbsUpSolidIcon from '../Icons/ThumbsUpSolidIcon.vue';
   import ReplyForm from './ReplyForm.vue';
   import ReplyComment from './ReplyComment.vue';
 
@@ -123,7 +123,7 @@
     },
 
     computed: {
-      ...mapState('profileWall',
+      ...mapState('posts',
         [
           'replyErrors',
           'requestFinished',
@@ -175,7 +175,7 @@
 
     methods: {
 
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'SET_REPLY_ERRORS',
           'SET_REQUEST_FINISHED',
@@ -183,7 +183,7 @@
         ]
       ),
 
-      ...mapActions('profileWall',
+      ...mapActions('posts',
         [
           'DELETE_COMMENT',
           'LIKE_COMMENT',

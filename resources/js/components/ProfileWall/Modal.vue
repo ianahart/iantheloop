@@ -27,7 +27,7 @@
 
     computed: {
 
-      ...mapState('profileWall',
+      ...mapState('posts',
         [
           'modalIsOpen'
         ]

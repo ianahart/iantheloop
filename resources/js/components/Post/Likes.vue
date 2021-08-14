@@ -26,8 +26,8 @@
 
 <script>
 
-  import ThumbsUpSolidIcon from '../../Icons/ThumbsUpSolidIcon.vue';
-  import ThumbsUpIcon from '../../Icons/ThumbsUpIcon.vue';
+  import ThumbsUpSolidIcon from '../Icons/ThumbsUpSolidIcon.vue';
+  import ThumbsUpIcon from '../Icons/ThumbsUpIcon.vue';
 
   export default {
 

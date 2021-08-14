@@ -12,23 +12,15 @@
 
 <script>
 
-  import CommentIcon from '../../Icons/CommentIcon.vue';
+  import CommentIcon from '../Icons/CommentIcon.vue';
 
   export default {
 
     name: 'CommentTrigger',
 
-    props: {
-
-    },
-
     components: {
 
       CommentIcon,
-    },
-
-    computed: {
-
     },
 
     methods: {

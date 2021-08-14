@@ -10,9 +10,6 @@
 
 <script>
 
-
-  import {  mapMutations, mapActions } from 'vuex';
-
   import Comment from './Comment.vue';
 
   export default {

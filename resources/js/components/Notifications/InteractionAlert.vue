@@ -100,6 +100,7 @@
     box-sizing: border-box;
     box-shadow: 0px 0px 11px 1px black;
     background-color: $primaryBlack;
+    z-index: 99;
     width: 275px;
     border-radius: 8px;
     overflow-wrap: break-word;

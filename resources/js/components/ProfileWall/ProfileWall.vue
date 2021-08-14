@@ -15,6 +15,8 @@
      <Posts
       :subjectUserId="baseProfile.user_id"
       :currentUserProfilePic="currentUserProfilePic"
+      @loadsubsequent="loadMore"
+      @loadinitial="loadPosts"
      />
    </div>
    <div class="restrict_profile_wall" v-else>
@@ -27,8 +29,8 @@
 <script>
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import FormTrigger from './Post/FormTrigger.vue';
-  import Posts from './Post/Posts.vue';
+  import FormTrigger from '../Post/FormTrigger.vue';
+  import Posts from '../Post/Posts.vue';
   import WallSettings from './WallSettings.vue';
 
   export default {
@@ -56,11 +58,36 @@
     },
 
     methods: {
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'RESET_MODULE'
         ]
       ),
+
+      ...mapActions('posts',
+        [
+          'LOAD_POSTS'
+        ]
+      ),
+
+       async loadMore () {
+        try {
+
+          await this.LOAD_POSTS(this.baseProfile.user_id);
+        } catch(e) {
+
+        }
+      },
+
+      async loadPosts (subjectUserId) {
+
+        try {
+
+          await this.LOAD_POSTS(subjectUserId);
+        } catch (e) {
+
+        }
+      }
     }
   }
 

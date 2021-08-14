@@ -146,13 +146,13 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-import HorizontalDotsIcon from "../../Icons/HorizontalDotsIcon.vue";
-import PlaySolidIcon from "../../Icons/PlaySolidIcon.vue";
-import VideoPlayer from "../VideoPlayer.vue";
-import DefaultProfileIcon from "../../Icons/DefaultProfileIcon.vue";
+import HorizontalDotsIcon from "../Icons/HorizontalDotsIcon.vue";
+import PlaySolidIcon from "../Icons/PlaySolidIcon.vue";
+import VideoPlayer from "../ProfileWall/VideoPlayer.vue";
+import DefaultProfileIcon from "../Icons/DefaultProfileIcon.vue";
 import PostActions from "./PostActions.vue";
 import Likes from "./Likes.vue";
-import ThumbsUpIcon from "../../Icons/ThumbsUpIcon.vue";
+import ThumbsUpIcon from "../Icons/ThumbsUpIcon.vue";
 import CommentTrigger from "../Comment/CommentTrigger.vue";
 import FlaggedOptions from './FlaggedOptions.vue';
 import CommentForm from '../Comment/CommentForm.vue';
@@ -222,7 +222,7 @@ export default {
 
     computed: {
 
-        ...mapState('profileWall',
+        ...mapState('posts',
             [
                 'alreadyFlaggedError',
                 'flagPostFinished',
@@ -285,7 +285,7 @@ export default {
 
     methods: {
 
-        ...mapMutations('profileWall',
+        ...mapMutations('posts',
             [
                 'CLOSE_MODAL',
                 'CLEAR_ALREADY_FLAGGED_ERROR',
@@ -294,7 +294,7 @@ export default {
             ]
         ),
 
-        ...mapActions("profileWall",
+        ...mapActions("posts",
             [
                 "LIKE_POST",
                 'UNLIKE_POST',

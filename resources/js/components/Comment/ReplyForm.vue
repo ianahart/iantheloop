@@ -24,7 +24,7 @@
 
 <script>
 
-  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
+  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
 
   export default {
 

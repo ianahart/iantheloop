@@ -46,11 +46,11 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import DefaultProfileIcon from '../../Icons/DefaultProfileIcon.vue';
-  import HorizontalDotsIcon from '../../Icons/HorizontalDotsIcon.vue'
+  import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
+  import HorizontalDotsIcon from '../Icons/HorizontalDotsIcon.vue'
   import CommentOptions from './CommentOptions.vue';
   import CommentInteractions from './CommentInteractions.vue';
-  import ThumbsUpSolidIcon from '../../Icons/ThumbsUpSolidIcon.vue';
+  import ThumbsUpSolidIcon from '../Icons/ThumbsUpSolidIcon.vue';
 
   export default {
 
@@ -78,7 +78,7 @@
 
     methods: {
 
-      ...mapActions('profileWall',
+      ...mapActions('posts',
         [
           'DELETE_REPLY_COMMENT',
           'LIKE_COMMENT',

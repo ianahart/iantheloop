@@ -5002,6 +5002,7 @@ div.about_profile_work__row p {
   box-sizing: border-box;
   box-shadow: 0px 0px 11px 1px black;
   background-color: #3b3b44;
+  z-index: 99;
   width: 275px;
   border-radius: 8px;
   overflow-wrap: break-word;

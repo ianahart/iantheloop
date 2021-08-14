@@ -43,7 +43,7 @@
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
   import FlaggedOption from './FlaggedOption.vue';
-  import CloseIcon from '../../Icons/CloseIcon.vue'
+  import CloseIcon from '../Icons/CloseIcon.vue'
 
   export default {
 
@@ -59,14 +59,14 @@
     },
 
     computed: {
-      ...mapGetters('profileWall',
+      ...mapGetters('posts',
         [
           'selectedFlaggedOptions',
           'unselectedFlaggedOptions',
         ]
       ),
 
-      ...mapState('profileWall',
+      ...mapState('posts',
         [
           'modalIsOpen',
           'activeModal',
@@ -79,7 +79,7 @@
 
     methods: {
 
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'CLOSE_MODAL',
           'SET_FLAGGED_OPTION',

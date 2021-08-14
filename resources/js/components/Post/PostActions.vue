@@ -28,7 +28,8 @@
 
   import { mapState, mapMutations, mapActions } from 'vuex';
 
-  import FlagSolidIcon from '../../Icons/FlagSolidIcon.vue';
+  import FlagSolidIcon from '../Icons/FlagSolidIcon.vue';
+
 
   export default {
 
@@ -37,7 +38,7 @@
     components: {
       FlagSolidIcon,
     },
-//  v-if="currentUserId !== authorUserId && authorUserId !== subjectUserId"
+
     props: {
       subjectUserId: Number,
       authorUserId: Number,
@@ -47,7 +48,7 @@
 
     computed: {
 
-      ...mapState('profileWall',
+      ...mapState('posts',
         [
           'responseError'
         ]
@@ -62,13 +63,13 @@
 
     methods: {
 
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'OPEN_MODAL'
         ]
       ),
 
-      ...mapActions('profileWall',
+      ...mapActions('posts',
         [
           'DELETE_POST'
         ]

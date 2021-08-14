@@ -30,7 +30,7 @@
 
   import { mapGetters } from 'vuex';
 
-  import HorizontalDotsIcon from '../../Icons/HorizontalDotsIcon.vue';
+  import HorizontalDotsIcon from '../Icons/HorizontalDotsIcon.vue';
 
   export default {
 

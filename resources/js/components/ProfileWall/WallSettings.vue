@@ -168,14 +168,14 @@
         ]
       ),
 
-      ...mapMutations('profileWall',
+      ...mapMutations('posts',
         [
           'SET_INITIAL_FILTER',
           'RESET_POSTS',
         ]
       ),
 
-      ...mapActions('profileWall',
+      ...mapActions('posts',
         [
           'LOAD_POSTS'
         ]
