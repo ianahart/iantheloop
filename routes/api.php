@@ -47,7 +47,6 @@ Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 |--------------------------------------------------------------------------
 |
 */
-Route::get('/auth/newsfeed', [NewsFeedController::class, 'index'])->middleware('auth:api');
 Route::get('/auth/profile/{profileId}/edit', [ProfileController::class, 'edit'])->middleware('auth:api');
 Route::get('/auth/profile/{profileId}/about', [ProfileController::class, 'showAbout'])->middleware('auth:api');
 Route::patch('/auth/profile/{profileId}/update', [ProfileController::class, 'update'])->middleware('auth:api');
@@ -86,3 +85,4 @@ Route::delete('/auth/user/notifications/messages/{userId}/delete', [Notification
 Route::get('/auth/user/notifications/alerts/{userId}/show', [NotificationController::class, 'showNotificationAlerts'])->middleware('auth:api');
 Route::get('/auth/user/notifications/interactions/{userId}/show', [NotificationController::class, 'showInteractionNotifications'])->middleware('auth:api');
 Route::delete('/auth/user/notifications/interactions/{notificationId}/delete', [NotificationController::class, 'deleteInteractionNotification'])->middleware('auth:api');
+Route::get('/auth/newsfeed/{slug}/show', [NewsFeedController::class, 'show'])->middleware('auth:api');

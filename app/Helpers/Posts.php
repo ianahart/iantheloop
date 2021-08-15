@@ -2,10 +2,12 @@
 
 namespace App\Helpers;
 
+use Illuminate\Database\Eloquent\Collection;
 use App\Helpers\AmazonS3;
 use App\Helpers\FormattingUtil;
 use App\Jobs\ProcessInteraction;
 use App\Models\User;
+
 
 use DateTime;
 use DateTimeZone;
@@ -15,6 +17,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Posts
 {
+
+  const PAG_LIMIT = 3;
+
   private object $user;
   private object $post;
   private array $newPost;
@@ -153,13 +158,6 @@ class Posts
 
     ProcessInteraction::dispatch($interaction, $post->user);
 
-
-
-
-
-
-
-
     $this->newPost = $post->refresh()->toArray();
 
     $this->subjectUserId = $this->newPost['subject_user_id'];
@@ -177,8 +175,6 @@ class Posts
 
     try {
 
-
-      $limit = 3;
       $formattedFilters = [];
 
       if (!is_null($filters)) {
@@ -195,22 +191,22 @@ class Posts
           $posts = $this->user::find($this->subjectUserId)
             ->posts()
             ->latest()
-            ->paginate($limit);
+            ->paginate(self::PAG_LIMIT);
         } else {
-          $posts = $this->filterPosts($formattedFilters, $limit, 'initialReq');
+          $posts = $this->filterPosts($formattedFilters, 'initialReq');
         }
       } else {
 
         if (count($formattedFilters) > 0) {
 
-          $posts = $this->filterPosts($formattedFilters, $limit, 'subseqReq');
+          $posts = $this->filterPosts($formattedFilters, 'subseqReq');
         } else {
 
           $posts = $this->user::find($this->subjectUserId)
             ->posts()
             ->where('id', '<', $this->lastPostItem)
             ->orderBy('id', 'DESC')
-            ->paginate($limit);
+            ->paginate(self::PAG_LIMIT);
         }
       }
       if ($posts->total() <= 0) {
@@ -219,45 +215,9 @@ class Posts
       }
 
       $postsCollection = [];
-      $COMMENT_LIMIT = 3;
 
       foreach ($posts as $post) {
-
-        $post->postLikes;
-        $comments = $post->comments()
-          ->orderBy('id', 'DESC')
-          ->whereNull('reply_to_comment_id')
-          ->paginate($COMMENT_LIMIT);
-
-        $post->last_comment = $comments[count($comments) - 1];
-        $postComments = [];
-
-        foreach ($comments as $comment) {
-          $this->applyDisplayFields($comment);
-          $comment->commentLikes;
-
-          $replyComments = $comment
-            ->where('reply_to_comment_id', '=', $comment->id)
-            ->orderBy('id', 'DESC')
-            ->paginate($COMMENT_LIMIT);
-
-          foreach ($replyComments as $replyComment) {
-            $this->applyDisplayFields($replyComment);
-            $replyComment->commentLikes;
-            unset($replyComment->user);
-          }
-
-          $comment->reply_comments = $replyComments->toArray()['data'];
-          $comment->reply_comments_count = $replyComments->total();
-
-          unset($comment->user);
-          array_push($postComments, $comment);
-        }
-
-
-        $post->post_comments = $postComments;
-        $post->comments_count = $post->comments()->count();
-        $postsCollection[] = $post->toArray();
+        array_push($postsCollection, $this->collectPostComments($post));
       }
 
       $enhancedPosts = $this->enhancePosts($postsCollection);
@@ -278,10 +238,57 @@ class Posts
   */
   private function appendSubjectName()
   {
+
     $user = $this->user::select(['full_name'])
       ->find($this->subjectUserId);
 
     return FormattingUtil::capitalize($user->full_name);
+  }
+
+  /*
+  * fetch all of the comments and reply comments for a post
+  *@param object $post
+  *@return array $post
+  */
+
+  private function collectPostComments(object $post): array
+  {
+
+    $post->postLikes;
+    $comments = $post->comments()
+      ->orderBy('id', 'DESC')
+      ->whereNull('reply_to_comment_id')
+      ->paginate(self::PAG_LIMIT);
+
+    $post->last_comment = $comments[count($comments) - 1];
+    $postComments = [];
+
+    foreach ($comments as $comment) {
+      $this->applyDisplayFields($comment);
+      $comment->commentLikes;
+
+      $replyComments = $comment
+        ->where('reply_to_comment_id', '=', $comment->id)
+        ->orderBy('id', 'DESC')
+        ->paginate(self::PAG_LIMIT);
+
+      foreach ($replyComments as $replyComment) {
+        $this->applyDisplayFields($replyComment);
+        $replyComment->commentLikes;
+        unset($replyComment->user);
+      }
+
+      $comment->reply_comments = $replyComments->toArray()['data'];
+      $comment->reply_comments_count = $replyComments->total();
+
+      unset($comment->user);
+      array_push($postComments, $comment);
+    }
+
+    $post->post_comments = $postComments;
+    $post->comments_count = $post->comments()->count();
+
+    return $post->toArray();
   }
 
 
@@ -328,7 +335,6 @@ class Posts
     $enhancedPosts = [];
 
     $subjectName = $this->appendSubjectName();
-
 
     foreach ($posts as $post) {
 
@@ -441,12 +447,10 @@ class Posts
   /*
   * filter posts by the provided array contents
   * @param array $filters
-  * @param int $limit
   * @param string $type
   * @return Illuminate\Pagination\LengthAwarePaginator Object
   */
-
-  private function filterPosts(array $filters, int $limit, string $type)
+  private function filterPosts(array $filters, string $type)
   {
 
     $postedBy = strtolower($filters['posted_by']);
@@ -474,7 +478,7 @@ class Posts
         ->whereMonth('created_at', '=', $filters['go_to_month'])
         ->whereYear('created_at', '=', $filters['go_to_year'])
         ->latest()
-        ->paginate($limit);
+        ->paginate(self::PAG_LIMIT);
     }
 
     if ($type === 'subseqReq') {
@@ -484,9 +488,55 @@ class Posts
         ->whereMonth('created_at', '=', $filters['go_to_month'])
         ->whereYear('created_at', '=', $filters['go_to_year'])
         ->orderBy('id', 'DESC')
-        ->paginate($limit);
+        ->paginate(self::PAG_LIMIT);
     }
 
     return $filteredPosts;
+  }
+
+  public function newsfeedPosts(string $slug)
+  {
+
+    try {
+
+      $newsfeedPosts = [];
+      $currentUser = $this->user->where('slug', '=', $slug)->first();
+      $followingIds = array_keys($currentUser->stat->following);
+      $followingIds[] = $currentUser->id;
+
+      $baseQuery = $this->post
+        ->whereIn('subject_user_id', $followingIds)
+        ->whereIn('author_user_id', $followingIds)
+        ->whereColumn('subject_user_id', '=', 'author_user_id');
+
+      if ($this->lastPostItem === 0) {
+
+        $posts = $baseQuery
+          ->latest()
+          ->paginate(self::PAG_LIMIT);
+      } else {
+
+        $posts = $baseQuery
+          ->where('id', '<', $this->lastPostItem)
+          ->orderBy('id', 'DESC')
+          ->paginate(self::PAG_LIMIT);
+      }
+
+      if ($posts->total() <= 0) {
+        throw new ModelNotFoundException('all records fetched');
+      }
+
+      foreach ($posts as $post) {
+
+        array_push($newsfeedPosts,  $this->collectPostComments($post));
+      }
+      $enhancedPosts = $this->enhancePosts($newsfeedPosts);
+
+      $this->lastPostItem = $newsfeedPosts[count($newsfeedPosts) - 1]['id'];
+      $this->posts = $enhancedPosts;
+    } catch (ModelNotFoundException $e) {
+
+      $this->exception = $e->getMessage();
+    }
   }
 }

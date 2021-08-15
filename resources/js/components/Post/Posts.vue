@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="postsLoaded && posts.length"
     ref="postsContainer"
     class="profile_posts__container"
   >
@@ -10,6 +11,7 @@
       :observer="observer"
       :lastPostItem="lastPostItem"
       :currentUserProfilePic="currentUserProfilePic"
+      :postsOrigin="postsOrigin"
     />
   </div>
 </template>
@@ -41,15 +43,9 @@
         threshold: document.documentElement.clientWidth <= 700 ? '0.1' : '0.7',
       }
     },
-
-     created () {
-
-       this.loadInitial(this.subjectUserId);
-    },
-
-    mounted () {
-      this.setupObserver();
-    },
+      created() {
+        this.setupObserver();
+      },
 
     beforeDestroy() {
       this.observer.disconnect();
@@ -64,22 +60,21 @@
           'morePosts',
           'posts',
           'lastPostItem',
+          'postsOrigin',
         ]
       ),
       ...mapState('profileWallSettings', ['filtersShowing']),
     },
 
     methods: {
-
       ...mapActions('posts',
         [
           'LOAD_POSTS',
         ]
       ),
-
       ...mapMutations('posts',
         [
-          'SET_POST_SEEN'
+          'SET_POST_SEEN',
         ]
       ),
 
@@ -107,7 +102,6 @@
              let seenId = entry.target.attributes['data-id'].value;
             this.SET_POST_SEEN(parseInt(seenId));
             this.debounce(() => {
-              // this.loadMore();
               this.loadSubsequent();
             }, 400)
             }
@@ -129,34 +123,9 @@
       })()
       },
 
-
-      loadInitial(subjectUserId) {
-        this.$emit('loadinitial', subjectUserId);
-      },
-
       loadSubsequent() {
         this.$emit('loadsubsequent', this.subjectUserId);
       },
-
-
-
-      // async loadMore () {
-      //   try {
-
-      //     await this.LOAD_POSTS(this.subjectUserId);
-      //   } catch(e) {
-
-      //   }
-      // },
-
-      // async loadPosts (subjectUserId) {
-      //   try {
-
-      //     await this.LOAD_POSTS(subjectUserId);
-      //   } catch (e) {
-
-      //   }
-      // }
     },
   }
 

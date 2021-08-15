@@ -44,7 +44,7 @@ const routes = [
   },
 
   {
-    path: '/newsfeed',
+    path: '/newsfeed/:slug',
     name: 'NewsFeed',
     component: () => import('../pages/NewsFeed.vue'),
     meta: {

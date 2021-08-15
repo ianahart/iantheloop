@@ -1,77 +1,99 @@
 <template>
-  <div>
-    <h1>News feed</h1>
-    <p>friend's posts go here</p>
-    <p v-for="(name, index) in names" :key="index">{{ name }}</p>
-
+  <div class="newsfeed_parent_container">
+    <div class="newsfeed_flex_container">
+      <Feed
+        v-if="postsLoaded && posts.length"
+        @refillfeed="refillNewsfeedPosts"
+      />
+      <Sidebar />
+    </div>
   </div>
 </template>
 
 <script>
 
-  import { mapState, mapActions, mapMutations } from 'vuex';
+  import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
+
+  import Feed from '../components/NewsFeed/Feed.vue';
+  import Sidebar from '../components/NewsFeed/Sidebar.vue';
 
   export default {
 
     name: 'NewsFeed',
 
     components: {
-
+      Feed,
+      Sidebar,
     },
 
-    props: {
-
+    async mounted() {
+      await this.loadNewsfeedPosts();
     },
 
-    data () {
-
-      return {
-
-      }
-    },
-
-    created () {
-
-    },
-
-    mounted () {
-
-      this.setNames();
+    beforeDestroy() {
+      this.RESET_MODULE();
     },
 
     computed: {
-      ...mapState('newsFeed',
+      ...mapState('posts',
         [
-        'names',
+          'posts',
+          'morePosts',
+          'postsLoaded'
+
+        ]
+      ),
+      ...mapGetters('user',
+        [
+          'getUserId',
+          'getProfilePic'
         ]
       ),
     },
 
     methods: {
 
-
-      ...mapActions('newsFeed',
+      ...mapMutations('posts',
         [
-          'GET_NAMES',
+          'RESET_MODULE'
         ]
       ),
+      ...mapActions('posts',
+        [
+          'NEWSFEED_POSTS'
+        ]
+      ),
+      async loadNewsfeedPosts () {
 
-      async setNames () {
-
-        await this.GET_NAMES();
+        await this.NEWSFEED_POSTS();
       },
-
-
-
-
+      async refillNewsfeedPosts() {
+        await this.NEWSFEED_POSTS();
+    },
     },
   }
 
 </script>
 
 <style lang="scss">
+  .newsfeed_parent_container {
+    box-sizing: border-box;
+  }
 
+  .newsfeed_flex_container {
+    box-sizing: border-box;
+    padding:0.5rem;
+    border: 1px solid green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
+  @media (max-width:600px) {
+    .newsfeed_flex_container {
+      flex-direction: column;
+    }
+  }
 </style>
 
 

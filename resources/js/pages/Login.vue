@@ -72,7 +72,9 @@
       ...mapGetters('user',
         [
           'getToken',
-          'getUserId'
+          'getUserId',
+          'getUserSlug',
+          'getProfileStatus',
         ]
       ),
     },
@@ -151,9 +153,13 @@
           this.trackUserStatus();
           this.initNotificationChannel();
           this.RESET_LOGIN_MODULE();
-          this.$router.push({ name: 'Home' });
-          await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: ['App/Notifications/UnreadMessage', 'App/Notifications/Interaction'] });
 
+          if (this.getProfileStatus) {
+              this.$router.push({ name: 'NewsFeed', params: {slug: this.getUserSlug}});
+          } else {
+              this.$router.push({ name: 'Home' });
+          }
+          await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: ['App/Notifications/UnreadMessage', 'App/Notifications/Interaction'] });
         }
       },
 

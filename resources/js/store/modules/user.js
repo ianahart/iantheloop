@@ -29,6 +29,12 @@ const user = {
       }
     },
 
+    getUserSlug(state) {
+      if (state.jwtToken) {
+        return JSON.parse(state.jwtToken).slug;
+      }
+    },
+
     getProfileStatus (state) {
 
       if (state.jwtToken) {

@@ -29,10 +29,21 @@ class Post extends Model
         'author_user_id' => 'integer',
     ];
 
+    public function personalPosts()
+    {
+        return 'hi';
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'subject_user_id');
     }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_user_id');
+    }
+
 
     public function postLikes()
     {

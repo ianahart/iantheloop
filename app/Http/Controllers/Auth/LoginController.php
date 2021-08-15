@@ -170,6 +170,7 @@ class LoginController extends Controller
                 'name' => $user->full_name,
                 'status' => $this->userStatus,
                 'is_logged_in' => $this->authStatus,
+                'slug' => $user->slug
             ]
         );
     }

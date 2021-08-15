@@ -561,7 +561,7 @@ class ProfileController extends Controller
                     );
             }
         } catch (Exception $e) {
-            error_log(print_r($e->getMessage(), true));
+
             return response()
                 ->json(
                     [

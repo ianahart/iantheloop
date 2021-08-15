@@ -16,11 +16,21 @@ const authenticatedNotAuthorized = [
   'ProfileEdit',
   'Explore',
   'Following',
-  'Followers'
+  'Followers',
+  'NewsFeed'
 ];
 
 router.beforeEach((to, from, next) => {
 
+  /*
+  *
+  * Only allow the user logged in to view only their newsfeed
+  **/
+    if (to.name === 'NewsFeed' && to.params.slug !== store.getters['user/getUserSlug']) {
+      next({ path: '/' })
+    } else {
+      next();
+    }
 
   /*
   *

@@ -3722,6 +3722,7 @@ div.about_profile_work__row p {
 .profile__dropdown__link span, .profile__dropdown__link a {
   color: #fcfcfc;
   font-size: 0.85rem;
+  padding-left: 0.1rem;
 }
 #statusToggle {
   border-radius: 5px;
@@ -4355,6 +4356,15 @@ div.about_profile_work__row p {
   height: 200px;
   border-radius: 8px;
 }
+.post_subject_name {
+  display: flex;
+  align-items: center;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
 .post_options_dots__container {
   position: relative;
 }
@@ -4440,12 +4450,67 @@ div.about_profile_work__row p {
 .post__container {
     width: 100%;
 }
+.post_body__text {
+    font-size: 0.7rem;
+}
+.post__names p {
+    font-size: 0.65rem;
+}
+.post__names svg {
+    width: 14px;
+    height: 14px;
+}
+.post_subject_name {
+    font-size: 0.65rem;
+}
 }
 .profile_posts__container {
   box-sizing: border-box;
   padding: 0.5rem;
   width: 100%;
   margin-top: 2rem;
+}
+.feed_main_container {
+  box-sizing: border-box;
+  border: 1px solid blue;
+  flex-grow: 2;
+  max-width: 900px;
+}
+@media (max-width: 600px) {
+.feed_main_container {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 100%;
+}
+}
+.newsfeed_sidebar_container {
+  box-sizing: border-box;
+  border: 1px solid red;
+  flex-grow: 1;
+  max-width: 280px;
+}
+@media (max-width: 600px) {
+.newsfeed_sidebar_container {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 100%;
+}
+}
+.newsfeed_parent_container {
+  box-sizing: border-box;
+}
+.newsfeed_flex_container {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media (max-width: 600px) {
+.newsfeed_flex_container {
+    flex-direction: column;
+}
 }
 .profile_wall_settings_container {
   margin: 0 auto;

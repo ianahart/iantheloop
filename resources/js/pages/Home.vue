@@ -1,7 +1,6 @@
 <template>
     <div class="home__container">
-        <h1>HOME PAGE</h1>
-        <router-link :to="{ name: 'NewsFeed' }">News feed</router-link>
+
     </div>
 </template>
 

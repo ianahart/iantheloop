@@ -16,7 +16,7 @@
       :subjectUserId="baseProfile.user_id"
       :currentUserProfilePic="currentUserProfilePic"
       @loadsubsequent="loadMore"
-      @loadinitial="loadPosts"
+
      />
    </div>
    <div class="restrict_profile_wall" v-else>
@@ -53,16 +53,16 @@
       currentUserProfilePic: String,
     },
 
-    beforeDestroy () {
-      this.RESET_MODULE();
+    async mounted() {
+      await this.loadPosts();
+    },
+
+    computed: {
+      ...mapState('posts',
+        ['postsLoaded']),
     },
 
     methods: {
-      ...mapMutations('posts',
-        [
-          'RESET_MODULE'
-        ]
-      ),
 
       ...mapActions('posts',
         [
@@ -72,18 +72,15 @@
 
        async loadMore () {
         try {
-
           await this.LOAD_POSTS(this.baseProfile.user_id);
         } catch(e) {
 
         }
       },
 
-      async loadPosts (subjectUserId) {
-
+      async loadPosts () {
         try {
-
-          await this.LOAD_POSTS(subjectUserId);
+          await this.LOAD_POSTS(this.baseProfile.user_id);
         } catch (e) {
 
         }
@@ -98,7 +95,6 @@
 
 .profile_wall__container {
   box-sizing: border-box;
-  // border: 1px solid blue;
   margin: 2rem auto 3rem auto;
   display: flex;
   justify-content: center;

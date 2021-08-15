@@ -58,6 +58,7 @@ export default {
 
     watch: {
         "$route.params.id": function() {
+
             this.RESET_MODULE();
             this.fetchBaseProfileData(this.$route.params.id);
         },

@@ -108,10 +108,6 @@ class refreshTokenController extends Controller
 
         $userStatus->updateStatus(true, 'online');
 
-        // $exception = $userStatus->getException();
-
-        // if (!$exception) {
-
         return json_encode(
             [
                 'iss' => 'jwt-auth',
@@ -125,8 +121,8 @@ class refreshTokenController extends Controller
                 'name' => JWTAuth::user()->full_name,
                 'is_logged_in' => true,
                 'status' => 'online',
+                'slug' => JWTAuth::user()->slug,
             ]
         );
-        // }
     }
 }

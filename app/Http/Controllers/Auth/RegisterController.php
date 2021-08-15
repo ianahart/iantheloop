@@ -8,6 +8,8 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 
 
@@ -24,7 +26,7 @@ class RegisterController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        
+
         $isValidated = false;
 
         $validated = $request->validated();
@@ -61,6 +63,10 @@ class RegisterController extends Controller
 
         if ($isValidated) {
 
+            $user->save();
+            $user->refresh();
+
+            $user->slug = Str::slug($user->first_name . ' ' . $user->last_name . ' ' . $user->id, '-');
             $user->save();
 
             return response()->json(

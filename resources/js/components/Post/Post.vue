@@ -1,5 +1,5 @@
 <template>
-    <div :data-id="post.id" ref="post" class="post__container">
+    <div v-if="postsLoaded" :data-id="post.id" ref="post" class="post__container">
         <FlaggedOptions
             :post="post"
             @flagpost="handleFlagPost"
@@ -26,10 +26,12 @@
                                 }
                             }"
                         >
-                            <p>{{ post.full_name }}</p>
+                        <p>{{ post.full_name }}</p>
                         </router-link>
-                        <PlaySolidIcon className="icon__xsm__dark" />
-                        <p>{{ post.subject_name }}</p>
+                        <div v-if="postsOrigin.toLowerCase() === 'profile'" class="post_subject_name">
+                            <PlaySolidIcon className="icon__xsm__dark" />
+                            <p>{{ post.subject_name }}</p>
+                        </div>
                     </div>
                     <div class="posted__date">
                         <p>{{ post.post_posted }}</p>
@@ -168,6 +170,7 @@ export default {
         post: Object,
         observer: IntersectionObserver,
         currentUserProfilePic: String,
+        postsOrigin: String,
     },
 
     components: {
@@ -196,14 +199,15 @@ export default {
     },
 
     mounted() {
+
         this.$refs.post.addEventListener("click", this.closeOptionsFallback);
         this.$nextTick(() => {
-       if (this.lastPostItem === this.post.id) {
-
-            this.observer.observe(this.$refs.post);
-        }
+            if (this.lastPostItem === this.post.id) {
+                if (this.$refs.post) {
+                    this.observer.observe(this.$refs.post);
+                }
+            }
         });
-
     },
 
     watch: {
@@ -227,6 +231,7 @@ export default {
                 'alreadyFlaggedError',
                 'flagPostFinished',
                 'commentsLoaded',
+                'postsLoaded'
             ]
         ),
 
@@ -494,6 +499,17 @@ export default {
     border-radius: 8px;
 }
 
+.post_subject_name {
+    display:flex;
+    align-items: center;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
 .post_options_dots__container {
     position: relative;
 }
@@ -591,6 +607,21 @@ export default {
 @media (max-width: 600px) {
     .post__container {
         width: 100%;
+    }
+    .post_body__text {
+        font-size: 0.7rem;
+    }
+    .post__names {
+        p {
+            font-size: 0.65rem;
+        }
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+    .post_subject_name {
+        font-size: 0.65rem;
     }
 }
 </style>

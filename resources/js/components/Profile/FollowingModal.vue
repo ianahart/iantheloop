@@ -64,7 +64,7 @@ export default {
 
     ...mapMutations("profile", ["CLOSE_MODAL"]),
 
-    ...mapMutations("profileWall", ["RESET_MODULE"]),
+    ...mapMutations("posts", ["RESET_MODULE"]),
 
     closeModal(e) {
       const modalRef = this.$refs.modal;

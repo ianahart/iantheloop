@@ -5,6 +5,7 @@ import { getElementIndex } from '../../helpers/moduleHelpers.js';
 const initialState = () => {
 
   return {
+    postsOrigin: null,
     postsLoaded: false,
     modalIsOpen: false,
     responseError: false,
@@ -48,7 +49,7 @@ const posts = {
   getters: {
 
     unselectedFlaggedOptions (state) {
-         return state.flaggedOptions.filter((flaggedOption) => !flaggedOption.selected);
+      return state.flaggedOptions.filter((flaggedOption) => !flaggedOption.selected);
     },
 
     selectedFlaggedOptions (state) {
@@ -58,6 +59,14 @@ const posts = {
 
   mutations: {
 
+    SET_POSTS_ORIGIN(state, payload) {
+      state.postsOrigin = payload;
+    },
+
+    SET_LAST_POST_ITEM(state, payload) {
+      state.lastPostItem = payload;
+    },
+
     SET_FLAGGED_OPTION: (state, payload) => {
        const index = getElementIndex(state.flaggedOptions, 'id', payload.option.id);
        state.flaggedOptions[index].selected = payload.action === 'selected' ? true : false;
@@ -65,7 +74,6 @@ const posts = {
 
     SET_POSTS: (state, payload) => {
       if (payload.posts !== null && payload.more_records) {
-
         state.posts.push(...payload.posts);
         state.lastPostItem = payload.last_post_item;
         state.morePosts = true;
@@ -442,6 +450,7 @@ const posts = {
             commit('SET_INITIAL_FILTER', false);
           }
           commit('SET_POSTS_LOADED', true);
+          commit('SET_POSTS_ORIGIN', 'profile');
           commit('SET_POSTS', response.data);
 
       } catch(e){
@@ -744,6 +753,32 @@ const posts = {
       // console.log(e.response);
     }
   },
+
+  async NEWSFEED_POSTS({ state, rootGetters, commit }) {
+    try {
+        const response = await axios(
+          {
+            method: 'GET',
+            url: `/api/auth/newsfeed/${rootGetters['user/getUserSlug']}/show?subjectId=${rootGetters['user/getUserId']}&lastPost=${state.lastPostItem}`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+       console.log('action: @NEWSFEED_POSTS Success: ', response);
+
+      if (response.status === 200) {
+          commit('SET_POSTS_ORIGIN', 'newsfeed');
+          commit('SET_POSTS', response.data);
+          commit('SET_POSTS_LOADED', true);
+      }
+    } catch(e) {
+       console.log('action: @NEWSFEED_POSTS Error: ', e.response);
+
+    }
+  }
  }
 };
 
