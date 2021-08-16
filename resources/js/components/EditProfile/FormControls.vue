@@ -69,7 +69,7 @@
 
       clearProfile () {
         this.CLEAR_FORM();
-        console.log('FormControls.vue: profile cleared');
+
       },
     }
   }

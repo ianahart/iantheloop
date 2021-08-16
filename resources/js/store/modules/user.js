@@ -1,4 +1,5 @@
 import axios from "axios";
+import { decodeToken } from "../../helpers/moduleHelpers";
 
 
 const initialState = () => {
@@ -8,6 +9,7 @@ const initialState = () => {
     jwtToken: localStorage.getItem('user'),
     statusToggledBtn: null,
     statusError: '',
+    status: 'offline',
     status: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).status : 'online',
     isUserLoggedIn: false,
   }
@@ -22,60 +24,52 @@ const user = {
   getters: {
 
     getToken (state)  {
-
       if (state.jwtToken) {
-
         return JSON.parse(state.jwtToken).access_token;
       }
     },
 
     getUserSlug(state) {
       if (state.jwtToken) {
-        return JSON.parse(state.jwtToken).slug;
+        const base64 = decodeToken(state.jwtToken);
+        return JSON.parse(window.atob(base64)).slug;
       }
     },
 
     getProfileStatus (state) {
 
       if (state.jwtToken) {
-
         return JSON.parse(state.jwtToken).profile_created;
+
       }
     },
        getUserId (state) {
 
       if (state.jwtToken) {
-
-        return JSON.parse(state.jwtToken).user_id;
+        const base64 = decodeToken(state.jwtToken);
+        return JSON.parse(window.atob(base64)).user_id;
       }
     },
 
-        getProfilePic (state) {
-
+    getProfilePic (state) {
       if (state.jwtToken) {
-
         return JSON.parse(state.jwtToken).profile_pic;
       }
     },
 
     userName (state) {
-
       if (state.jwtToken) {
-
-        return JSON.parse(state.jwtToken).name;
+        const base64 = decodeToken(state.jwtToken);
+        return JSON.parse(window.atob(base64)).name;
       }
     },
 
-    isLoggedIn (state) {
-
+    isLoggedIn (state) {1
       return !!state.jwtToken;
     },
 
     getStatus(state) {
-
        if (state.jwtToken) {
-
-
         return state.status;
       }
     }
@@ -119,6 +113,7 @@ const user = {
     },
 
     SYNC_NEW_STATUS: (state, payload) => {
+
       const user = JSON.parse(localStorage.getItem('user'));
 
       user.status = payload.new_user_status;

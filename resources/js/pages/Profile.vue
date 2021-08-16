@@ -101,6 +101,8 @@ export default {
             [
               'getProfilePic',
               'getToken',
+              'getUserId',
+              'userName',
             ]
         ),
 
@@ -140,7 +142,7 @@ export default {
         async fetchBaseProfileData(profileId) {
 
             await this.FETCH_BASE_PROFILE_DATA(profileId);
-            let currentUserFullname =  JSON.parse(localStorage.getItem('user'))?.name;
+            let currentUserFullname =  this.userName;
             this.CURRENT_USER_NAME(currentUserFullname);
             this.setInitialPostInputText();
         },

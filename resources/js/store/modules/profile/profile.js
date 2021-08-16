@@ -86,13 +86,11 @@ const profile = {
       state.currUserFollowing = payload.currUserFollowing;
     },
 
-    SET_BASE_PROFILE_DATA: (state, { profile, currUserHasRequested }) => {
+    SET_BASE_PROFILE_DATA: (state,{ profile, currUserHasRequested, currentUserId }) => {
 
       state.baseProfileData = profile;
       state.followStatus = currUserHasRequested ? 'Requested' : '';
-
-      state.currentUserId = JSON.parse(localStorage.getItem('user')).user_id;
-
+      state.currentUserId = currentUserId;
       const routes = [
         { name: 'Profile', text: 'Profile', id: 0, params: { id: state.baseProfileData.user_id } },
         { name: 'ProfileAbout', text: 'About', id: 1, params: { profileId: state.baseProfileData.id } },
@@ -147,7 +145,7 @@ const profile = {
       }
     },
 
-    async FETCH_BASE_PROFILE_DATA({ commit }, payload) {
+    async FETCH_BASE_PROFILE_DATA({ rootGetters, commit }, payload) {
 
       try {
 
@@ -164,7 +162,8 @@ const profile = {
         commit('SET_BASE_PROFILE_DATA',
           {
             profile: response.data.profile,
-            currUserHasRequested: response.data.currUserHasRequested
+            currUserHasRequested: response.data.currUserHasRequested,
+            currentUserId: rootGetters['user/getUserId'],
           });
 
       } catch (e) {

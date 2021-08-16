@@ -23,6 +23,7 @@
       <CommentOptions
         @delete="deleteComment"
         :comment="postComment"
+        :postAuthorUserId="postAuthorUserId"
       />
     </div>
      <div class="xs_spacer_top">
@@ -59,6 +60,7 @@
           :originalComment="postComment.id"
           :currentUserId="getUserId"
           :currentUserName="userName"
+          :postAuthorUserId="postAuthorUserId"
         />
      </div>
      <div v-if="!shouldReplyThreadStart"  class="xs_spacer_top post_reply_comments_wrapper">
@@ -69,6 +71,7 @@
           :originalComment="postComment.id"
           :currentUserId="getUserId"
           :currentUserName="userName"
+          :postAuthorUserId="postAuthorUserId"
         />
      </div>
      <div class="sm_spacer">
@@ -100,6 +103,7 @@
 
     props: {
       postComment: Object,
+      postAuthorUserId: Number,
 
 
     },

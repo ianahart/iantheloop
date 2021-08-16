@@ -1,11 +1,15 @@
 <template>
   <div class="newsfeed_parent_container">
-    <div class="newsfeed_flex_container">
+    <div v-if="posts.length" class="newsfeed_flex_container">
       <Feed
         v-if="postsLoaded && posts.length"
         @refillfeed="refillNewsfeedPosts"
       />
       <Sidebar />
+    </div>
+    <div v-else class="empty_newsfeed_container">
+      <p>Start following people to get your newsfeed up and running!</p>
+      <FriendsIcon />
     </div>
   </div>
 </template>
@@ -15,6 +19,7 @@
   import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 
   import Feed from '../components/NewsFeed/Feed.vue';
+  import FriendsIcon from '../components/Icons/FriendsIcon.vue';
   import Sidebar from '../components/NewsFeed/Sidebar.vue';
 
   export default {
@@ -24,6 +29,7 @@
     components: {
       Feed,
       Sidebar,
+      FriendsIcon,
     },
 
     async mounted() {
@@ -87,6 +93,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .empty_newsfeed_container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+    p {
+      color: gray;
+      text-align: center;
+    }
+
+    svg {
+      height: 100px;
+      width: 100px;
+      color: gray;
+
+    }
   }
 
   @media (max-width:600px) {

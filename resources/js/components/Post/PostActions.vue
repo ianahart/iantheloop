@@ -5,7 +5,7 @@
   >
     <div
       @click="openFlagModal"
-      v-if="currentUserId !== authorUserId && currentUserId !== subjectUserId"
+      v-if="getUserId !== authorUserId && getUserId !== subjectUserId"
       class="post_user_actions_flag"
     >
       <FlagSolidIcon
@@ -14,8 +14,8 @@
       <p>Flag Post</p>
     </div>
     <div
-      @click="deletePost(postId, currentUserId)"
-      v-if="currentUserId === authorUserId || currentUserId === subjectUserId"
+      @click="deletePost(postId, getUserId)"
+      v-if="getUserId === authorUserId || getUserId === subjectUserId"
       class="post_user_actions_delete"
     >
       <div class="post_user_actions_empty_icon"></div>
@@ -26,7 +26,7 @@
 
 <script>
 
-  import { mapState, mapMutations, mapActions } from 'vuex';
+  import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
 
   import FlagSolidIcon from '../Icons/FlagSolidIcon.vue';
 
@@ -53,12 +53,20 @@
           'responseError'
         ]
       ),
-
-      ...mapState('profile',
+      ...mapGetters('user',
         [
-          'currentUserId'
+          'getUserId'
         ]
       ),
+      // ...mapState('profile',
+      //   [
+      //     'currentUserId'
+      //   ]
+      // ),
+    },
+
+    mounted() {
+
     },
 
     methods: {

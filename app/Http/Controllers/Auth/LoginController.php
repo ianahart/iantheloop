@@ -14,9 +14,6 @@ use App\Helpers\Status;
 use App\Helpers\LoginThrottle;
 use Exception;
 
-
-
-
 class LoginController extends Controller
 {
 
@@ -67,7 +64,6 @@ class LoginController extends Controller
                 $TLL = 60;
 
                 $payload = JWTAuth::attempt($request->form);
-
 
                 $this->updateStatus();
 
@@ -154,24 +150,12 @@ class LoginController extends Controller
      */
     protected function createNewToken(string $payload, int $TLL, object $user)
     {
-
         $profile_pic = $this->getProfilePic();
-
-        return json_encode(
-            [
-                'iss' => 'jwt-auth',
-                'access_token' => $payload,
-                'token_type' => 'bearer',
-                'iat' => time(),
-                'exp' => time() + $TLL * 60,
-                'user_id' => JWTAuth::user()->id,
-                'profile_created' => JWTAuth::user()->profile_created,
-                'profile_pic' => $profile_pic ?? '',
-                'name' => $user->full_name,
-                'status' => $this->userStatus,
-                'is_logged_in' => $this->authStatus,
-                'slug' => $user->slug
-            ]
-        );
+        return json_encode([
+            'access_token' => $payload,
+            'profile_pic' => $profile_pic ?? '',
+            'profile_created' => JWTAuth::user()->profile_created,
+            'status' => 'online',
+        ]);
     }
 }

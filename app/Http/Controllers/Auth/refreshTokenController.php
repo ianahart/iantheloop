@@ -107,22 +107,11 @@ class refreshTokenController extends Controller
         $userStatus = new Status(JWTAuth::user()->id);
 
         $userStatus->updateStatus(true, 'online');
-
-        return json_encode(
-            [
-                'iss' => 'jwt-auth',
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'iat' => time(),
-                'exp' => time() + $TLL * 60,
-                'user_id' => JWTAuth::user()->id,
-                'profile_created' => JWTAuth::user()->profile_created,
-                'profile_pic' => $profile_pic ?? '',
-                'name' => JWTAuth::user()->full_name,
-                'is_logged_in' => true,
-                'status' => 'online',
-                'slug' => JWTAuth::user()->slug,
-            ]
-        );
+        return json_encode([
+            'access_token' => $token,
+            'profile_pic' => $profile_pic ?? '',
+            'profile_created' => JWTAuth::user()->profile_created,
+            'status' => 'online',
+        ]);
     }
 }

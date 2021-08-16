@@ -1662,6 +1662,7 @@ body {
 .identity__radio_btns div {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 .identity_label__container {
   display: flex;
@@ -4483,6 +4484,11 @@ div.about_profile_work__row p {
     max-width: 100%;
 }
 }
+.friends__icon {
+  width: 25px;
+  height: 25px;
+  color: #fcfcfc;
+}
 .newsfeed_sidebar_container {
   box-sizing: border-box;
   border: 1px solid red;
@@ -4506,6 +4512,23 @@ div.about_profile_work__row p {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.empty_newsfeed_container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem;
+}
+.empty_newsfeed_container p {
+  color: gray;
+  text-align: center;
+}
+.empty_newsfeed_container svg {
+  height: 100px;
+  width: 100px;
+  color: gray;
 }
 @media (max-width: 600px) {
 .newsfeed_flex_container {

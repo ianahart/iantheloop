@@ -4,6 +4,7 @@
       v-for="post_comment in post.post_comments"
       :key="post_comment.id"
       :postComment="post_comment"
+      :postAuthorUserId="post.author_user_id"
     />
   </div>
 </template>

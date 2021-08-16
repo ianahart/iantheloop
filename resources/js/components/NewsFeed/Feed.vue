@@ -2,7 +2,7 @@
   <div v-if="postsLoaded" class="feed_main_container">
     <h3>Feed Container</h3>
     <Posts
-      :subjectUserId="getUserId.toString()"
+      :subjectUserId="userId"
       :currentUserProfilePic="getProfilePic"
       @loadsubsequent="emitRefill"
     />
@@ -29,6 +29,12 @@
     },
 
     computed: {
+      userId() {
+        if (this.getUserId) {
+          return this.getUserId.toString();
+        }
+      },
+
       ...mapGetters('user',
         [
           'getUserId',

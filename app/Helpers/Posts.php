@@ -501,7 +501,13 @@ class Posts
 
       $newsfeedPosts = [];
       $currentUser = $this->user->where('slug', '=', $slug)->first();
+
+      if (is_null($currentUser->stat->following)) {
+        throw new ModelNotFoundException('all records fetched');
+      }
+
       $followingIds = array_keys($currentUser->stat->following);
+
       $followingIds[] = $currentUser->id;
 
       $baseQuery = $this->post

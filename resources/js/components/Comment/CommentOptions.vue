@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="getUserId === comment.user_id || getUserId === getProfileOwner"
+    v-if="getUserId === comment.user_id || getUserId === getProfileOwner || getUserId === postAuthorUserId && postsOrigin ===  'newsfeed'"
     @click="togglePopup"
     class="comment_options_container"
   >
@@ -24,11 +24,7 @@
 </template>
 
 <script>
-
-  //delete
-  // if you are the one who wrote the comment or the comment is on you wall you can delete
-
-  import { mapGetters } from 'vuex';
+  import { mapsState, mapGetters, mapState } from 'vuex';
 
   import HorizontalDotsIcon from '../Icons/HorizontalDotsIcon.vue';
 
@@ -38,6 +34,7 @@
 
     props: {
       comment: Object,
+      postAuthorUserId: Number,
     },
 
     components: {
@@ -45,16 +42,19 @@
     },
 
     computed: {
-
+      ...mapState('posts',
+        [
+          'postsOrigin'
+        ]
+      ),
       ...mapGetters('profile',
         [
           'getProfileOwner'
         ]
       ),
-
       ...mapGetters('user',
         [
-          'getUserId'
+          'getUserId',
         ]
       ),
     },
@@ -64,7 +64,6 @@
         commentOptionsOpen: false,
       }
     },
-
     mounted() {
       window.addEventListener('click', this.clickAway);
     },

@@ -28,6 +28,8 @@
         <CommentOptions
           :comment="replyComment"
           @delete="deleteReplyComment"
+          :postAuthorUserId="postAuthorUserId"
+
         />
       </div>
     </div>
@@ -61,6 +63,7 @@
       currentUserId: Number,
       originalComment: Number,
       currentUserName: String,
+      postAuthorUserId: Number,
     },
 
     components: {

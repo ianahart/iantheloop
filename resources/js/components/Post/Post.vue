@@ -120,6 +120,7 @@
                 <p class="toggle_comments_btn" @click="toggleComments">View more comments...</p>
                 <Comment
                   :postComment="previewComment"
+                  :postAuthorUserId="post.author_user_id"
                 />
             </div>
             <Comments

@@ -195,3 +195,8 @@ export function getElementIndex(container, elementProp, target) {
 
      return container.findIndex(element => element[elementProp] === target );
 }
+
+export function decodeToken(token) {
+   const base64Url = token.split('.')[1];
+   return base64Url.replace('-', '+').replace('_', '/');
+}

@@ -41,17 +41,10 @@ class LoginControllerTest extends TestCase
                 'formSubmitted',
                 'userLoggedIn',
                 "jwt" => [
-                    'iss',
                     'access_token',
-                    'token_type',
-                    'iat',
-                    'exp',
-                    'user_id',
                     'profile_created',
                     'profile_pic',
-                    'name',
                     'status',
-                    'is_logged_in',
                 ]
             ]
         );
@@ -68,11 +61,8 @@ class LoginControllerTest extends TestCase
                 $assertions[$key] = $value;
             }
         }
-
-        $this->assertTrue($assertions['is_logged_in']);
         $this->assertAuthenticated('api');
         $this->assertSame('online', $assertions['status']);
-        $this->assertSame('jwt-auth', $assertions['iss']);
     }
 
     /** @test */

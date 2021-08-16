@@ -447,7 +447,7 @@ const profileEdit = {
       }
     },
 
-    async UPDATE_PROFILE ({commit, state, getters }) {
+    async UPDATE_PROFILE ({commit, rootGetters, state, getters }) {
 
       try {
 
@@ -499,7 +499,7 @@ const profileEdit = {
         parsedUser.profile_pic = response.data.profile_pic;
         commit('user/SET_TOKEN', JSON.stringify(parsedUser), { root: true });
 
-        commit('SET_IS_UPDATED', {isUpdated:response.data.isUpdated, user_id: parsedUser.user_id});
+        commit('SET_IS_UPDATED', {isUpdated:response.data.isUpdated, user_id: rootGetters['user/getUserId']});
       } catch (e) {
         if (e.response.status === 422) {
 
