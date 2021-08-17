@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-form" appear>
-    <div v-if="modalIsOpen && dataLoaded && activeModal === 'create_post'" class="profile_form__container">
+    <div v-if="modalIsOpen  && activeModal === 'create_post'" :class="`profile_form__container ${formPos}`">
       <header>
         <h3>Create a Post</h3>
         <div @click="closeForm">
@@ -16,7 +16,7 @@
             v-else
             class="default_profile_image_rel_md"
           />
-          <span>{{ currentUserFullName }}</span>
+          <span>{{ baseProfile.current_user_full_name }}</span>
         </div>
         <div v-if="postErrors.length" class="profile_post_errors">
           <p
@@ -39,9 +39,6 @@
           </div>
           <img :src="postInputPhoto.src" alt="user supplied photo for a post" />
         </div>
-
-
-
         <div v-if="postInputVideo.src" class="post_form_video__container">
           <div class="post_form_video__overlay">
             <div @click="removeMedia(postInputVideo.input)">
@@ -113,12 +110,10 @@
       baseProfile: Object,
       currUserFollowing: Boolean,
       currentUserId: Number,
-      viewUserFirstName: String,
       currentUserProfilePic: String,
     },
 
     components: {
-
       CloseSolidIcon,
       DefaultProfileIcon,
       PictureSolidIcon,
@@ -126,31 +121,28 @@
       VideoPlayer,
     },
 
-
     computed: {
-
-
       ...mapState('profile',
         [
           'dataLoaded'
         ]
       ),
-
       ...mapState('posts',
         [
           'modalIsOpen',
           'activeModal',
+          'postsOrigin',
           'postInputText',
-          'currentUserFullName',
-          'currentUserFirstName',
           'postInputPlaceholder',
           'postInputPhoto',
           'postInputVideo',
           'postErrors',
         ]
       ),
+      formPos() {
+        return this.postsOrigin === 'newsfeed' ? 'form_screen_pos_newsfeed' : 'form_screen_pos_profile';
+      },
     },
-
     methods: {
 
       ...mapMutations('posts',
@@ -178,7 +170,7 @@
           {
             baseProfileUserId: this.baseProfile.user_id,
             currentUserId:this.currentUserId,
-            viewUserFirstName: this.viewUserFirstName,
+            viewUserFirstName: this.baseProfile.view_user_first_name,
           }
         );
       },
@@ -308,7 +300,7 @@
 
         } else {
 
-          this.SET_POST_ERROR(`${this.currentUserFirstName}, Please make sure the uploads are correct size and a message is present.`);
+          this.SET_POST_ERROR(`${this.baseProfile.current_user_first_name}, Please make sure the uploads are correct size and a message is present.`);
         }
       },
     },
@@ -324,13 +316,19 @@
   opacity: 0;
 }
 
+.form_screen_pos_profile {
+  top: -350px;
+}
+.form_screen_pos_newsfeed {
+  top:0;
+}
+
 .profile_form__container {
   background-color: lighten($primaryBlack, 1);
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   position: absolute;
   box-sizing: border-box;
   z-index: 16;
-  top: -350px;
   width: 600px;
   border-radius: 8px;
 
@@ -395,8 +393,6 @@
     font-size: 0.9rem;
   }
 }
-
-
 .post_form_separator {
   margin-top: 0.5rem;
   height: 2px;

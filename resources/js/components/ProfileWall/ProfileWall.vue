@@ -1,5 +1,5 @@
 <template>
-  <div ref="profileWallContainer" class="profile_wall__container">
+  <div v-if="dataLoaded" ref="profileWallContainer" class="profile_wall__container">
    <div v-if="parseInt(this.baseProfile.user_id) === this.currentUserId || currUserFollowing" class="profile_wall__inner_container">
      <FormTrigger
       :baseProfile="baseProfile"
@@ -55,11 +55,13 @@
 
     async mounted() {
       await this.loadPosts();
+
     },
 
     computed: {
       ...mapState('posts',
         ['postsLoaded']),
+     ...mapState('profile', ['dataLoaded']),
     },
 
     methods: {

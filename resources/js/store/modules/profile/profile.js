@@ -5,7 +5,7 @@ const initialState = () => {
 
   return {
 
-    baseProfileData: [],
+    baseProfileData: {},
     fetchError: '',
     dataLoaded: false,
     profileNavigation: [],
@@ -33,7 +33,6 @@ const profile = {
     },
 
     getProfileOwner(state) {
-
       return parseInt(state.baseProfileData.user_id);
     },
 
@@ -87,7 +86,6 @@ const profile = {
     },
 
     SET_BASE_PROFILE_DATA: (state,{ profile, currUserHasRequested, currentUserId }) => {
-
       state.baseProfileData = profile;
       state.followStatus = currUserHasRequested ? 'Requested' : '';
       state.currentUserId = currentUserId;
@@ -103,6 +101,10 @@ const profile = {
       });
 
       state.dataLoaded = true;
+    },
+
+    SET_DATA_LOADED(state, payload) {
+      state.dataLoaded = payload;
     },
 
     SET_FETCH_ERROR: (state, payload) => {
@@ -158,13 +160,17 @@ const profile = {
             },
           }
         );
-        commit('SET_PROFILE_STATS', response.data);
-        commit('SET_BASE_PROFILE_DATA',
-          {
-            profile: response.data.profile,
-            currUserHasRequested: response.data.currUserHasRequested,
-            currentUserId: rootGetters['user/getUserId'],
-          });
+
+        if (response.status === 200) {
+          commit('SET_PROFILE_STATS', response.data);
+          commit('SET_BASE_PROFILE_DATA',
+            {
+              profile: response.data.profile,
+              currUserHasRequested: response.data.currUserHasRequested,
+              currentUserId: rootGetters['user/getUserId'],
+            });
+        }
+
 
       } catch (e) {
 

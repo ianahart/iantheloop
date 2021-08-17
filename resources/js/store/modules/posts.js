@@ -162,7 +162,8 @@ const posts = {
     },
 
     SET_INITIAL_POST_INPUT_TEXT: (state, payload) => {
-      const currentUser = `Want to share your thoughts, ${state.currentUserFirstName}?`;
+
+      const currentUser = `Want to share your thoughts, ${payload.currentUserFirstName.substr(0, 1).toUpperCase() + payload.currentUserFirstName.substr(1)}?`;
       const userViewed = `Write something to ${payload.viewUserFirstName}...`;
       state.postInputPlaceholder = parseInt(payload.baseProfileUserId) === payload.currentUserId ? currentUser : userViewed;
     },
@@ -449,9 +450,10 @@ const posts = {
             commit('RESET_POSTS');
             commit('SET_INITIAL_FILTER', false);
           }
-          commit('SET_POSTS_LOADED', true);
           commit('SET_POSTS_ORIGIN', 'profile');
           commit('SET_POSTS', response.data);
+          commit('SET_POSTS_LOADED', true);
+
 
       } catch(e){
         commit('SET_POSTS_LOADED', false);
@@ -766,9 +768,6 @@ const posts = {
             },
           }
         );
-
-       console.log('action: @NEWSFEED_POSTS Success: ', response);
-
       if (response.status === 200) {
           commit('SET_POSTS_ORIGIN', 'newsfeed');
           commit('SET_POSTS', response.data);

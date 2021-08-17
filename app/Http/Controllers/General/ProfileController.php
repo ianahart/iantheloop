@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use App\Models\Profile;
+use App\Helpers\FormattingUtil;
 use App\Helpers\AmazonS3;
 use App\Helpers\Statistics;
 use App\Helpers\FollowRequest;
@@ -90,6 +91,12 @@ class ProfileController extends Controller
             $followRequest->setReceiverUserId($profile['user_id']);
 
             $currentUserHasRequested = $followRequest->checkRequestExists();
+
+            $profile['current_user_full_name'] = FormattingUtil::capitalize(JWTAuth::user()->full_name);
+            $profile['current_user_first_name'] = FormattingUtil::capitalize(JWTAuth::user()->first_name);
+
+            $viewingUser = User::find($id);
+            $profile['view_user_first_name'] = FormattingUtil::capitalize(explode(' ', $viewingUser->full_name)[0]);
 
             return response()->json(
                 [

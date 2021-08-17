@@ -3,14 +3,14 @@
         <Modal />
         <div ref="profile" class="profile_component__wrapper">
             <Header />
-            <ProfileStats />
+            <ProfileStats/>
             <Dashboard />
             <ProfileWall
               :currentUserId="currentUserId"
               :currUserFollowing="currUserFollowing"
               :baseProfile="getBaseProfile"
-              :currentUserFirstName="currentUserFirstName"
-              :viewUserFirstName="viewUserFirstName"
+              :currentUserFirstName="getBaseProfile.current_user_first_name"
+              :viewUserFirstName="getBaseProfile.view_user_first_name"
               :currentUserProfilePic="getProfilePic"
 
             />
@@ -38,10 +38,8 @@ export default {
         Modal,
     },
 
-    async mounted() {
-
-    await this.fetchBaseProfileData(this.$route.params.id);
-
+    async created() {
+        await this.fetchBaseProfileData(this.$route.params.id);
     },
 
     beforeDestroy() {
@@ -58,7 +56,6 @@ export default {
 
     watch: {
         "$route.params.id": function() {
-
             this.RESET_MODULE();
             this.fetchBaseProfileData(this.$route.params.id);
         },
@@ -72,12 +69,6 @@ export default {
     },
 
     computed: {
-
-        viewUserFirstName () {
-
-           return this.getBaseProfile.full_name.split(' ')[0];
-        },
-
 
         linkParam() {
             return this.$route.params.id;
@@ -101,7 +92,6 @@ export default {
             [
               'getProfilePic',
               'getToken',
-              'getUserId',
               'userName',
             ]
         ),
@@ -122,8 +112,6 @@ export default {
 
         ...mapMutations("posts",
             [
-                "CURRENT_USER_NAME",
-                'CURRENT_USER_FIRST_NAME',
                 'SET_INITIAL_POST_INPUT_TEXT',
             ]
         ),
@@ -140,22 +128,19 @@ export default {
         },
 
         async fetchBaseProfileData(profileId) {
-
             await this.FETCH_BASE_PROFILE_DATA(profileId);
-            let currentUserFullname =  this.userName;
-            this.CURRENT_USER_NAME(currentUserFullname);
             this.setInitialPostInputText();
         },
 
           setInitialPostInputText() {
-
-        this.SET_INITIAL_POST_INPUT_TEXT(
-          {
-            baseProfileUserId: this.getBaseProfile.user_id,
-            currentUserId:this.currentUserId,
-            viewUserFirstName: this.viewUserFirstName,
-          }
-        );
+            this.SET_INITIAL_POST_INPUT_TEXT(
+            {
+                baseProfileUserId: this.getBaseProfile.user_id,
+                currentUserId:this.currentUserId,
+                'currentUserFirstName': this.userName.split(' ')[0],
+                viewUserFirstName: this.getBaseProfile.view_user_first_name,
+            }
+            );
       },
     }
 };

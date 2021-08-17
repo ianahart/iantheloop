@@ -50,6 +50,7 @@
     beforeDestroy() {
       this.observer.disconnect();
       clearTimeout(this.debounceID);
+      this.SET_POSTS_LOADED(false);
     },
 
     computed: {
@@ -75,6 +76,7 @@
       ...mapMutations('posts',
         [
           'SET_POST_SEEN',
+          'SET_POSTS_LOADED',
         ]
       ),
 

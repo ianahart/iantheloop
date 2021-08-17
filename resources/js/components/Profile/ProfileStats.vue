@@ -68,6 +68,7 @@
 
       ...mapState('profile',
         [
+          'dataLoaded',
           'currentUserId',
           'profileStats',
           'currUserFollowing',

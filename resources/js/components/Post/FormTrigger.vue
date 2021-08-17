@@ -1,5 +1,5 @@
 <template>
-  <div class="form_trigger__container">
+  <div v-if="postsOrigin === 'newsfeed' || postsOrigin ==='profile'" class="form_trigger__container">
     <section id="top_trigger_form">
       <img v-if="currentUserProfilePic"  :src="currentUserProfilePic" />
       <DefaultProfileIcon
@@ -7,10 +7,10 @@
         className="default_profile_image_rel_md"
       />
       <div @click="launchPostForm">
-        <p v-if="currentUserId === parseInt(baseProfile.user_id)">
-          Want to share your thoughts, {{ currentUserFirstName }}?
+        <p v-if="parseInt(currentUserId) === parseInt(baseProfile.user_id)">
+          Want to share your thoughts, {{ baseProfile.current_user_first_name.substr(0,1).toUpperCase() + baseProfile.current_user_first_name.substr(1).toLowerCase() }}?
         </p>
-        <p v-else>Write something to {{ viewUserFirstName }}...</p>
+        <p v-else>Write something to {{ baseProfile.view_user_first_name }}...</p>
       </div>
     </section>
     <section id="bottom_trigger_form">
@@ -32,14 +32,13 @@
           </div>
           <p>Video</p>
         </div>
-
       </div>
     </section>
     <Form
+     v-if="Object.keys(baseProfile).length"
      :baseProfile="baseProfile"
      :currentUserId="currentUserId"
      :currentUserFirstName="currentUserFirstName"
-     :viewUserFirstName="viewUserFirstName"
      :currentUserProfilePic="currentUserProfilePic"
     />
   </div>
@@ -61,23 +60,22 @@
     props: {
       baseProfile: Object,
       currentUserId: Number,
-      viewUserFirstName: String,
       currentUserProfilePic: String,
     },
-
     components: {
       DefaultProfileIcon,
       PictureSolidIcon,
       Form,
       VideoSolidIcon,
     },
-
     computed: {
       ...mapState('posts',
         [
-          'currentUserFirstName'
+          'currentUserFirstName',
+          'postsOrigin',
         ]
       ),
+     ...mapState('profile',['dataLoaded']),
 
     },
 

@@ -1,5 +1,6 @@
 <template>
   <div class="newsfeed_parent_container">
+    <Modal />
     <div v-if="posts.length" class="newsfeed_flex_container">
       <Feed
         v-if="postsLoaded && posts.length"
@@ -21,6 +22,7 @@
   import Feed from '../components/NewsFeed/Feed.vue';
   import FriendsIcon from '../components/Icons/FriendsIcon.vue';
   import Sidebar from '../components/NewsFeed/Sidebar.vue';
+  import Modal from '../components/ProfileWall/Modal.vue';
 
   export default {
 
@@ -30,6 +32,7 @@
       Feed,
       Sidebar,
       FriendsIcon,
+      Modal,
     },
 
     async mounted() {
@@ -92,7 +95,6 @@
     border: 1px solid green;
     display: flex;
     justify-content: center;
-    align-items: center;
   }
 
   .empty_newsfeed_container {
@@ -117,7 +119,7 @@
 
   @media (max-width:600px) {
     .newsfeed_flex_container {
-      flex-direction: column;
+      flex-direction: column-reverse;
     }
   }
 </style>

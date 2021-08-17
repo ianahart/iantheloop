@@ -16,10 +16,6 @@
 
     name: 'Dashboard',
 
-    props: {
-
-    },
-
     components: {
       ProfileNavigation,
       WorkPreview,
