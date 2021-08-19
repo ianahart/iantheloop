@@ -57,4 +57,9 @@ class Profile extends Model
     {
         return $this->hasOne(Stat::class);
     }
+
+    public function followSuggestion()
+    {
+        return $this->hasOne(FollowSuggestion::class);
+    }
 }

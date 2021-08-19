@@ -41,7 +41,6 @@ export default {
     async created() {
         await this.fetchBaseProfileData(this.$route.params.id);
     },
-
     beforeDestroy() {
         this.clearBaseProfileState();
         this.clearProfileWallState();
@@ -56,6 +55,7 @@ export default {
 
     watch: {
         "$route.params.id": function() {
+            this.RESET_POSTS();
             this.RESET_MODULE();
             this.fetchBaseProfileData(this.$route.params.id);
         },
@@ -113,6 +113,7 @@ export default {
         ...mapMutations("posts",
             [
                 'SET_INITIAL_POST_INPUT_TEXT',
+                'RESET_POSTS',
             ]
         ),
 

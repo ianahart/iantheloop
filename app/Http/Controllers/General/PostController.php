@@ -115,7 +115,6 @@ class PostController extends Controller
             $post->findPosts($request->query('filters'));
 
             if ($post->getException() === 'all records fetched') {
-
                 $moreRecords = false;
             }
 
@@ -129,6 +128,7 @@ class PostController extends Controller
                 $posts = null;
                 $lastPostItem = null;
             }
+
 
             return response()
                 ->json(

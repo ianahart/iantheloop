@@ -4511,6 +4511,13 @@ div.about_profile_work__row p {
   height: 25px;
   color: #fcfcfc;
 }
+.follow_suggestion_container {
+  box-sizing: border-box;
+}
+.follow_suggestions {
+  box-sizing: border-box;
+  border: 1px solid blue;
+}
 .newsfeed_sidebar_container {
   margin: 0.5rem;
   box-sizing: border-box;
@@ -4519,6 +4526,9 @@ div.about_profile_work__row p {
   border: 2px solid red;
   flex-grow: 1;
   max-width: 500px;
+}
+.follow_suggestions_container {
+  box-sizing: border-box;
 }
 @media (max-width: 600px) {
 .newsfeed_sidebar_container {

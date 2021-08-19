@@ -209,6 +209,7 @@ class Posts
             ->paginate(self::PAG_LIMIT);
         }
       }
+
       if ($posts->total() <= 0) {
 
         throw new ModelNotFoundException('all records fetched');

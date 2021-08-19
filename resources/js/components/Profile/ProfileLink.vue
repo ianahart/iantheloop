@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 
   export default {
 
@@ -23,9 +24,6 @@
       text: String,
       params: Object,
     },
-
-    mounted() {
-    }
   }
 </script>
 

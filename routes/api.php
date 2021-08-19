@@ -23,6 +23,7 @@ use App\Http\Controllers\General\CommentLikeController;
 use App\Http\Controllers\General\FollowRequestController;
 use App\Http\Controllers\General\MessengerController;
 use App\Http\Controllers\General\NotificationController;
+use App\Http\Controllers\General\FollowSuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,3 +87,4 @@ Route::get('/auth/user/notifications/alerts/{userId}/show', [NotificationControl
 Route::get('/auth/user/notifications/interactions/{userId}/show', [NotificationController::class, 'showInteractionNotifications'])->middleware('auth:api');
 Route::delete('/auth/user/notifications/interactions/{notificationId}/delete', [NotificationController::class, 'deleteInteractionNotification'])->middleware('auth:api');
 Route::get('/auth/newsfeed/{slug}/show', [NewsFeedController::class, 'show'])->middleware('auth:api');
+Route::get('/auth/follow-suggestions/{userId}/show', [FollowSuggestionController::class, 'show'])->middleware('auth:api');

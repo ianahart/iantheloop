@@ -1,12 +1,19 @@
 <template>
   <div class="newsfeed_sidebar_container">
     <h3>Sidebar Container</h3>
+    <div class="follow_suggestions_container">
+      <FollowSuggestions
+        @refill="refillSuggestions"
+        :followSuggestions="followSuggestions"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import FollowSuggestions from './FollowSuggestions.vue';
 
   export default {
     name: 'Sidebar',
@@ -14,28 +21,60 @@
 
     },
     components: {
-
+      FollowSuggestions,
     },
     data () {
       return {
-
+        debounceID: '',
       }
     },
-    mounted() {
-
+    async created() {
+      await this.retrieveFollowSuggestions();
     },
     beforeDestroy() {
-
+      this.RESET_NEWSFEED_MODULE();
+      clearTimeout(this.debounceID);
     },
     computed: {
-
+      ...mapState('newsFeed',
+        [
+          'followSuggestions'
+        ]
+      ),
     },
     methods: {
+      ...mapMutations('newsFeed',
+        [
+          'RESET_NEWSFEED_MODULE',
+        ]
+      ),
+      ...mapActions('newsFeed',
+        [
+          'RETRIEVE_FOLLOW_SUGGESTIONS'
+        ]
+      ),
+      async retrieveFollowSuggestions() {
+        await this.RETRIEVE_FOLLOW_SUGGESTIONS();
+      },
+      async refillSuggestions() {
+        this.debounce(async () => {
+          await this.RETRIEVE_FOLLOW_SUGGESTIONS();
+        }, 300);
 
+      },
+      debounce(fn, delay = 400) {
+        return ((...args) => {
+            clearTimeout(this.debounceID);
+
+            this.debounceID = setTimeout(() => {
+                this.debounceID = null;
+
+                fn(...args);
+            }, delay);
+        })();
+      },
     },
   }
-
-
 </script>
 
 <style lang="scss">
@@ -48,6 +87,9 @@
     flex-grow: 1;
     max-width: 500px;
   }
+  .follow_suggestions_container {
+    box-sizing: border-box;
+  }
 
   @media (max-width:600px) {
     .newsfeed_sidebar_container {
@@ -57,5 +99,4 @@
       margin: 0;
     }
   }
-
 </style>
