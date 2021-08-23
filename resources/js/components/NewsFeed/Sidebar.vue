@@ -1,6 +1,5 @@
 <template>
   <div class="newsfeed_sidebar_container">
-    <h3>Sidebar Container</h3>
     <div class="follow_suggestions_container">
       <FollowSuggestions
         @refill="refillSuggestions"
@@ -83,7 +82,6 @@
     box-sizing: border-box;
     border-radius: 0.25rem;
     background-color: #3b3b441f;
-    border: 2px solid red;
     flex-grow: 1;
     max-width: 500px;
   }

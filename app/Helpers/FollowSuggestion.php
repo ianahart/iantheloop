@@ -11,7 +11,8 @@ use Exception;
 class FollowSuggestion
 {
 
-  const PAG_LIMIT = 3;
+  const PAG_LIMIT = 2;
+  const CHUNK_SIZE = 40;
 
   private ?int $total;
   private int $userId;
@@ -97,7 +98,6 @@ class FollowSuggestion
         )
         ->paginate(2);
 
-
       $this->total = $followSuggestions->total();
 
       if ($this->total === 0) {
@@ -115,53 +115,67 @@ class FollowSuggestion
   public function aggregate()
   {
     try {
+
       $currentUser = User::find($this->userId);
       $followingIDs = array_keys($currentUser->stat->following);
 
-      // get current users following (paginate eventually)
-      // paginate
-      $users = User::whereIn('id', $followingIDs)->with(['stat'])->get();
+      $currentUserFollowing = collect([]);
 
-      $prospects = [];
+      User::whereIn('id', $followingIDs)->whereHas('stat', function ($query) {
+        $query->whereNotNull('following');
+      })
+        ->chunkById(self::CHUNK_SIZE, function ($users) use ($currentUserFollowing) {
+          foreach ($users as $user) {
 
-      foreach ($users as $key => $user) {
-        if (!is_null($user->stat->following)) {
-          // $prospectFollowing represents a single user's following list
-          // paginate
-          $prospectFollowing = User::whereIn('id', array_keys($user->stat->following))
-            ->with(
-              [
-                'stat' => function ($query) {
-                  $query->select(
-                    [
-                      'user_id',
-                      'following'
-                    ]
-                  );
-                }
-              ]
-            )->get();
-          array_push($prospects, ...$prospectFollowing);
-        }
-      }
+            if (!is_null($user->stat->following) && $currentUserFollowing->count() <= 20) {
 
-      // return only if the prospect is not already in the current user's following list
-      $prospects = collect($prospects)->unique()->map(function ($prospect, $key) use ($followingIDs) {
+              $currentUserFollowing->push($user);
+            } else {
+              return false;
+            }
+          }
+        });
 
-        if ($prospect->id === $this->userId) {
-          return;
-        }
+      $prospects = collect([]);
+      $prospectIDs = $currentUserFollowing
+        ->flatten()
+        ->pluck('stat.following')
+        ->flatten(1)
+        ->pluck('id')
+        ->unique()
+        ->values();
 
-        if (
-          !in_array($prospect->id, $followingIDs) &&
-          $prospect->stat->following !== null &&
-          count(array_intersect($followingIDs, array_keys($prospect->stat->following))) > 0
-        ) {
-          return $prospect;
-        }
-      });
+      User::join('stats', 'users.id', '=', 'stats.user_id')->select(
+        [
+          'users.id',
+          'users.full_name',
+          'stats.following'
+        ]
+      )
+        ->whereIn('users.id', $prospectIDs)
+        ->whereNotIn('users.id', array_merge($followingIDs, [$this->userId]))
+        ->whereNotNull('stats.following')
+        ->chunkById(
+          self::CHUNK_SIZE,
+          function ($users) use ($followingIDs, $prospects) {
 
-      $prospects = $prospects->filter();
+            foreach ($users as $user) {
+
+              $mutualCount = count(array_intersect($followingIDs, array_keys($user->stat->following)));
+
+              if ($mutualCount > 0 && $prospects->count() <= 15) {
+
+                $prospect = $this->packageProspect($user, $mutualCount);
+                $prospects->push($prospect);
+
+                unset($user->stat);
+                unset($user->profile);
+              } else {
+                return false;
+              }
+            }
+          }
+        );
 
       $this->createRecords($prospects,  $followingIDs);
     } catch (Exception $e) {
@@ -171,34 +185,37 @@ class FollowSuggestion
   }
 
   /*
-  *Create records for each follow suggestion
+  * Creates a record to be saved in follow suggestions (mostly to cleanup main func for readability)
   * @param object $prospect
-  * @param array $mutuals
+  * @param int $count
   * @return void
   */
-  public function createRecords(object $prospects, array $followingIDs): void
+  private function packageProspect(object $prospect, int $count): array
+  {
+    return [
+      'profile_id' => $prospect->profile->id,
+      'user_id' => $this->userId,
+      'prospect_user_id' => $prospect->id,
+      'unique_identifier' => $prospect->id . '_' . $this->userId,
+      'mutual_follows' =>  $count,
+      'rejected' => false,
+      'rejected_at' => NULL,
+      'created_at' => Carbon::now()->toDateTimeString(),
+      'updated_at' => NULL,
+    ];
+  }
+
+  /*
+  *Create records for each follow suggestion
+  * @param object $prospect
+  * @return void
+  */
+  public function createRecords(object $prospects): void
   {
     try {
-      $records = [];
-      foreach ($prospects as $key => $prospect) {
-        $records[] =  [
-          'profile_id' => $prospect->profile->id,
-          'user_id' => $this->userId,
-          'prospect_user_id' => $prospect->id,
-          'unique_identifier' => $prospect->id . '_' . $this->userId,
-          'mutual_follows' =>  count(array_intersect($followingIDs, array_keys($prospect->stat->following))),
-          'rejected' => false,
-          'rejected_at' => NULL,
-          'created_at' => Carbon::now()->toDateTimeString(),
-          'updated_at' => NULL,
-        ];
 
-        unset($prospect->stat);
-        unset($prospect->profile);
-      }
-
-      $poo = FollowSuggestionModel::upsert(
-        $records,
+      FollowSuggestionModel::upsert(
+        $prospects->toArray(),
         [
           'unique_identifier'
         ],

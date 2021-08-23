@@ -92,7 +92,6 @@
   .newsfeed_flex_container {
     box-sizing: border-box;
     padding:0.5rem;
-    border: 1px solid green;
     display: flex;
     justify-content: center;
   }

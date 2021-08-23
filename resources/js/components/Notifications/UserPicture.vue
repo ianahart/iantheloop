@@ -46,9 +46,4 @@
        color: $themePink;
      }
   }
-
-  //32px
-
-      // background-color: $themeLightBlue;
-      // color: $themePink;
 </style>

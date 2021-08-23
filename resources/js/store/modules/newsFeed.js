@@ -8,6 +8,7 @@ const initialState = () => {
     followSuggestionsLoaded: false,
     followSuggestions: [],
     lastFollowSuggestion: null,
+    isLoadingData: false,
     endOfFollowSuggestions: false,
     endOfFollowSuggestionsCounter:0,
     errorMessage: '',
@@ -24,24 +25,34 @@ const newsFeed = {
   },
 
   mutations: {
+    SET_IS_LOADING_DATA(state, payload) {
+      state.isLoadingData = payload;
+    },
+
     SET_FOLLOW_SUGGESTIONS_LOADED(state, payload) {
       state.followSuggestionsLoaded = payload;
     },
+
     SET_FOLLOW_SUGGESTIONS(state, payload) {
       state.followSuggestions = [...state.followSuggestions, ...payload];
     },
+
     SET_ERROR_MESSAGE(state, payload) {
       state.errorMessage = payload;
     },
+
     SET_LAST_FOLLOW_SUGGESTION(state, payload) {
       state.lastFollowSuggestion = payload.id;
     },
+
     SET_FOLLOW_SUGGESTIONS_END(state, payload) {
       state.endOfFollowSuggestions = payload;
     },
+
     RESET_NEWSFEED_MODULE: (state) => {
      Object.assign(state, initialState());
     },
+
     INCREMENT_END_OF_FOLLOW_SUGGESTIONS_COUNTER (state)  {
       state.endOfFollowSuggestionsCounter = state.endOfFollowSuggestionsCounter + 1;
     }
@@ -50,7 +61,7 @@ const newsFeed = {
   actions: {
     async RETRIEVE_FOLLOW_SUGGESTIONS({ state, rootGetters, commit }) {
       try {
-
+        commit('SET_IS_LOADING_DATA', true);
         const response = await axios(
           {
             method: 'GET',
@@ -63,7 +74,7 @@ const newsFeed = {
         );
           if (response.status === 200) {
 
-            console.log('newsFeed.js RETRIEVE_FOLLOW_SUGGESTIONS OK: ', response);
+            console.log('newsFeed.js | Response:200', response);
 
             if (response.data.total > 0) {
               commit('SET_FOLLOW_SUGGESTIONS', response.data.follow_suggestions);
@@ -74,10 +85,12 @@ const newsFeed = {
               commit('INCREMENT_END_OF_FOLLOW_SUGGESTIONS_COUNTER');
             }
             commit('SET_FOLLOW_SUGGESTIONS_LOADED', true);
+            commit('SET_IS_LOADING_DATA', false);
           }
       } catch(e) {
-        console.log('newsFeed.js RETRIEVE_FOLLOW_SUGGESTIONS Error: ', e.response);
+        console.log('newsFeed.js | Response:404', e.response);
         commit('SET_ERROR_MESSAGE', e.response.data.error);
+        commit('SET_IS_LOADING_DATA', false);
       }
     }
   }
