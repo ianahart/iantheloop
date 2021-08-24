@@ -32,7 +32,7 @@ use App\Http\Controllers\General\FollowSuggestionController;
 /*
 /*
 |--------------------------------------------------------------------------
-| Public Routes
+| Unauthenticated Routes
 |--------------------------------------------------------------------------
 |
 */
@@ -44,7 +44,7 @@ Route::post('/auth/recovery', [ForgotPasswordController::class, 'store']);
 Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 /*
 |--------------------------------------------------------------------------
-| Private Routes
+| Authentication Required Routes
 |--------------------------------------------------------------------------
 |
 */
@@ -88,3 +88,4 @@ Route::get('/auth/user/notifications/interactions/{userId}/show', [NotificationC
 Route::delete('/auth/user/notifications/interactions/{notificationId}/delete', [NotificationController::class, 'deleteInteractionNotification'])->middleware('auth:api');
 Route::get('/auth/newsfeed/{slug}/show', [NewsFeedController::class, 'show'])->middleware('auth:api');
 Route::get('/auth/follow-suggestions/{userId}/show', [FollowSuggestionController::class, 'show'])->middleware('auth:api');
+Route::patch('/auth/follow-suggestions/{suggestionId}/update', [FollowSuggestionController::class, 'update'])->middleware('auth:api');

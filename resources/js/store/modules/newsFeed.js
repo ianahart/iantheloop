@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getElementIndex } from '../../helpers/moduleHelpers.js';
 
 
 const initialState = () => {
@@ -55,6 +56,10 @@ const newsFeed = {
 
     INCREMENT_END_OF_FOLLOW_SUGGESTIONS_COUNTER (state)  {
       state.endOfFollowSuggestionsCounter = state.endOfFollowSuggestionsCounter + 1;
+    },
+
+    UPDATE_FOLLOW_SUGGESTION(state, id) {
+      state.followSuggestions.splice(getElementIndex(state.followSuggestions, 'id', id), 1);
     }
   },
 
@@ -74,8 +79,6 @@ const newsFeed = {
         );
           if (response.status === 200) {
 
-            console.log('newsFeed.js | Response:200', response);
-
             if (response.data.total > 0) {
               commit('SET_FOLLOW_SUGGESTIONS', response.data.follow_suggestions);
               commit('SET_LAST_FOLLOW_SUGGESTION', response.data.follow_suggestions[response.data.follow_suggestions.length - 1]);
@@ -88,12 +91,39 @@ const newsFeed = {
             commit('SET_IS_LOADING_DATA', false);
           }
       } catch(e) {
-        console.log('newsFeed.js | Response:404', e.response);
         commit('SET_ERROR_MESSAGE', e.response.data.error);
         commit('SET_IS_LOADING_DATA', false);
+      }
+    },
+    async UPDATE_FOLLOW_SUGGESTION({ state, commit }, data) {
+      try {
+        commit('SET_ERROR_MESSAGE', '');
+        const response = await axios({
+          method: 'PATCH',
+          url: `/api/auth/follow-suggestions/${data.follow_suggestion.id}/update`,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          data: {
+            current_user_id: data.user_id,
+            suggestion_user_id: data.follow_suggestion.user_id,
+            prospect_user_id: data.follow_suggestion.prospect.id,
+            suggestion_action: data.action,
+          }
+        });
+
+        if (response.status === 200) {
+          console.log('newsFeed.js | Response:200', response);
+          commit('UPDATE_FOLLOW_SUGGESTION', data.follow_suggestion.id);
+        }
+      } catch (e) {
+        console.log('newsFeed.js | Response:404', e.response);
+        commit('SET_ERROR_MESSAGE', e.response.data.error);
       }
     }
   }
 };
+
 
 export default newsFeed;

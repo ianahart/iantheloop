@@ -12,7 +12,7 @@
     </div>
     <div class="follow_suggestion_actions_container">
       <button @click="emitFollow(followSuggestion)">Follow</button>
-      <button @click="emitIgnore(followSuggestion)">Ignore</button>
+      <button @click="ignore(followSuggestion)">Ignore</button>
     </div>
   </div>
 </template>
@@ -27,6 +27,7 @@
     name: 'FollowSuggestion',
     props: {
       followSuggestion: Object,
+      currentUserId: Number,
     },
     components: {
       UserPicture,
@@ -41,13 +42,22 @@
     },
 
     methods: {
+      sendEvent(event , data) {
+        this.$emit(event, data);
+      },
+
       emitFollow(followSuggestion) {
         console.log('Follow Suggestion Id: ', followSuggestion.id);
         console.log('Sending Follow Request to: ', followSuggestion.prospect.id);
       },
-      emitIgnore(followSuggestion) {
-        console.log('Follow Suggestion Id: ', followSuggestion.id);
-        console.log('Ignoring Follow Suggeston from: ', followSuggestion.prospect.id);
+
+      ignore(followSuggestion) {
+        this.sendEvent('reject',
+        {
+          user_id: this.currentUserId,
+          follow_suggestion: followSuggestion,
+          action: 'reject',
+        });
       }
     },
   }

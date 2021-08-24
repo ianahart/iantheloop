@@ -5,8 +5,10 @@ namespace App\Helpers;
 use App\Models\FollowSuggestion as FollowSuggestionModel;
 use App\Models\User;
 use Carbon\Carbon;
-
 use Exception;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 
 class FollowSuggestion
 {
@@ -223,6 +225,44 @@ class FollowSuggestion
           'updated_at'
         ]
       );
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
+  }
+
+  /*
+  * Update follow suggestion depending on action provided
+  * @param array $data
+  * @param string $suggestionId
+  * @return void
+  */
+  public function updateFollowSuggestion(array $data, string $suggestionId): void
+  {
+    try {
+      error_log(print_r($data, true));
+      if ($data['current_user_id'] !== JWTAuth::user()->id) {
+        throw new Exception('Unauthorized to make this action');
+      }
+
+      $followSuggestion = FollowSuggestionModel::where('id', '=', $suggestionId)
+        ->where('user_id', '=', $data['current_user_id'])
+        ->where('prospect_user_id', '=', $data['prospect_user_id'])
+        ->where('id', '=', $suggestionId)
+        ->first();
+
+      if ($data['suggestion_action'] === 'reject') {
+
+        $followSuggestion->rejected = 1;
+        $followSuggestion->rejected_at = time();
+      }
+
+      if ($data['suggestion_action'] === 'unreject') {
+
+        $followSuggestion->rejected = 0;
+        $followSuggestion->reject_at = NULL;
+      }
+
+      $followSuggestion->save();
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }

@@ -5,6 +5,8 @@
       v-for="followSuggestion in followSuggestions"
       :key="followSuggestion.id"
       :followSuggestion="followSuggestion"
+      :currentUserId="getUserId"
+      @reject="sendReject"
     />
     <div class="refill_suggestions_btn_container">
       <button v-if="endOfFollowSuggestionsCounter !== 2 && !isLoadingData" @click="refill">More Suggestions...</button>
@@ -33,11 +35,25 @@
           'isLoadingData',
         ]
       ),
+      ...mapGetters('user',
+        [
+          'getUserId'
+        ]
+      ),
     },
     methods: {
-      refill() {
-        this.$emit('refill');
+
+      sendEvent(event ,data = null) {
+        this.$emit(event, data);
       },
+
+      refill() {
+        this.sendEvent('refill');
+      },
+
+      sendReject(payload) {
+        this.sendEvent('reject', payload);
+      }
     }
   };
 </script>

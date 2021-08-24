@@ -3,6 +3,7 @@
     <div class="follow_suggestions_container">
       <FollowSuggestions
         @refill="refillSuggestions"
+        @reject="handleReject"
         :followSuggestions="followSuggestions"
       />
     </div>
@@ -49,18 +50,25 @@
       ),
       ...mapActions('newsFeed',
         [
-          'RETRIEVE_FOLLOW_SUGGESTIONS'
+          'RETRIEVE_FOLLOW_SUGGESTIONS',
+          'UPDATE_FOLLOW_SUGGESTION',
         ]
       ),
+
       async retrieveFollowSuggestions() {
         await this.RETRIEVE_FOLLOW_SUGGESTIONS();
       },
+
       async refillSuggestions() {
         this.debounce(async () => {
           await this.RETRIEVE_FOLLOW_SUGGESTIONS();
         }, 300);
-
       },
+
+      async handleReject(payload) {
+        await this.UPDATE_FOLLOW_SUGGESTION(payload);
+      },
+
       debounce(fn, delay = 400) {
         return ((...args) => {
             clearTimeout(this.debounceID);

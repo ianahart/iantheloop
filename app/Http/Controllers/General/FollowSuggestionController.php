@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Helpers\FollowSuggestion;
 use Exception;
@@ -65,6 +64,46 @@ class FollowSuggestionController extends Controller
                         'msg' => 'Unable to load follow suggestions right now',
                         'error' => $e->getMessage()
                     ]
+                );
+        }
+    }
+
+    /*
+     * Update suggestion to "rejected" so user will not see suggestion for x amount of time
+     * Or update suggestion to "not rejected" so user will see the suggestion again
+     * @param string $suggestionId
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update(Request $request, string $suggestionId)
+    {
+
+        try {
+
+            $followSuggestion = new FollowSuggestion(intval($request->all()['current_user_id']));
+            $followSuggestion->updateFollowSuggestion($request->all(), $suggestionId);
+
+            $exception = $followSuggestion->getError();
+
+            if (!is_null($exception)) {
+                throw new Exception($exception);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Follow suggestion updated'
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to preform update on follow suggestion',
+                        'error' => $e->getMessage(),
+                    ],
+                    500
                 );
         }
     }
