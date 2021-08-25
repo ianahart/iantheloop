@@ -42,9 +42,12 @@ export default {
     DefaultProfileIcon,
   },
 
-  computed: {},
+  computed: {
+    ...mapGetters('user', ['getUserId']),
+  },
 
   methods: {
+    ...mapActions('newsFeed', ['UPDATE_FOLLOW_SUGGESTION']),
     emitAcceptRequest(request) {
       const data = {
         viewingUserId: request.receiver_user_id,
@@ -55,12 +58,28 @@ export default {
       this.$emit("acceptrequest", data);
     },
 
-    emitDenyRequest(request) {
+    async emitDenyRequest(request) {
+
       const data = {
         viewingUserId: request.receiver_user_id,
+           requesterUserId: request.requester_user_id,
         requestId: request.id,
       };
       this.$emit("denyrequest", data);
+
+      if (request.follow_suggestion_id !== null) {
+
+    const data = {
+      follow_suggestion: {
+        id: request.follow_suggestion_id,
+        user_id: request.requester_user_id,
+        prospect: {id: request.receiver_user_id},
+        },
+      action: 'reject',
+      user_id:  this.getUserId,
+    };
+        await this.UPDATE_FOLLOW_SUGGESTION(data);
+      }
     },
   },
 };

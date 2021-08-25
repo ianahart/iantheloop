@@ -107,6 +107,12 @@ const profile = {
       state.dataLoaded = payload;
     },
 
+    SET_PARTY(state, payload) {
+      console.log('profile.js|SET_PARTY: ', payload);
+      state.currentUserId = payload.currentUserId;
+      state.viewingUserId = payload.viewingUserId;
+    },
+
     SET_FETCH_ERROR: (state, payload) => {
 
       state.fetchError = payload;

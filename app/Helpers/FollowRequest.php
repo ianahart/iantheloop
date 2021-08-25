@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\FollowRequest as FollowRequestModel;
+use App\Models\FollowSuggestion as FollowSuggestionModel;
 use App\Models\User as UserModel;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
@@ -128,6 +129,12 @@ class FollowRequest
     $receivesData = [];
 
     foreach ($receives as $key => $receive) {
+
+
+      $suggestion = FollowSuggestionModel::where('unique_identifier', '=', $receive->receiver_user_id  . '_' . $receive->requester_user_id)
+        ->select('id')->first();
+
+      $receive->follow_suggestion_id = $suggestion ? $suggestion->id : NULL;
 
       $receive->full_name = $this->formatRequesterName($receive->user->full_name);
       $receive->requester_profile_picture = $receive->user->profile->profile_picture;

@@ -47,7 +47,9 @@ class ReSuggestFollow extends Command
             ->update(
                 [
                     'rejected' => 0,
-                    'rejected_at' => NULL
+                    'rejected_at' => NULL,
+                    'pending' => 0,
+                    'suggest' => 1,
                 ]
             );
 

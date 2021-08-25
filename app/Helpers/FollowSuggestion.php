@@ -67,6 +67,8 @@ class FollowSuggestion
 
       return FollowSuggestionModel::where('user_id', '=', $this->userId)
         ->where('rejected', '=', 0)
+        ->where('suggest', '=', 1)
+        ->where('pending', '=', 0)
         ->count();
     } catch (Exception $e) {
       $this->error = $e->getMessage();
@@ -89,6 +91,8 @@ class FollowSuggestion
           return $query->where('id', '>', $lastSuggestion);
         })
         ->where('user_id', '=', $this->userId)
+        ->where('pending', '=', 0)
+        ->where('suggest', '=', 1)
         ->where('rejected', '=', 0)
         ->with(
           [
@@ -205,6 +209,8 @@ class FollowSuggestion
       'rejected_at' => NULL,
       'created_at' => Carbon::now()->toDateTimeString(),
       'updated_at' => NULL,
+      'pending' => false,
+      'suggest' => true,
     ];
   }
 
@@ -237,32 +243,52 @@ class FollowSuggestion
   * @param string $suggestionId
   * @return void
   */
-  public function updateFollowSuggestion(array $data, string $suggestionId): void
+  public function updateFollowSuggestion(array $data, string $suggestionId = NULL): void
   {
     try {
-      error_log(print_r($data, true));
+
       if ($data['current_user_id'] !== JWTAuth::user()->id) {
         throw new Exception('Unauthorized to make this action');
       }
 
-      $followSuggestion = FollowSuggestionModel::where('id', '=', $suggestionId)
-        ->where('user_id', '=', $data['current_user_id'])
+      $followSuggestion = FollowSuggestionModel::where('user_id', '=', $data['suggestion_user_id'])
         ->where('prospect_user_id', '=', $data['prospect_user_id'])
-        ->where('id', '=', $suggestionId)
+        ->when(
+          $suggestionId,
+          function ($query, $suggestionId) {
+            return $query
+              ->where('id', '=', $suggestionId);
+          },
+          function ($query) use ($data) {
+            return $query
+              ->where('unique_identifier', '=', $data['prospect_user_id'] . '_' . $data['suggestion_user_id']);
+          }
+        )
         ->first();
 
-      if ($data['suggestion_action'] === 'reject') {
 
-        $followSuggestion->rejected = 1;
-        $followSuggestion->rejected_at = time();
+      switch ($data['suggestion_action']) {
+        case "follow":
+
+          $followSuggestion->suggest = 0;
+          $followSuggestion->pending = 1;
+          break;
+        case "reject":
+
+          $followSuggestion->rejected = 1;
+          $followSuggestion->rejected_at = time();
+          $followSuggestion->suggest = 0;
+          break;
+        case "unreject":
+
+          $followSuggestion->rejected = 0;
+          $followSuggestion->rejected_at = NULL;
+          $followSuggestion->pending = 0;
+          $followSuggestion->suggest = 1;
+          break;
+        default:
+          break;
       }
-
-      if ($data['suggestion_action'] === 'unreject') {
-
-        $followSuggestion->rejected = 0;
-        $followSuggestion->reject_at = NULL;
-      }
-
       $followSuggestion->save();
     } catch (Exception $e) {
       $this->error = $e->getMessage();

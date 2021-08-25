@@ -4,9 +4,12 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Helpers\Statistics;
 use App\Models\Stat;
+use App\Models\FollowSuggestion as FollowSuggestionModel;
 use App\Helpers\FollowRequest;
+use App\Helpers\Statistics;
+
+
 use Exception;
 
 
@@ -66,6 +69,13 @@ class StatsController extends Controller
 
             $currentUserStat->notifications = $statisticUser->getNotifications();
             $viewingUserStat->notifications = $statisticSubject->getNotifications();
+
+            $followSuggestion = FollowSuggestionModel::where('unique_identifier', '=', $viewingUserId . '_' . $userId)->first();
+            if ($followSuggestion) {
+                $followSuggestion->suggest = 0;
+                $followSuggestion->pending = 0;
+                $followSuggestion->save();
+            }
 
             $viewingUserStat->save();
             $currentUserStat->save();

@@ -42,13 +42,33 @@
     },
 
     methods: {
+      ...mapMutations('profile',
+        [
+          'SET_PARTY'
+        ]
+      ),
+      ...mapActions('profile',
+        [
+          'SEND_FOLLOW_REQUEST'
+        ]
+      ),
       sendEvent(event , data) {
         this.$emit(event, data);
       },
 
-      emitFollow(followSuggestion) {
-        console.log('Follow Suggestion Id: ', followSuggestion.id);
-        console.log('Sending Follow Request to: ', followSuggestion.prospect.id);
+      async emitFollow(followSuggestion) {
+        this.SET_PARTY({
+          currentUserId: this.currentUserId,
+          viewingUserId: followSuggestion.prospect.id
+          });
+          await this.SEND_FOLLOW_REQUEST();
+
+        this.sendEvent('follow',
+          {
+            user_id: this.currentUserId,
+            follow_suggestion: followSuggestion,
+            action: 'follow',
+          });
       },
 
       ignore(followSuggestion) {

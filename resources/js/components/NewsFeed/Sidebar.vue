@@ -4,6 +4,7 @@
       <FollowSuggestions
         @refill="refillSuggestions"
         @reject="handleReject"
+        @follow="handleFollow"
         :followSuggestions="followSuggestions"
       />
     </div>
@@ -66,6 +67,10 @@
       },
 
       async handleReject(payload) {
+        await this.UPDATE_FOLLOW_SUGGESTION(payload);
+      },
+
+      async handleFollow(payload) {
         await this.UPDATE_FOLLOW_SUGGESTION(payload);
       },
 

@@ -16,7 +16,9 @@ class FollowSuggestion extends Model
         'unique_identifier',
         'mutual_follows',
         'rejected',
-        'rejected_at'
+        'rejected_at',
+        'pending',
+        'suggest'
     ];
 
 

@@ -97,6 +97,7 @@ const newsFeed = {
     },
     async UPDATE_FOLLOW_SUGGESTION({ state, commit }, data) {
       try {
+
         commit('SET_ERROR_MESSAGE', '');
         const response = await axios({
           method: 'PATCH',
@@ -114,7 +115,7 @@ const newsFeed = {
         });
 
         if (response.status === 200) {
-          console.log('newsFeed.js | Response:200', response);
+
           commit('UPDATE_FOLLOW_SUGGESTION', data.follow_suggestion.id);
         }
       } catch (e) {

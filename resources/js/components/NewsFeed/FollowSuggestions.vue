@@ -7,6 +7,7 @@
       :followSuggestion="followSuggestion"
       :currentUserId="getUserId"
       @reject="sendReject"
+      @follow="sendFollow"
     />
     <div class="refill_suggestions_btn_container">
       <button v-if="endOfFollowSuggestionsCounter !== 2 && !isLoadingData" @click="refill">More Suggestions...</button>
@@ -53,6 +54,10 @@
 
       sendReject(payload) {
         this.sendEvent('reject', payload);
+      },
+
+      sendFollow(payload) {
+        this.sendEvent('follow', payload);
       }
     }
   };

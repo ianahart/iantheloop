@@ -79,6 +79,8 @@ class FollowSuggestionController extends Controller
     {
 
         try {
+            error_log(print_r('Suggestion Id: ' . $suggestionId, true));
+            error_log(print_r($request->all(), true));
 
             $followSuggestion = new FollowSuggestion(intval($request->all()['current_user_id']));
             $followSuggestion->updateFollowSuggestion($request->all(), $suggestionId);
