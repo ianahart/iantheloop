@@ -82,6 +82,7 @@ class FollowSuggestion
   {
     try {
 
+
       $followSuggestions = FollowSuggestionModel::OrderBy('id', 'ASC')
         ->OrderBy('created_at', 'ASC')
         ->when($lastSuggestion, function ($query, $lastSuggestion) {
