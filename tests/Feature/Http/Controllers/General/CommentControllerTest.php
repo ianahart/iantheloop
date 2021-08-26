@@ -6,12 +6,14 @@ use App\Http\Controllers\General\CommentController;
 use App\Http\Requests\StoreCommentRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 use JMac\Testing\Traits\AdditionalAssertions;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Profile;
 use App\Models\User;
+use App\Jobs\ProcessInteraction;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class CommentControllerTest extends TestCase
@@ -24,7 +26,9 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function it_stores_a_comment_on_a_post()
     {
+        Bus::fake();
         $this->assertActionUsesFormRequest(CommentController::class, 'store', StoreCommentRequest::class);
+
 
         $user = User::factory()->create();
         Profile::factory()->fullMedia()
@@ -35,6 +39,7 @@ class CommentControllerTest extends TestCase
             );
         $post = Post::factory()->create();
 
+        /**@var mixed $user */
         $response = $this
             ->actingAs($user, 'api')
             ->postJson(
@@ -47,6 +52,7 @@ class CommentControllerTest extends TestCase
             );
 
         $response->assertStatus(201);
+        Bus::assertDispatched(ProcessInteraction::class);
         $response->assertJsonStructure(
             [
                 'latest_comment' => [
@@ -101,6 +107,7 @@ class CommentControllerTest extends TestCase
                 ]
             );
 
+        /**@var mixed $user */
         $response = $this->actingAs($user, 'api')->postJson(
             '/api/auth/comments/store',
             [
@@ -149,6 +156,7 @@ class CommentControllerTest extends TestCase
 
         for ($i = 0; $i < count($authorized = [$authorCommentUser, $subjectUser]); $i++) {
 
+            /**@var mixed $authorized */
             $response = $this
                 ->actingAs($authorized[$i], 'api')
                 ->deleteJson(
@@ -258,7 +266,7 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function it_returns_a_message_if_all_comments_are_loaded()
     {
-        $user = User::factory()
+        $user = User::factory()->count(1)
             ->create();
 
         $post = Post::factory()
@@ -277,6 +285,7 @@ class CommentControllerTest extends TestCase
                 ]
             );
 
+        /**@var mixed $user */
         $response = $this
             ->actingAs($user, 'api')
             ->getJson(
@@ -395,6 +404,7 @@ class CommentControllerTest extends TestCase
                 ]
             );
 
+        /**@var mixed $user */
         $response = $this
             ->actingAs($user, 'api')
             ->getJson(
@@ -444,6 +454,7 @@ class CommentControllerTest extends TestCase
             ->for($user->posts[0])
             ->create();
 
+        /**@var mixed $user */
         $response = $this
             ->actingAs($user, 'api')
             ->postJson(
@@ -521,6 +532,7 @@ class CommentControllerTest extends TestCase
 
         foreach ([$subjectUser, $replyCommentAuthor] as $key => $user) {
 
+            /**@var mixed $user */
             $response = $this
                 ->actingAs($user, 'api')
                 ->deleteJson(

@@ -162,6 +162,7 @@ class ProfileControllerTest extends TestCase
         $strPos = strpos($user->profile->profile_picture, $strToFind);
         $curProPic = substr($user->profile->profile_picture, $strPos + strlen($strToFind));
 
+        /**@var mixed $user */
         $response = $this
             ->actingAs($user, 'api')
             ->patchJson(
@@ -269,6 +270,7 @@ class ProfileControllerTest extends TestCase
             )
             ->create();
 
+        /**@var mixed $user */
         $response = $this
             ->actingAs($user, 'api')
             ->getJson(
@@ -294,6 +296,7 @@ class ProfileControllerTest extends TestCase
                 ]
             );
 
+        /**@var mixed $user */
         $response = $this
             ->actingAs($user, 'api')
             ->getJson(

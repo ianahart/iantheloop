@@ -50,6 +50,7 @@ class PostControllerTest extends TestCase
 
         Storage::fake('s3');
 
+        /**@var mixed $authorUser */
         $response = $this
             ->actingAs($authorUser, 'api')
             ->postJson(
@@ -116,6 +117,7 @@ class PostControllerTest extends TestCase
 
         foreach ($authorizedUsers as $key => $authorizedUser) {
 
+            /**@var mixed $authorizedUser */
             $response = $this
                 ->actingAs($authorizedUser, 'api')
                 ->deleteJson(
@@ -152,6 +154,7 @@ class PostControllerTest extends TestCase
 
         Post::factory()->for($subjectUser)->create(['author_user_id' => $authorUser->id]);
 
+        /**@var mixed $currentUser */
         $response = $this
             ->actingAs($currentUser, 'api')
             ->deleteJson(
@@ -179,6 +182,7 @@ class PostControllerTest extends TestCase
             ->for($subjectUser)
             ->create();
 
+        /**@var mixed $subjectUser */
         $response = $this
             ->actingAs($subjectUser, 'api')
             ->deleteJson(
@@ -245,6 +249,7 @@ class PostControllerTest extends TestCase
                 $lastPost = $lastPost - 3;
             }
 
+            /**@var mixed $subjectUser */
             $response = $this
                 ->actingAs($subjectUser, 'api')
                 ->getJson(

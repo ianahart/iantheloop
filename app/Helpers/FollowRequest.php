@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use App\Models\FollowRequest as FollowRequestModel;
 use App\Models\FollowSuggestion as FollowSuggestionModel;
-use App\Models\User as UserModel;
+use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
 use DateTime;
@@ -108,7 +108,7 @@ class FollowRequest
   {
     try {
 
-      $currentUser = UserModel::find($this->receiverUserId);
+      $currentUser = User::find($this->receiverUserId);
 
       $receives = $currentUser->followReceives()->get();
 

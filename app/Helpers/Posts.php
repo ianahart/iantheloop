@@ -2,15 +2,12 @@
 
 namespace App\Helpers;
 
-use Illuminate\Database\Eloquent\Collection;
+
 use App\Helpers\AmazonS3;
 use App\Helpers\FormattingUtil;
 use App\Jobs\ProcessInteraction;
 use App\Models\User;
 
-
-use DateTime;
-use DateTimeZone;
 use Exception;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;

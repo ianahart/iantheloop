@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
 use App\Helpers\FlaggedPosts;
-use Mockery\CountValidator\Exact;
+
 
 class FlaggedPostController extends Controller
 {

@@ -111,7 +111,7 @@ class MessengerController extends Controller
     }
 
     /*
-    *It retrieves all the messages for the current user's current chat conversation
+    *It stores a user's chat message in a conversation then broadcasts it to the other user
     * @param Request $request
     * @return JsonResponse
     */

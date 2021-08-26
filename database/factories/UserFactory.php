@@ -3,9 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
 {
@@ -54,6 +53,12 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'is_logged_in' => false,
             'profile_created' => false,
+            'status' => '',
+            'cur_chat_window_user_id' => '',
+            'slug' => '',
+            'last_following_user_id' => '',
+            'last_following_suggestion_user_id' => '',
+
         ];
     }
 
