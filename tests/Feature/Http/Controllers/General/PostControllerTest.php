@@ -5,9 +5,11 @@ namespace Tests\Feature\Http\Controllers\General;
 use App\Http\Controllers\General\PostController;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StorePostRequest;
+use App\Jobs\ProcessInteraction;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Profile;
@@ -15,6 +17,7 @@ use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
+
 
 
 class PostControllerTest extends TestCase
@@ -36,7 +39,7 @@ class PostControllerTest extends TestCase
     {
         $this->assertActionUsesFormRequest(PostController::class, 'store', StorePostRequest::class);
 
-
+        Bus::fake();
 
         $newPost = [
             'subject_user_id' => 20,
@@ -64,7 +67,7 @@ class PostControllerTest extends TestCase
             );
 
         $response->assertStatus(201);
-
+        Bus::assertDispatched(ProcessInteraction::class);
         $response->assertJsonFragment(
             [
                 'subject_user_id' => $newPost['subject_user_id'],

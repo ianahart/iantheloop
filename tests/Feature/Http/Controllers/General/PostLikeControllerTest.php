@@ -4,9 +4,12 @@ namespace Tests\Feature\Http\Controllers\General;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Bus;
+use App\Jobs\ProcessInteraction;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Profile;
 use App\Models\PostLike;
 
 
@@ -23,6 +26,8 @@ class PostLikeControllerTest extends TestCase
         parent::setUp();
 
         $this->currentUser = User::factory()
+            ->has(Profile::factory()
+                ->fullMedia())
             ->create(
                 [
                     'id' => 2
@@ -30,6 +35,8 @@ class PostLikeControllerTest extends TestCase
             );
 
         $this->subjectUser = User::factory()
+            ->has(Profile::factory()
+                ->fullMedia())
             ->has(Post::factory()
                 ->count(2)
                 ->uploadedPhoto()
@@ -50,6 +57,8 @@ class PostLikeControllerTest extends TestCase
     /** @test */
     public function it_likes_a_post_on_a_users_profile()
     {
+        Bus::fake();
+
         $response = $this->actingAs($this->currentUser, 'api')
             ->postJson(
                 '/api/auth/post-likes/store',
@@ -60,6 +69,8 @@ class PostLikeControllerTest extends TestCase
             );
 
         $response->assertStatus(201);
+
+        Bus::assertDispatched(ProcessInteraction::class);
 
         $this->assertEquals(1, $response->getData()->new_like->post->likes);
         $this->assertEquals($this->currentUser->id, $response->getData()->new_like->user_id);

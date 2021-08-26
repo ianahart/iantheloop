@@ -88,6 +88,7 @@ class PostLikes
       $recipient = User::find($post->subject_user_id);
       $newLikeProfilePicture =  User::find($newLike->user_id)->profile->profile_picture;
 
+
       $interaction = [
         'sender_name' => $newLike->liker_name,
         'recipient_name' => FormattingUtil::capitalize($recipient->full_name),
@@ -99,7 +100,6 @@ class PostLikes
         'sender_profile_picture' => $newLikeProfilePicture,
         'text' => $newLike->liker_name . ' liked a post on your wall',
       ];
-
       ProcessInteraction::dispatch($interaction, $recipient);
     } catch (Exception $e) {
 
@@ -110,7 +110,6 @@ class PostLikes
   public function deletePostLike()
   {
     try {
-
       $like = $this->postLike
         ->where('id', '=', $this->postLikeToDel['id'])
         ->where('user_id', '=', $this->postLikeToDel['user_id'])

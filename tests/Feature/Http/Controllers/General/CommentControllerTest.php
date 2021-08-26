@@ -266,7 +266,7 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function it_returns_a_message_if_all_comments_are_loaded()
     {
-        $user = User::factory()->count(1)
+        $user = User::factory()
             ->create();
 
         $post = Post::factory()
