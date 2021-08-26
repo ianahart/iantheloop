@@ -4,9 +4,12 @@ namespace Tests\Feature\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use App\Models\User;
+use App\Events\UserStatusChanged;
 use Illuminate\Support\Facades\Hash;
+
 
 
 class LoginControllerTest extends TestCase
@@ -19,6 +22,8 @@ class LoginControllerTest extends TestCase
     /** @test */
     public function it_authenticates_a_user_and_returns_a_token()
     {
+        Event::fake();
+
         User::factory()
             ->count(3)
             ->create(
@@ -36,6 +41,8 @@ class LoginControllerTest extends TestCase
         ]);
 
         $response->assertStatus(200);
+        Event::assertDispatched(UserStatusChanged::class);
+
         $response->assertJsonStructure(
             [
                 'formSubmitted',

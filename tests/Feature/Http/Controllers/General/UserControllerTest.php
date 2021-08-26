@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Http\Controllers\General;
 
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use App\Models\User;
+use App\Events\UserStatusChanged;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserControllerTest extends TestCase
@@ -31,6 +34,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function it_updates_the_users_status()
     {
+        Event::fake();
 
         $response = $this
             ->withHeaders(
@@ -44,6 +48,7 @@ class UserControllerTest extends TestCase
             );
 
         $response->assertStatus(200);
+        Event::assertDispatched(UserStatusChanged::class);
         $response->assertJsonFragment(
             [
                 'new_user_status' => 'online',
