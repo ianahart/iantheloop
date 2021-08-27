@@ -131,6 +131,7 @@ class Messenger
       $unreadMessage['status'] = $recipient->status;
 
       if (intval($recipient->cur_chat_window_user_id) !== intval($message['sender_user_id'])) {
+
         $recipient->notify(new UnreadMessage($unreadMessage));
       }
 

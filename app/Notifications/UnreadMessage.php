@@ -13,7 +13,7 @@ class UnreadMessage extends Notification
 {
     use Queueable;
 
-    protected $message;
+    public $message;
 
 
     /**
