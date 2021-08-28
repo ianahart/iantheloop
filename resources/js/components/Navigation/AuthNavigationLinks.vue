@@ -11,17 +11,13 @@
     </li>
     <li class="navbar_notificatons_listitem" @click.stop="toggleMessageNotifications">
       <MessagesIcon
-        :className="
-          !isMenuVisible ? 'messages__icon_dark' : 'messages__icon_light'"
+        :className="iconStyle"
       />
       <span v-if="navMessageAlerts" class="navbar_notification_messages_alerts">&#43;</span>
     </li>
     <li class="navbar_notificatons_listitem" @click.stop="toggleNotifications">
       <NotificationsIcon
-        :className="
-          !isMenuVisible
-            ? 'notifications__icon_dark'
-            : 'notifications__icon_light'"
+        :className="iconStyle"
       />
       <span v-if="navInteractionAlerts > 0" class="navbar_notification_interactions_alerts">{{ formattedInteractionAlert }}</span>
     </li>
@@ -61,6 +57,9 @@ export default {
     ...mapState("notifications", ["messageNotificationsAreOpen", 'navInteractionAlerts', 'navMessageAlerts']),
     ...mapState("hamburgerMenu", ["isMenuVisible"]),
     ...mapState("profileDropdown", ['isProfileDropdownOpen']),
+    iconStyle() {
+      return this.$route.name === 'Home' && !this.isMenuVisible ? 'messages__icon_dark' : 'messages__icon_light';
+    },
 
     formattedInteractionAlert() {
       return this.navInteractionAlerts >= 9 ? `9+` : this.navInteractionAlerts;

@@ -1,12 +1,9 @@
 <template>
   <nav :class="`navbar__desktop ${navBGC}`">
     <div class="logo__container">
-      <LogoName :theme="isLoggedIn ? 'dark' : 'light'" />
+      <LogoName :theme="logo" />
       <HamburgerIcon
-        :className="
-          isMenuIconVisible && isLoggedIn
-            ? 'hamburger__menu__icon_dark'
-            : 'hamburger__menu__icon_light'"
+        :className="hamburger"
       />
     </div>
     <p v-if="isMenuIconVisible">&nbsp;</p>
@@ -77,8 +74,14 @@ export default {
     ...mapState("hamburgerMenu", ["isMenuIconVisible"]),
 
     navBGC() {
-      return this.isLoggedIn ? "logged_in_nav " : "default_nav";
+      return this.$route.name === 'Home' ? "landing_nav " : "default_nav";
     },
+    logo() {
+        return this.$route.name === 'Home' ? "dark" : "light";
+    },
+    hamburger() {
+      return this.$route.name === 'Home' ? 'hamburger__menu__icon_dark' : 'hamburger__menu__icon_light';
+    }
   },
 
   methods: {
@@ -94,7 +97,7 @@ export default {
 
 
 <style lang="scss">
-.logged_in_nav {
+.landing_nav {
   background-color: transparent;
 
   a {
