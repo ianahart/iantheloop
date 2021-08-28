@@ -37,6 +37,7 @@ use App\Http\Controllers\General\FollowSuggestionController;
 |
 */
 
+Route::get('/auth/users/count', [UserController::class, 'count']);
 Route::post('/auth/register', [RegisterController::class, 'store']);
 Route::post('/auth/login', [LoginController::class, 'store']);
 Route::post('/auth/token/refresh', [refreshTokenController::class, 'store']);

@@ -18,8 +18,6 @@ class UserController extends Controller
   * @param string $userId
   * @return void
   */
-
-
     public function updateUserStatus(Request $request, string $userId)
     {
         try {
@@ -91,7 +89,7 @@ class UserController extends Controller
                     200
                 );
         } catch (Exception $e) {
-            error_log(print_r($e->getMessage(), true));
+
             return response()
                 ->json(
                     [
@@ -99,6 +97,40 @@ class UserController extends Controller
                         'error' => $e->getMessage()
                     ],
                     400
+                );
+        }
+    }
+    /**
+     * Get the total count of users
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function count(Request $request)
+    {
+
+        try {
+            $count = User::count();
+
+            if (is_null($count) || !$count) {
+                $count = 0;
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success',
+                        'count' => $count
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to get user count',
+                        'error' => $e->getMessage()
+                    ],
+                    500
                 );
         }
     }

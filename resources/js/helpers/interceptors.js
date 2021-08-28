@@ -31,12 +31,12 @@ const cleanUpAndLogout = (store) => {
 
 
 const UNAUTHORIZED_URLS = [
-
   '/api/auth/login',
   '/api/auth/token/refresh',
   '/api/auth/recovery',
   '/api/auth/reset-password/',
   '/api/auth/reset-password/create',
+  '/api/auth/users/count',
 ];
 
 export default function setup(store) {

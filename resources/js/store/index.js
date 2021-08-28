@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
 
 import user from './modules/user.js';
 import login from './modules/login.js';
@@ -32,16 +33,38 @@ export default new Vuex.Store(
     state: {
 
       isPasswordShowing: false,
+      userCount: 0,
     },
 
     mutations: {
-
       CHANGE_PASSWORD_ICON: (state) => {
-
         state.isPasswordShowing = !state.isPasswordShowing;
       },
+      SET_USER_COUNT: (state, count) =>{
+        state.userCount = count;
+      }
     },
 
+    actions: {
+      async RETRIEVE_USER_COUNT({ state, commit }) {
+        try {
+
+          const response = await axios(
+            {
+             method: 'GET',
+             url: '/api/auth/users/count',
+             headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json',
+             }
+            });
+           console.log('index.js RETRIEVE_USER_TOTAL SUCC: ', response);
+           commit('SET_USER_COUNT', response.data.count);
+        } catch(e) {
+          console.log('index.js RETRIEVE_USER_TOTAL ERROR: ', e.response);
+        }
+      }
+    },
 
 
     modules: {
