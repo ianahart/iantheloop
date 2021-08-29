@@ -37,6 +37,7 @@ const UNAUTHORIZED_URLS = [
   '/api/auth/reset-password/',
   '/api/auth/reset-password/create',
   '/api/auth/users/count',
+  '/api/auth/reviews'
 ];
 
 export default function setup(store) {

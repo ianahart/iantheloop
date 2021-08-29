@@ -18,6 +18,12 @@ const routes = [
     component: () => import('../pages/AboutLooped.vue'),
   },
 
+   {
+    path: '/reviews',
+    name: 'Reviews',
+    component: () => import('../pages/Reviews.vue'),
+  },
+
   {
     path: '/login',
     name: 'Login',

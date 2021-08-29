@@ -70,7 +70,7 @@ export function inputChange(state, payload) {
 
                     oldField.value = payload.value;
 
-                    oldField.errors.push( payload.error);
+                    oldField.errors.push(payload.error);
 
                     state.hasErrors = oldField.errors.length ? true : false;
                }

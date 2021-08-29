@@ -164,4 +164,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(FollowSuggestion::class, 'prospect_user_id');
     }
+
+    public function review()
+    {
+        return $this->hasOne(Review::class, 'user_id');
+    }
 }

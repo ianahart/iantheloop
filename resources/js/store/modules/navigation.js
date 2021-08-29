@@ -9,10 +9,12 @@ const initialState = () => {
       { component: 'Login', linkText: 'login' },
       { component: 'CreateAccount', linkText: 'create account' },
       { component: 'AboutLooped', linkText: 'about' },
+      { component: 'Reviews', linkText: 'Reviews' },
     ],
     authNavigationLinks: [
       { component: 'Home', linkText: 'home' },
       { component: 'AboutLooped', linkText: 'about' },
+      { component: 'Reviews', linkText: 'Reviews' },
     ],
     notificationsAreOpen: false,
   }

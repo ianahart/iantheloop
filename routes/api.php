@@ -24,6 +24,7 @@ use App\Http\Controllers\General\FollowRequestController;
 use App\Http\Controllers\General\MessengerController;
 use App\Http\Controllers\General\NotificationController;
 use App\Http\Controllers\General\FollowSuggestionController;
+use App\Http\Controllers\General\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,7 @@ Route::post('/auth/login', [LoginController::class, 'store']);
 Route::post('/auth/token/refresh', [refreshTokenController::class, 'store']);
 Route::post('/auth/recovery', [ForgotPasswordController::class, 'store']);
 Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
+Route::get('/auth/reviews/index', [ReviewController::class, 'index']);
 /*
 |--------------------------------------------------------------------------
 | Authentication Required Routes
@@ -90,3 +92,4 @@ Route::delete('/auth/user/notifications/interactions/{notificationId}/delete', [
 Route::get('/auth/newsfeed/{slug}/show', [NewsFeedController::class, 'show'])->middleware('auth:api');
 Route::get('/auth/follow-suggestions/{userId}/show', [FollowSuggestionController::class, 'show'])->middleware('auth:api');
 Route::patch('/auth/follow-suggestions/{suggestionId}/update', [FollowSuggestionController::class, 'update'])->middleware('auth:api');
+Route::post('/auth/reviews/create', [ReviewController::class, 'store'])->middleware('auth:api');

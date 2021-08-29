@@ -102,7 +102,10 @@ return [
     */
     /**USE 1 FOR TESTING*/
     //'ttl' => env('JWT_TTL', 1),
-    'ttl' => env('JWT_TTL', 60),
+    // 1 hour
+    // 'ttl' => env('JWT_TTL', 60),
+    // 2 days
+    'ttl' => env('JWT_TTL', 2880),
     /*
     |--------------------------------------------------------------------------
     | Refresh time to live
