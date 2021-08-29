@@ -24,6 +24,7 @@ import posts from './modules/posts.js';
 import profileWallSettings from './modules/profileWallSettings.js';
 import notifications from './modules/notifications.js';
 import messenger from './modules/messenger.js';
+import reviews from './modules/reviews.js';
 
 Vue.use(Vuex);
 export default new Vuex.Store(
@@ -34,6 +35,8 @@ export default new Vuex.Store(
 
       isPasswordShowing: false,
       userCount: 0,
+      reviewCount: 0,
+      reviewRating: 0,
     },
 
     mutations: {
@@ -42,7 +45,13 @@ export default new Vuex.Store(
       },
       SET_USER_COUNT: (state, count) =>{
         state.userCount = count;
-      }
+      },
+      SET_REVIEW_COUNT: (state, count) => {
+        state.reviewCount = count;
+      },
+      SET_REVIEW_RATING:(state, rating) => {
+        state.reviewRating = rating;
+      },
     },
 
     actions: {
@@ -60,6 +69,8 @@ export default new Vuex.Store(
             });
            console.log('index.js RETRIEVE_USER_TOTAL SUCC: ', response);
            commit('SET_USER_COUNT', response.data.count);
+           commit('SET_REVIEW_COUNT', response.data.review_count);
+           commit('SET_REVIEW_RATING', response.data.avg_review_rating);
         } catch(e) {
           console.log('index.js RETRIEVE_USER_TOTAL ERROR: ', e.response);
         }
@@ -90,6 +101,7 @@ export default new Vuex.Store(
       profileWallSettings,
       notifications,
       messenger,
+      reviews,
     },
   }
 );

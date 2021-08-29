@@ -8,6 +8,7 @@ use App\Helpers\Status;
 use Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
+use App\Models\Review;
 
 
 class UserController extends Controller
@@ -110,16 +111,26 @@ class UserController extends Controller
 
         try {
             $count = User::count();
+            $reviewCount = Review::count();
 
             if (is_null($count) || !$count) {
                 $count = 0;
+            }
+
+            if (is_null($reviewCount) || !$reviewCount) {
+                $reviewCount = 0;
+            } else {
+                $avgReviewRating = Review::avg('rating');
+                $avgReviewRating = round($avgReviewRating, 1);
             }
 
             return response()
                 ->json(
                     [
                         'msg' => 'success',
-                        'count' => $count
+                        'count' => $count,
+                        'review_count' => $reviewCount,
+                        'avg_review_rating' => $avgReviewRating,
                     ],
                     200
                 );

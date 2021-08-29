@@ -16,9 +16,19 @@
                         <img :src="require('../../assets/home_main_1.svg').default" alt="a user looking through their friend's list" />
                     </div>
                 </div>
-                <div class="home_main_user_total">
-                  <h1>{{ userCount }}</h1>
-                  <p>Happy Users</p>
+                <div class="home_main_statistics">
+                  <div class="home_main_statistic">
+                    <h1>{{ userCount }}</h1>
+                    <p>Happy Users</p>
+                 </div>
+                   <div class="home_main_statistic">
+                    <h1>{{ reviewCount }}</h1>
+                    <p>Active Reviews</p>
+                 </div>
+                   <div class="home_main_statistic">
+                    <h1>{{ reviewRating }}</h1>
+                    <p>User Rating</p>
+                 </div>
                 </div>
         </section>
     </div>
@@ -44,7 +54,11 @@ export default {
     },
 
     computed: {
-        ...mapState([ 'userCount' ]),
+        ...mapState([
+            'userCount',
+            'reviewCount',
+            'reviewRating',
+        ]),
     },
 
     methods: {
@@ -91,8 +105,11 @@ export default {
     display: flex;
     justify-content: space-evenly;
 }
-
-.home_main_user_total {
+.home_main_statistics {
+    display: flex;
+    justify-content: space-evenly;
+}
+.home_main_statistic {
     box-sizing: border-box;
     margin-top: 3rem auto;
     display: flex;
