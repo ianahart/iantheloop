@@ -87,7 +87,7 @@ class ReviewController extends Controller
                 $hasReviewed = $review->reviewStatus();
             }
 
-            $review->retrieve($request->query('page'));
+            $review->retrieve(intval($request->query('page')), $request->query('filters'));
 
             $error = $review->getError();
 
@@ -95,8 +95,7 @@ class ReviewController extends Controller
                 throw new Exception($error);
             }
 
-            $total = $review->getTotal();
-            $page = $review->getPage();
+            $pagination = $review->getPagination();
             $reviews = $review->getReviews();
 
             return response()
@@ -105,8 +104,7 @@ class ReviewController extends Controller
                         'msg' => 'success',
                         'authenticated' => $authenticationStatus,
                         'submit_status' => $hasReviewed,
-                        'page' => $page,
-                        'total' => $total,
+                        'pagination' => $pagination,
                         'reviews' => $reviews,
                     ],
                     200

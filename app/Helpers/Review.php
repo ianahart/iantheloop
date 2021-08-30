@@ -9,21 +9,16 @@ use Exception;
 
 class Review
 {
-  const LIMIT = 1;
+  const LIMIT = 5;
   private string $error;
   private int $userId;
   private array $review;
-  private int $total;
-  private int $page;
+  private array $pagination;
 
-  public function getTotal()
-  {
-    return $this->total;
-  }
 
-  public function getPage()
+  public function getPagination()
   {
-    return $this->page;
+    return $this->pagination;
   }
 
   public function getReviews()
@@ -87,19 +82,51 @@ class Review
     }
   }
 
-  public function retrieve()
+  public function retrieve(int $page, ?string $filter)
   {
     try {
 
-      $reviews = ReviewModel::join('profiles', 'reviews.user_id', '=', 'profiles.user_id')
-        ->join('users', 'reviews.user_id', '=', 'users.id')
-        ->select('profiles.profile_picture', 'users.full_name', 'reviews.*')
-        ->orderBy('reviews.id', 'DESC')
-        ->orderBy('reviews.created_at', 'DESC')
-        ->paginate(self::LIMIT);
+      $map = [
+        'lowest rated' => [
+          'column' => 'rating',
+          'direction' => 'ASC',
+        ],
+        'highest rated' => [
+          'column' => 'rating',
+          'direction' => 'DESC',
+        ],
+        'newest' => [
+          'column' => 'created_at',
+          'direction' => 'DESC',
+        ],
+        'oldest' => [
+          'column' => 'created_at',
+          'direction' => 'ASC',
+        ],
+      ];
 
-      $this->total = $reviews->total();
-      $this->page = $reviews->currentPage();
+      $baseQuery = ReviewModel::join('profiles', 'reviews.user_id', '=', 'profiles.user_id')
+        ->join('users', 'reviews.user_id', '=', 'users.id')
+        ->select('profiles.profile_picture', 'users.full_name', 'reviews.*');
+
+      if ($filter === NULL || !$filter) {
+        $reviews = $baseQuery
+          ->orderBy('reviews.id', 'DESC')
+          ->orderBy('reviews.created_at', 'DESC')
+          ->paginate(self::LIMIT);
+      } else {
+
+        $reviews = $baseQuery
+          ->orderBy($map[$filter]['column'], $map[$filter]['direction'])
+          ->paginate(self::LIMIT);
+      }
+
+      $this->pagination = [
+        'total' => $reviews->total(),
+        'page' => $reviews->currentPage(),
+        'last_page' => $reviews->lastPage(),
+      ];
+
       $this->reviews = $reviews->items();
     } catch (Exception $e) {
       $this->error = $e->getMessage();

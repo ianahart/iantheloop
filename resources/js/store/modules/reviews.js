@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { property } from 'lodash';
 
 
 const initialState = () => {
@@ -9,8 +10,20 @@ const initialState = () => {
     reviewsLoaded: false,
     alreadySubmitted: false,
     authenticated : false,
-    page: 1,
+    pagination: {total: 0, page: 1, last_page: null},
     totalReviews: 0,
+    filtersEnabled: false,
+    filters: [
+        {
+        field: 'sort_by',
+        errors: [],
+        label: '',
+        form: null,
+        value: 'Newest',
+        nameAttr: 'newest',
+        defaultValue: 'Newest'
+      },
+    ],
     form: [
       {
       field: 'review',
@@ -41,12 +54,30 @@ const reviews = {
 
   mutations: {
 
-    SET_PAGE(state, payload) {
-      state.page = payload;
+    UPDATE_FILTER(state,  { selection }) {
+      state.filtersEnabled = true;
+      state.filters.forEach(field => {
+        field.value = selection.value;
+      });
+
     },
 
-    SET_TOTAL(state, payload) {
-      state.totalReviews = payload;
+    SET_PAGINATION (state, payload) {
+      Object.assign(state.pagination, payload);
+    },
+
+    UPDATE_PAGINATION(state, { order, property }) {
+      if (order === 'next' && property === 'page') {
+        if (state.pagination.page < state.pagination.last_page) {
+          state.pagination.page = state.pagination.page  + 1;
+        }
+      }
+
+      if (order === 'prev' && property === 'page') {
+        if (state.pagination.page > 1) {
+          state.pagination.page = state.pagination.page - 1;
+        }
+      }
     },
 
     SET_REVIEWS_LOADED(state, payload) {
@@ -67,7 +98,6 @@ const reviews = {
 
     SET_ERRORS(state, payload) {
       state.errors = [...state.errors, ...payload];
-      console.log(state.errors);
     },
 
     SET_AUTHENTICATED(state, payload) {
@@ -98,28 +128,26 @@ const reviews = {
   },
 
   actions: {
-    /** GET ALL REVIEWS route -> /api/auth/reviews */
 
     async RETRIEVE_REVIEWS({ state, commit }, order = null) {
       try {
 
-        // if (state.reviews.length) {
-        //   commit('CLEAR_REVIEWS');
-        // }
+        if (state.reviews.length) {
+          commit('CLEAR_REVIEWS');
+        }
 
-        /**Filters: */
-        // 1.)'created_at' -> ASC -> newest
-        // 2.)'created_at' -> DESC -> oldest
-        // 3.) 'rating' -> ASC -> highest rated
-        // 4.) 'rating -> DESC -> lowest rated
-        /** order */
-        // if next +1 to page
-        // if prev -1 to page
+        if (state.pagination.last_page !== null) {
+          commit('UPDATE_PAGINATION', { order, property: 'page' });
+        }
 
+        let filter = '';
+        if (state.filtersEnabled) {
+          filter = state.filters[0].value.toLowerCase();
+        }
          const response= await axios(
           {
             method: 'GET',
-            url: `/api/auth/reviews/index?page=${state.page}&filters=null`,
+            url: `/api/auth/reviews/index?page=${state.pagination.page}&filters=${filter}`,
             headers:{
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -128,16 +156,14 @@ const reviews = {
         );
 
         if (response.status === 200) {
-            console.log('reviews.js Retrieve_REVIEW Success: ', response);
             commit('SET_AUTHENTICATED', response.data.authenticated);
             commit('SET_SUBMIT_STATUS', response.data.submit_status);
             commit('SET_REVIEWS', response.data.reviews);
-            commit('SET_PAGE', response.data.page);
-            commit('SET_TOTAL', response.data.total);
+            commit('SET_PAGINATION', response.data.pagination);
             commit('SET_REVIEWS_LOADED', true);
         }
       } catch(e) {
-     console.log('reviews.js RETRIEVE_REVIEWS Error: ', e.response);
+        console.log('reviews.js RETRIEVE_REVIEWS Error: ', e.response);
       }
     },
 

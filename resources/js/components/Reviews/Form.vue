@@ -39,7 +39,7 @@
       <div v-if="errors.length" class="reviews_errors_container">
         <p
         v-for="(error, index) in errors"
-        :key="index">ths is an error oh boy sdfj dklsfjdkls jdsfkl a </p>
+        :key="index">{{ error }}</p>
       </div>
       <div class="reviews_form_btn_container">
         <button type="submit">Post</button>

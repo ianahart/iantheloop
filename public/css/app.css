@@ -993,57 +993,6 @@ body {
   background-color: #484aa4;
   color: #fb4d70;
 }
-.logo {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-}
-.logo img {
-  height: 100px;
-  width: 100px;
-  display: block;
-}
-.login__header {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-.login__header h1 {
-  font-size: 3rem;
-  font-weight: 500;
-  margin-bottom: 0;
-  font-family: "Secular One", sans-serif;
-  letter-spacing: -3px;
-  color: #31326f;
-}
-.login__signup__link {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-.login__signup__link div:last-of-type {
-  display: flex;
-  align-items: center;
-}
-.login__signup__link p {
-  margin-bottom: 0;
-  margin-top: 0;
-  margin-right: 0.2rem;
-  font-size: 0.8rem;
-}
-.login__signup__link p:first-of-type {
-  font-weight: bold;
-  color: #31326f;
-}
-.login__signup__link a {
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: #31326f;
-  font-size: 0.8rem;
-  color: #77d2c2;
-}
 .create_profile_sidebar__icon {
   margin-right: 0.7rem;
   display: inline-block;
@@ -1470,6 +1419,139 @@ body {
 }
 .review_container {
   box-sizing: border-box;
+  margin: 1.2rem 0;
+  background-color: white;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  min-width: 450px;
+  border-radius: 8px;
+  width: 70%;
+  min-height: 400px;
+}
+.review_container section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.review_container header {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.review_header_row {
+  padding: 0.5rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #4169e1;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+.review_user_meta {
+  display: flex;
+  align-items: center;
+}
+.review_user_name_rating {
+  margin-left: 1.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.review_user_name_rating h4 {
+  margin: 0.09rem;
+  font-family: "Secular One", sans-serif;
+  color: #f4f4f4;
+}
+.review_user_name_rating svg {
+  height: 24px;
+  width: 24px;
+  padding: 0 0.09rem;
+  color: #e3e2e2;
+  height: 20px;
+  width: 20px;
+}
+.review_review {
+  margin-top: 2.9rem;
+  box-sizing: border-box;
+  width: 70%;
+  padding: 0.5rem;
+}
+.review_review p {
+  font-size: 1.125rem;
+  color: #6c717b;
+  line-height: 1.65;
+}
+.review_review_title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.review_review_title p {
+  color: #656a73;
+  font-weight: bold;
+}
+.review_review_title svg {
+  height: 28px;
+  width: 28px;
+  color: #e8e8e8;
+  fill: #e8e8e8;
+  margin-right: 0.3rem;
+}
+.review_review_text span {
+  color: #fb4d70;
+  margin: 0 0.5rem;
+  width: 5px;
+}
+.review_review_text em {
+  padding-top: 0.3rem;
+}
+.review_posted_date {
+  color: #fc7a94;
+  font-family: "Open Sans", sans-serif;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+.star_set {
+  fill: #e6e600;
+}
+.star_unset {
+  fill: transparent;
+}
+@media (max-width: 600px) {
+.review_container {
+    min-width: 95%;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 0;
+}
+.review_container svg {
+    width: 20px;
+    height: 20px;
+}
+.review_container p {
+    font-size: 0.75rem;
+}
+.review_user_name_rating h4 {
+    font-size: 0.8rem;
+}
+.review_review {
+    width: 95%;
+    margin-top: 1.4rem;
+}
+}
+.logo {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+}
+.logo img {
+  height: 100px;
+  width: 100px;
+  display: block;
 }
 .reviews_container {
   box-sizing: border-box;
@@ -1488,7 +1570,7 @@ body {
 }
 .reviews_list_container {
   box-sizing: border-box;
-  border: 1px solid #e3e2e2;
+  background-color: #fafafa;
   border-radius: 8px;
   margin: 3rem 0;
   display: flex;
@@ -1496,9 +1578,24 @@ body {
   flex-direction: column;
   align-items: center;
 }
+.review_sort_by_container {
+  box-sizing: border-box;
+  margin: 0 auto;
+  width: 200px;
+}
 .reviews_pagination {
   box-sizing: border-box;
+  width: 300px;
   margin: 1.5rem auto;
+  display: flex;
+}
+.reviews_pagination div {
+  justify-content: space-evenly;
+  align-items: center;
+}
+.reviews_pagination img {
+  width: 35px;
+  height: 35px;
 }
 .reviews_pagination button {
   width: 140px;
@@ -1550,6 +1647,54 @@ body {
 .reviews_form_heading h4 {
     margin-left: 1.5rem;
 }
+.reviews_pagination {
+    display: flex;
+    justify-content: center;
+    width: 180px;
+}
+.reviews_pagination button {
+    width: 100%;
+}
+}
+.login__header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.login__header h1 {
+  font-size: 3rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: -3px;
+  color: #31326f;
+}
+.login__signup__link {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.login__signup__link div:last-of-type {
+  display: flex;
+  align-items: center;
+}
+.login__signup__link p {
+  margin-bottom: 0;
+  margin-top: 0;
+  margin-right: 0.2rem;
+  font-size: 0.8rem;
+}
+.login__signup__link p:first-of-type {
+  font-weight: bold;
+  color: #31326f;
+}
+.login__signup__link a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #31326f;
+  font-size: 0.8rem;
+  color: #77d2c2;
 }
 .about_detals_form__row {
   margin: 2rem 0;
