@@ -103,7 +103,7 @@ class FollowSuggestion
             }
           ]
         )
-        ->paginate(2);
+        ->paginate(self::PAG_LIMIT);
 
       $this->total = $followSuggestions->total();
 
@@ -162,6 +162,8 @@ class FollowSuggestion
         ->whereIn('users.id', $prospectIDs)
         ->whereNotIn('users.id', array_merge($followingIDs, [$this->userId]))
         ->whereNotNull('stats.following')
+        ->orderBy('id', 'DESC')
+
         ->chunkById(
           self::CHUNK_SIZE,
           function ($users) use ($followingIDs, $prospects) {
@@ -170,13 +172,14 @@ class FollowSuggestion
 
               $mutualCount = count(array_intersect($followingIDs, array_keys($user->stat->following)));
 
-              if ($mutualCount > 0 && $prospects->count() <= 15) {
+              if ($prospects->count() <= 15) {
+                if ($mutualCount > 0) {
+                  $prospect = $this->packageProspect($user, $mutualCount);
+                  $prospects->push($prospect);
 
-                $prospect = $this->packageProspect($user, $mutualCount);
-                $prospects->push($prospect);
-
-                unset($user->stat);
-                unset($user->profile);
+                  unset($user->stat);
+                  unset($user->profile);
+                }
               } else {
                 return false;
               }
@@ -186,7 +189,6 @@ class FollowSuggestion
 
       $this->createRecords($prospects,  $followingIDs);
     } catch (Exception $e) {
-      error_log(print_r('Error: ' . $e->getMessage(), true));
       $this->error = $e->getMessage();
     }
   }
@@ -199,6 +201,7 @@ class FollowSuggestion
   */
   private function packageProspect(object $prospect, int $count): array
   {
+
     return [
       'profile_id' => $prospect->profile->id,
       'user_id' => $this->userId,
