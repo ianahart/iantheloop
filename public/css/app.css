@@ -1568,6 +1568,16 @@ body {
   letter-spacing: 1px;
   text-align: center;
 }
+.current_user_review_link {
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+.current_user_review_link a {
+  color: #8e8e94;
+  font-family: "Open Sans", sans-serif;
+}
 .reviews_list_container {
   box-sizing: border-box;
   background-color: #fafafa;
@@ -1581,6 +1591,7 @@ body {
 .review_sort_by_container {
   box-sizing: border-box;
   margin: 0 auto;
+  margin-bottom: 2rem;
   width: 200px;
 }
 .reviews_pagination {
@@ -1654,6 +1665,112 @@ body {
 }
 .reviews_pagination button {
     width: 100%;
+}
+}
+.left-fade-enter-active, .left-fade-leave-active {
+  transition: all 0.35s;
+}
+.left-fade-enter, .left-fade-leave-to {
+  opacity: 0;
+  transform: translateX(150px);
+}
+.right-fade-enter-active, .right-fade-leave-active {
+  transition: all 0.35s;
+}
+.right-fade-enter, .right-fade-leave-to {
+  opacity: 0;
+}
+.user_review_container {
+  box-sizing: border-box;
+  max-width: 1140px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  margin-top: 2rem;
+}
+.user_review_container h2 {
+  color: #8e8e94;
+  font-size: 20px;
+  font-family: "Open Sans", sans-serif;
+  letter-spacing: 1px;
+  text-align: center;
+}
+.current_user_edit_form {
+  box-sizing: border-box;
+  width: 75%;
+}
+.user_review_actions_container {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.user_review_actions_container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 140px;
+  border-radius: 10px;
+  padding: 0.7rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border: none;
+  font-family: "Open Sans", sans-serif;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  margin: 1.2rem 1.5rem;
+  font-weight: bold;
+}
+.user_review_actions_container button:hover {
+  opacity: 0.6;
+}
+.user_review_delete_btn {
+  background-color: #cecece;
+  color: #42424c;
+}
+.user_review_delete_btn svg {
+  height: 20px;
+  width: 20px;
+  color: #42424c;
+}
+.user_review_edit_btn {
+  background-color: #434599;
+  color: #f4f4f4;
+}
+.user_review_edit_btn svg {
+  height: 20px;
+  width: 20px;
+  color: #e3e3e3;
+}
+.current_user_review {
+  display: flex;
+  justify-content: center;
+}
+.user_review_column {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+}
+.user_review_background {
+  background-color: #fafafa;
+}
+@media (max-width: 600px) {
+.user_review_column {
+    width: 95%;
+}
+.user_review_actions_container {
+    flex-direction: column;
+    align-items: center;
+}
+.user_review_actions_container button {
+    width: 120px;
+}
+.current_user_edit_form {
+    width: 95%;
 }
 }
 .login__header {

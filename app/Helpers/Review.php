@@ -132,4 +132,45 @@ class Review
       $this->error = $e->getMessage();
     }
   }
+
+  public function userReview()
+  {
+    try {
+
+      if (JWTAuth::user()->id !== $this->userId) {
+        throw new Exception('User is not authorized', 401);
+      }
+
+      $data = ReviewModel::where('reviews.user_id', '=', $this->userId)
+        ->join('profiles', 'reviews.user_id', '=', 'profiles.user_id')
+        ->with(
+          [
+            'user' => function ($query) {
+              $query->select(
+                [
+                  'id',
+                  'full_name'
+                ]
+              );
+            }
+          ]
+        )
+        ->select(
+          [
+            'reviews.*',
+            'profiles.profile_picture'
+          ]
+        )
+        ->first();
+
+      $review = $data->toArray();
+      $review['full_name'] = $review['user']['full_name'];
+
+      unset($review['user']);
+
+      $this->reviews = $review;
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
+  }
 }

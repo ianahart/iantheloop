@@ -42,7 +42,7 @@
         :key="index">{{ error }}</p>
       </div>
       <div class="reviews_form_btn_container">
-        <button type="submit">Post</button>
+        <button type="submit">{{ this.type === 'add' ? 'Post' : 'Edit' }}</button>
       </div>
     </form>
   </div>
@@ -58,7 +58,7 @@
   export default {
     name: 'Form',
     props: {
-
+      type: String,
     },
     components: {
       StarOutlineIcon,
@@ -82,7 +82,13 @@
     },
 
     mounted() {
-
+      if (this.type === 'update') {
+        this.ratings.forEach((star, index) => {
+          if (star.id <= this.rating) {
+              star.state = 'selected';
+          }
+        });
+      }
     },
 
     beforeDestroy() {
@@ -100,6 +106,7 @@
         [
           'form',
           'errors',
+          'rating',
         ]
       ),
 
@@ -122,7 +129,8 @@
         ),
        ...mapActions('reviews',
         [
-          'SUBMIT_REVIEW'
+          'SUBMIT_REVIEW',
+          'EDIT_REVIEW',
         ]
       ),
       highlight(star, action) {
@@ -193,7 +201,14 @@
 
       async handleSubmit() {
         this.CLEAR_ERRORS();
-        await this.SUBMIT_REVIEW();
+
+        if (this.type === 'add') {
+           await this.SUBMIT_REVIEW();
+        }
+
+        if (this.type === 'update') {
+          await this.EDIT_REVIEW();
+        }
       },
     },
   }

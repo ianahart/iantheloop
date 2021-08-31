@@ -17,13 +17,16 @@ const routes = [
     name: 'AboutLooped',
     component: () => import('../pages/AboutLooped.vue'),
   },
-
    {
     path: '/reviews',
     name: 'Reviews',
     component: () => import('../pages/Reviews.vue'),
   },
-
+  {
+    path: '/reviews/:userId',
+    name: 'UserReview',
+    component: () => import('../pages/UserReview.vue'),
+  },
   {
     path: '/login',
     name: 'Login',

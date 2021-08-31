@@ -93,3 +93,4 @@ Route::get('/auth/newsfeed/{slug}/show', [NewsFeedController::class, 'show'])->m
 Route::get('/auth/follow-suggestions/{userId}/show', [FollowSuggestionController::class, 'show'])->middleware('auth:api');
 Route::patch('/auth/follow-suggestions/{suggestionId}/update', [FollowSuggestionController::class, 'update'])->middleware('auth:api');
 Route::post('/auth/reviews/create', [ReviewController::class, 'store'])->middleware('auth:api');
+Route::get('/auth/reviews/{userId}/show', [ReviewController::class, 'show'])->middleware('auth:api');

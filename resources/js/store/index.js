@@ -67,7 +67,6 @@ export default new Vuex.Store(
                'Content-Type': 'application/json',
              }
             });
-           console.log('index.js RETRIEVE_USER_TOTAL SUCC: ', response);
            commit('SET_USER_COUNT', response.data.count);
            commit('SET_REVIEW_COUNT', response.data.review_count);
            commit('SET_REVIEW_RATING', response.data.avg_review_rating);

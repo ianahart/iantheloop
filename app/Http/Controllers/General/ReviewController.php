@@ -120,4 +120,47 @@ class ReviewController extends Controller
                 );
         }
     }
+
+    /**
+     * Get all the reviews to be displayed
+     * @param Request $request
+     * @param String $userId
+     * @return JSONResponse
+     */
+    public function show(Request $request, String $userId)
+    {
+        try {
+
+            $review = new Review;
+            $review->setUserId(intval($userId));
+
+            $review->userReview();
+            $exception = $review->getError();
+
+            if (!is_null($exception)) {
+                throw new Exception($exception, 404);
+            }
+
+            $review = $review->getReviews();
+
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success',
+                        'review' => [$review],
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to retrieve review',
+                        'error' => $e->getMessage()
+                    ],
+                    $e->getCode() ? $e->getCode() : 404
+                );
+        }
+    }
 }

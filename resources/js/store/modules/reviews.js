@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { property } from 'lodash';
+
 
 
 const initialState = () => {
@@ -9,9 +9,12 @@ const initialState = () => {
     reviews: [],
     reviewsLoaded: false,
     alreadySubmitted: false,
+    currentView: 'review',
     authenticated : false,
     pagination: {total: 0, page: 1, last_page: null},
     totalReviews: 0,
+    currentUserReview: [],
+    currentUserReviewLoaded: false,
     filtersEnabled: false,
     filters: [
         {
@@ -59,7 +62,14 @@ const reviews = {
       state.filters.forEach(field => {
         field.value = selection.value;
       });
+    },
 
+    SET_CURRENT_VIEW (state, currentView){
+      state.currentView = currentView;
+    },
+
+    SET_CURRENT_USER_REVIEW_LOADED(state, payload) {
+      state.currentUserReviewLoaded = payload;
     },
 
     SET_PAGINATION (state, payload) {
@@ -86,6 +96,12 @@ const reviews = {
 
     RESET_REVIEW_MODULE(state) {
       Object.assign(state, initialState());
+    },
+
+    SET_CURRENT_USER_REVIEW(state, review) {
+      state.form[0].value = review[0].text;
+      state.rating = review[0].rating;
+      state.currentUserReview = [...state.currentUserReview, ...review];
     },
 
     SET_REVIEWS(state, reviews) {
@@ -163,7 +179,7 @@ const reviews = {
             commit('SET_REVIEWS_LOADED', true);
         }
       } catch(e) {
-        console.log('reviews.js RETRIEVE_REVIEWS Error: ', e.response);
+        console.log('reviews.js RETRIEVE_REVIEWS Error: ', e);
       }
     },
 
@@ -193,6 +209,42 @@ const reviews = {
         }
       }
     },
+
+    async RETRIEVE_REVIEW({ state, rootGetters, commit }) {
+
+      try {
+
+        const response = await axios(
+          {
+            method: 'GET',
+            url: `/api/auth/reviews/${rootGetters['user/getUserId']}/show`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+       if (response.status === 200) {
+         commit('SET_CURRENT_USER_REVIEW', response.data.review);
+         commit('SET_CURRENT_USER_REVIEW_LOADED', true);
+       }
+      } catch(e) {
+        console.log('reviews.js RETRIEVE_REVIEW Error', e);
+      }
+    },
+
+    async UPDATE_REVIEW({ state, commit }) {
+      try {
+
+        // console.log('review.js UPDATE_REVIEW Success: ', response);
+        // if (response.status === 200) {
+        //   commit('SET_CURRENT_VIEW', 'review');
+        // }
+      } catch(e) {
+        //console.log('review.js UPDATE_REVIEW Error: ', e);
+      }
+    }
   }
 }
 
