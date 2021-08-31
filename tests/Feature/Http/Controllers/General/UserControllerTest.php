@@ -8,7 +8,9 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Review;
 use App\Events\UserStatusChanged;
+use Database\Factories\ReviewFactory;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserControllerTest extends TestCase
@@ -81,5 +83,41 @@ class UserControllerTest extends TestCase
                 'status_updated' => false,
             ]
         );
+    }
+
+    /** @test */
+    public function it_counts_total_users_and_total_reviews()
+    {
+
+        $users = User::factory()
+            ->count(4)
+            ->create();
+
+        $ratings = [];
+        foreach ($users as $idx => $user) {
+            $rating = $idx % 2 === 0 ? 3 : 4;
+            $ratings[] = $rating;
+
+            Review::factory()
+                ->for($user)
+                ->count(2)
+                ->create(
+                    [
+                        'user_id' => $user->id,
+                        'rating' => $rating,
+                    ]
+                );
+        }
+
+        $avgRating = round(array_sum($ratings) / count($ratings), 1);
+
+        $response = $this->getJson('/api/auth/users/count', []);
+
+        $data = $response->getData();
+
+        $this->assertEquals($users->count() + 1, $data->count);
+        $this->assertEquals(8, $data->review_count);
+
+        $this->assertEquals($avgRating, $data->avg_review_rating);
     }
 }
