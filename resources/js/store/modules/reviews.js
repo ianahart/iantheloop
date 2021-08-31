@@ -15,6 +15,7 @@ const initialState = () => {
     totalReviews: 0,
     currentUserReview: [],
     currentUserReviewLoaded: false,
+    serverError: '',
     filtersEnabled: false,
     filters: [
         {
@@ -64,6 +65,10 @@ const reviews = {
       });
     },
 
+    SET_SERVER_ERROR(state, serverError) {
+      state.serverError = serverError;
+    },
+
     SET_CURRENT_VIEW (state, currentView){
       state.currentView = currentView;
     },
@@ -102,6 +107,18 @@ const reviews = {
       state.form[0].value = review[0].text;
       state.rating = review[0].rating;
       state.currentUserReview = [...state.currentUserReview, ...review];
+    },
+
+    UPDATE_CURRENT_USER_REVIEW(state, review) {
+      state.currentUserReview[0].text = review.text;
+      state.currentUserReview[0].is_edited = review.is_edited;
+      state.currentUserReview[0].rating = review.rating;
+      state.rating = review.rating;
+
+    },
+
+    CLEAR_CURRENT_USER_REVIEW(state) {
+      state.currentUserReview = [];
     },
 
     SET_REVIEWS(state, reviews) {
@@ -179,12 +196,13 @@ const reviews = {
             commit('SET_REVIEWS_LOADED', true);
         }
       } catch(e) {
-        console.log('reviews.js RETRIEVE_REVIEWS Error: ', e);
+        commit('SET_SERVER_ERROR', e.response.data.error);
       }
     },
 
     async SUBMIT_REVIEW({ state, rootGetters, commit }) {
       try {
+
         const response = await axios(
           {
             method: 'POST',
@@ -230,21 +248,59 @@ const reviews = {
          commit('SET_CURRENT_USER_REVIEW_LOADED', true);
        }
       } catch(e) {
-        console.log('reviews.js RETRIEVE_REVIEW Error', e);
+        commit('SET_SERVER_ERROR', e.response.data.error);
       }
     },
 
-    async UPDATE_REVIEW({ state, commit }) {
+    async UPDATE_REVIEW({ state, rootGetters, commit }) {
       try {
 
-        // console.log('review.js UPDATE_REVIEW Success: ', response);
-        // if (response.status === 200) {
-        //   commit('SET_CURRENT_VIEW', 'review');
-        // }
+        const response = await axios(
+          {
+            method: 'PATCH',
+            url: `/api/auth/reviews/${state.currentUserReview[0].id}/update`,
+            headers:{
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            data: {
+              currentUserId: rootGetters['user/getUserId'],
+              review: state.form[0].value,
+              rating: state.rating,
+            }
+          }
+        );
+        if (response.status === 200) {
+          commit('UPDATE_CURRENT_USER_REVIEW', response.data.review);
+          commit('SET_CURRENT_VIEW', 'review');
+        }
       } catch(e) {
-        //console.log('review.js UPDATE_REVIEW Error: ', e);
+        commit('SET_SERVER_ERROR', e.response.data.msg);
       }
-    }
+  },
+
+  async DELETE_REVIEW({ state, rootGetters, commit }) {
+     try {
+
+       const response = await axios(
+         {
+           method: 'DELETE',
+           url: `/api/auth/reviews/${state.currentUserReview[0].id}/delete?userId=${state.currentUserReview[0].user_id}`,
+           headers: {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+           },
+         }
+        );
+
+        if (response.status === 200) {
+          commit('CLEAR_CURRENT_USER_REVIEW');
+        }
+     } catch (e) {
+       console.log('DELETE_REVIEW review.js Error: ', e.response);
+       commit('SET_SERVER_ERROR', e.response.data.error);
+     }
+  }
   }
 }
 

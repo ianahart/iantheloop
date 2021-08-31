@@ -163,4 +163,90 @@ class ReviewController extends Controller
                 );
         }
     }
+
+    /**
+     * Update current user's review
+     * @param StoreReviewRequest $request
+     * @param String $reviewId
+     * @return JSONResponse
+     */
+    public function update(StoreReviewRequest $request, String $reviewId)
+    {
+        try {
+            $request->validated();
+
+            $review = new Review;
+
+            $review->setUserId(intval($request->all()['currentUserId']));
+            $review->setReview($request->all());
+
+            $review->update($reviewId);
+
+            $error = $review->getError();
+
+            if (!is_null($error)) {
+                throw new Exception($error);
+            }
+
+            $reviews = $review->getReviews();
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success',
+                        'review' => $reviews[0],
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to preform update on review',
+                        'error' => $e->getMessage()
+                    ],
+                    $e->getCode() ? $e->getCode() : 500
+                );
+        }
+    }
+
+    /**
+     * Delete current user's review
+     * @param Request $request
+     * @param String $reviewId
+     * @return JSONResponse
+     */
+    public function delete(Request $request, String $reviewId)
+    {
+        try {
+
+            $review = new Review;
+            $review->setUserId(intval($request->query('userId')));
+
+            $review->delete($reviewId);
+
+            $error = $review->getError();
+
+            if (!is_null($error)) {
+                throw new Exception($error);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success'
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to preform delete on review',
+                        'error' => $e->getMessage()
+                    ],
+                    $e->getCode() ? $e->getCode() : 500
+                );
+        }
+    }
 }

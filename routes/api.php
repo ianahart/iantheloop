@@ -94,3 +94,5 @@ Route::get('/auth/follow-suggestions/{userId}/show', [FollowSuggestionController
 Route::patch('/auth/follow-suggestions/{suggestionId}/update', [FollowSuggestionController::class, 'update'])->middleware('auth:api');
 Route::post('/auth/reviews/create', [ReviewController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/reviews/{userId}/show', [ReviewController::class, 'show'])->middleware('auth:api');
+Route::patch('/auth/reviews/{reviewId}/update', [ReviewController::class, 'update'])->middleware('auth:api');
+Route::delete('/auth/reviews/{reviewId}/delete', [ReviewController::class, 'delete'])->middleware('auth:api');

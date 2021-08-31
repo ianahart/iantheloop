@@ -98,6 +98,7 @@
       ...mapActions('reviews',
         [
           'RETRIEVE_REVIEW',
+          'DELETE_REVIEW',
         ]
       ),
 
@@ -105,8 +106,11 @@
         this.SET_CURRENT_VIEW('form');
       },
 
-      remove() {
-        console.log('UserReview.vue removing');
+      async remove() {
+        await this.DELETE_REVIEW();
+        if (!this.currentUserReview || !this.currentUserReview.length) {
+          this.$router.push({name: 'Reviews'});
+        }
       },
 
       back() {

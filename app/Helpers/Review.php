@@ -173,4 +173,50 @@ class Review
       $this->error = $e->getMessage();
     }
   }
+  /**
+   * @param String $reviewId */
+
+  public function update(String $reviewId)
+  {
+
+    try {
+
+      if (JWTAuth::user()->id !== intval($this->userId)) {
+        throw new Exception('Not authorized to make this transaction', 401);
+      }
+
+      $review = ReviewModel::where('id', '=', $reviewId)
+        ->where('user_id', '=', $this->userId)
+        ->first();
+
+      $review->is_edited = 1;
+      $review->text = $this->review['review'];
+      $review->rating = $this->review['rating'];
+
+      $review->save();
+      $review->refresh();
+
+      $this->reviews = [$review];
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
+  }
+  /** @param String $reviewId */
+  public function delete(String $reviewId)
+  {
+    try {
+
+      if (intval(JWTAuth::user()->id) !== intval($this->userId)) {
+        throw new Exception('Not authorized to make this transaction', 401);
+      }
+
+      $review = ReviewModel::where('id', '=', $reviewId)
+        ->where('user_id', '=', $this->userId)
+        ->first();
+
+      $review->delete();
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
+  }
 }

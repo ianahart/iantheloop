@@ -26,6 +26,7 @@
             <p>{{ firstName }} said:</p>
           </div>
           <p class="review_review_text"><span>&#9776;</span><em>{{ review.text }}<span>&#9776;</span></em></p>
+          <p v-if="review.is_edited === 1" class="review_review_edited">(Edited)</p>
         </div>
       </header>
     </section>
@@ -101,7 +102,15 @@
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
+      width: 100%;
     }
+  }
+
+
+  .review_review_edited {
+    margin: 1.2rem 0rem 0.5rem 0rem;
+    font-size: 0.8rem;
+    color: darken(lightgrey, 15);
   }
 
   .review_header_row {
@@ -147,8 +156,6 @@
     width: 70%;
     padding: 0.5rem;
     p {
-      font-size: 1.125rem;
-      color: #6c717b;
       line-height: 1.65;
     }
   }
@@ -177,6 +184,8 @@
       margin: 0 0.5rem;
       width: 5px;
     }
+      font-size: 1.125rem;
+      color: lighten(#6c717b, 4);
     em {
       padding-top: 0.3rem;
     }

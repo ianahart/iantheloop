@@ -1437,6 +1437,12 @@ body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+.review_review_edited {
+  margin: 1.2rem 0rem 0.5rem 0rem;
+  font-size: 0.8rem;
+  color: #adadad;
 }
 .review_header_row {
   padding: 0.5rem;
@@ -1479,8 +1485,6 @@ body {
   padding: 0.5rem;
 }
 .review_review p {
-  font-size: 1.125rem;
-  color: #6c717b;
   line-height: 1.65;
 }
 .review_review_title {
@@ -1498,6 +1502,10 @@ body {
   color: #e8e8e8;
   fill: #e8e8e8;
   margin-right: 0.3rem;
+}
+.review_review_text {
+  font-size: 1.125rem;
+  color: #767b86;
 }
 .review_review_text span {
   color: #fb4d70;

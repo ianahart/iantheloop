@@ -130,7 +130,7 @@
        ...mapActions('reviews',
         [
           'SUBMIT_REVIEW',
-          'EDIT_REVIEW',
+          'UPDATE_REVIEW',
         ]
       ),
       highlight(star, action) {
@@ -147,6 +147,7 @@
         if (this.allRatingsSelected()) {
           this.changeRating(star, action);
         }
+        this.SET_RATING(0);
       },
 
       handleRatingLeave() {
@@ -207,7 +208,7 @@
         }
 
         if (this.type === 'update') {
-          await this.EDIT_REVIEW();
+          await this.UPDATE_REVIEW();
         }
       },
     },
