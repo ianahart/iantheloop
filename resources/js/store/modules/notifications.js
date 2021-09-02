@@ -244,6 +244,7 @@ const notifications = {
         );
 
         if (response.status === 200) {
+          console.log(response.data)
           commit('SET_INTERACTION_CURSOR', response.data.next_page_url);
           commit('SET_INTERACTION_NOTIFICATIONS', response.data);
           commit('SET_INTERACTION_NOTIFICATIONS_LOADED', true);

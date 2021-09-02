@@ -62,6 +62,7 @@ class UserNotification
         $newValue['data'] = json_decode($newValue['data'], true,);
 
         $date = new DateTime($newValue['created_at']);
+
         $newValue['data']['readable_date'] = $this->makeReadableTime($date->format('U'), 'create');
 
         $arrayNotifications[] = $newValue;
@@ -110,7 +111,7 @@ class UserNotification
         $notification['notification_id'] = bin2hex(random_bytes(16));
 
         $latestReadNotification = $currentUser->notifications()
-          ->where('data->sender_user_id', '=', $notification['sender_user_id'])
+          ->where('data->sender_user_id', '=', intval($notification['sender_user_id']))
           ->where('type', '=', 'App\Notifications\UnreadMessage')
           ->latest('created_at')
           ->first();
@@ -127,7 +128,10 @@ class UserNotification
           $notification['latest_read_at'] = NULL;
         }
         $notification['new_notifications'] = !is_null($notification['latest_read_at']) ? false : true;
-        $notification['created_at'] = $latestReadNotification->created_at;
+
+        if (!is_null($latestReadNotification)) {
+          $notification['created_at'] = $latestReadNotification->created_at;
+        }
       }
 
       $this->notifications = count($this->notifications) > 0 ? $this->notifications : [];
@@ -147,7 +151,7 @@ class UserNotification
         $currentUser
           ->notifications()
           ->where('type', '=', $this->type)
-          ->where('data->sender_user_id', '=', $senderId)
+          ->where('data->sender_user_id', '=', intval($senderId))
           ->delete();
       }
     } catch (Exception $e) {
@@ -164,7 +168,7 @@ class UserNotification
       if ($currentUser) {
         $currentUser
           ->unreadNotifications()
-          ->where('data->sender_user_id', '=', $senderId)
+          ->where('data->sender_user_id', '=', intval($senderId))
           ->where('type', '=', 'App\Notifications\UnreadMessage')
           ->update(
             [
@@ -257,7 +261,7 @@ class UserNotification
 
       $currentUser
         ->notifications()
-        ->where('notifiable_id', '=', $currentUser->id)
+        ->where('notifiable_id', '=', intval($currentUser->id))
         ->where('id', '=', $id)
         ->delete();
     } catch (Exception $e) {

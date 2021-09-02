@@ -29,8 +29,8 @@ class refreshTokenControllerTest extends TestCase
 
         $this->user = User::factory()->create();
     }
-    /** @test */
 
+    /** @test */
     public function it_disallows_a_non_authenticated_user_from_trying_refresh()
     {
 
@@ -66,7 +66,6 @@ class refreshTokenControllerTest extends TestCase
     }
 
     /** @test */
-
     public function it_rejects_an_expired_token()
     {
         JWTAuth::factory()->setTTL(1);

@@ -182,7 +182,6 @@ class NotificationController extends Controller
             $notification = new UserNotification($userId);
             $notification->setType($request->query('type'));
 
-
             $alerts = $notification->notificationAlerts();
 
 

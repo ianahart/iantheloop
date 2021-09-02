@@ -16,7 +16,7 @@ class ResetPasswordControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-
+    /** @test */
     public function it_does_not_reset_password_if_validators_not_passed()
     {
         $passwords = ['', 'apple1@3D', 'sds2', 'sdeprl4!@d'];
