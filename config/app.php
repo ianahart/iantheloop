@@ -238,6 +238,7 @@ return [
         'Statistics' => 'App\Helpers\Statistics::class',
         'Status' => 'App\Helpers\Status::class',
         'Storage' => Illuminate\Support\Facades\Storage::class,
+        'Story' => 'App\Helpers\Story::class',
         'Str' => Illuminate\Support\Str::class,
         'URL' => Illuminate\Support\Facades\URL::class,
         'UserNotification' => 'App\Helpers\UserNotification::class',

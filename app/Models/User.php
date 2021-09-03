@@ -169,4 +169,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Review::class, 'user_id');
     }
+
+    public function subjectStories()
+    {
+        return $this->hasMany(Story::class, 'user_id');
+    }
+
+    public function authorStories()
+    {
+        return $this->hasMany(Story::class, 'story_user_id');
+    }
 }

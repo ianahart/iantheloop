@@ -25,6 +25,7 @@ use App\Http\Controllers\General\MessengerController;
 use App\Http\Controllers\General\NotificationController;
 use App\Http\Controllers\General\FollowSuggestionController;
 use App\Http\Controllers\General\ReviewController;
+use App\Http\Controllers\General\StoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,3 +97,4 @@ Route::post('/auth/reviews/create', [ReviewController::class, 'store'])->middlew
 Route::get('/auth/reviews/{userId}/show', [ReviewController::class, 'show'])->middleware('auth:api');
 Route::patch('/auth/reviews/{reviewId}/update', [ReviewController::class, 'update'])->middleware('auth:api');
 Route::delete('/auth/reviews/{reviewId}/delete', [ReviewController::class, 'delete'])->middleware('auth:api');
+Route::post('/auth/stories/create', [StoryController::class, 'store'])->middleware('auth:api');

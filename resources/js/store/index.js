@@ -25,6 +25,7 @@ import profileWallSettings from './modules/profileWallSettings.js';
 import notifications from './modules/notifications.js';
 import messenger from './modules/messenger.js';
 import reviews from './modules/reviews.js';
+import stories from './modules/stories.js';
 
 Vue.use(Vuex);
 export default new Vuex.Store(
@@ -128,6 +129,7 @@ export default new Vuex.Store(
       notifications,
       messenger,
       reviews,
+      stories,
     },
   }
 );

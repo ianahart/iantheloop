@@ -4946,10 +4946,12 @@ div.about_profile_work__row p {
   color: #fcfcfc;
 }
 @charset "UTF-8";
-.swiper-enter-active, .swiper-leave-active {
+.swiper-enter-active,
+.swiper-leave-active {
   transition: all 0.65s;
 }
-.swiper-enter, .swiper-leave-to {
+.swiper-enter,
+.swiper-leave-to {
   opacity: 0;
   transform: translate(-200px);
 }

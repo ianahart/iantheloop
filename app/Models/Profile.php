@@ -62,4 +62,9 @@ class Profile extends Model
     {
         return $this->hasOne(FollowSuggestion::class);
     }
+
+    public function story()
+    {
+        return $this->hasOne(Story::class);
+    }
 }
