@@ -37,6 +37,7 @@ export default new Vuex.Store(
       userCount: 0,
       reviewCount: 0,
       reviewRating: 0,
+      testimonials: [],
     },
 
     mutations: {
@@ -52,6 +53,12 @@ export default new Vuex.Store(
       SET_REVIEW_RATING:(state, rating) => {
         state.reviewRating = rating;
       },
+      SET_TESTIMONIALS: (state, testimonials) => {
+        state.testimonials = [...state.testimonials, ...testimonials];
+      },
+      CLEAR_TESTIMONIALS: (state) => {
+        state.testimonials = [];
+      }
     },
 
     actions: {
@@ -73,6 +80,26 @@ export default new Vuex.Store(
         } catch(e) {
           console.log('index.js RETRIEVE_USER_TOTAL ERROR: ', e.response);
         }
+      },
+
+      async GET_TESTIMONIALS({state, commit}) {
+           try {
+            const response = await axios(
+              {
+                method: 'GET',
+                url: `/api/auth/reviews/index?page=1&filters=newest`,
+                headers: {
+                 'Accept': 'application/json',
+                 'Content-Type': 'application/json',
+                }
+              }
+            );
+             if (response.status === 200) {
+               commit('SET_TESTIMONIALS', response.data.reviews.slice(0,3));
+             }
+           } catch(e) {
+            console.log('index.js GET_TESTIMONIALS | 400', e.response);
+           }
       }
     },
 

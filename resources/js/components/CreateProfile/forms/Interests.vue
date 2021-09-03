@@ -62,7 +62,6 @@
 
 <style lang="scss">
 
-//  @import '../../../../sass/general/_variables.scss';
 
 .about_details_interests__container {
   display: flex;
