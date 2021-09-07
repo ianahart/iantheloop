@@ -1,6 +1,10 @@
 <template>
   <div class="newsfeed_parent_container">
     <Modal />
+    <div class="user_stories_component_container">
+      <CreateStoryTrigger />
+      <Stories />
+    </div>
     <div v-if="posts.length" class="newsfeed_flex_container">
       <Feed
         v-if="postsLoaded && posts.length"
@@ -23,6 +27,8 @@
   import FriendsIcon from '../components/Icons/FriendsIcon.vue';
   import Sidebar from '../components/NewsFeed/Sidebar.vue';
   import Modal from '../components/ProfileWall/Modal.vue';
+  import Stories from '../components/Stories/Stories.vue';
+  import CreateStoryTrigger from '../components/Stories/CreateStoryTrigger.vue';
 
   export default {
 
@@ -33,6 +39,8 @@
       Sidebar,
       FriendsIcon,
       Modal,
+      Stories,
+      CreateStoryTrigger,
     },
 
     async mounted() {
@@ -89,6 +97,16 @@
     box-sizing: border-box;
   }
 
+  .user_stories_component_container {
+    background-color: #3b3b441f;
+    box-sizing: border-box;
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 0.25rem;
+    margin: 1.5rem 0.85rem;
+  }
+
   .newsfeed_flex_container {
     box-sizing: border-box;
     padding:0.5rem;
@@ -119,6 +137,11 @@
   @media (max-width:600px) {
     .newsfeed_flex_container {
       flex-direction: column-reverse;
+    }
+
+    .user_stories_component_container {
+      margin: 1.5rem 0.5rem;
+      padding: 0.5rem;
     }
   }
 </style>

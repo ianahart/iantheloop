@@ -1,0 +1,366 @@
+<template>
+   <div class="create_story_container">
+     <div class="create_story_grid">
+       <div class="create_story_sidebar">
+        <div @click="toNewsFeed" class="newsfeed_return">
+          <CloseIcon />
+        </div>
+        <div class="create_story_settings">
+          <h1>{{ firstName }}'s Story</h1>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+         </svg>
+        </div>
+        <div class="current_users_story">
+          <StoryProPic
+            :src="getProfilePic"
+            :alt="userName"
+          />
+          <h3>{{ capitalizedName }}</h3>
+        </div>
+        <div v-if="isFormOpen" class="story_form_component_container">
+          <Form />
+        </div>
+       </div>
+       <div class="create_story_showcase_options">
+        <div class="create_text_story_preview_container">
+         <Preview
+           v-if="isFormOpen"
+           :newStory="newStory"
+           :storyType="storyType"
+         />
+       </div>
+        <div v-if="!isFormOpen" class="showcase_options_container">
+          <div @click="openForm('text')" class="showcase_option_text">
+            <div class="showcase_option_text_content">
+              <h2>Text Story</h2>
+              <h3>Aa</h3>
+            </div>
+          </div>
+          <div class="showcase_option_photo">
+            <div class="showcase_option_photo_content">
+              <h2>Photo Story</h2>
+              <CameraSolidIcon />
+              <p v-if="photoError.length">{{ photoError }}</p>
+              <PhotoUpload
+                @error="setError"
+                @upload="handlePhotoStory"
+                :photoError="photoError"
+              />
+            </div>
+          </div>
+        </div>
+       </div>
+     </div>
+   </div>
+</template>
+
+<script>
+  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+
+  import CloseIcon from '../components/Icons/CloseIcon.vue';
+  import StoryProPic from '../components/Stories/StoryProPic.vue';
+  import CameraSolidIcon from '../components/Icons/CameraSolidIcon.vue';
+  import Form from '../components/Stories/Form.vue';
+  import Preview from '../components/Stories/Preview.vue';
+  import PhotoUpload from '../components/Stories/PhotoUpload.vue';
+
+  export default {
+    name: 'CreateStory',
+    components: {
+      CloseIcon,
+      StoryProPic,
+      CameraSolidIcon,
+      Form,
+      Preview,
+      PhotoUpload,
+    },
+
+    data () {
+      return {
+        photoError: '',
+      }
+    },
+
+    beforeDestroy() {
+      this.RESET_STORIES_MODULE();
+    },
+
+    computed: {
+      ...mapState('stories',
+        [
+          'isFormOpen',
+          'newStory',
+          'storyType',
+        ]
+      ),
+      ...mapGetters('user',
+        [
+          'getUserSlug',
+          'getUserId',
+          'userName',
+          'getProfilePic',
+        ]
+      ),
+
+      firstName() {
+        if (this.userName) {
+          const name = this.userName.split(' ')[0];
+          return name.toUpperCase().slice(0, 1) + name.toLowerCase().slice(1)
+        }
+      },
+
+      capitalizedName() {
+        if (this.userName) {
+          return this.userName.split(' ').map(word => word.toUpperCase().slice(0, 1) + word.toLowerCase().slice(1)).join(' ');
+        }
+
+      }
+    },
+
+    methods: {
+      ...mapMutations('stories',
+        [
+          'RESET_STORIES_MODULE',
+          'SET_FORM_OPEN',
+          'SAVE_PHOTO_FILE',
+        ]
+      ),
+
+      setError(error) {
+        this.photoError = error;
+      },
+
+      handlePhotoStory(photo) {
+        if (!this.photoError.length) {
+          this.SAVE_PHOTO_FILE(photo);
+          this.openForm('photo');
+        }
+      },
+
+      openForm(storyType) {
+        this.SET_FORM_OPEN({storyType, isFormOpen: true});
+      },
+
+      toNewsFeed() {
+        this.$router.push({name: 'NewsFeed', params:{slug: `${this.getUserSlug}`}});
+      },
+    },
+  }
+</script>
+
+<style lang="scss">
+  .create_story_container {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background-color: lighten($primaryBlack, 1);
+  }
+
+  .create_story_grid {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .create_story_sidebar {
+    box-sizing: border-box;
+    background-color: #3a3a3a;
+    border-right: 1px solid #616161;
+    flex-grow: 1;
+    max-width: 500px;
+  }
+
+  .create_story_showcase_options{
+    box-sizing: border-box;
+    background-color: #232222;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+  }
+
+
+  .showcase_options_container {
+    width: 80%;
+    max-width: 1140px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+
+  }
+
+  .showcase_option_text,
+  .showcase_option_photo {
+    box-sizing: border-box;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    width: 35%;
+    max-width: 320px;
+    min-width: 200px;
+    height: 490px;
+    cursor: pointer;
+    position: relative;
+  }
+
+    .showcase_option_text {
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(145,253,29,1) 50%, rgba(252,176,69,1) 100%);
+  }
+    .showcase_option_photo {
+    background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  }
+
+
+  .showcase_option_text_content,
+  .showcase_option_photo_content {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    h2 {
+      font-family: 'Secular One', sans-serif;
+      color: darken($primaryBlack, 2);
+      margin: 0.1rem 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
+    }
+  }
+
+  .showcase_option_text_content {
+     h3 {
+       font-family: 'Open Sans', sans-serif;
+       color: darken($primaryBlack, 2);
+       margin: 0.1rem 0;
+       font-size: 2.8rem;
+     }
+  }
+
+  .showcase_option_photo_content {
+    p {
+      margin: 0.1rem 0;
+      color: #b6b6b6;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.75rem;
+    }
+    svg {
+        color: darken($primaryBlack, 2);
+        height: 60px;
+        width: 60px;
+    }
+  }
+
+
+  .newsfeed_return {
+    box-sizing: border-box;
+    display: flex;
+    padding: 1rem;
+    justify-content: flex-start;
+    svg {
+       height: 35px;
+       width: 35px;
+       color: $primaryWhite;
+       background-color: #232222;
+       border-radius: 50%;
+    }
+  }
+
+  .create_story_settings {
+    border-top:  1px solid #464447;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    svg {
+      color: darken(darkgrey,4);
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+      background-color: #232222;
+    }
+    h1 {
+      color: $primaryWhite;
+      font-family: 'Secular One', sans-serif;
+    }
+  }
+
+  .current_users_story {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0.7rem 0.5rem 1.3rem 0.5rem;
+    border-bottom:  1px solid #464444;
+    img {
+      cursor: pointer;
+    }
+    svg {
+      cursor: pointer;
+    }
+    h3 {
+      color: $primaryWhite;
+      padding-left: 1rem;
+      font-weight: 100;
+    }
+  }
+
+  .story_form_component_container {
+    box-sizing: border-box;
+    margin: 3.5rem auto 1.5rem auto;
+    max-width: 85%;
+  }
+
+  .create_text_story_preview_container {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media(max-width:800px) {
+    .create_story_grid {
+      flex-direction: column;
+    }
+
+    .create_text_story_preview_container {
+      height: 100%;
+    }
+
+    .create_story_sidebar {
+      flex-grow: 1;
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .create_story_showcase_options {
+      flex-grow: 1;
+      width: 100%;
+      height: 100%;
+    }
+
+    .showcase_options_container {
+      height: 100%;
+      flex-direction: column;
+      padding: 0.5rem;
+      max-width: 100%;
+    }
+
+    .showcase_option_text,
+    .showcase_option_photo {
+       height: 300px;
+       margin: 2rem auto;
+    }
+  }
+</style>

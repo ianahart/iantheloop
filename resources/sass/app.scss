@@ -153,3 +153,23 @@
         background-color: rgba(255, 0, 51, 0.8);
     }
 }
+
+.story_preview_align_bottom {
+    display: flex;
+    flex-direction: column;
+    p {
+        margin-top: auto;
+    }
+}
+
+.story_preview_align_center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.story_preview_align_top {
+    display: flex;
+    justify-content: center;
+}

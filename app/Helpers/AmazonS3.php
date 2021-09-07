@@ -10,6 +10,7 @@ class AmazonS3
 {
   public $fileName;
   public $file;
+  private string $type;
 
   public function __construct($fileName, $file)
   {
@@ -19,12 +20,17 @@ class AmazonS3
     $this->s3 = Storage::disk('s3');
   }
 
+  public function setType($type)
+  {
+    $this->type = $type;
+  }
+
   public function uploadToBucket()
   {
 
     try {
 
-      $body = file_get_contents($this->file);
+      $body =  isset($this->type) && !is_null($this->type) ?   $this->file : file_get_contents($this->file);
       $this->s3->put($this->fileName, $body, 'public');
     } catch (S3Exception $e) {
 

@@ -17,6 +17,22 @@ const routes = [
     name: 'AboutLooped',
     component: () => import('../pages/AboutLooped.vue'),
   },
+  {
+    path: '/stories/create',
+    name: 'CreateStory',
+    component: () => import('../pages/CreateStory.vue'),
+    meta: {
+      requiresAuth: true,
+    }
+  },
+  {
+   path: '/stories/:userId',
+   name: 'StoriesDashboard',
+   component: () => import('../pages/StoriesDashboard.vue'),
+   meta: {
+     requiresAuth: true,
+   }
+  },
    {
     path: '/reviews',
     name: 'Reviews',

@@ -24,6 +24,12 @@ class Story extends Model
         'text',
         'created_at_unix',
         'expire_in_unix',
+        'duration',
+        'background',
+        'font_size',
+        'story_type',
+        'color',
+        'alignment'
     ];
 
     protected $casts = [
@@ -34,6 +40,8 @@ class Story extends Model
         'muted' => 'boolean',
         'created_at_unix' => 'integer',
         'expire_in_unix' => 'integer',
+        'duration' => 'string',
+        'font_size' => 'string',
     ];
 
     public function profile()

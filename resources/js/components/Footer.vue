@@ -25,7 +25,7 @@
 <style lang="scss">
 
   .footer {
-    background-color: lighten(#191919, 10);
+    background-color:#3b3b44;
     flex-shrink: 0;
     display: flex;
     justify-content: space-around;

@@ -21,17 +21,6 @@
 
 <script>
 
-// Contents of baseProfile:
-// {…}
-// background_picture: "https://hart-looped.s3.amazonaws.com/60a6c87f300ceweatherman_bg-2.jpeg"
-// company: (...)
-// display_name: "Bluewallrider87"
-// full_name: "Dan Weatherman"
-// id: "22"
-// position: "Head Photographer"
-// profile_picture: "https://hart-looped.s3.amazonaws.com/60a6c999541f0weatherman_pro_2.jpeg"
-
-
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
   import FormTrigger from '../Post/FormTrigger.vue';
   import Posts from '../Post/Posts.vue';

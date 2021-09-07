@@ -17,16 +17,18 @@ const authenticatedNotAuthorized = [
   'Explore',
   'Following',
   'Followers',
-  'NewsFeed'
+  'NewsFeed',
+  'CreateStory',
+   'StoriesDashboard',
 ];
 
 router.beforeEach((to, from, next) => {
 
   /*
   *
-  * Only allow the user logged in to view only their newsfeed
+  * Only allow the user logged in to view only their newsfeed/stories
   **/
-    if (to.name === 'NewsFeed' && to.params.slug !== store.getters['user/getUserSlug']) {
+    if (to.name === 'NewsFeed' && to.params.slug !== store.getters['user/getUserSlug'] || to.name === 'StoriesDashboard' && parseInt(to.params.userId) !== store.getters['user/getUserId']) {
       next({ path: '/' })
     } else {
       next();
