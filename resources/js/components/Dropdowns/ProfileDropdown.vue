@@ -223,10 +223,15 @@
 
         this.leaveUserStatusChannel();
         this.leaveNotificationChannel();
+        this.leaveStoryChannel();
         this.CLOSE_PROFILE_DROPDOWN(false);
         this.SET_NAV_ALERTS({ nav_interaction_alerts: 0, nav_message_alerts: false });
         this.$router.push({ name: 'Login' });
 
+      },
+
+      leaveStoryChannel() {
+        Echo.leave(`stories.${this.getUserId}`);
       },
 
       leaveUserStatusChannel() {

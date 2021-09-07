@@ -34,7 +34,7 @@ class ProcessStoryPhoto implements ShouldQueue
 
         $this->onQueue('stories');
         $this->onConnection('database');
-        $this->delay(now()->addSeconds(15));
+        $this->delay(now()->addSeconds(10));
         $this->afterCommit();
     }
 
@@ -88,5 +88,34 @@ class ProcessStoryPhoto implements ShouldQueue
         }
 
         $story->save();
+        $story->refresh();
+
+        $followersOnline = collect([]);
+        User::whereIn(
+            'id',
+            array_keys($story->authorUser->stat->followers)
+        )
+            ->chunkById(100, function ($users) use ($followersOnline) {
+                foreach ($users as $user) {
+
+                    if ($user->status === 'online') {
+
+                        $followersOnline->push($user->id);
+                    }
+                }
+            });
+
+        $followersOnline->push($story->authorUser->id);
+
+        $related = [
+            'full_name' => $story->authorUser->full_name,
+            'profile_picture' => $story->profile->profile_picture,
+            'followers' => $followersOnline,
+        ];
+
+        unset($story->authorUser);
+        unset($story->profile);
+
+        StoryPhotoProcessed::dispatch($story, $related);
     }
 }

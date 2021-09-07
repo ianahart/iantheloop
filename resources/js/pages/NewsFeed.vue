@@ -45,6 +45,10 @@
 
     async mounted() {
       await this.loadNewsfeedPosts();
+
+      if (this.checkExistingStoryConnection() === -1) {
+            this.initStoryChannel();
+      }
     },
 
     beforeDestroy() {
@@ -60,12 +64,19 @@
 
         ]
       ),
+      ...mapState('stories',
+        [
+          'stories'
+        ]
+      ),
       ...mapGetters('user',
         [
           'getUserId',
-          'getProfilePic'
+          'getProfilePic',
+          'getToken',
         ]
       ),
+
     },
 
     methods: {
@@ -75,18 +86,48 @@
           'RESET_MODULE'
         ]
       ),
+      ...mapMutations('stories',
+        [
+          'SET_STORIES',
+          'SET_CURRENT_USER_STORIES',
+        ]
+      ),
       ...mapActions('posts',
         [
           'NEWSFEED_POSTS'
         ]
       ),
+
+      checkExistingStoryConnection() {
+        const channelNames = Object.keys(window.Echo.connector.channels)
+        const storyConnection = channelNames.findIndex(channelName => channelName === `private-stories.${this.getUserId}`);
+
+        return storyConnection;
+      },
+
       async loadNewsfeedPosts () {
 
         await this.NEWSFEED_POSTS();
       },
+
       async refillNewsfeedPosts() {
         await this.NEWSFEED_POSTS();
-    },
+      },
+
+      initStoryChannel() {
+
+        Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+
+         Echo.private(`stories.${this.getUserId}`)
+            .listen('StoryPhotoProcessed', (event) => {
+
+                if (parseInt(event.data.story.user_id) === parseInt(this.getUserId)) {
+                      this.SET_CURRENT_USER_STORIES([event.data]);
+                } else {
+                    this.SET_STORIES([event.data]);
+                }
+            });
+      }
     },
   }
 

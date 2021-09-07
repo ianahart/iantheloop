@@ -42,6 +42,8 @@ export default new Vuex.Store(
     },
 
     mutations: {
+
+
       CHANGE_PASSWORD_ICON: (state) => {
         state.isPasswordShowing = !state.isPasswordShowing;
       },

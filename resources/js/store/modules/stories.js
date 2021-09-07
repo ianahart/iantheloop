@@ -8,6 +8,7 @@ const initialState = () => {
     storyTextError: '',
     storyType: 'text',
     validationErrors: [],
+    currentUserStories: [],
     newStory: {
       text: '',
       file: {file: null, src: ''},
@@ -40,6 +41,16 @@ const stories = {
       state.storyType = payload.storyType;
 
       state.validationErrors = [];
+    },
+
+    SET_STORIES(state, payload) {
+      console.log('stories.js|SET_STORIES: ', payload);
+      state.stories = [...state.stories, ...payload];
+    },
+
+    SET_CURRENT_USER_STORIES(state, payload) {
+      console.log('stories.js|SET_CURRENT_USER_STORIES: ', payload);
+       state.currentUserStories = [...state.currentUserStories, ...payload];
     },
 
     SET_VALIDATION_ERRORS(state, { errors }) {
@@ -134,6 +145,7 @@ const stories = {
         if (response.status === 201) {
           console.log('stories.js|CREATE_STORY| Success Response: ', response);
           commit('SET_FORM_OPEN', {storyType: 'text', isFormOpen: false});
+          commit('CLEAR_STORY_FORM');
         }
       } catch(e) {
         console.log('stories.js|CREATE_STORY| Error Response: ', e.response);

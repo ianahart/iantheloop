@@ -42,6 +42,8 @@ export default {
         if (this.getStatus === 'online') {
             this.initUserStatusChannel();
             this.reInitNotificationChannel();
+            this.reInitStoriesChannel();
+
             await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: ['App/Notifications/UnreadMessage', 'App/Notifications/Interaction'] });
         }
     },
@@ -49,11 +51,12 @@ export default {
     beforeDestroy() {
         this.SET_NAV_ALERTS({ nav_interaction_alerts: 0, nav_message_alerts: false });
         this.leave(`notifications.${this.getUserId}`);
-
+        Echo.leave(`stories.${this.getUserId}`);
     },
 
     computed: {
 
+      ...mapState('stories', ['stories']),
 
         ...mapState('profileDropdown',
             [
@@ -89,6 +92,12 @@ export default {
                 'SET_CURRENT_INTERACTION_ALERT_ACTIVE'
             ]
         ),
+        ...mapMutations('stories',
+            [
+               'SET_STORIES',
+               'SET_CURRENT_USER_STORIES',
+            ]
+        ),
         ...mapActions('notifications',
             [
                 'FETCH_NAV_NOTIFICATION_ALERTS'
@@ -106,6 +115,18 @@ export default {
             })
             .error((error) => {
                 console.log('Channel Error: ', error);
+            });
+      },
+
+      reInitStoriesChannel() {
+        Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
+        Echo.private(`stories.${this.getUserId}`)
+            .listen('StoryPhotoProcessed', (event) => {
+                if (parseInt(event.data.story.user_id) === parseInt(this.getUserId)) {
+                      this.SET_CURRENT_USER_STORIES([event.data]);
+                } else {
+                    this.SET_STORIES([event.data]);
+                }
             });
       },
 

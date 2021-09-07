@@ -24,8 +24,7 @@ class StoryChannel
      */
     public function join(User $user, $userId)
     {
-        $userJoining = User::find($userId);
-
-        return $user->id === $userJoining->id;
+        $currentUser = User::find($userId);
+        return $user->id === $currentUser->id;
     }
 }
