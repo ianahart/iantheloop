@@ -5,9 +5,13 @@ const initialState = () => {
 
   return {
     stories: [],
-    storyTextError: '',
+    storyError: '',
     storyType: 'text',
     validationErrors: [],
+    isLightBoxActive: false,
+    lightBoxStory: '',
+    currentUserHasStories: false,
+    userIdClicked: null,
     currentUserStories: [],
     newStory: {
       text: '',
@@ -35,6 +39,37 @@ const stories = {
   },
 
   mutations: {
+    SET_USER_ID_CLICKED(state, userId) {
+       state.userIdClicked = userId;
+    },
+
+    SET_IS_LIGHTBOX_ACTIVE(state, payload) {
+      state.isLightBoxActive = payload;
+    },
+
+    SET_LIGHTBOX_STORY(state, { story, btn, user }) {
+      console.log('Story Id: ', story);
+      const currentStoryIndex = state[user].findIndex(el => el.id === story);
+
+      if (btn === 'next') {
+        if (currentStoryIndex >= 0 && currentStoryIndex + 1 < state[user].length) {
+
+          state.lightBoxStory = state[user][currentStoryIndex + 1];
+        } else {
+          state.isLightBoxActive = false;
+          state.lightBoxStory = '';
+          state[user] = [];
+        }
+      } else if (btn === 'prev') {
+        if (currentStoryIndex >= 0 && currentStoryIndex - 1 >= 0) {
+          state.lightBoxStory = state[user][currentStoryIndex -1];
+        } else {
+          state.isLightBoxActive = false;
+          state.lightBoxStory = '';
+          state[user] = [];
+        }
+      }
+    },
 
     SET_FORM_OPEN(state, payload) {
       state.isFormOpen = payload.isFormOpen;
@@ -51,6 +86,11 @@ const stories = {
     SET_CURRENT_USER_STORIES(state, payload) {
       console.log('stories.js|SET_CURRENT_USER_STORIES: ', payload);
        state.currentUserStories = [...state.currentUserStories, ...payload];
+       state.lightBoxStory = state.currentUserStories.slice(0,1)[0];
+    },
+
+    SET_CURRENT_USER_HAS_STORIES(state, count) {
+      state.currentUserHasStories = count > 0 ? true : false;
     },
 
     SET_VALIDATION_ERRORS(state, { errors }) {
@@ -66,12 +106,14 @@ const stories = {
        state.validationErrors = [];
     },
 
-    SET_STORY_TEXT_ERROR(state, payload) {
-      state.storyTextError = payload;
+    SET_STORY_ERROR(state, payload) {
+      state.storyError = payload;
     },
 
     CLEAR_STORY_FORM(state) {
        Object.assign(state.newStory,  initialState().newStory);
+       state.storyError = '';
+       state.validationErrors = [];
     },
 
     SAVE_PHOTO_FILE(state, photo) {
@@ -143,16 +185,72 @@ const stories = {
         );
 
         if (response.status === 201) {
-          console.log('stories.js|CREATE_STORY| Success Response: ', response);
+          console.log('stories.js|CREATE_STORY| Success (201): ', response);
           commit('SET_FORM_OPEN', {storyType: 'text', isFormOpen: false});
           commit('CLEAR_STORY_FORM');
         }
       } catch(e) {
-        console.log('stories.js|CREATE_STORY| Error Response: ', e.response);
-        commit('SET_VALIDATION_ERRORS',e.response.data);
+        console.log('stories.js|CREATE_STORY| Error (400): ', e.response);
+        if (e.response.status === 422) {
+          commit('SET_VALIDATION_ERRORS',e.response.data);
+        } else if (e.response.status === 400) {
+          commit('SET_STORY_ERROR', e.response.data.error);
+        }
+
       }
+    },
+
+    async RETRIEVE_STORY({ state, rootGetters, commit }, userId) {
+
+      try {
+
+        const response = await axios(
+          {
+            method: 'GET',
+            url: `/api/auth/stories/${userId}/show`,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          console.log('stories.js|RETRIEVE_STORY| Success (200): ', response);
+          if (parseInt(rootGetters['user/getUserId']) === parseInt(userId)) {
+              commit('SET_CURRENT_USER_STORIES', response.data.stories);
+          } else {
+            console.log('stories.js|RETRIEVE_STORY| should set user stories not current user stories');
+          }
+        }
+      } catch(e) {
+          console.log('stories.js|RETRIEVE_STORY| Error (404): ', e.response);
+      }
+
+    },
+
+    async ACTIVE_STORY_COUNT({ state, commit }, userId) {
+        try {
+          const response = await axios(
+            {
+              method: 'GET',
+              url: `/api/auth/stories/${userId}/count/show`,
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              }
+            }
+          );
+
+          if (response.status === 200) {
+            commit('SET_CURRENT_USER_HAS_STORIES', response.data.user_stories_count);
+          }
+        } catch(e) {
+          console.log('stories.js|ACTIVE_STORY_COUNT| Error (404): ', e.response);
+        }
     }
   }
 };
 
 export default stories;
+

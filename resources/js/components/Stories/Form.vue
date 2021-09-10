@@ -5,6 +5,7 @@
         <p v-for="(validationError , index) in validationErrors" :key="index">{{ validationError }}</p>
       </div>
       <div v-if="storyType === 'photo'" class="story_form_photo_fields">
+        <p class="edit_photo_story_error" v-if="storyError.length">{{ storyError }}</p>
         <div class="story_form_photo_duration_container">
           <p class="story_form_label">Duration:</p>
           <Duration />
@@ -65,7 +66,7 @@
             </div>
           </div>
       <p class="story_text_error">
-        {{ storyTextError }}
+        {{ storyError }}
       </p>
       <div class="story_form_text_area_container">
         <textarea
@@ -93,7 +94,7 @@
     </div>
       <div class="story_action_btns_container">
         <button @click.stop.prevent="clearStoryForm">Clear</button>
-        <button :disabled="storyTextError.length ? true : false" type="submit">Share</button>
+        <button :disabled="storyError.length && storyType === 'text' ? true : false" type="submit">Share</button>
       </div>
     </form>
   </transition>
@@ -146,7 +147,7 @@
         [
           'newStory',
           'storyType',
-          'storyTextError',
+          'storyError',
           'validationErrors',
         ]
       ),
@@ -163,7 +164,7 @@
       ...mapMutations('stories',
         [
           'UPDATE_STORY_FIELD',
-          'SET_STORY_TEXT_ERROR',
+          'SET_STORY_ERROR',
           'CLEAR_STORY_FORM',
           'SAVE_PHOTO_FILE',
           'CLEAR_VALIDATION_ERRORS',
@@ -240,26 +241,28 @@
       },
 
       checkStoryTextError() {
+
         if (this.newStory.text.trim().length > 150) {
-           this.SET_STORY_TEXT_ERROR('Please keep the text in your story under 150 characters.');
+           this.SET_STORY_ERROR('Please keep the text in your story under 150 characters.');
         } else {
-          this.SET_STORY_TEXT_ERROR('');
+          this.SET_STORY_ERROR('');
         }
       },
 
       async handleSubmit(e) {
-
+        this.SET_STORY_ERROR('');
         this.CLEAR_VALIDATION_ERRORS();
         let canSubmit = false;
 
         if (this.storyType === 'text') {
             this.checkStoryTextError();
-          if (!this.storyTextError.length && this.newStory.text.length) {
+          if (!this.storyError.length && this.newStory.text.length) {
             canSubmit = true;
           }
         }
         if (this.storyType === 'photo') {
-          if (this.newStory.file.file !== null && !this.photoError.length) {
+          const file = this.newStory.file.file !== null && !this.photoError.length;
+          if (file && !this.storyError.length) {
             canSubmit = true;
           }
         }

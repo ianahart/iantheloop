@@ -98,3 +98,5 @@ Route::get('/auth/reviews/{userId}/show', [ReviewController::class, 'show'])->mi
 Route::patch('/auth/reviews/{reviewId}/update', [ReviewController::class, 'update'])->middleware('auth:api');
 Route::delete('/auth/reviews/{reviewId}/delete', [ReviewController::class, 'delete'])->middleware('auth:api');
 Route::post('/auth/stories/create', [StoryController::class, 'store'])->middleware('auth:api');
+Route::get('/auth/stories/{userId}/show', [StoryController::class, 'show'])->middleware('auth:api');
+Route::get('/auth/stories/{userId}/count/show', [StoryController::class, 'count'])->middleware('auth:api');

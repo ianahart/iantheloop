@@ -1,5 +1,5 @@
 <template>
-  <div class="story_pro_pic">
+  <div :class="`story_pro_pic ${activeStories}`">
     <img v-if="src" :src="src" :alt="alt" />
     <DefaultProfileIcon
       v-else
@@ -23,6 +23,18 @@
       props: {
         src: String,
         alt: String,
+      },
+
+      computed: {
+        ...mapState('stories',
+        [
+          'currentUserHasStories',
+        ]
+      ),
+
+      activeStories() {
+          return this.currentUserHasStories ? 'story_pro_pic_active' : 'story_pro_pic_not_active';
+      }
       }
     }
 
@@ -31,13 +43,15 @@
 <style lang="scss">
   .story_pro_pic {
     box-sizing: border-box;
-
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
      img {
        width: 64px;
        height: 64px;
        border-radius: 50%;
      }
-
      svg {
        width: 64px;
        height: 64px;
@@ -45,5 +59,26 @@
        background-color: $themeLightBlue;
        color: $themePink;
      }
+  }
+
+  .story_pro_pic_active {
+    border: 4px solid $themeRoyalBlue;
+    img {
+      border: 3px solid #3a3a3a;
+    }
+    svg {
+      border: 3px solid #3a3a3a;
+    }
+  }
+
+  .story_pro_pic_not_active {
+    border: 4px solid transparent;
+    img {
+      border: 3px solid transparent;
+    }
+    svg {
+      border: 3px solid transparent;
+    }
+
   }
 </style>

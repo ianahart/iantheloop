@@ -181,7 +181,7 @@ class UserNotification
     }
   }
 
-  private function makeReadableTime(string $timestamp, string $type): string
+  public function makeReadableTime(string $timestamp, string $type): string
   {
 
     $epochs = [
