@@ -48,7 +48,6 @@ const stories = {
     },
 
     SET_LIGHTBOX_STORY(state, { story, btn, user }) {
-      console.log('Story Id: ', story);
       const currentStoryIndex = state[user].findIndex(el => el.id === story);
 
       if (btn === 'next') {
@@ -84,9 +83,16 @@ const stories = {
     },
 
     SET_CURRENT_USER_STORIES(state, payload) {
-      console.log('stories.js|SET_CURRENT_USER_STORIES: ', payload);
+       state.currentUserHasStories = payload.length ? true : false;
+
+       console.log('stories.js|SET_CURRENT_USER_STORIES: ', payload);
+
        state.currentUserStories = [...state.currentUserStories, ...payload];
        state.lightBoxStory = state.currentUserStories.slice(0,1)[0];
+
+       if (state.currentUserHasStories) {
+         state.userIdClicked = state.lightBoxStory.user_id;
+       }
     },
 
     SET_CURRENT_USER_HAS_STORIES(state, count) {
@@ -248,7 +254,28 @@ const stories = {
         } catch(e) {
           console.log('stories.js|ACTIVE_STORY_COUNT| Error (404): ', e.response);
         }
+    },
+    async RETRIEVE_BASE_STORIES_DATA() {
+
+      try {
+
+          const response = await axios(
+            {
+              method: 'GET',
+              url: '/api/auth/stories/index',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+
+          console.log('stories.js|RETRIEVE_BASE_STORIES_DATA|Success (200): ', response);
+      } catch(e) {
+          console.log('stories.js|RETRIEVE_BASE_STORIES_DATA|Error (404): ', e.response);
+      }
     }
+
   }
 };
 

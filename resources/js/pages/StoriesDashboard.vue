@@ -34,8 +34,10 @@
    },
 
    async created () {
-     await this.getActiveStoryCount(this.getUserId);
      this.SET_USER_ID_CLICKED(this.getUserId);
+     await this.getActiveStoryCount(this.getUserId);
+     await this.RETRIEVE_BASE_STORIES_DATA();
+
    },
 
    beforeDestroy() {
@@ -66,7 +68,8 @@
     ),
     ...mapActions('stories',
       [
-        'ACTIVE_STORY_COUNT'
+        'ACTIVE_STORY_COUNT',
+        'RETRIEVE_BASE_STORIES_DATA',
       ]
     ),
 

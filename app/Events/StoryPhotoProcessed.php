@@ -36,13 +36,11 @@ class StoryPhotoProcessed implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return [
-            'data' => [
-                'story' => $this->story,
-                'profile_picture' => $this->related['profile_picture'],
-                'full_name' => $this->related['full_name'],
-            ],
-        ];
+        $this->story->full_name = $this->related['full_name'];
+        $this->story->profile_picture = $this->related['profile_picture'];
+        $this->story->displayed_time = 'Just now';
+
+        return [$this->story];
     }
 
 

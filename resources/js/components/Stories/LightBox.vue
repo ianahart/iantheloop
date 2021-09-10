@@ -40,7 +40,7 @@
           <p>{{ fullName }}</p>
         </div>
         <p class="story_posted_time">{{ lightBoxStory.displayed_time }}</p>
-        <div v-if="durationBars.length" class="story_duration_bar_container">
+        <div class="story_duration_bar_container">
           <DurationBar v-for="durationBar in durationBars" :key="durationBar.id"
            :durationBar="durationBar"
            :activeDurationBar="lightBoxStory.id"

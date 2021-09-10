@@ -120,11 +120,11 @@
 
          Echo.private(`stories.${this.getUserId}`)
             .listen('StoryPhotoProcessed', (event) => {
-
-                if (parseInt(event.data.story.user_id) === parseInt(this.getUserId)) {
-                      this.SET_CURRENT_USER_STORIES([event.data]);
+                console.log('NewsFeed: ' , event);
+                if (parseInt(event[0].user_id) === parseInt(this.getUserId)) {
+                      this.SET_CURRENT_USER_STORIES([...event]);
                 } else {
-                    this.SET_STORIES([event.data]);
+                    this.SET_STORIES([...event]);
                 }
             });
       }
