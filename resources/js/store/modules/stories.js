@@ -7,10 +7,12 @@ const initialState = () => {
     stories: [],
     storyError: '',
     storyType: 'text',
+    baseStories: [],
     validationErrors: [],
     isLightBoxActive: false,
     lightBoxStory: '',
     currentUserHasStories: false,
+    pagination: null,
     userIdClicked: null,
     currentUserStories: [],
     newStory: {
@@ -41,6 +43,16 @@ const stories = {
   mutations: {
     SET_USER_ID_CLICKED(state, userId) {
        state.userIdClicked = userId;
+    },
+
+    SET_PAGINATION(state, pagination) {
+      state.pagination = {};
+
+      for (let prop in pagination) {
+        if (prop !== 'data') {
+           state.pagination[prop] = pagination[prop];
+        }
+      }
     },
 
     SET_IS_LIGHTBOX_ACTIVE(state, payload) {
@@ -77,9 +89,27 @@ const stories = {
       state.validationErrors = [];
     },
 
+    SET_BASE_STORIES(state, payload) {
+      state.baseStories = [...state.baseStories, ...payload];
+    },
+
     SET_STORIES(state, payload) {
-      console.log('stories.js|SET_STORIES: ', payload);
-      state.stories = [...state.stories, ...payload];
+      if (payload.length === 1 && payload[0].displayed_time.toLowerCase() === 'just now') {
+        if (payload[0].user_id === state.stories[0].user_id) {
+           state.stories = [...state.stories, ...payload];
+            return;
+        }
+      } else {
+        state.stories = [];
+        state.stories = [...state.stories, ...payload];
+
+        state.isLightBoxActive = true;
+        state.lightBoxStory = state.stories.slice(0,1)[0];
+      }
+    },
+
+    CLEAR_CURRENT_USER_STORIES(state) {
+      state.currentUserStories = [];
     },
 
     SET_CURRENT_USER_STORIES(state, payload) {
@@ -93,6 +123,10 @@ const stories = {
        if (state.currentUserHasStories) {
          state.userIdClicked = state.lightBoxStory.user_id;
        }
+    },
+
+    CLEAR_LIGHTBOX_STORY(state) {
+      state.lightBoxStory = '';
     },
 
     SET_CURRENT_USER_HAS_STORIES(state, count) {
@@ -209,7 +243,8 @@ const stories = {
     async RETRIEVE_STORY({ state, rootGetters, commit }, userId) {
 
       try {
-
+        state.lightBoxStory = '';
+        state.isLightBoxActive = false;
         const response = await axios(
           {
             method: 'GET',
@@ -222,11 +257,11 @@ const stories = {
         );
 
         if (response.status === 200) {
-          console.log('stories.js|RETRIEVE_STORY| Success (200): ', response);
+           console.log('stories.js|RETRIEVE_STORY| Success (200): ', response);
           if (parseInt(rootGetters['user/getUserId']) === parseInt(userId)) {
               commit('SET_CURRENT_USER_STORIES', response.data.stories);
           } else {
-            console.log('stories.js|RETRIEVE_STORY| should set user stories not current user stories');
+            commit('SET_STORIES', response.data.stories);
           }
         }
       } catch(e) {
@@ -255,14 +290,27 @@ const stories = {
           console.log('stories.js|ACTIVE_STORY_COUNT| Error (404): ', e.response);
         }
     },
-    async RETRIEVE_BASE_STORIES_DATA() {
+    async RETRIEVE_BASE_STORIES_DATA({ state, commit }) {
 
       try {
+
+          const url = state.pagination !== null ? state.pagination.next_page_url : '/api/auth/stories/index';
+          let lastPage = false;
+
+          if (state.pagination !== null) {
+            if (state.pagination.current_page === state.pagination.last_page) {
+              lastPage = true;
+            }
+          }
+
+          if (lastPage) {
+            return;
+          }
 
           const response = await axios(
             {
               method: 'GET',
-              url: '/api/auth/stories/index',
+              url,
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -271,6 +319,12 @@ const stories = {
           );
 
           console.log('stories.js|RETRIEVE_BASE_STORIES_DATA|Success (200): ', response);
+          if (response.status === 200) {
+            const { stories } = response.data
+
+            commit('SET_PAGINATION', stories);
+            commit('SET_BASE_STORIES', stories.data);
+          }
       } catch(e) {
           console.log('stories.js|RETRIEVE_BASE_STORIES_DATA|Error (404): ', e.response);
       }
@@ -281,3 +335,6 @@ const stories = {
 
 export default stories;
 
+/** TODO */
+// Wire up individual story requests
+// make sure real time sockets is updating right with individial stories

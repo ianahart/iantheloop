@@ -100,3 +100,4 @@ Route::delete('/auth/reviews/{reviewId}/delete', [ReviewController::class, 'dele
 Route::post('/auth/stories/create', [StoryController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/stories/{userId}/show', [StoryController::class, 'show'])->middleware('auth:api');
 Route::get('/auth/stories/{userId}/count/show', [StoryController::class, 'count'])->middleware('auth:api');
+Route::get('/auth/stories/index', [StoryController::class, 'index'])->middleware('auth:api');

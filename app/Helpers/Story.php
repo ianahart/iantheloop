@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Story as StoryModel;
 use App\Models\User;
 use App\Helpers\AmazonS3;
@@ -14,7 +15,7 @@ use Exception;
 
 class Story
 {
-
+  const LIMIT = 4;
   private int $currentUserId;
   private ?string $error;
   private array $stories;
@@ -193,6 +194,51 @@ class Story
           }
         );
     } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
+  }
+
+  public function usersStories()
+  {
+
+    try {
+
+      $currentUserFollowing = array_keys(
+        User::find($this->currentUserId)
+          ->stat
+          ->following
+      );
+
+      $this->stories = User::select(['id', 'full_name'])
+        ->orderBy('id', 'DESC')
+        ->whereHas(
+          'subjectStory',
+          function (Builder $query) use ($currentUserFollowing) {
+            $query->whereIn('user_id', $currentUserFollowing);
+          }
+        )->with(
+          ['subjectStory' => function ($query) {
+            $query
+              ->where('expire_in_unix', '>', now()->timestamp)
+              ->select(
+                [
+                  'id',
+                  'profile_id',
+                  'user_id'
+                ]
+              )
+              ->with(
+                ['profile' => function ($innerQuery) {
+                  $innerQuery->select(
+                    [
+                      'id', 'profile_picture'
+                    ]
+                  );
+                }]
+              );
+          }]
+        )->paginate(2)->toArray();
+    } catch (ModelNotFoundException $e) {
       $this->error = $e->getMessage();
     }
   }

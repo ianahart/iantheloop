@@ -147,4 +147,44 @@ class StoryController extends Controller
                 );
         }
     }
+
+    /**
+     * Get base data for user stories (userId, profilePicture, name)
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function index(Request $request)
+    {
+        try {
+            $story = new Story(JWTAuth::user()->id);
+
+            $story->usersStories();
+
+            $error = $story->getError();
+
+            if (!is_null($error)) {
+                throw new Exception($error);
+            }
+
+            $stories = $story->getStories();
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'success',
+                        'stories' => $stories,
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to find users with stories currently.',
+                        'error' => $e->getMessage()
+                    ],
+                    404
+                );
+        }
+    }
 }

@@ -56,6 +56,7 @@
   import SidebarHeader from '../components/Stories/SidebarHeader.vue';
 
   export default {
+
     name: 'CreateStory',
     components: {
       CameraSolidIcon,
@@ -164,7 +165,7 @@
     max-width: 1140px;
     box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     height: 100%;
     align-items: center;
 
@@ -176,7 +177,7 @@
     box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
     border-radius: 10px;
     width: 35%;
-    max-width: 320px;
+    max-width: 220px;
     min-width: 200px;
     height: 490px;
     cursor: pointer;
@@ -212,10 +213,22 @@
 
   .showcase_option_text_content {
      h3 {
-       font-family: 'Open Sans', sans-serif;
-       color: darken($primaryBlack, 2);
-       margin: 0.1rem 0;
-       font-size: 2.8rem;
+      font-family: 'Open Sans', sans-serif;
+      color: darken($primaryBlack, 2);
+      margin: 0.1rem 0;
+      font-size: 2.8rem;
+      text-shadow: 2px 2px 3px rgb(255 255 255 / 40%);
+      width: 75px;
+      height: 75px;
+      box-sizing: border-box;
+      padding: 0.2rem;
+      margin-top: 0.1rem;
+      text-align: center;
+      border-radius: 50%;
+      background-color: rgba(0,0,0,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
      }
   }
 
@@ -229,8 +242,18 @@
     }
     svg {
         color: darken($primaryBlack, 2);
-        height: 60px;
-        width: 60px;
+        height: 75px;
+        width: 75px;
+        filter: drop-shadow(3px 5px 10px rgb(255 255 255 / 0.5));
+        box-sizing: border-box;
+        padding: 0.2rem;
+        margin-top: 0.1rem;
+        text-align: center;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
   }
 
@@ -273,6 +296,8 @@
     .showcase_option_text,
     .showcase_option_photo {
        height: 300px;
+       width: 95%;
+       max-width: 95%;
        margin: 2rem auto;
     }
   }

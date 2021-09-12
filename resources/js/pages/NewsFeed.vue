@@ -3,7 +3,7 @@
     <Modal />
     <div class="user_stories_component_container">
       <CreateStoryTrigger />
-      <Stories />
+      <!-- <Stories /> -->
     </div>
     <div v-if="posts.length" class="newsfeed_flex_container">
       <Feed
@@ -120,7 +120,6 @@
 
          Echo.private(`stories.${this.getUserId}`)
             .listen('StoryPhotoProcessed', (event) => {
-                console.log('NewsFeed: ' , event);
                 if (parseInt(event[0].user_id) === parseInt(this.getUserId)) {
                       this.SET_CURRENT_USER_STORIES([...event]);
                 } else {

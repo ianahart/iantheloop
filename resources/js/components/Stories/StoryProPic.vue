@@ -24,7 +24,6 @@
         src: String,
         alt: String,
       },
-
       computed: {
         ...mapState('stories',
         [
@@ -32,9 +31,17 @@
         ]
       ),
 
-      activeStories() {
-          return this.currentUserHasStories ? 'story_pro_pic_active' : 'story_pro_pic_not_active';
-      }
+        page() {
+          return this.$route.name;
+        },
+
+        activeStories() {
+          if (this.page === 'CreateStory') {
+            return this.currentUserHasStories ? 'story_pro_pic_active' : 'story_pro_pic_not_active';
+          } else if (this.page === 'StoriesDashboard') {
+            return 'story_pro_pic_active';
+          }
+        }
       }
     }
 

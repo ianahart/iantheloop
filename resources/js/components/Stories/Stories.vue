@@ -1,6 +1,13 @@
 <template>
  <div class="stories_container">
-   <h3>Stories Component</h3>
+   <Story
+     v-for="baseStory in baseStories" :key="baseStory.id"
+     :name="baseStory.full_name"
+     :profilePicture="baseStory.subject_story.profile.profile_picture"
+     :profileId="baseStory.subject_story.profile.id"
+     :storyId="baseStory.subject_story.id"
+     :userId="baseStory.id"
+   />
  </div>
 </template>
 
@@ -14,9 +21,8 @@
    components: {
      Story,
    },
-
-   mounted() {
-
+   props: {
+    baseStories: Array,
    },
 
    beforeDestroy() {
@@ -42,8 +48,9 @@
 <style lang="scss">
  .stories_container {
    box-sizing: border-box;
-   border: 1px solid blue;
    display: flex;
+   flex-direction: column;
+   align-items: flex-start;
  }
 
 

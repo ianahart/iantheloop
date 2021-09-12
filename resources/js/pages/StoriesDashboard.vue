@@ -6,7 +6,12 @@
         <SidebarHeader
          :page="$route.name"
         />
-        <h3>TEST TEST TEST TEST TESSET</h3>
+        <h3 class="stories_list_title">Stories</h3>
+        <Stories
+         v-if="baseStories.length"
+         :baseStories="baseStories"
+         />
+        <button class="load_more_stories_btn" v-if="!isLastPage" @click="loadMoreStories">Fetch more</button>
       </template>
     </Sidebar>
     <div class="dashboard_lightbox_wrapper">
@@ -33,6 +38,12 @@
      LightBox,
    },
 
+   data() {
+     return {
+       debounceID: '',
+     }
+   },
+
    async created () {
      this.SET_USER_ID_CLICKED(this.getUserId);
      await this.getActiveStoryCount(this.getUserId);
@@ -42,12 +53,15 @@
 
    beforeDestroy() {
      this.RESET_STORIES_MODULE();
+     clearTimeout(this.debounceID);
    },
 
    computed: {
      ...mapState('stories',
       [
         'stories',
+        'baseStories',
+        'pagination',
         'currentUserStories',
         'isLightBoxActive',
       ]
@@ -57,6 +71,15 @@
         'getUserId'
       ]
     ),
+    isLastPage() {
+      let lastPage = false;
+        if (this.pagination !== null) {
+          if (this.pagination.current_page === this.pagination.last_page) {
+            lastPage = true;
+          }
+        }
+        return lastPage;
+    },
    },
 
    methods: {
@@ -75,7 +98,28 @@
 
     async getActiveStoryCount(userId) {
       await this.ACTIVE_STORY_COUNT(userId);
-    }
+    },
+
+    async loadMoreStories() {
+      this.debounce(async () => {
+        await this.RETRIEVE_BASE_STORIES_DATA();
+      }, 350);
+    },
+
+    debounce(fn, delay = 400) {
+
+    return ((...args) => {
+
+      clearTimeout(this.debounceID)
+
+      this.debounceID = setTimeout(() => {
+
+        this.debounceID = null
+
+        fn(...args)
+      }, delay)
+    })()
+    },
    },
  }
 </script>
@@ -101,6 +145,30 @@
     flex-direction: column;
     align-items: center;
     background-color: #000;
+  }
+
+  .load_more_stories_btn {
+    border: none;
+    padding: 0.6rem 0.5rem;
+    width: 120px;
+    border-radius: 10px;
+    background-color: $themeLightBlue;
+    text-shadow: 1px 1px 0px rgb(0 0 0 / 50%);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.95rem;
+    color: $primaryWhite;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+    margin-left: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stories_list_title {
+    color: #fcfcfc;
+    font-family: "Secular One", sans-serif;
+    padding-left: 0.5rem;
+    font-size: 1.5rem;
   }
 
   @media(max-width: 800px) {

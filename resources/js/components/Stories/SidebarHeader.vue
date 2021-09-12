@@ -70,6 +70,9 @@
       ...mapMutations('stories',
         [
           'SET_IS_LIGHTBOX_ACTIVE',
+          'SET_USER_ID_CLICKED',
+          'CLEAR_LIGHTBOX_STORY',
+          'CLEAR_CURRENT_USER_STORIES',
         ]
       ),
       ...mapActions('stories',
@@ -78,10 +81,15 @@
         ]
       ),
       async getCurrentUserStories(userId) {
+        this.CLEAR_LIGHTBOX_STORY();
+        this.CLEAR_CURRENT_USER_STORIES();
+
         if (!this.currentUserStories.length) {
-          await this.RETRIEVE_STORY(userId);
+           this.SET_USER_ID_CLICKED(userId);
+           await this.RETRIEVE_STORY(userId);
         }
           if (this.currentUserHasStories) {
+            this.SET_USER_ID_CLICKED(userId);
             this.SET_IS_LIGHTBOX_ACTIVE(true);
           }
 

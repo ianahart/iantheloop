@@ -175,6 +175,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Story::class, 'user_id');
     }
 
+    public function subjectStory()
+    {
+        return $this->hasOne(Story::class, 'user_id');
+    }
+
     public function authorStories()
     {
         return $this->hasMany(Story::class, 'story_user_id');
