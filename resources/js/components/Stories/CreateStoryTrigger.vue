@@ -134,4 +134,14 @@
     }
   }
 
+  @media(max-width:600px) {
+    .create_story_trigger {
+      margin: 1rem 0;
+    }
+
+    .create_story_btn_container {
+      width: 130px;
+    }
+  }
+
 </style>

@@ -40,6 +40,8 @@
             return this.currentUserHasStories ? 'story_pro_pic_active' : 'story_pro_pic_not_active';
           } else if (this.page === 'StoriesDashboard') {
             return 'story_pro_pic_active';
+          } else if (this.page === 'NewsFeed') {
+            return 'newsfeed_story_pro_pic_active';
           }
         }
       }
@@ -86,6 +88,31 @@
     svg {
       border: 3px solid transparent;
     }
+  }
 
+  .newsfeed_story_pro_pic_active {
+    box-sizing: border-box;
+    border: 4px solid $themeRoyalBlue;
+    border-radius: 8px;
+    height: 200px;
+    width: 130px;
+    transition: all 0.3s ease-in;
+    &:hover {
+      background-color: black;
+    }
+    img {
+      border: 2px solid #3a3a3a;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      opacity: 0.7;
+    }
+    svg {
+      width: 100%;
+      opacity: 0.7;
+      height: 100%;
+      border: 2px solid #3a3a3a;
+      border-radius: 8px;
+    }
   }
 </style>

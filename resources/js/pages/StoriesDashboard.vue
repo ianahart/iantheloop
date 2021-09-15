@@ -7,11 +7,7 @@
          :page="$route.name"
         />
         <h3 class="stories_list_title">Stories</h3>
-        <Stories
-         v-if="baseStories.length"
-         :baseStories="baseStories"
-         />
-        <button class="load_more_stories_btn" v-if="!isLastPage" @click="loadMoreStories">Fetch more</button>
+        <Stories />
       </template>
     </Sidebar>
     <div class="dashboard_lightbox_wrapper">
@@ -45,14 +41,14 @@
    },
 
    async created () {
-     this.SET_USER_ID_CLICKED(this.getUserId);
-     await this.getActiveStoryCount(this.getUserId);
-     await this.RETRIEVE_BASE_STORIES_DATA();
+     this.SET_STORIES_LOCATION(this.$route.name);
+     const idClicked = this.userIdClicked !== null ? this.userIdClicked : this.getUserId;
 
+     this.SET_USER_ID_CLICKED(idClicked);
+     await this.getActiveStoryCount(this.getUserId);
    },
 
    beforeDestroy() {
-     this.RESET_STORIES_MODULE();
      clearTimeout(this.debounceID);
    },
 
@@ -60,10 +56,9 @@
      ...mapState('stories',
       [
         'stories',
-        'baseStories',
-        'pagination',
         'currentUserStories',
         'isLightBoxActive',
+        'userIdClicked'
       ]
     ),
     ...mapGetters('user',
@@ -71,54 +66,24 @@
         'getUserId'
       ]
     ),
-    isLastPage() {
-      let lastPage = false;
-        if (this.pagination !== null) {
-          if (this.pagination.current_page === this.pagination.last_page) {
-            lastPage = true;
-          }
-        }
-        return lastPage;
-    },
    },
 
    methods: {
      ...mapMutations('stories',
       [
         'RESET_STORIES_MODULE',
-        'SET_USER_ID_CLICKED'
+        'SET_USER_ID_CLICKED',
+        'SET_STORIES_LOCATION',
       ]
     ),
     ...mapActions('stories',
       [
         'ACTIVE_STORY_COUNT',
-        'RETRIEVE_BASE_STORIES_DATA',
       ]
     ),
 
     async getActiveStoryCount(userId) {
       await this.ACTIVE_STORY_COUNT(userId);
-    },
-
-    async loadMoreStories() {
-      this.debounce(async () => {
-        await this.RETRIEVE_BASE_STORIES_DATA();
-      }, 350);
-    },
-
-    debounce(fn, delay = 400) {
-
-    return ((...args) => {
-
-      clearTimeout(this.debounceID)
-
-      this.debounceID = setTimeout(() => {
-
-        this.debounceID = null
-
-        fn(...args)
-      }, delay)
-    })()
     },
    },
  }
@@ -146,24 +111,6 @@
     align-items: center;
     background-color: #000;
   }
-
-  .load_more_stories_btn {
-    border: none;
-    padding: 0.6rem 0.5rem;
-    width: 120px;
-    border-radius: 10px;
-    background-color: $themeLightBlue;
-    text-shadow: 1px 1px 0px rgb(0 0 0 / 50%);
-    font-family: 'Open Sans', sans-serif;
-    font-size: 0.95rem;
-    color: $primaryWhite;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-    margin-left: 1rem;
-    margin-bottom: 2rem;
-  }
-
   .stories_list_title {
     color: #fcfcfc;
     font-family: "Secular One", sans-serif;

@@ -15,7 +15,7 @@ use Exception;
 
 class Story
 {
-  const LIMIT = 4;
+  const LIMIT = 3;
   private int $currentUserId;
   private ?string $error;
   private array $stories;
@@ -237,7 +237,7 @@ class Story
                 }]
               );
           }]
-        )->paginate(2)->toArray();
+        )->paginate(self::LIMIT)->toArray();
     } catch (ModelNotFoundException $e) {
       $this->error = $e->getMessage();
     }

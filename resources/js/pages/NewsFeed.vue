@@ -3,7 +3,7 @@
     <Modal />
     <div class="user_stories_component_container">
       <CreateStoryTrigger />
-      <!-- <Stories /> -->
+      <Stories />
     </div>
     <div v-if="posts.length" class="newsfeed_flex_container">
       <Feed
@@ -43,9 +43,12 @@
       CreateStoryTrigger,
     },
 
+    created() {
+      this.SET_STORIES_LOCATION(this.$route.name);
+    },
+
     async mounted() {
       await this.loadNewsfeedPosts();
-
       if (this.checkExistingStoryConnection() === -1) {
             this.initStoryChannel();
       }
@@ -66,7 +69,7 @@
       ),
       ...mapState('stories',
         [
-          'stories'
+          'stories',
         ]
       ),
       ...mapGetters('user',
@@ -90,6 +93,8 @@
         [
           'SET_STORIES',
           'SET_CURRENT_USER_STORIES',
+          'RESET_STORIES_MODULE',
+          'SET_STORIES_LOCATION',
         ]
       ),
       ...mapActions('posts',
@@ -101,12 +106,10 @@
       checkExistingStoryConnection() {
         const channelNames = Object.keys(window.Echo.connector.channels)
         const storyConnection = channelNames.findIndex(channelName => channelName === `private-stories.${this.getUserId}`);
-
         return storyConnection;
       },
 
       async loadNewsfeedPosts () {
-
         await this.NEWSFEED_POSTS();
       },
 
@@ -115,9 +118,7 @@
       },
 
       initStoryChannel() {
-
         Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
-
          Echo.private(`stories.${this.getUserId}`)
             .listen('StoryPhotoProcessed', (event) => {
                 if (parseInt(event[0].user_id) === parseInt(this.getUserId)) {
@@ -182,6 +183,8 @@
     .user_stories_component_container {
       margin: 1.5rem 0.5rem;
       padding: 0.5rem;
+      flex-direction: column;
+      align-items: center;
     }
   }
 </style>

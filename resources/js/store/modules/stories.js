@@ -5,28 +5,30 @@ const initialState = () => {
 
   return {
     stories: [],
-    storyError: '',
-    storyType: 'text',
+    carousel: [],
+    carouselNavigation: { start: 0, end: 0, navigation: '', seenPages: [] ,url: '/api/auth/stories/index', baseUrl: '/api/auth/stories/index'},
     baseStories: [],
+    currentUserHasStories: false,
+    pagination: { current_page: 1, path: '/api/auth/stories/index' },
+    userIdClicked: null,
+    currentUserStories: [],
     validationErrors: [],
     isLightBoxActive: false,
     lightBoxStory: '',
-    currentUserHasStories: false,
-    pagination: null,
-    userIdClicked: null,
-    currentUserStories: [],
+    storyError: '',
+    storyType: 'text',
     newStory: {
       text: '',
-      file: {file: null, src: ''},
+      file: { file: null, src: '' },
       alignment: 'center',
       color: 'black',
-      duration: {name: '10s', value: 10000},
+      duration: { name: '10s', value: 10000 },
       font_size: '12px',
       background: 'linear-gradient(90deg, #833ab4 0%, #91fd1d 50%, #fcb045 100%);',
     },
     isDashboardOpen: false,
     isFormOpen: false,
-    storiesLocation: 'newsfeed', // newsfeed default | storiesdashboard
+    storiesLocation: '', // newsfeed default | storiesdashboard
   }
 };
 
@@ -41,17 +43,53 @@ const stories = {
   },
 
   mutations: {
+
+     NAVIGATE_CAROUSEL(state, navigation) {
+         state.carouselNavigation.navigation = navigation;
+          if (state.carouselNavigation.start === 0 && state.carouselNavigation.end === 0) {
+           state.carouselNavigation.start = 0;
+           state.carouselNavigation.end = state.pagination.per_page;
+           state.carousel = state.baseStories.slice(state.carouselNavigation.start, state.carouselNavigation.end);
+            return;
+         }
+
+         if (state.carouselNavigation.navigation === 'next') {
+          state.carousel = state.baseStories.slice(state.carouselNavigation.end, state.carouselNavigation.end + state.pagination.per_page);
+          state.carouselNavigation.end = state.carouselNavigation.end + state.pagination.per_page;
+          state.carouselNavigation.start = state.carouselNavigation.end - state.pagination.per_page;
+            return;
+         } else if (state.carouselNavigation.navigation === 'prev') {
+            state.carouselNavigation.end = state.carouselNavigation.end - state.pagination.per_page;
+            state.carouselNavigation.start = state.carouselNavigation.start - state.pagination.per_page;
+            state.carousel = state.baseStories.slice(state.carouselNavigation.start, state.carouselNavigation.end);
+            return;
+         }
+     },
+
     SET_USER_ID_CLICKED(state, userId) {
        state.userIdClicked = userId;
     },
 
     SET_PAGINATION(state, pagination) {
-      state.pagination = {};
-
       for (let prop in pagination) {
-        if (prop !== 'data') {
+        const newsFeedFilter = prop !== 'data' && prop !== 'current_page';
+        const storiesDashboardFilter = prop !== 'data';
+        const filteredApplied = state.location === 'NewsFeed' ? newsFeedFilter : storiesDashboardFilter;
+
+        if (filteredApplied) {
            state.pagination[prop] = pagination[prop];
         }
+      }
+    },
+
+    SET_PAGINATION_PAGE(state, action) {
+      if (action === 'next') {
+        state.pagination.current_page = state.pagination.current_page + 1;
+        state.carouselNavigation.url = `${state.carouselNavigation.baseUrl}?page=${state.pagination.current_page}`;
+
+      } else if (action === 'prev') {
+        state.pagination.current_page = state.pagination.current_page -1;
+        state.carouselNavigation.url = `${state.carouselNavigation.baseUrl}?page=${state.pagination.current_page}`;
       }
     },
 
@@ -93,6 +131,12 @@ const stories = {
       state.baseStories = [...state.baseStories, ...payload];
     },
 
+    CLEAR_BASE_STORIES(state) {
+      state.baseStories = [];
+       state.pagination = { current_page: 1, path: '/api/auth/stories/index' };
+       state.carouselNavigation = { start: 0, end: 0, navigation: '', seenPages: [] ,url: '/api/auth/stories/index', baseUrl: '/api/auth/stories/index'};
+    },
+
     SET_STORIES(state, payload) {
       if (payload.length === 1 && payload[0].displayed_time.toLowerCase() === 'just now') {
         if (payload[0].user_id === state.stories[0].user_id) {
@@ -114,9 +158,6 @@ const stories = {
 
     SET_CURRENT_USER_STORIES(state, payload) {
        state.currentUserHasStories = payload.length ? true : false;
-
-       console.log('stories.js|SET_CURRENT_USER_STORIES: ', payload);
-
        state.currentUserStories = [...state.currentUserStories, ...payload];
        state.lightBoxStory = state.currentUserStories.slice(0,1)[0];
 
@@ -138,7 +179,6 @@ const stories = {
       for (let prop in errors) {
         validation.push(...errors[prop]);
       }
-
       state.validationErrors = [...state.validationErrors, ...validation];
     },
 
@@ -225,12 +265,10 @@ const stories = {
         );
 
         if (response.status === 201) {
-          console.log('stories.js|CREATE_STORY| Success (201): ', response);
           commit('SET_FORM_OPEN', {storyType: 'text', isFormOpen: false});
           commit('CLEAR_STORY_FORM');
         }
       } catch(e) {
-        console.log('stories.js|CREATE_STORY| Error (400): ', e.response);
         if (e.response.status === 422) {
           commit('SET_VALIDATION_ERRORS',e.response.data);
         } else if (e.response.status === 400) {
@@ -257,7 +295,6 @@ const stories = {
         );
 
         if (response.status === 200) {
-           console.log('stories.js|RETRIEVE_STORY| Success (200): ', response);
           if (parseInt(rootGetters['user/getUserId']) === parseInt(userId)) {
               commit('SET_CURRENT_USER_STORIES', response.data.stories);
           } else {
@@ -293,19 +330,21 @@ const stories = {
     async RETRIEVE_BASE_STORIES_DATA({ state, commit }) {
 
       try {
+        const paginationExists = Object.keys(state.pagination).length > 2;
+        let url;
 
-          const url = state.pagination !== null ? state.pagination.next_page_url : '/api/auth/stories/index';
-          let lastPage = false;
-
-          if (state.pagination !== null) {
-            if (state.pagination.current_page === state.pagination.last_page) {
-              lastPage = true;
-            }
-          }
-
-          if (lastPage) {
+        if (state.storiesLocation === 'NewsFeed' && state.carouselNavigation.seenPages.includes(state.pagination.current_page)) {
             return;
+          } else {
+            state.carouselNavigation.seenPages.push(state.pagination.current_page);
           }
+
+        if (state.storiesLocation === 'NewsFeed') {
+           url = paginationExists && state.storiesLocation === 'NewsFeed' ? `${state.carouselNavigation.url}` : state.carouselNavigation.baseUrl;
+
+        }  else  {
+          url = state.pagination.next_page_url ? state.pagination.next_page_url : state.pagination.path;
+        }
 
           const response = await axios(
             {
@@ -318,7 +357,6 @@ const stories = {
             }
           );
 
-          console.log('stories.js|RETRIEVE_BASE_STORIES_DATA|Success (200): ', response);
           if (response.status === 200) {
             const { stories } = response.data
 
@@ -334,7 +372,3 @@ const stories = {
 };
 
 export default stories;
-
-/** TODO */
-// Wire up individual story requests
-// make sure real time sockets is updating right with individial stories

@@ -78,7 +78,8 @@
     },
 
     beforeDestroy() {
-      this.RESET_STORIES_MODULE();
+      this.CLEAR_STORY_FORM();
+      this.SET_FORM_OPEN(false);
     },
 
     computed: {
@@ -103,6 +104,7 @@
           'RESET_STORIES_MODULE',
           'SET_FORM_OPEN',
           'SAVE_PHOTO_FILE',
+          'CLEAR_STORY_FORM',
         ]
       ),
       ...mapActions('stories',
