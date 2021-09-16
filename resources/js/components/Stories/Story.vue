@@ -3,6 +3,8 @@
       <StoryProPic
         :src="profilePicture"
         :alt="name"
+        :userId="userId"
+
       />
       <h3>{{ capitalizedName }}</h3>
     </div>
@@ -87,7 +89,6 @@
     display: flex;
     cursor: pointer;
     transition: all 0.2s ease-in;
-    width: 100%;
 
     h3 {
       font-weight: 100;
@@ -97,7 +98,7 @@
 
   .dashboard_page_story_container {
     flex-direction: row;
-
+    width: 100%;
     &:hover {
       background-color: rgba(0,0,0,0.4);
     }
@@ -114,6 +115,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
+
     h3 {
       color: $primaryBlack;
       padding-left: 0;

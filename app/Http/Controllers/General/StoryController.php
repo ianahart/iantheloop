@@ -187,4 +187,44 @@ class StoryController extends Controller
                 );
         }
     }
+
+    /**
+     * Remove/Delete a current user's specified story
+     * @param Request $request
+     * @param String $storyId
+     * @return JsonResponse
+     */
+    public function delete(Request $request, String $storyId)
+    {
+        try {
+
+            $story = new Story(JWTAuth::user()->id);
+
+            $story->deleteSpecifiedStory($storyId, $request->query('userId'));
+
+            $error = $story->getError();
+
+            if (!is_null($error)) {
+                throw new Exception($error);
+            }
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Your story was deleted'
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Cannot delete someone elses story',
+                        'error' => $e->getMessage()
+                    ],
+                    403
+                );
+        }
+    }
 }

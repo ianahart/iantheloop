@@ -14,6 +14,7 @@
       <StoryProPic
         :src="getProfilePic"
         :alt="userName"
+        :userId="getUserId"
       />
       <h3>{{ capitalizedName }}</h3>
     </div>

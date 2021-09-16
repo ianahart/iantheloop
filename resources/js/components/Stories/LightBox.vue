@@ -1,9 +1,9 @@
 <template>
   <div v-if="lightBoxStory !== ''" class="story_light_box_container">
-    <svg @click="prevStory(lightBoxStory)" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 v story_light_box_prev" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg @click.stop="prevStory(lightBoxStory)" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 v story_light_box_prev" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
     </svg>
-    <svg @click="nextStory(lightBoxStory)" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 story_light_box_next" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg @click.stop="nextStory(lightBoxStory)" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 story_light_box_next" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
     <div class="lightbox_story">
@@ -34,10 +34,24 @@
        </div>
       </div>
       <div class="lightbox_story_settings">
+        <div v-if="removePopupShowing && canDeleteStory" class="remove_story_popup_container">
+          <p>Delete this story?</p>
+          <div>
+            <button @click.stop="handleRemoveStory(lightBoxStory)">Delete</button>
+            <button @click.stop="closeRemovePopup">Cancel</button>
+          </div>
+        </div>
         <div class="story_settings_username">
-          <img v-if="lightBoxStory.profile_picture" :src="lightBoxStory.profile_picture" :alt="fullName" />
-          <DefaultIcon v-else />
-          <p>{{ fullName }}</p>
+          <div>
+            <img v-if="lightBoxStory.profile_picture" :src="lightBoxStory.profile_picture" :alt="fullName" />
+            <DefaultIcon v-else />
+            <p>{{ fullName }}</p>
+          </div>
+          <div @click.stop="openRemovePopup">
+            <CloseIcon
+              v-if="canDeleteStory && !removePopupShowing"
+            />
+          </div>
         </div>
         <p class="story_posted_time">{{ lightBoxStory.displayed_time }}</p>
         <div class="story_duration_bar_container">
@@ -57,6 +71,7 @@
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
   import DefaultIcon from '../Icons/DefaultProfileIcon.vue';
   import DurationBar from './DurationBar.vue';
+  import CloseIcon from '../Icons/CloseIcon.vue';
 
   export default {
     name: 'LightBox',
@@ -66,6 +81,13 @@
     components: {
      DefaultIcon,
      DurationBar,
+     CloseIcon,
+    },
+
+    data() {
+      return {
+         removePopupShowing: false,
+      }
     },
 
     computed: {
@@ -83,6 +105,10 @@
           'getUserId',
         ]
       ),
+
+      canDeleteStory() {
+         return parseInt(this.lightBoxStory.user_id) === parseInt(this.getUserId);
+      },
 
       durationBars() {
         return this.getUserId === this.userIdClicked ? this.currentUserStories : this.stories;
@@ -129,8 +155,27 @@
            'SET_LIGHTBOX_STORY',
          ]
       ),
+      ...mapActions('stories',
+        [
+          'REMOVE_CURRENT_USER_STORY'
+        ]
+      ),
+
+      openRemovePopup() {
+         this.removePopupShowing = true;
+      },
+
+      closeRemovePopup() {
+         this.removePopupShowing = false;
+      },
+
+      async handleRemoveStory(story) {
+         await this.REMOVE_CURRENT_USER_STORY(story);
+         this.closeRemovePopup();
+      },
 
       handleDurationBar({ story }) {
+        this.closeRemovePopup();
          this.SET_LIGHTBOX_STORY(
            {
               story: story.id,
@@ -141,6 +186,7 @@
       },
 
       prevStory(story) {
+        this.closeRemovePopup();
         this.SET_LIGHTBOX_STORY(
           {
             story: story.id,
@@ -151,6 +197,7 @@
       },
 
       nextStory(story) {
+        this.closeRemovePopup();
         this.SET_LIGHTBOX_STORY(
           {
             story: story.id,
@@ -272,9 +319,12 @@
 
   .story_settings_username {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
+    div:first-of-type {
+      display: flex;
+    }
     img {
       width: 45px;
       height: 45px;
@@ -286,6 +336,13 @@
       border-radius: 50%;
       color: $themePink;
       background-color: $themeLightBlue;
+
+      &:last-of-type {
+        height: 40px;
+        width: 40px;
+        color: $primaryBlack;
+        background-color: transparent;
+      }
     }
     p {
       color: #fff;
@@ -294,14 +351,13 @@
       margin: 0.1rem 0 0.1rem 1.2rem;
       font-size: 0.85rem;
       font-family: 'Open Sans', sans-serif;
+      margin-top: auto;
     }
   }
 
   .story_duration_bar_container {
     box-sizing: border-box;
     margin: 0.75rem 0;
-    // display: flex;
-    // justify-content: space-evenly;
     display: grid;
     grid-template-columns: repeat(5,1fr);
     gap: 10px;
@@ -354,6 +410,59 @@
   font-weight: bold;
   font-size: 0.85rem;
   font-family: 'Open Sans', sans-serif;
+}
+
+.remove_story_popup_container {
+  box-sizing: border-box;
+  position: absolute;
+  background-color: rgba(0,0,0,0.6);
+  width: 200px;
+  border-radius: 10px;
+  padding: 0.2rem;
+  box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
+  top: 0;
+  right:30px;
+  z-index: 4;
+
+  p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.8rem;
+    color: lighten($primaryWhite, 2);
+    text-align: center;
+  }
+  div {
+    &:first-of-type {
+      margin: 0 auto;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      button {
+        cursor: pointer;
+        margin: 0.2rem;
+        padding: 0.2rem;
+        transition: all 0.2s ease-out;
+        height: 30px;
+        width: 70px;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Secular One', sans-serif;
+        text-align: center;
+        background-color: transparent;
+        &:hover {
+          opacity: 0.7;
+        }
+        &:first-of-type {
+          color: #8284e6;
+          border: 1px solid lighten($themeLightBlue, 10);
+        }
+        &:last-of-type {
+           background-color: transparent;
+           border: 1px solid darken($primaryGray, 10);
+           color: darken($primaryGray, 3);
+        }
+      }
+    }
+  }
 }
 
 

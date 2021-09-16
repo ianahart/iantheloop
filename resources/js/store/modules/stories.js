@@ -28,7 +28,7 @@ const initialState = () => {
     },
     isDashboardOpen: false,
     isFormOpen: false,
-    storiesLocation: '', // newsfeed default | storiesdashboard
+    storiesLocation: '',
   }
 };
 
@@ -231,6 +231,22 @@ const stories = {
     RESET_STORIES_MODULE: (state) => {
      Object.assign(state, initialState());
     },
+
+    REMOVE_CURRENT_USER_STORY(state, lightBoxStory) {
+      const storyIndex = state.currentUserStories.findIndex(story => story.id === lightBoxStory.id);
+      if (state.currentUserStories.length === 1) {
+        state.lightBoxStory = '';
+        state.currentUserHasStories = false;
+        return;
+      }
+      if (state.currentUserStories.length - 1 < storyIndex +1) {
+        state.lightBoxStory = '';
+        state.isLightBoxActive = false;
+        return;
+      }
+      state.lightBoxStory = state.currentUserStories[storyIndex + 1];
+      state.currentUserStories.splice(storyIndex,1);
+    },
   },
 
   actions: {
@@ -304,7 +320,6 @@ const stories = {
       } catch(e) {
           console.log('stories.js|RETRIEVE_STORY| Error (404): ', e.response);
       }
-
     },
 
     async ACTIVE_STORY_COUNT({ state, commit }, userId) {
@@ -366,9 +381,24 @@ const stories = {
       } catch(e) {
           console.log('stories.js|RETRIEVE_BASE_STORIES_DATA|Error (404): ', e.response);
       }
-    }
+    },
 
+    async REMOVE_CURRENT_USER_STORY ({ state, rootGetters, commit, }, story) {
+      try {
+        const response = await axios({
+            method: 'DELETE',
+            url: `/api/auth/stories/${story.id}/delete?userId=${rootGetters['user/getUserId']}`,
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', }
+          });
+        if (response.status === 200) {
+          commit('REMOVE_CURRENT_USER_STORY', story);
+        }
+        console.log('stories.js|REMOVE_CURRENT_USER_STORY|Error (200): ', response);
+      } catch(e) {
+        console.log('stories.js|REMOVE_CURRENT_USER_STORY|Error (403): ', e.response);
+      }
+    }
   }
-};
+};1
 
 export default stories;

@@ -9,7 +9,6 @@ use App\Models\Story as StoryModel;
 use App\Models\User;
 use App\Helpers\AmazonS3;
 use App\Jobs\ProcessStoryPhoto;
-
 use Exception;
 
 
@@ -239,6 +238,37 @@ class Story
           }]
         )->paginate(self::LIMIT)->toArray();
     } catch (ModelNotFoundException $e) {
+      $this->error = $e->getMessage();
+    }
+  }
+
+  /**
+   * @param String $storyId
+   * @param String $userId
+   * @return void
+   */
+
+  public function deleteSpecifiedStory(String $storyId, String $userId)
+  {
+    try {
+
+      if (intval($userId) !== $this->currentUserId) {
+        throw new Exception('Forbidden to delete a story that is not yours.');
+      }
+
+      $specifiedStory = StoryModel::where('id', '=', $storyId)
+        ->where('user_id', '=', $userId)
+        ->first();
+
+      if ($specifiedStory->story_type === 'photo') {
+        $fileName = 'stories/' . $specifiedStory->photo_filename;
+
+        $s3Bucket = new AmazonS3($fileName, null);
+        $s3Bucket->deleteFromBucket();
+      }
+
+      $specifiedStory->delete();
+    } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
   }

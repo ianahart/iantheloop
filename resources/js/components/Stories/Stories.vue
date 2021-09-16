@@ -6,7 +6,7 @@
       <svg @click.stop="nextStories('next')" v-if="$route.name === 'NewsFeed' && pagination.current_page !== pagination.last_page" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 newsfeed_stories_chevron_right" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>
-    <transition-group name="slide-stories" tag="div" mode="out-in" appear>
+    <transition-group class="story_transition_container" name="slide-stories" tag="div" mode="out-in" appear>
 
     <Story
       v-for="baseStory in baseStoryData" :key="baseStory.id"
@@ -160,6 +160,10 @@
  .dashboard_page_stories_container {
    flex-direction: column;
    align-items: flex-start;
+ }
+
+ .story_transition_container {
+   width: 100%;
  }
 
  .newsfeed_page_stories_container {

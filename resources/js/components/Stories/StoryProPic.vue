@@ -12,7 +12,7 @@
 
 <script>
 
-    import { mapState } from 'vuex';
+    import { mapGetters, mapState } from 'vuex';
     import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
 
     export default {
@@ -23,11 +23,17 @@
       props: {
         src: String,
         alt: String,
+        userId: Number,
       },
       computed: {
         ...mapState('stories',
         [
           'currentUserHasStories',
+        ]
+      ),
+      ...mapGetters('user',
+        [
+          'getUserId'
         ]
       ),
 
@@ -36,9 +42,12 @@
         },
 
         activeStories() {
+          if (this.userId === this.getUserId) {
+            return this.currentUserHasStories ? 'story_pro_pic_active' : 'story_pro_pic_not_active';
+          }
           if (this.page === 'CreateStory') {
             return this.currentUserHasStories ? 'story_pro_pic_active' : 'story_pro_pic_not_active';
-          } else if (this.page === 'StoriesDashboard') {
+          } else if (this.page === 'StoriesDashboard' && this.userId !== this.getUserId) {
             return 'story_pro_pic_active';
           } else if (this.page === 'NewsFeed') {
             return 'newsfeed_story_pro_pic_active';
