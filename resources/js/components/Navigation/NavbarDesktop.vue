@@ -1,15 +1,11 @@
 <template>
   <nav :class="`navbar__desktop ${navBGC}`">
     <div class="logo__container">
-      <LogoName :theme="logo" />
-      <HamburgerIcon
-        :className="hamburger"
-      />
+      <Logo />
+      <HamburgerIcon :className="hamburger" />
     </div>
     <p v-if="isMenuIconVisible">&nbsp;</p>
-    <InteractionAlert
-      v-if="isLoggedIn && isCurrentInteractionAlertActive"
-    />
+    <InteractionAlert v-if="isLoggedIn && isCurrentInteractionAlertActive" />
     <NavigationLinks
       v-if="!isMenuIconVisible && !isLoggedIn"
       rootStyle="nav__links__desktop"
@@ -25,16 +21,15 @@
 
 
 <script>
-
 import { mapState, mapGetters, mapActions } from "vuex";
 
 import AuthNavigationLinks from "./AuthNavigationLinks";
 import HamburgerIcon from "../Icons/HamburgerIcon";
-import LogoName from "../Icons/LogoName";
+import Logo from "../Icons/Logo";
 import NavigationLinks from "./NavigationLinks";
 import Notifications from "../Notifications/Notifications.vue";
-import MessageNotifications from '../Notifications/MessageNotifications.vue';
-import InteractionAlert from '../Notifications/InteractionAlert.vue';
+import MessageNotifications from "../Notifications/MessageNotifications.vue";
+import InteractionAlert from "../Notifications/InteractionAlert.vue";
 
 export default {
   name: "NavbarDesktop",
@@ -44,7 +39,7 @@ export default {
   components: {
     AuthNavigationLinks,
     HamburgerIcon,
-    LogoName,
+    Logo,
     NavigationLinks,
     Notifications,
     MessageNotifications,
@@ -59,7 +54,6 @@ export default {
 
   watch: {
     isLoggedIn() {
-
       if (this.isLoggedIn) {
         this.fetchFollowRequests();
       }
@@ -70,18 +64,24 @@ export default {
     ...mapGetters("user", ["isLoggedIn", "getUserId"]),
 
     ...mapState("navigation", ["navigationLinks", "notificationsAreOpen"]),
-    ...mapState("notifications", ["messageNotificationsAreOpen", 'isCurrentInteractionAlertActive', 'processQueue']),
+    ...mapState("notifications", [
+      "messageNotificationsAreOpen",
+      "isCurrentInteractionAlertActive",
+      "processQueue",
+    ]),
     ...mapState("hamburgerMenu", ["isMenuIconVisible"]),
 
     navBGC() {
-      return this.$route.name === 'Home' ? "landing_nav " : "default_nav";
+      return this.$route.name === "Home" ? "landing_nav " : "default_nav";
     },
     logo() {
-        return this.$route.name === 'Home' ? "dark" : "light";
+      return this.$route.name === "Home" ? "dark" : "light";
     },
     hamburger() {
-      return this.$route.name === 'Home' ? 'hamburger__menu__icon_dark' : 'hamburger__menu__icon_light';
-    }
+      return this.$route.name === "Home"
+        ? "hamburger__menu__icon_dark"
+        : "hamburger__menu__icon_light";
+    },
   },
 
   methods: {
