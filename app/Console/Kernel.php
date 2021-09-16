@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Console\Commands\ReSuggestFollow;
+use App\Console\Commands\ClearExpiredStory;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         ReSuggestFollow::class,
+        ClearExpiredStory::class,
     ];
 
     /**
@@ -29,6 +31,12 @@ class Kernel extends ConsoleKernel
             ->weekly()
             ->mondays()
             ->at('02:00')
+            ->runInBackground()
+            ->appendOutputTo(storage_path('logs/scheduling.log'));
+
+        $schedule->command('clear:expiredstory')
+            ->hourlyAt(15)
+            ->runInBackground()
             ->appendOutputTo(storage_path('logs/scheduling.log'));
     }
 
