@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: "AboutLooped",
+    name: "About",
 
     components: {},
 

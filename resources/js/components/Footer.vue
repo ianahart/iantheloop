@@ -1,7 +1,7 @@
 <template>
   <div :class="`${footerStyles} footer`">
     <p>All Rights Reserved &#169;</p>
-    <p>LoOped 2021</p>
+    <p>iaNtheLoop 2021</p>
     <div class="footer_policies">
       <a href="https://www.freeprivacypolicy.com/live/644bb30b-ae07-4de5-a9e1-c8230ad37f58">Privacy Policy</a>
     </div>

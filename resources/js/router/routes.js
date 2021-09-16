@@ -14,8 +14,8 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'AboutLooped',
-    component: () => import('../pages/AboutLooped.vue'),
+    name: 'About',
+    component: () => import('../pages/About.vue'),
   },
   {
     path: '/stories/create',

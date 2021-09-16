@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>LoOped.com</title>
+  <title>fictionalcompany.com</title>
 </head>
 <style>
   h2 {
@@ -38,7 +38,7 @@
   <a class="reset-link" href={{url($details['URL'])}}>Reset Password</a>
   <p>This link will expire in 24 hours...</p>
   <p>If you did not initiate this request, please contact us immediately at</p>
-  <a href="mailto:support@looped.com">support@looped.com</a>
+  <a href="mailto:support@fictionalcompany.com">support@fictionalcompany.com</a>
 </body>
 
 </html>

@@ -39,7 +39,7 @@ class refreshTokenControllerTest extends TestCase
 
         $customClaims = JWTFactory::customClaims(
             [
-                'iss' => new Issuer('http://looped.com'),
+                'iss' => new Issuer('http://iantheloop.com'),
                 'exp' => new Expiration($now + 1),
                 'nbf' => new NotBefore($now),
                 'iat' => new IssuedAt($now),

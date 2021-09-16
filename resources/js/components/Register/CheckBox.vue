@@ -3,7 +3,7 @@
     <input type="checkbox" :checked="isChecked ? 'checked': ''">
     <span class="checkmark_checkmark"></span>
     <div>
-     <span> I agree to LoOped's
+     <span> I agree
        <a :href="url">Privacy Policy</a>
      </span>
      <p>{{ checkboxError }}</p>

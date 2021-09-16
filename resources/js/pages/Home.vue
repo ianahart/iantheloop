@@ -29,7 +29,7 @@
                         >
                         <a
                             class="home_action_btn"
-                            href="mailto:looped@example.com?subject=Basic Information:"
+                            href="mailto:fictionalcompany@example.com?subject=Basic Information:"
                             >Contact</a
                         >
                     </div>
@@ -109,7 +109,7 @@
                     </ul>
                     <router-link
                         class="home_action_btn"
-                        :to="{ name: 'AboutLooped' }"
+                        :to="{ name: 'About' }"
                         >Learn More</router-link
                     >
                 </div>

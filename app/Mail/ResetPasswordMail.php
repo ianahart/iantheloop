@@ -32,7 +32,7 @@ class ResetPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->from('support@looped.social')
+        return $this->from('support@fictionalcompany.social')
             ->subject('Password Reset:')
             ->view('resetPasswordEmail');
     }
