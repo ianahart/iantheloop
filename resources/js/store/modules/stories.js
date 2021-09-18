@@ -128,7 +128,9 @@ const stories = {
     },
 
     SET_BASE_STORIES(state, payload) {
-      state.baseStories = [...state.baseStories, ...payload];
+      const existingBaseStories = state.baseStories.map(existingStory => existingStory.id);
+      const newBaseStories = payload.filter(newStory => !existingBaseStories.includes(newStory.id));
+       state.baseStories = [...state.baseStories, ...newBaseStories];
     },
 
     CLEAR_BASE_STORIES(state) {
@@ -138,11 +140,29 @@ const stories = {
     },
 
     SET_STORIES(state, payload) {
+        const baseStory = {};
+        baseStory.full_name = payload[0].full_name;
+        baseStory.id = payload[0].user_id;
+        baseStory.subject_story = {
+          id: payload[0].id,
+          profile: {
+            profile_id: payload[0].profile_id,
+            profile_picture: payload[0].profile_picture,
+          },
+          profile_id: payload[0].profile_id,
+          user_id: payload[0].user_id,
+        };
+        const exists = state.baseStories.find(baseStory => baseStory.id === payload[0].user_id);
+        if (!exists) {
+        state.baseStories.unshift(baseStory);
+      }
       if (payload.length === 1 && payload[0].displayed_time.toLowerCase() === 'just now') {
-        if (payload[0].user_id === state.stories[0].user_id) {
-           state.stories = [...state.stories, ...payload];
-            return;
-        }
+          if (state.stories.length) {
+            if (payload[0].user_id === state.stories[0].user_id) {
+                  state.stories = [...state.stories, ...payload];
+                  return;
+              }
+          }
       } else {
         state.stories = [];
         state.stories = [...state.stories, ...payload];
@@ -393,7 +413,6 @@ const stories = {
         if (response.status === 200) {
           commit('REMOVE_CURRENT_USER_STORY', story);
         }
-        console.log('stories.js|REMOVE_CURRENT_USER_STORY|Error (200): ', response);
       } catch(e) {
         console.log('stories.js|REMOVE_CURRENT_USER_STORY|Error (403): ', e.response);
       }

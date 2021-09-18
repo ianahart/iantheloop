@@ -15,7 +15,7 @@ const initialState = () => {
     messageNotificationsLoaded: false,
     currentInteractionAlert: null,
     isCurrentInteractionAlertActive: false,
-    interactionNotificationsLoaded:false,
+    interactionNotificationsLoaded: false,
     navMessageAlerts: false,
     navInteractionAlerts: 0,
     serverError: '',
@@ -38,7 +38,7 @@ const notifications = {
       state.processQueue = [...state.processQueue, ...payload];
     },
 
-    PROCESS_DEQUEUE(state,payload) {
+    PROCESS_DEQUEUE(state, payload) {
       const index = state.processQueue.findIndex(queue => queue.sender_user_id === payload.sender_user_id);
       state.processQueue.splice(index, 1);
     },
@@ -51,9 +51,9 @@ const notifications = {
       }
 
       if (notEmpty && state.currentInteractionAlert.sender_user_id === payload.sender_user_id) {
-          return;
-        }
-     state.currentInteractionAlert = payload;
+        return;
+      }
+      state.currentInteractionAlert = payload;
 
     },
 
@@ -73,20 +73,20 @@ const notifications = {
       state.interactions = [];
     },
 
-   SET_SERVER_ERROR(state, payload) {
-    state.serverError = payload;
-   },
+    SET_SERVER_ERROR(state, payload) {
+      state.serverError = payload;
+    },
 
-   RESET_NOTIFICATIONS_MODULE: (state) => {
-     Object.assign(state, initialState());
+    RESET_NOTIFICATIONS_MODULE: (state) => {
+      Object.assign(state, initialState());
     },
 
 
     SET_CURRENT_PAGE_MESSAGES(state, payload) {
-       if (payload === 'end') {
+      if (payload === 'end') {
         state.currentPageMessages = payload;
         return;
-      }  else if (payload === 'reset') {
+      } else if (payload === 'reset') {
         state.currentPageMessages = 1;
       } else {
         state.currentPageMessages = payload + 1;
@@ -216,12 +216,12 @@ const notifications = {
             }
           }
         );
-          if (response.status === 200) {
-            commit('SET_MESSAGE_NOTIFICATIONS', response.data);
-            commit('SET_CURRENT_PAGE_MESSAGES', response.data.current_page_messages);
-            commit('MESSAGE_NOTIFICATIONS_LOADED', true);
-          }
-      } catch(e) {
+        if (response.status === 200) {
+          commit('SET_MESSAGE_NOTIFICATIONS', response.data);
+          commit('SET_CURRENT_PAGE_MESSAGES', response.data.current_page_messages);
+          commit('MESSAGE_NOTIFICATIONS_LOADED', true);
+        }
+      } catch (e) {
 
         // console.log('notifications.js: FETCH_MESSAGE_NOTIFICATIONS() line 161 Error:', e);
       }
@@ -235,7 +235,7 @@ const notifications = {
         const response = await axios(
           {
             method: 'GET',
-            url: state.interactionCursor === null ? `/api/auth/user/notifications/interactions/${rootGetters['user/getUserId']}/show?cursor=&type=${type}`: state.interactionCursor + '&type='+ type,
+            url: state.interactionCursor === null ? `/api/auth/user/notifications/interactions/${rootGetters['user/getUserId']}/show?cursor=&type=${type}` : state.interactionCursor + '&type=' + type,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
@@ -244,13 +244,12 @@ const notifications = {
         );
 
         if (response.status === 200) {
-          console.log(response.data)
           commit('SET_INTERACTION_CURSOR', response.data.next_page_url);
           commit('SET_INTERACTION_NOTIFICATIONS', response.data);
           commit('SET_INTERACTION_NOTIFICATIONS_LOADED', true);
         }
 
-      } catch(e) {
+      } catch (e) {
         // console.log('notifications.js: FETCH_INTERACTION_NOTIFICATIONS() line 165 Error:', e);
       }
     },
@@ -269,28 +268,28 @@ const notifications = {
           data: { sender: payload.sender, type: payload.type },
         });
 
-      } catch(e) {
+      } catch (e) {
         //  console.log('notifications.js: UPDATE_MESSAGE_NOTIFICATIONS() line 155 Error:', e.response);
       }
     },
 
-    async DELETE_MESSAGE_NOTIFICATIONS ({ state, commit }, payload) {
+    async DELETE_MESSAGE_NOTIFICATIONS({ state, commit }, payload) {
       try {
 
         const response = await axios(
           {
             method: 'DELETE',
-            url:`/api/auth/user/notifications/messages/${payload.recipient}/delete?sender=${payload.sender}&type=${payload.type}`,
+            url: `/api/auth/user/notifications/messages/${payload.recipient}/delete?sender=${payload.sender}&type=${payload.type}`,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application.json',
             },
           }
         );
-          if (response.status === 200) {
-            commit('DELETE_MESSAGE_NOTIFICATIONS', payload.sender);
-          }
-      } catch(e) {
+        if (response.status === 200) {
+          commit('DELETE_MESSAGE_NOTIFICATIONS', payload.sender);
+        }
+      } catch (e) {
         // console.log('notifications.js: DELETE_MESSAGE_NOTIFICATIONS() line 155 Error:', e.response);
       }
     },
@@ -311,7 +310,7 @@ const notifications = {
         if (response.status === 200) {
           commit('SET_NAV_ALERTS', response.data);
         }
-      } catch(e) {
+      } catch (e) {
         commit('SET_SERVER_ERROR', e.response.data.error);
       }
     },
@@ -332,10 +331,10 @@ const notifications = {
 
 
         if (response.status === 200) {
-           commit('DELETE_INTERACTION_NOTIFICATION', payload);
+          commit('DELETE_INTERACTION_NOTIFICATION', payload);
         }
 
-      } catch(e) {
+      } catch (e) {
         console.log('notifications.js:DELETE_INTERACTION_NOTIFICATION Error:', e.response);
 
       }
