@@ -110,7 +110,7 @@ class Story
         ->orderBy('created_at', 'ASC')
         ->where('expire_in_unix', '>', now()->timestamp)
         ->with(
-          ['authorUser' => function ($query) {
+          ['user' => function ($query) {
             return $query->select('id', 'full_name');
           }]
         )
@@ -126,10 +126,10 @@ class Story
             foreach ($stories as $story) {
 
               $story->displayed_time = $this->makeDisplayTime($story->created_at_unix);
-              $story->full_name = $story->authorUser->full_name;
+              $story->full_name = $story->user->full_name;
               $story->profile_picture = $story->profile->profile_picture;
 
-              unset($story->authorUser);
+              unset($story->user);
               unset($story->profile);
 
               $specifiedUserStories->push($story);

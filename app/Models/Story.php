@@ -49,7 +49,7 @@ class Story extends Model
         return $this->belongsTo(Profile::class);
     }
 
-    public function authorUser()
+    public function user()
     {
         return $this->belongsTo(User::class, 'story_user_id');
     }

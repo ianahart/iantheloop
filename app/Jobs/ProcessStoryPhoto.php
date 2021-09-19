@@ -20,7 +20,7 @@ class ProcessStoryPhoto implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected array $data;
+    private array $data;
 
     /**
      * Create a new job instance.
@@ -36,6 +36,16 @@ class ProcessStoryPhoto implements ShouldQueue
         $this->onConnection('database');
         $this->delay(now()->addSeconds(10));
         $this->afterCommit();
+    }
+
+    /**
+     *
+     * @return array
+     */
+
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
@@ -93,7 +103,7 @@ class ProcessStoryPhoto implements ShouldQueue
         $followersOnline = collect([]);
         User::whereIn(
             'id',
-            array_keys($story->authorUser->stat->followers)
+            array_keys($story->user->stat->followers)
         )
             ->chunkById(100, function ($users) use ($followersOnline) {
                 foreach ($users as $user) {
@@ -105,15 +115,15 @@ class ProcessStoryPhoto implements ShouldQueue
                 }
             });
 
-        $followersOnline->push($story->authorUser->id);
+        $followersOnline->push($story->user->id);
 
         $related = [
-            'full_name' => $story->authorUser->full_name,
+            'full_name' => $story->user->full_name,
             'profile_picture' => $story->profile->profile_picture,
             'followers' => $followersOnline,
         ];
 
-        unset($story->authorUser);
+        unset($story->user);
         unset($story->profile);
 
         StoryPhotoProcessed::dispatch($story, $related);

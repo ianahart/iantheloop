@@ -10,8 +10,8 @@
     "/images/home_interests.svg": "/images/home_interests.svg",
     "/images/home_main_1.svg": "/images/home_main_1.svg",
     "/images/home_offers.svg": "/images/home_offers.svg",
+    "/images/iantheloop.png": "/images/iantheloop.png",
     "/images/login.svg": "/images/login.svg",
-    "/images/looped_logo.png": "/images/looped_logo.png",
     "/images/looped_logo_name_dark.png": "/images/looped_logo_name_dark.png",
     "/images/looped_logo_name_light.png": "/images/looped_logo_name_light.png",
     "/images/network.svg": "/images/network.svg",
@@ -19,6 +19,5 @@
     "/images/reset_password_bg.svg": "/images/reset_password_bg.svg",
     "/images/test_image.jpg": "/images/test_image.jpg",
     "/images/test_image_md.png": "/images/test_image_md.png",
-    "/images/test_vid.mp4": "/images/test_vid.mp4",
-    "/images/iantheloop.png": "/images/iantheloop.png"
+    "/images/test_vid.mp4": "/images/test_vid.mp4"
 }
