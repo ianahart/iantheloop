@@ -97,6 +97,8 @@
     background-color: #3b3b441f;
     flex-grow: 1;
     max-width: 500px;
+    max-height: 90%;
+    height: 600px;
   }
   .follow_suggestions_container {
     box-sizing: border-box;
@@ -107,7 +109,8 @@
       flex-grow: 1;
       width:100%;
       max-width: 100%;
-      margin: 0;
+      margin: 0.5rem auto;
+      height: 300px;
     }
   }
 </style>
