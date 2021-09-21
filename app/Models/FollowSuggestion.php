@@ -26,6 +26,10 @@ class FollowSuggestion extends Model
         'profile_id' => 'integer',
         'user_id' => 'integer',
         'prospect_user_id' => 'integer',
+        'rejected' => 'integer',
+        'pending' => 'integer',
+        'suggest' => 'integer',
+        'mutual_follows' => 'integer',
     ];
 
     public function prospect()

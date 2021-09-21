@@ -152,13 +152,14 @@ class FollowSuggestion
         ->unique()
         ->values();
 
-      User::join('stats', 'users.id', '=', 'stats.user_id')->select(
-        [
-          'users.id',
-          'users.full_name',
-          'stats.following'
-        ]
-      )
+      User::join('stats', 'users.id', '=', 'stats.user_id')
+        ->select(
+          [
+            'users.id as id',
+            'users.full_name as full_name',
+            'stats.following as following'
+          ]
+        )
         ->whereIn('users.id', $prospectIDs)
         ->whereNotIn('users.id', array_merge($followingIDs, [$this->userId]))
         ->whereNotNull('stats.following')

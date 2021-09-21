@@ -213,12 +213,13 @@ class Story
         ->whereHas(
           'subjectStory',
           function (Builder $query) use ($currentUserFollowing) {
-            $query->whereIn('user_id', $currentUserFollowing);
+            $query
+              ->whereIn('user_id', $currentUserFollowing)
+              ->where('expire_in_unix', '>', now()->timestamp);
           }
         )->with(
           ['subjectStory' => function ($query) {
             $query
-              ->where('expire_in_unix', '>', now()->timestamp)
               ->select(
                 [
                   'id',

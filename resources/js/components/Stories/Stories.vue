@@ -63,6 +63,7 @@
    computed: {
      ...mapState('stories',
       [
+        'stories',
         'storiesLocation',
         'baseStories',
         'pagination',
