@@ -19,6 +19,7 @@
 <script>
 
   import { mapState, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers.js';
 
   import Post from './Post.vue';
 
@@ -39,17 +40,16 @@
 
       return {
         observer: null,
-        debounceID: '',
         threshold: document.documentElement.clientWidth <= 700 ? '0.1' : '0.7',
       }
     },
       created() {
         this.setupObserver();
+        this.loadSubsequent = debounce(this.loadSubsequent, 400);
       },
 
     beforeDestroy() {
       this.observer.disconnect();
-      clearTimeout(this.debounceID);
       this.SET_POSTS_LOADED(false);
     },
 
@@ -98,31 +98,13 @@
       },
 
     onElementObserved(entries) {
-
         entries.forEach((entry) => {
           if (entry.intersectionRatio >= this.threshold || entry.isIntersecting) {
              let seenId = entry.target.attributes['data-id'].value;
             this.SET_POST_SEEN(parseInt(seenId));
-            this.debounce(() => {
               this.loadSubsequent();
-            }, 400)
             }
         });
-      },
-
-      debounce(fn, delay = 400) {
-
-      return ((...args) => {
-
-        clearTimeout(this.debounceID)
-
-        this.debounceID = setTimeout(() => {
-
-          this.debounceID = null
-
-          fn(...args)
-        }, delay)
-      })()
       },
 
       loadSubsequent() {

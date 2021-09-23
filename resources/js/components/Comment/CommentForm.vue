@@ -33,6 +33,8 @@
 <script>
 
   import { mapState, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers';
+
   import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
 
   export default {
@@ -55,14 +57,12 @@
       return {
         input: '',
         localError: '',
-        debounceID: '',
         finished: false,
       }
     },
 
-    beforeDestroy() {
-
-      clearTimeout(this.debounceID);
+    created () {
+      this.addComment = debounce(this.addComment, 400);
     },
 
     computed: {
@@ -87,19 +87,6 @@
           'ADD_COMMENT',
         ]
       ),
-
-        debounce(fn, delay = 400) {
-          return ((...args) => {
-              clearTimeout(this.debounceID);
-
-              this.debounceID = setTimeout(() => {
-                  this.debounceID = null;
-
-                  fn(...args);
-              }, delay);
-          })();
-        },
-
       async addComment() {
         this.localError = '';
         this.RESET_COMMENT_ERRORS();
@@ -114,8 +101,6 @@
           this.localError = 'A comment must be under 250 characters';
           return;
         }
-
-        this.debounce(async () => {
           await this.ADD_COMMENT(
               {
                 input: this.$refs.input.value,
@@ -129,9 +114,6 @@
                 this.$emit('closeform', false);
             }
           }
-        }, 400);
-
-
       }
     },
   }

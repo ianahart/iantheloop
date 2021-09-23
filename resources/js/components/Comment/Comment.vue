@@ -89,6 +89,7 @@
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers';
 
   import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
   import CommentInteractions from './CommentInteractions.vue';
@@ -120,7 +121,6 @@
     data () {
 
       return {
-        debounceID: '',
         isCommentFormOpen: false,
         replyThreadStart: true,
       }
@@ -173,10 +173,12 @@
       ),
     },
 
-    beforeDestroy() {
-      clearTimeout(this.debounceID);
+    created() {
+      this.loadMoreReplies = debounce(this.loadMoreReplies, 300);
+      this.replyToComment = debounce(this.replyToComment, 350);
+      this.likeComment = debounce(this.likeComment, 350);
+      this.unlikeComment = debounce(this.unlikeComment, 350);
     },
-
     methods: {
 
       ...mapMutations('posts',
@@ -197,7 +199,7 @@
         ]
       ),
 
-      loadMoreReplies () {
+      async loadMoreReplies () {
         const comment = this.postComment.reply_comments[this.postComment.reply_comments.length - 1];
 
         const lastReplyComment = {
@@ -205,10 +207,7 @@
           comment_id: this.postComment.id,
           last_reply_comment_id: comment.id,
         };
-
-        this.debounce(async() => {
           await this.REFILL_REPLIES(lastReplyComment);
-        }, 300);
       },
 
       toggleReplyThread() {
@@ -231,7 +230,7 @@
 
       },
 
-      replyToComment (commentText) {
+      async replyToComment (commentText) {
           this.SET_REPLY_ERRORS({ error: null, commentId: this.postComment.id, action: 'unset' })
           this.validateReply(commentText, this.postComment.id);
 
@@ -247,7 +246,7 @@
               input: commentText,
             };
 
-          this.debounce(async() => {
+
             await this.ADD_REPLY_COMMENT(replyComment);
             if (this.requestFinished) {
 
@@ -259,40 +258,33 @@
                 this.SET_REQUEST_FINISHED(false);
               }
             }
-          }, 350);
-
         } catch(e) {
 
         }
       },
 
-      unlikeComment(commentLike) {
+      async unlikeComment(commentLike) {
 
           try {
-              this.debounce(async() => {
-                commentLike.type = 'comment';
-                 await this.UNLIKE_COMMENT(commentLike);
-         }, 300);
+            commentLike.type = 'comment';
+            await this.UNLIKE_COMMENT(commentLike);
         } catch(e) {
 
         }
       },
 
-      likeComment(comment) {
+      async likeComment(comment) {
         try {
-              this.debounce(async() => {
-                 await this.LIKE_COMMENT(
-                  {
-                    user_id: this.getUserId,
-                    liked_by: this.userName.toLowerCase(),
-                    comment_id: comment.id,
-                    post_id: comment.post_id,
-                    type: 'comment',
-                    action: 'like',
-                  });
-         }, 300);
+          await this.LIKE_COMMENT(
+          {
+            user_id: this.getUserId,
+            liked_by: this.userName.toLowerCase(),
+            comment_id: comment.id,
+            post_id: comment.post_id,
+            type: 'comment',
+            action: 'like',
+          });
         } catch(e) {
-
         }
       },
 
@@ -320,18 +312,6 @@
           console.log('Comment.vue: ', e);
         }
       },
-
-      debounce(fn, delay = 400) {
-          return ((...args) => {
-              clearTimeout(this.debounceID);
-
-              this.debounceID = setTimeout(() => {
-                  this.debounceID = null;
-
-                  fn(...args);
-              }, delay);
-          })();
-        }
     },
   }
 

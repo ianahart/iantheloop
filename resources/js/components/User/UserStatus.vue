@@ -11,11 +11,10 @@
   </div>
 </template>
 
-
-
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers.js';
 
   export default {
 
@@ -26,24 +25,13 @@
     },
 
     created () {
-
+      this.toggleUserStatus = debounce(this.toggleUserStatus, 350);
       if (this.status === 'online') {
 
         this.SET_INITIAL_TOGGLE_VALUE(true);
       } else if (this.status === 'offline') {
         this.SET_INITIAL_TOGGLE_VALUE(false);
       }
-    },
-
-    data () {
-      return {
-        debounceID: '',
-      }
-    },
-
-    beforeDestroy() {
-
-      window.clearTimeout(this.debounceID);
     },
 
     computed: {
@@ -95,34 +83,19 @@
         ]
       ),
 
-      debounce(fn, delay = 1000) {
-
-      return ((...args) => {
-
-        clearTimeout(this.debounceID)
-
-        this.debounceID = setTimeout(() => {
-
-          this.debounceID = null
-
-          fn(...args)
-        }, delay)
-      })()
-      },
         async toggleUserStatus () {
-
-          this.TOGGLE_STATUS_BTN();
-
-
-          this.debounce(async() => {
-            await this.UPDATE_USER_STATUS();
-            if (this.getStatus === 'online') {
-              this.listenForUserStatusChange();
-              this.reJoinNotificationChannel();
-            } else {
-              Echo.leave('userstatus');
-              Echo.leave(`notifications.${this.getUserId}`);            }
-          }, 400);
+          try {
+            this.TOGGLE_STATUS_BTN();
+              await this.UPDATE_USER_STATUS();
+              if (this.getStatus === 'online') {
+                this.listenForUserStatusChange();
+                this.reJoinNotificationChannel();
+              } else {
+                Echo.leave('userstatus');
+                Echo.leave(`notifications.${this.getUserId}`);
+              }
+          } catch(e) {
+          }
         },
         listenForUserStatusChange() {
           Echo.join('userstatus')

@@ -52,6 +52,7 @@
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers.js';
 
   import ProfilePicture from './ProfilePicture.vue';
   import CloseIcon from '../Icons/CloseIcon.vue';
@@ -70,12 +71,15 @@
 
     data () {
       return {
-        debounceID: '',
         typingID: '',
         isTyping: false,
         recipientUserId: '',
         typingUser: '',
       }
+    },
+
+    created() {
+      this.loadMoreChatMessages = debounce(this.loadMoreChatMessages, 350);
     },
 
     async mounted() {
@@ -113,7 +117,6 @@
       this.SET_TOTAL_CHAT_MESSAGES(0);
       this.SET_MORE_CHAT_MESSAGES_BTN(false);
       this.SET_CONVERSATION_ID(null);
-      clearTimeout(this.debounceID);
       clearTimeout(this.typingID);
     },
 
@@ -224,24 +227,11 @@
       },
 
       async loadMoreChatMessages(e) {
-        this.debounce(async() => {
-
+         try {
           await this.getChatMessages();
-        }, 300);
-
+         } catch(e) {
+         }
       },
-
-      debounce(fn, delay = 400) {
-          return ((...args) => {
-              clearTimeout(this.debounceID);
-
-              this.debounceID = setTimeout(() => {
-                  this.debounceID = null;
-
-                  fn(...args);
-              }, delay);
-          })();
-      }
     }
   }
 </script>

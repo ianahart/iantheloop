@@ -26,6 +26,7 @@
 
 <script>
  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+ import { debounce } from '../../helpers/moduleHelpers.js';
 
  import Story from './Story.vue';
 
@@ -37,12 +38,13 @@
 
    data () {
      return {
-       debounceID: '',
        fetchedPages: [],
      }
    },
 
    async created() {
+     this.nextStories = debounce(this.nextStories, 350);
+     this.loadMoreStories = debounce(this.loadMoreStories, 350);
      this.CLEAR_BASE_STORIES();
      this.RESET_STORIES_MODULE();
      if (!this.baseStories.length) {
@@ -55,7 +57,6 @@
    },
 
    beforeDestroy() {
-      clearTimeout(this.debounceID);
       this.CLEAR_BASE_STORIES();
       this.fetchedPages = [];
    },
@@ -106,11 +107,12 @@
     ),
 
     async nextStories(navigation) {
-     this.SET_PAGINATION_PAGE(navigation);
-        this.debounce(async () => {
+      try {
+            this.SET_PAGINATION_PAGE(navigation);
             await this.RETRIEVE_BASE_STORIES_DATA();
             this.NAVIGATE_CAROUSEL(navigation);
-          }, 350);
+      } catch(e) {
+      }
     },
 
     prevStories(navigation) {
@@ -119,19 +121,10 @@
     },
 
     async loadMoreStories() {
-      this.debounce(async () => {
-        await this.RETRIEVE_BASE_STORIES_DATA();
-      }, 350);
-    },
-
-    debounce(fn, delay = 400) {
-    return ((...args) => {
-      clearTimeout(this.debounceID)
-      this.debounceID = setTimeout(() => {
-        this.debounceID = null
-        fn(...args)
-      }, delay)
-    })()
+      try {
+         await this.RETRIEVE_BASE_STORIES_DATA();
+      } catch(e) {
+      };
     },
    },
  }

@@ -47,6 +47,7 @@
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers.js';
 
   import DefaultProfileIcon from '../Icons/DefaultProfileIcon.vue';
   import HorizontalDotsIcon from '../Icons/HorizontalDotsIcon.vue'
@@ -74,7 +75,10 @@
       ThumbsUpSolidIcon,
     },
 
-
+    created() {
+       this.likeReplyComment = debounce(this.likeReplyComment, 300);
+       this.unlikeReplyComment = debounce(this.unlikeReplyComment, 300);
+    },
     computed: {
 
     },
@@ -89,50 +93,41 @@
         ]
       ),
 
-      likeReplyComment(comment) {
+      async likeReplyComment(comment) {
         try {
-              this.debounce(async() => {
-                 await this.LIKE_COMMENT(
-                  {
-                    user_id: this.currentUserId,
-                    liked_by: this.currentUserName.toLowerCase(),
-                    comment_id: comment.id,
-                    post_id: comment.post_id,
-                    type: 'reply',
-                    action: 'like',
-                    parent_id: comment.reply_to_comment_id,
-                  });
-         }, 300);
+          await this.LIKE_COMMENT(
+          {
+            user_id: this.currentUserId,
+            liked_by: this.currentUserName.toLowerCase(),
+            comment_id: comment.id,
+            post_id: comment.post_id,
+            type: 'reply',
+            action: 'like',
+            parent_id: comment.reply_to_comment_id,
+          });
         } catch(e) {
 
         }
       },
-
-
-            unlikeReplyComment(comment) {
+      async unlikeReplyComment(comment) {
         try {
+          await this.UNLIKE_COMMENT(
+          {
+            user_id: this.currentUserId,
+            id: comment.id,
+            parent_id: this.originalComment,
+            comment_id: comment.comment_id,
+            post_id: comment.post_id,
+            type: 'reply',
+            action: 'unlike',
 
-              this.debounce(async() => {
-                 await this.UNLIKE_COMMENT(
-                  {
-                    user_id: this.currentUserId,
-                    id: comment.id,
-                    parent_id: this.originalComment,
-                    comment_id: comment.comment_id,
-                    post_id: comment.post_id,
-                    type: 'reply',
-                    action: 'unlike',
-
-                  });
-         }, 300);
+          });
         } catch(e) {
 
         }
       },
 
       async deleteReplyComment(data)  {
-
-
         const replyComment = {
              commentID: data.id,
               replyID: data.reply_to_comment_id,
@@ -142,19 +137,6 @@
         }
         await this.DELETE_REPLY_COMMENT(replyComment);
       },
-
-      debounce(fn, delay = 400) {
-        return ((...args) => {
-          clearTimeout(this.debounceID);
-
-          this.debounceID = setTimeout(() => {
-              this.debounceID = null;
-
-              fn(...args);
-          }, delay);
-        })();
-      },
-
     }
   }
 

@@ -3479,6 +3479,50 @@ div.about_profile_work__row p {
   right: 2px;
   pointer-events: none;
 }
+.user_search_bar_container {
+  box-sizing: border-box;
+  width: 100%;
+  position: relative;
+}
+.user_search_bar_container svg {
+  position: absolute;
+  top: 8px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  color: gray;
+}
+.user_search_bar_container input {
+  box-sizing: border-box;
+  padding-left: 1.6rem;
+}
+.search_history_container {
+  box-sizing: border-box;
+}
+.user_search_component_container {
+  box-sizing: border-box;
+  width: 85%;
+}
+.auth_nav_wrapper {
+  box-sizing: border-box;
+  width: 85%;
+  display: flex;
+  justify-content: flex-end;
+}
+.auth_nav_wrapper ul {
+  justify-content: flex-end;
+}
+.auth_nav_home {
+  box-sizing: border-box;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  width: 60%;
+}
+.auth_nav_home > a a {
+  margin: 0 0.5rem;
+  margin-right: 2rem;
+}
 .navbar_notificatons_listitem {
   cursor: pointer;
   position: relative;
@@ -3505,6 +3549,21 @@ div.about_profile_work__row p {
   padding: 0.015rem;
   top: -11px;
   font-family: "Secular One", sans-serif;
+}
+@media (max-width: 600px) {
+.auth_nav_wrapper {
+    flex-direction: column;
+    align-items: center;
+}
+.auth_nav_wrapper ul {
+    align-items: center;
+}
+.auth_nav_home {
+    margin-top: 0.1rem;
+    align-items: center;
+    flex-direction: column-reverse;
+    width: 100%;
+}
 }
 /*
   IMPORTS
@@ -4454,6 +4513,17 @@ div.about_profile_work__row p {
   width: 100%;
   min-height: 600px;
   height: 100%;
+}
+.no-auth-links-list {
+  box-sizing: border-box;
+}
+.no-auth-links-list li:first-of-type {
+  margin-left: auto;
+}
+@media (max-width: 600px) {
+.no-auth-links-list li:first-of-type {
+    margin-left: 0;
+}
 }
 .follow_request_container {
   margin-bottom: 0;
@@ -7481,11 +7551,27 @@ div.about_profile_work__row p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.1rem 0.7rem;
+  padding: 0.2rem 0.7rem;
+  height: 70px;
 }
 .navbar__desktop p {
   margin: 1rem auto;
   text-align: center;
+}
+.navbar__desktop a {
+  font-size: 0.85rem;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: 0.1rem;
+  font-weight: 100;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.25s ease-in-out;
+}
+.navbar__desktop a:hover {
+  border-bottom: 3px solid #fb4d70;
+}
+.navbar__desktop a:first-of-type {
+  margin-right: auto;
 }
 .logo__container {
   display: flex;
@@ -7496,30 +7582,11 @@ div.about_profile_work__row p {
   justify-content: center;
   align-items: center;
   padding: 0;
-  width: 80%;
   margin-bottom: 0;
 }
 .nav__links__desktop li {
   margin: 0 0.5rem;
   list-style-type: none;
-}
-.nav__links__desktop li:first-of-type {
-  margin-right: auto;
-}
-.nav__links__desktop a {
-  font-size: 0.85rem;
-  font-family: "Secular One", sans-serif;
-  letter-spacing: 0.1rem;
-  font-weight: 100;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: all 0.25s ease-in-out;
-}
-.nav__links__desktop a:hover {
-  border-bottom: 3px solid #fb4d70;
-}
-.nav__links__desktop a:first-of-type {
-  margin-right: auto;
 }
 @media (max-width: 600px) {
 .logo__container {
@@ -7542,6 +7609,15 @@ div.about_profile_work__row p {
   z-index: 17;
   box-shadow: 0px 0px 9px 3px rgba(41, 41, 41, 0.25);
 }
+.navbar__mobile a {
+  font-size: 0.85rem;
+  color: #fcfcfc;
+  font-family: "Secular One", sans-serif;
+  letter-spacing: 0.1rem;
+  font-weight: 100;
+  text-decoration: none;
+  text-transform: uppercase;
+}
 .nav__links__mobile {
   display: flex;
   flex-direction: column;
@@ -7556,15 +7632,6 @@ div.about_profile_work__row p {
 }
 .nav__links__mobile li:hover {
   border-bottom: 3px solid #fb4d70;
-}
-.nav__links__mobile a {
-  font-size: 0.85rem;
-  color: #fcfcfc;
-  font-family: "Secular One", sans-serif;
-  letter-spacing: 0.1rem;
-  font-weight: 100;
-  text-decoration: none;
-  text-transform: uppercase;
 }
 .navigation__links_container {
   display: flex;

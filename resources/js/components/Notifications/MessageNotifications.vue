@@ -29,6 +29,7 @@
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers.js';
 
   import CloseIcon from '../Icons/CloseIcon.vue';
   import MessageNotification from './MessageNotification.vue';
@@ -42,10 +43,8 @@
       MessageNotification,
     },
 
-    data() {
-      return {
-        timerID: '',
-      }
+    created () {
+      this.loadMoreNotifications = debounce(this.loadMoreNotifications, 350);
     },
 
     async mounted() {
@@ -56,7 +55,6 @@
         this.CLEAR_MESSAGE_NOTIFICATIONS();
         this.MESSAGE_NOTIFICATIONS_LOADED(false);
         this.SET_CURRENT_PAGE_MESSAGES('reset');
-        clearTimeout(this.timerID);
     },
 
     computed: {
@@ -85,22 +83,8 @@
           ]
       ),
 
-      debounce(fn, delay = 400) {
-          return ((...args) => {
-              clearTimeout(this.debounceID);
-
-              this.debounceID = setTimeout(() => {
-                  this.debounceID = null;
-
-                  fn(...args);
-              }, delay);
-          })();
-      },
-
       async loadMoreNotifications(type) {
-        this.debounce(async () => {
           await this.FETCH_MESSAGE_NOTIFICATIONS(type);
-        }, 350);
       },
 
       closeMessageNotifications() {

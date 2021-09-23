@@ -79,6 +79,7 @@
 
 <script>
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers';
 
   import { goToYears } from '../../data/profileWallSettingsData';
 
@@ -146,13 +147,16 @@
       ),
 
       filterStyleIndicator() {
-
         return this.checkFiltersOn ? 'profile_wall_settings_filter_active': 'profile_wall_settings_filter_inactive';
       },
     },
 
-    beforeDestroy() {
+    created() {
+      this.clearFilters = debounce(this.clearFilters, 400);
+      this.applyFilters = debounce(this.applyFilters, 400);
+    },
 
+    beforeDestroy() {
       this.$store.commit('profileWallSettings/RESET_MODULE');
     },
 
@@ -195,37 +199,28 @@
         this.CLOSE_FILTERS();
       },
 
-      clearFilters () {
+      async clearFilters () {
+        try {
         this.CLEAR_FILTERS(['Who', 'Month', 'Year']);
-        this.SET_INITIAL_FILTER(true);
-        this.RESET_POSTS();
-
-        this.debounce(async () => {
+          this.SET_INITIAL_FILTER(true);
+          this.RESET_POSTS();
           await this.LOAD_POSTS(this.subjectUserId);
-        }, 400);
+        } catch(e) {
+        }
       },
 
-      applyFilters () {
-        this.SET_FEEDBACK('');
-        this.debounce(async () => {
-          if (this.checkFiltersOn) {
-            this.RESET_POSTS();
-              await this.LOAD_POSTS(this.subjectUserId);
-              this.closeFilters();
-            } else {
-              this.SET_FEEDBACK('Make sure to select an option for each box');
-            }
-        }, 400);
-      },
-
-      debounce(fn, delay = 400) {
-        return ((...args) => {
-          clearTimeout(this.debounceID);
-          this.debounceID = setTimeout(() => {
-              this.debounceID = null;
-              fn(...args);
-          }, delay);
-        })();
+      async applyFilters () {
+        try {
+          this.SET_FEEDBACK('');
+            if (this.checkFiltersOn) {
+              this.RESET_POSTS();
+                await this.LOAD_POSTS(this.subjectUserId);
+                this.closeFilters();
+              } else {
+                this.SET_FEEDBACK('Make sure to select an option for each box');
+              }
+        } catch(e) {
+        }
       },
     }
   }

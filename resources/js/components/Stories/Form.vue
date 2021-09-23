@@ -103,6 +103,7 @@
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers.js';
 
   import BackgroundOption from './BackgroundOption.vue';
   import CustomSelect from '../forms/selects/CustomSelect.vue';
@@ -129,17 +130,12 @@
     data () {
       return {
         backgrounds: [1,2,3,4,5,6,7,8,9,10],
-        debounceID: '',
         photoError: '',
       }
     },
 
-    mounted() {
-
-    },
-
-    beforeDestroy() {
-      clearTimeout(this.debounceID);
+    created() {
+      this.handleKeyUp = debounce(this.handleKeyUp, 350);
     },
 
     computed: {
@@ -187,7 +183,6 @@
       },
 
       handleKeyUp(e) {
-        this.debounce(() => {
         this.UPDATE_STORY_FIELD(
             {
               field: 'text',
@@ -195,7 +190,6 @@
               error: '',
               form: null
             });
-        }, 350);
       },
 
       selectAlignment(alignment) {
@@ -222,18 +216,6 @@
 
       handleTextChange(e) {
           this.checkStoryTextError();
-      },
-
-      debounce(fn, delay = 400) {
-        return ((...args) => {
-            clearTimeout(this.debounceID);
-
-            this.debounceID = setTimeout(() => {
-                this.debounceID = null;
-
-                fn(...args);
-            }, delay);
-        })();
       },
 
       clearStoryForm() {

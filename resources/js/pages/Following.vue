@@ -24,6 +24,8 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { debounce } from '../helpers/moduleHelpers.js';
+
 import Header from "../components/Network/Header.vue";
 import NetworkList from "../components/Network/NetworkList.vue";
 
@@ -35,15 +37,8 @@ export default {
     NetworkList,
   },
 
-  props: {},
-
-  data() {
-    return {
-      debounceID: "",
-    };
-  },
-
   created() {
+    this.loadMore = debounce(this.loadMore, 400);
     this.RESET_MODULE();
     this.setUserId(this.$route.params.id);
   },
@@ -96,25 +91,15 @@ export default {
       this.SET_USER_ID(userId);
     },
 
-    loadMore() {
-      this.debounce(async () => {
-        await this.GET_FOLLOWING();
-      }, 400);
+    async loadMore() {
+      try {
+       await this.GET_FOLLOWING();
+      } catch(e) {
+      }
     },
 
     async loadFollowingList() {
       await this.GET_FOLLOWING();
-    },
-    debounce(fn, delay = 1000) {
-      return ((...args) => {
-        clearTimeout(this.debounceID);
-
-        this.debounceID = setTimeout(() => {
-          this.debounceID = null;
-
-          fn(...args);
-        }, delay);
-      })();
     },
   },
 };

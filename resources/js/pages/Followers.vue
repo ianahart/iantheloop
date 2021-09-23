@@ -24,6 +24,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { debounce } from '../helpers/moduleHelpers.js';
 
 import Header from "../components/Network/Header.vue";
 import NetworkList from "../components/Network/NetworkList.vue";
@@ -36,19 +37,10 @@ export default {
     NetworkList,
   },
 
-  props: {},
-
-  data() {
-    return {
-      debounceID: "",
-    };
-  },
-
   created() {
+    this.loadMore = debounce(this.loadMore,400);
     this.RESET_MODULE();
-
     const userId = this.$route.params.id;
-
     this.setUserId(userId);
   },
 
@@ -61,11 +53,6 @@ export default {
         query: { status: `${encodeURI("Could not find the user")}` },
       });
     }
-  },
-
-  beforeDestroy() {
-    window.clearTimeout(this.bounceID);
-
   },
 
   watch: {
@@ -100,10 +87,11 @@ export default {
       this.SET_USER_ID(userId);
     },
 
-    loadMore() {
-      this.debounce(async () => {
+    async loadMore() {
+      try {
         await this.GET_FOLLOWERS();
-      }, 400);
+      }  catch(e) {
+      }
     },
 
     async loadFollowersList() {
@@ -112,18 +100,6 @@ export default {
       } catch (e) {
 
       }
-    },
-
-    debounce(fn, delay = 1000) {
-      return ((...args) => {
-        clearTimeout(this.debounceID);
-
-        this.debounceID = setTimeout(() => {
-          this.debounceID = null;
-
-          fn(...args);
-        }, delay);
-      })();
     },
   },
 };

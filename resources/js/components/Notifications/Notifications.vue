@@ -36,6 +36,8 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { debounce } from '../../helpers/moduleHelpers.js';
+
 import FollowRequest from "./FollowRequest.vue";
 import CloseIcon from "../Icons/CloseIcon.vue";
 import Interaction from './Interaction.vue';
@@ -51,10 +53,8 @@ export default {
     Interaction,
   },
 
-  data () {
-    return {
-      debounceID: '',
-    }
+  created() {
+    this.refillInteractions = debounce(this.refillInteractions, 350);
   },
 
   async mounted() {
@@ -62,7 +62,6 @@ export default {
   },
 
   beforeDestroy() {
-    clearTimeout(this.debounceID);
     this.RESET_INTERACTION_NOTIFICATIONS();
     this.RESET_INTERACTION_CURSOR();
   },
@@ -105,22 +104,11 @@ export default {
     },
 
     async refillInteractions(type) {
-      this.debounce(async() => {
-        await this.FETCH_INTERACTION_NOTIFICATIONS(type);
-      }, 300);
+      try {
+         await this.FETCH_INTERACTION_NOTIFICATIONS(type);
+      } catch(e) {
+      }
     },
-
-    debounce(fn, delay = 400) {
-        return ((...args) => {
-            clearTimeout(this.debounceID);
-
-            this.debounceID = setTimeout(() => {
-                this.debounceID = null;
-
-                fn(...args);
-            }, delay);
-        })();
-      },
   },
 };
 </script>

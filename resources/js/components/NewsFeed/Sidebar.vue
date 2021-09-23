@@ -14,27 +14,21 @@
 <script>
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import { debounce } from '../../helpers/moduleHelpers.js';
+
   import FollowSuggestions from './FollowSuggestions.vue';
 
   export default {
     name: 'Sidebar',
-    props: {
-
-    },
     components: {
       FollowSuggestions,
     },
-    data () {
-      return {
-        debounceID: '',
-      }
-    },
     async created() {
       await this.retrieveFollowSuggestions();
+      this.refillSuggestions = debounce(this.refillSuggestions, 350);
     },
     beforeDestroy() {
       this.RESET_NEWSFEED_MODULE();
-      clearTimeout(this.debounceID);
     },
     computed: {
       ...mapState('newsFeed',
@@ -61,9 +55,7 @@
       },
 
       async refillSuggestions() {
-        this.debounce(async () => {
           await this.RETRIEVE_FOLLOW_SUGGESTIONS();
-        }, 300);
       },
 
       async handleReject(payload) {
@@ -72,18 +64,6 @@
 
       async handleFollow(payload) {
         await this.UPDATE_FOLLOW_SUGGESTION(payload);
-      },
-
-      debounce(fn, delay = 400) {
-        return ((...args) => {
-            clearTimeout(this.debounceID);
-
-            this.debounceID = setTimeout(() => {
-                this.debounceID = null;
-
-                fn(...args);
-            }, delay);
-        })();
       },
     },
   }

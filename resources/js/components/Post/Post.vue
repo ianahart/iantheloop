@@ -148,6 +148,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { debounce } from '../../helpers/moduleHelpers';
 
 import HorizontalDotsIcon from "../Icons/HorizontalDotsIcon.vue";
 import PlaySolidIcon from "../Icons/PlaySolidIcon.vue";
@@ -193,7 +194,6 @@ export default {
      return {
             isPostOptionsOpen: false,
             isCommentFormOpen: false,
-            debounceID: "",
             errorID: '',
             commentPreviewShowing: true,
         };
@@ -218,10 +218,15 @@ export default {
             }
         },
     },
+    created() {
+      this.loadMoreComments = debounce(this.loadMoreComments, 350);
+      this.handleAddLike = debounce(this.handleAddLike, 350);
+      this.handleRemoveLike = debounce(this.handleRemoveLike, 350);
+      this.handleFlagPost = debounce(this.handleFlagPost, 400);
+    },
 
     beforeDestroy() {
         this.$refs.post.removeEventListener("click", this.closeOptionsFallback);
-        clearTimeout(this.debounceID);
         clearTimeout(this.errorID);
     },
 
@@ -331,63 +336,52 @@ export default {
             this.isCommentFormOpen = !this.isCommentFormOpen;
         },
 
-        loadMoreComments() {
-          this.debounce(async() => {
+        async loadMoreComments() {
+            try {
               await this.REFILL_COMMENTS(this.post.id);
-          }, 400);
+            } catch(e) {
+            }
         },
 
         async handleAddLike(payload) {
-
-            this.debounce(async () => {
+            try {
                 await this.LIKE_POST({
                     postId: payload,
                     currentUserId: this.getUserId
                 });
-            }, 350);
+            } catch(e) {
+            }
         },
 
         async handleRemoveLike(payload) {
-
-            this.debounce(async () => {
-                await this.UNLIKE_POST(payload);
-            }, 350);
+          try {
+            await this.UNLIKE_POST(payload);
+          } catch(e) {
+          }
         },
 
         async handleFlagPost (payload) {
+            try {
+                await this.FLAG_POST({ postId: payload, userId: this.getUserId });
 
-            this.debounce(async () => {
-                    await this.FLAG_POST({ postId: payload, userId: this.getUserId });
+                if (this.flagPostFinished) {
+                    if (this.alreadyFlaggedError.length) {
 
-                    if (this.flagPostFinished) {
-                        if (this.alreadyFlaggedError.length) {
-
-                            this.errorID = setTimeout(() => {
-                                this.CLEAR_ALREADY_FLAGGED_ERROR();
-                                this.RESET_FLAGGED_OPTIONS();
-                                this.FLAG_POST_FINISHED(false);
-                                this.CLOSE_MODAL();
-                        }, 2500);
-                        } else {
+                        this.errorID = setTimeout(() => {
+                            this.CLEAR_ALREADY_FLAGGED_ERROR();
                             this.RESET_FLAGGED_OPTIONS();
                             this.FLAG_POST_FINISHED(false);
                             this.CLOSE_MODAL();
-                        }
+                    }, 2500);
+                    } else {
+                        this.RESET_FLAGGED_OPTIONS();
+                        this.FLAG_POST_FINISHED(false);
+                        this.CLOSE_MODAL();
                     }
-            }, 400);
+                }
+            } catch(e) {
+            }
         },
-
-        debounce(fn, delay = 400) {
-            return ((...args) => {
-                clearTimeout(this.debounceID);
-
-                this.debounceID = setTimeout(() => {
-                    this.debounceID = null;
-
-                    fn(...args);
-                }, delay);
-            })();
-        }
     }
 };
 </script>
