@@ -26,6 +26,7 @@ import notifications from './modules/notifications.js';
 import messenger from './modules/messenger.js';
 import reviews from './modules/reviews.js';
 import stories from './modules/stories.js';
+import userSearch from './modules/userSearch.js';
 
 Vue.use(Vuex);
 export default new Vuex.Store(
@@ -132,6 +133,7 @@ export default new Vuex.Store(
       messenger,
       reviews,
       stories,
+      userSearch,
     },
   }
 );

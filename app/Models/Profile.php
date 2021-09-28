@@ -47,6 +47,22 @@ class Profile extends Model
     ];
 
 
+    /**
+     * Get the formatted company.
+     *
+     * @param  void;
+     * @return string
+     */
+    public function getCompanyAttribute()
+    {
+
+        return implode(' ', array_map(
+            function ($word) {
+                return strtoupper(substr($word, 0, 1)) . strtolower(substr($word, 1));
+            },
+            explode(' ', $this->attributes['company'])
+        ));
+    }
 
     public function user()
     {
@@ -66,5 +82,10 @@ class Profile extends Model
     public function story()
     {
         return $this->hasOne(Story::class);
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(Search::class);
     }
 }

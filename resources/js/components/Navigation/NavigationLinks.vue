@@ -1,6 +1,6 @@
 
 <template>
-  <ul :class="rootStyle">
+  <ul :class="`${rootStyle} no-auth-links-list`">
     <li
       v-for="(navigationLink, index) in navigationLinks"
       :key="index"
@@ -57,6 +57,22 @@
 </script>
 
 <style lang="scss">
-
+  .no-auth-links-list {
+    box-sizing: border-box;
+    li {
+      &:first-of-type {
+        margin-left: auto;
+      }
+    }
+  }
+  @media(max-width:600px) {
+    .no-auth-links-list {
+      li {
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+    }
+  }
 
 </style>

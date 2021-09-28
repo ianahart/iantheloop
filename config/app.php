@@ -234,6 +234,7 @@ return [
         'Review' => 'App\Helpers\Review::class',
         'Route' => Illuminate\Support\Facades\Route::class,
         'Schema' => Illuminate\Support\Facades\Schema::class,
+        'Search' => 'App\Helpers\Search::class',
         'Session' => Illuminate\Support\Facades\Session::class,
         'Statistics' => 'App\Helpers\Statistics::class',
         'Status' => 'App\Helpers\Status::class',

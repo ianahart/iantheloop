@@ -81,6 +81,15 @@ export default {
   width: 100%;
   z-index: 17;
   box-shadow: 0px 0px 9px 3px rgba(41, 41, 41, 0.25);
+  a {
+    font-size: 0.85rem;
+    color: $primaryWhite;
+    font-family: "Secular One", sans-serif;
+    letter-spacing: 0.1rem;
+    font-weight: 100;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
 }
 
 .nav__links__mobile {
@@ -97,16 +106,6 @@ export default {
     &:hover {
       border-bottom: 3px solid $themePink;
     }
-  }
-
-  a {
-    font-size: 0.85rem;
-    color: $primaryWhite;
-    font-family: "Secular One", sans-serif;
-    letter-spacing: 0.1rem;
-    font-weight: 100;
-    text-decoration: none;
-    text-transform: uppercase;
   }
 }
 

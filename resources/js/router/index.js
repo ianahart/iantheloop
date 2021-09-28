@@ -23,12 +23,12 @@ const authenticatedNotAuthorized = [
 ];
 
 router.beforeEach((to, from, next) => {
-
   /*
   *
-  * Only allow the user logged in to view only their newsfeed/stories
+  * Only allow the user logged in to view only their newsfeed/stories/settings
   **/
-    if (to.name === 'NewsFeed' && to.params.slug !== store.getters['user/getUserSlug'] || to.name === 'StoriesDashboard' && parseInt(to.params.userId) !== store.getters['user/getUserId']) {
+    const slugRoutes = ['NewsFeed', 'Settings'];
+    if (slugRoutes.includes(to.name) && to.params.slug !== store.getters['user/getUserSlug'] || to.name === 'StoriesDashboard' && parseInt(to.params.userId) !== store.getters['user/getUserId']) {
       next({ path: '/' })
     } else {
       next();

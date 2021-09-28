@@ -1,6 +1,5 @@
 <template>
   <div class="profile_stats_follow_btn">
-    <!-- <button @click="updateFollowStats">Follow</button> -->
     <button @click="sendFollowRequest">Follow</button>
   </div>
 </template>

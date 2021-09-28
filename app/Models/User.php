@@ -30,6 +30,17 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * Get the user's formatted full name.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getFullNameAttribute($value)
+    {
+        return ucwords($value);
+    }
+
+    /**
      * The channels the user receives notification broadcasts on.
      *
      * @return string
@@ -183,5 +194,15 @@ class User extends Authenticatable implements JWTSubject
     public function authorStories()
     {
         return $this->hasMany(Story::class, 'story_user_id');
+    }
+
+    public function searchers()
+    {
+        return $this->hasMany(Search::class, 'searcher_user_id');
+    }
+
+    public function searched()
+    {
+        return $this->hasMany(Search::class, 'searched_user_id');
     }
 }

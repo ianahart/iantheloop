@@ -1,7 +1,5 @@
 <?php
 
-use App\Helpers\Messenger;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\RegisterController;
@@ -26,6 +24,7 @@ use App\Http\Controllers\General\NotificationController;
 use App\Http\Controllers\General\FollowSuggestionController;
 use App\Http\Controllers\General\ReviewController;
 use App\Http\Controllers\General\StoryController;
+use App\Http\Controllers\General\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,3 +101,7 @@ Route::get('/auth/stories/{userId}/show', [StoryController::class, 'show'])->mid
 Route::get('/auth/stories/{userId}/count/show', [StoryController::class, 'count'])->middleware('auth:api');
 Route::get('/auth/stories/index', [StoryController::class, 'index'])->middleware('auth:api');
 Route::delete('/auth/stories/{storyId}/delete', [StoryController::class, 'delete'])->middleware('auth:api');
+route::post('/auth/searches/search', [SearchController::class, 'search'])->middleware('auth:api');
+route::post('/auth/searches/store', [SearchController::class, 'store'])->middleware('auth:api');
+route::get('/auth/searches/{userId}/show', [SearchController::class, 'show'])->middleware('auth:api');
+route::delete('/auth/searches/{searchId}/delete', [SearchController::class, 'delete'])->middleware('auth:api');

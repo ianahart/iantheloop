@@ -12,7 +12,7 @@ const initialState = () => {
       { component: 'Reviews', linkText: 'Reviews' },
     ],
     authNavigationLinks: [
-      { component: 'Home', linkText: 'home' },
+      // { component: 'Home', linkText: 'home' },
       { component: 'About', linkText: 'about' },
       { component: 'Reviews', linkText: 'Reviews' },
     ],

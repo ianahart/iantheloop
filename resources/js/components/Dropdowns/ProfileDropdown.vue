@@ -43,7 +43,6 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
              </svg>
              <router-link :disabled="this.getUserSlug === $route.params.slug" :to="{name: 'NewsFeed', params: {slug: this.getUserSlug}}">Newsfeed</router-link>
-             <!-- <span class="news_feed_dropdown_link">Newsfeed</span> -->
             </div>
           </div>
         <li>
@@ -56,15 +55,6 @@
                 linkText="Create Profile"
               />
             </div>
-            <div v-if="getProfileStatus" class="profile__dropdown__link">
-                <SearchIcon
-                  className="icon__sm__light"
-                />
-                <DropDownLink
-                  name="Explore"
-                  linkText="Explore"
-                />
-             </div>
               <div v-if="getProfileStatus" class="profile__dropdown__link">
               <FollowingIcon
                   className="icon__sm__light"
@@ -91,6 +81,22 @@
         </li>
         <li>
           <div class="profile__dropdown__section">
+             <div v-if="getProfileStatus" class="profile__dropdown__link">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 icon__sm__light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <DropDownLink
+                name="Settings"
+                linkText="Settings"
+                param="slug"
+                :paramValue="this.getUserSlug"
+              />
+             </div>
+          </div>
+        </li>
+        <li>
+          <div class="profile__dropdown__section">
             <div @click="logout" class="profile__dropdown__link">
               <SignoutIcon />
               <span>Log Out</span>
@@ -110,7 +116,6 @@
   import CreateProfileIcon from '../../components/Icons/CreateProfileIcon.vue';
   import DropDownLink from '../../components/Dropdowns/DropDownLink.vue';
   import ProfileIcon from '../Navigation/LinkIcons/ProfileIcon.vue';
-  import SearchIcon from '../../components/Icons/SearchIcon.vue';
   import SignoutIcon from '../../components/Icons/SignoutIcon.vue';
   import FollowersIcon from '../Icons/FollowersIcon.vue';
   import FollowingIcon from '../Icons/FollowingIcon.vue';
@@ -132,7 +137,6 @@
       CreateProfileIcon,
       DropDownLink,
       ProfileIcon,
-      SearchIcon,
       SignoutIcon,
       FollowersIcon,
       FollowingIcon,
@@ -188,6 +192,11 @@
     },
 
     methods: {
+      ...mapMutations('userSearch',
+        [
+          'RESET_USER_SEARCH_MODULE',
+        ]
+      ),
       ...mapActions('user',
           [
             'LOGOUT'
@@ -218,7 +227,7 @@
       },
 
       async logout() {
-
+        this.RESET_USER_SEARCH_MODULE();
         await this.LOGOUT();
 
         this.leaveUserStatusChannel();
@@ -351,7 +360,6 @@
   }
 
   .profile__dropdown__section {
-
     border-top: 1px solid darken(#838383, 5);
   }
 

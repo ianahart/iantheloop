@@ -201,22 +201,6 @@ export function decodeToken(token) {
    return base64Url.replace('-', '+').replace('_', '/');
 }
 
-// export function debounce(fn, delay) {
-
-//   var timeoutID = null
-
-//   return function () {
-
-//     clearTimeout(timeoutID)
-//     var args = arguments
-//     var that = this
-//     console.log('this: inside debounce function ', that);
-//     timeoutID = setTimeout(function () {
-//       fn.apply(args)
-//     }, delay)
-//   }
-// }
-
 export function debounce(fn, delay) {
 
   var timeoutID = null
@@ -224,7 +208,6 @@ export function debounce(fn, delay) {
 
     clearTimeout(timeoutID)
     var args = arguments
-    console.log('ARGS: ', args.target);
     var that = this
     timeoutID = setTimeout(function () {
       fn.apply(that, args)

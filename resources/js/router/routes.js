@@ -85,9 +85,9 @@ const routes = [
     }
   },
   {
-    path: '/explore',
-    name: 'Explore',
-    component: () => import('../pages/Explore.vue'),
+    path: '/settings/:slug',
+    name: 'Settings',
+    component: () => import('../pages/Settings.vue'),
     meta: {
       requiresAuth: true,
     }

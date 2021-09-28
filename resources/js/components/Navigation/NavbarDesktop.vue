@@ -118,37 +118,10 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.1rem 0.7rem;
+  padding: 0.2rem 0.7rem;
+  height:70px;
 
-  p {
-    margin: 1rem auto;
-    text-align: center;
-  }
-}
-
-.logo__container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.nav__links__desktop {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  width: 80%;
-  margin-bottom: 0;
-
-  li {
-    margin: 0 0.5rem;
-    list-style-type: none;
-
-    &:first-of-type {
-      margin-right: auto;
-    }
-  }
-
-  a {
+   a {
     font-size: 0.85rem;
     font-family: "Secular One", sans-serif;
     letter-spacing: 0.1rem;
@@ -162,6 +135,24 @@ export default {
     &:first-of-type {
       margin-right: auto;
     }
+  }
+}
+
+.logo__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav__links__desktop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 0;
+
+  li {
+    margin: 0 0.5rem;
+    list-style-type: none;
   }
 }
 
