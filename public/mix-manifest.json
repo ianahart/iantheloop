@@ -1,6 +1,8 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/images/about_activity.svg": "/images/about_activity.svg",
+    "/images/about_stars.svg": "/images/about_stars.svg",
     "/images/create_account.svg": "/images/create_account.svg",
     "/images/create_profile_bg.svg": "/images/create_profile_bg.svg",
     "/images/decoration-star.svg": "/images/decoration-star.svg",
@@ -12,14 +14,10 @@
     "/images/home_offers.svg": "/images/home_offers.svg",
     "/images/iantheloop.png": "/images/iantheloop.png",
     "/images/login.svg": "/images/login.svg",
-    "/images/looped_logo_name_dark.png": "/images/looped_logo_name_dark.png",
-    "/images/looped_logo_name_light.png": "/images/looped_logo_name_light.png",
     "/images/network.svg": "/images/network.svg",
     "/images/not_found.jpg": "/images/not_found.jpg",
     "/images/reset_password_bg.svg": "/images/reset_password_bg.svg",
     "/images/test_image.jpg": "/images/test_image.jpg",
     "/images/test_image_md.png": "/images/test_image_md.png",
-    "/images/test_vid.mp4": "/images/test_vid.mp4",
-    "/images/about_activity.svg": "/images/about_activity.svg",
-    "/images/about_stars.svg": "/images/about_stars.svg"
+    "/images/test_vid.mp4": "/images/test_vid.mp4"
 }

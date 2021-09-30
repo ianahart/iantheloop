@@ -103,6 +103,7 @@ class Search
     try {
 
       if (JWTAuth::user()->id !== intval($data['user_id'])) {
+
         throw new Exception('Unauthorized action', 403);
       }
 
@@ -115,6 +116,7 @@ class Search
         )->first();
 
       if (!is_null($exists)) {
+
         throw new Exception('Search has already been saved', 400);
       }
 

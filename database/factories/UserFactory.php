@@ -54,10 +54,10 @@ class UserFactory extends Factory
             'is_logged_in' => false,
             'profile_created' => false,
             'status' => '',
-            'cur_chat_window_user_id' => '',
+            'cur_chat_window_user_id' => '0',
             'slug' => '',
-            'last_following_user_id' => '',
-            'last_following_suggestion_user_id' => '',
+            'last_following_user_id' => NULL,
+            'last_following_suggestion_user_id' => NULL,
 
         ];
     }
