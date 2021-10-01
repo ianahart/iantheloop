@@ -1,10 +1,10 @@
 <template>
-  <transition name="messenger" appear>
-  <div v-if="messengerLoaded" class="messenger_container">
+  <transition name="conversator" appear>
+  <div v-if="conversatorLoaded" class="conversator_container">
     <Header
       :contactsCount="contactsCount"
     />
-   <MessengerContacts
+   <ConversatorContacts
       v-if="!getServerErrors.length"
     />
     <p class="no_contacts_explanation" v-if="getServerErrors.length">A contact is someone that you are following and they are following you back.</p>
@@ -22,17 +22,17 @@
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
   import Header from './Header.vue';
-  import MessengerContacts from './MessengerContacts.vue';
+  import ConversatorContacts from './ConversatorContacts.vue';
   import ChatWindow from './ChatWindow.vue';
 
   export default {
-    name: 'MessengerContainer',
+    name: 'ConversatorContainer',
     props: {
 
     },
     components: {
       Header,
-      MessengerContacts,
+      ConversatorContacts,
       ChatWindow,
     },
 
@@ -47,21 +47,21 @@
       if (this.conversationId !== null) {
         Echo.leave(`chat.${this.conversationId}`);
       }
-       this.RESET_MESSENGER_MODULE();
+       this.RESET_CONVERSATOR_MODULE();
     },
 
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
           'contacts',
           'contactsCount',
-          'messengerLoaded',
+          'conversatorLoaded',
           'isChatWindowOpen',
           'chatWindowReload',
           'conversationId',
         ]
       ),
-      ...mapGetters('messenger',
+      ...mapGetters('conversator',
         [
           'getServerErrors',
         ]
@@ -74,9 +74,9 @@
     },
 
     methods: {
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
-          'RESET_MESSENGER_MODULE'
+          'RESET_CONVERSATOR_MODULE'
         ]
       ),
     }
@@ -84,15 +84,15 @@
 </script>
 
 <style lang="scss">
-.messenger-enter-active, .messenger-leave-active {
+.conversator-enter-active, .conversator-leave-active {
   transition: all 0.3s ease-out;
 }
-.messenger-enter, .messenger-leave-to {
+.conversator-enter, .conversator-leave-to {
   opacity: 0;
   transform: translateX(50px);
 }
 
-.messenger_container {
+.conversator_container {
     padding: 0.5rem;
     transform: translateY(78.5%);
     width: 200px;
@@ -111,7 +111,7 @@
 }
 
 @media (max-width: 600px) {
-  .messenger_container {
+  .conversator_container {
     transform: translateY(100%);
     min-height: 315px;
   }

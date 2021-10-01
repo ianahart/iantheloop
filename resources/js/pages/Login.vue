@@ -64,9 +64,9 @@
           'formSubmitted',
         ]
       ),
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
-          'isMessengerOpen'
+          'isConversatorOpen'
         ]
       ),
       ...mapGetters('user',
@@ -98,7 +98,7 @@
             'SET_AUTH_STATUS',
           ]
         ),
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'UPDATE_CONTACT_STATUS',
           'UPDATE_UNREAD_MESSAGE_COUNT',

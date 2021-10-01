@@ -36,7 +36,7 @@
     },
 
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
            'chatMessagesLoaded',
            'loadChatMessagesBtn'
@@ -50,7 +50,7 @@
     },
     methods: {
 
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'SET_MORE_CHAT_MESSAGES_BTN'
         ]

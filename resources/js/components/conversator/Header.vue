@@ -1,8 +1,8 @@
 <template>
-  <div class="messenger_header_container">
-    <div v-if="getServerErrors.length === 0" class="messenger_header">
+  <div class="conversator_header_container">
+    <div v-if="getServerErrors.length === 0" class="conversator_header">
       <h4>Contacts ({{ contactsCount }})</h4>
-      <div class="messenger_actions">
+      <div class="conversator_actions">
         <div
           class="filter_contacts"
           @click="toggleFilterBox"
@@ -18,11 +18,11 @@
         </div>
       </div>
     </div>
-    <p class="messenger_header_no_contacts" v-if="getServerErrors.length">{{ this.getServerErrors[0].msg }}</p>
+    <p class="conversator_header_no_contacts" v-if="getServerErrors.length">{{ this.getServerErrors[0].msg }}</p>
     <FilterBox
       v-if="isFilterBoxVisible"
     />
-    <div class="messenger_header_separator"></div>
+    <div class="conversator_header_separator"></div>
   </div>
 </template>
 
@@ -54,15 +54,15 @@
 
     computed: {
         searchClassName() {
-          return this.isFilterBoxVisible ? 'messenger_active_search' : 'messenger_non_active_search';
+          return this.isFilterBoxVisible ? 'conversator_active_search' : 'conversator_non_active_search';
         },
 
-        ...mapState('messenger',
+        ...mapState('conversator',
         [
           'isFilterBoxVisible',
         ]
       ),
-      ...mapGetters('messenger',
+      ...mapGetters('conversator',
         [
           'getServerErrors'
         ]
@@ -70,7 +70,7 @@
     },
 
     methods: {
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'TOGGLE_FILTER_BOX_VISIBILITY'
         ]
@@ -85,7 +85,7 @@
 
 <style lang="scss">
 
-  .messenger_header_container {
+  .conversator_header_container {
     h4 {
       font-weight: 100;
       margin:0;
@@ -93,14 +93,14 @@
     }
   }
 
-  .messenger_header {
+  .conversator_header {
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .messenger_actions {
+  .conversator_actions {
     display: flex;
     align-items: center;
 
@@ -121,12 +121,12 @@
     align-items: center;
   }
 
-  .messenger_header_separator {
+  .conversator_header_separator {
     border-top: 1px solid #767676;
     margin: 0.3rem 0;
   }
 
-  .messenger_header_no_contacts {
+  .conversator_header_no_contacts {
     margin: 0.1rem 0;
     color: darken($primaryWhite, 5);
     text-align: center;
@@ -134,10 +134,10 @@
     font-family: 'Open Sans', sans-serif;
   }
 
-  .messenger_active_search {
+  .conversator_active_search {
     color: $themePink;
   }
-  .messenger_non_active_search {
+  .conversator_non_active_search {
     color: $primaryWhite;
   }
 </style>

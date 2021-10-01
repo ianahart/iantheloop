@@ -227,7 +227,7 @@ const user = {
             status: rootGetters['user/getStatus'],
           };
 
-          commit('messenger/UPDATE_CONTACT_STATUS', {user, status: rootGetters['user/getStatus']}, { root: true });
+          commit('conversator/UPDATE_CONTACT_STATUS', {user, status: rootGetters['user/getStatus']}, { root: true });
 
 
       } catch (e) {

@@ -220,7 +220,7 @@ return [
         'Log' => Illuminate\Support\Facades\Log::class,
         'LoginThrottle' => 'App\Helpers\LoginThrottle::class',
         'Mail' => Illuminate\Support\Facades\Mail::class,
-        'Messenger' => 'App\Helpers\Messenger::class',
+        'Conversator' => 'App\Helpers\Conversator::class',
         'Network' => 'App\Helpers\Network::class',
         'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,

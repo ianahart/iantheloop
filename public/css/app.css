@@ -1611,8 +1611,144 @@ body {
   display: flex;
   flex-wrap: wrap;
 }
+.settings_sidebar_container {
+  box-sizing: border-box;
+  background-color: #3a3a3a;
+  flex-grow: 1;
+  height: 100%;
+  max-width: 350px;
+}
+.settings_sidebar_container header h1 {
+  color: #fcfcfc;
+  margin: 0.17rem 0;
+  font-family: "Secular One", sans-serif;
+  text-align: left;
+  padding-left: 0.5rem;
+}
+.settings_sidebar_container svg {
+  color: #fcfcfc;
+  width: 28px;
+  height: 28px;
+  background-color: transparent;
+}
+.settings_header_underline {
+  width: 100%;
+  background-color: #323131;
+  height: 1px;
+}
+.settings_sidebar_options {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.settings_sidebar_option {
+  cursor: pointer;
+  border-bottom: 1px solid #444343;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0.5rem 0;
+  width: 100%;
+}
+.settings_sidebar_option h2 {
+  font-size: 1rem;
+  margin-left: 0.5rem;
+  font-family: "Open Sans", sans-serif;
+}
+.settings_active_sidebar_option h2 {
+  color: #737373;
+}
+.settings_active_sidebar_option svg {
+  color: #737373;
+}
+.settings_active_sidebar_option:hover svg {
+  color: #737373;
+}
+.settings_non_active_sidebar_option h2 {
+  color: #efefef;
+}
+.settings_non_active_sidebar_option:hover svg {
+  color: #fc6684;
+}
+@media (max-width: 900px) {
+.settings_sidebar_container {
+    max-width: 95%;
+    width: 95%;
+    margin: 0 auto;
+    flex-grow: 0;
+}
+}
+.settings_general_container {
+  box-sizing: border-box;
+}
+.settings_general_container h1 {
+  color: #fcfcfc;
+}
+.settings_security_container {
+  box-sizing: border-box;
+}
+.settings_security_container h1 {
+  color: #fcfcfc;
+}
+
+.privacy_container {
+  box-sizing: border-box;
+  background-color: blue;
+  border: 1px solid #fff;
+  margin: 0.3rem;
+}
+.settings_showcase {
+  box-sizing: border-box;
+  background-color: #000;
+  border: 1px solid orange;
+  max-width: 980px;
+  height: 100%;
+  margin: 0 auto;
+}
+.settings_default_option {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.settings_default_option h3 {
+  color: #fcfcfc;
+  font-family: "Secular One", sans-serif;
+  text-align: center;
+}
+@media (max-width: 1350px) {
+.settings_showcase {
+    max-width: 80%;
+}
+}
+@media (max-width: 900px) {
+.settings_showcase {
+    max-width: 95%;
+    width: 95%;
+    margin: 0 auto;
+    flex-grow: 0;
+}
+}
 .settings_page_container {
   box-sizing: border-box;
+  background-color: #3a3a3a;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+}
+.settings_showcase_container {
+  box-sizing: border-box;
+  background-color: #000;
+  flex-grow: 2;
+  height: 100%;
+}
+@media (max-width: 900px) {
+.settings_page_container {
+    flex-direction: column;
+}
 }
 .previous_route__container {
   cursor: pointer;
@@ -3785,35 +3921,35 @@ div.about_profile_work__row p {
     top: 300px;
 }
 }
-.messenger_filter_box {
+.conversator_filter_box {
   margin: 0.5rem 0;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.messenger_filter_box input {
+.conversator_filter_box input {
   border-radius: 8px;
   height: 20px;
   border: none;
   border: 1px solid gray;
 }
-.messenger_header_container h4 {
+.conversator_header_container h4 {
   font-weight: 100;
   margin: 0;
   font-family: "Open Sans", sans-serif;
 }
-.messenger_header {
+.conversator_header {
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.messenger_actions {
+.conversator_actions {
   display: flex;
   align-items: center;
 }
-.messenger_actions svg {
+.conversator_actions svg {
   margin: 0 0.3rem;
 }
 .filter_contacts {
@@ -3826,21 +3962,21 @@ div.about_profile_work__row p {
   display: flex;
   align-items: center;
 }
-.messenger_header_separator {
+.conversator_header_separator {
   border-top: 1px solid #767676;
   margin: 0.3rem 0;
 }
-.messenger_header_no_contacts {
+.conversator_header_no_contacts {
   margin: 0.1rem 0;
   color: #efefef;
   text-align: center;
   font-size: 0.9rem;
   font-family: "Open Sans", sans-serif;
 }
-.messenger_active_search {
+.conversator_active_search {
   color: #fb4d70;
 }
-.messenger_non_active_search {
+.conversator_non_active_search {
   color: #fcfcfc;
 }
 .contact_profile_picture {
@@ -3859,7 +3995,7 @@ div.about_profile_work__row p {
   background-color: #484aa4;
   color: #fb4d70;
 }
-.contact_profile_picture .messenger_online_indicator {
+.contact_profile_picture .conversator_online_indicator {
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -3868,13 +4004,13 @@ div.about_profile_work__row p {
   bottom: 6px;
   right: 0;
 }
-.contact_profile_picture .messenger_online_indicator_online {
+.contact_profile_picture .conversator_online_indicator_online {
   background-color: limegreen;
 }
-.contact_profile_picture .messenger_online_indicator_offline {
+.contact_profile_picture .conversator_online_indicator_offline {
   background-color: gray;
 }
-.messenger_contact_list_item {
+.conversator_contact_list_item {
   box-sizing: border-box;
   display: flex;
   padding: 0.1rem;
@@ -3885,10 +4021,10 @@ div.about_profile_work__row p {
   transition: all 0.1ss ease-out;
   cursor: pointer;
 }
-.messenger_contact_list_item:hover {
+.conversator_contact_list_item:hover {
   background-color: #2f2f36;
 }
-.messenger_contact_list_item h5 {
+.conversator_contact_list_item h5 {
   margin: 0.1rem 0;
   text-align: center;
   font-family: "Open Sans", sans-serif;
@@ -3896,14 +4032,14 @@ div.about_profile_work__row p {
   font-size: 0.65rem;
   font-weight: 100;
 }
-.messenger_contact_list_item h5:hover {
+.conversator_contact_list_item h5:hover {
   color: #fff;
 }
-.messenger_contact_name {
+.conversator_contact_name {
   position: relative;
   flex-grow: 1;
 }
-.messenger_contact_unread_messages_count {
+.conversator_contact_unread_messages_count {
   position: absolute;
   background-color: #ff0033;
   color: #fcfcfc;
@@ -3920,26 +4056,26 @@ div.about_profile_work__row p {
   justify-content: center;
   align-items: center;
 }
-.messenger_contacts_list {
+.conversator_contacts_list {
   box-sizing: border-box;
   min-height: 375px;
   max-height: 400px;
   overflow-y: auto;
 }
-.messenger_contacts_list::-webkit-scrollbar {
+.conversator_contacts_list::-webkit-scrollbar {
   width: 12px;
 }
-.messenger_contacts_list::-webkit-scrollbar-track {
+.conversator_contacts_list::-webkit-scrollbar-track {
   background: #232329;
   border-radius: 8px;
 }
-.messenger_contacts_list::-webkit-scrollbar-thumb {
+.conversator_contacts_list::-webkit-scrollbar-thumb {
   background-color: #fb4d70;
   border-radius: 20px;
   border: 3px solid #232329;
 }
 @media (max-width: 600px) {
-.messenger_contacts_list {
+.conversator_contacts_list {
     max-height: 275px;
     min-height: 0;
 }
@@ -7974,7 +8110,7 @@ div.about_profile_work__row p {
   justify-content: flex-start;
   margin-left: 0.5rem;
 }
-.messenger_trigger {
+.conversator_trigger {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -7989,10 +8125,10 @@ div.about_profile_work__row p {
   transform: rotate(-90deg);
   transition: all 0.3s ease-out;
 }
-.messenger_trigger:hover {
+.conversator_trigger:hover {
   background-color: #42424c;
 }
-.messenger_trigger h3 {
+.conversator_trigger h3 {
   color: #fcfcfc;
   letter-spacing: 0.01rem;
   margin: 0;
@@ -8000,7 +8136,7 @@ div.about_profile_work__row p {
   font-family: "Secular One", sans-serif;
 }
 @media (max-width: 600px) {
-.messenger_trigger {
+.conversator_trigger {
     top: 17%;
     left: -45px;
     right: unset;
@@ -8099,7 +8235,7 @@ div.about_profile_work__row p {
   transform: translateX(-30px);
   opacity: 0;
 }
-.messenger_chat_window {
+.conversator_chat_window {
   border-radius: 8px;
   box-sizing: border-box;
   position: absolute;
@@ -8208,19 +8344,19 @@ div.about_profile_work__row p {
   color: #8d8d8d;
 }
 @media (max-width: 600px) {
-.messenger_chat_window {
+.conversator_chat_window {
     right: 0;
     bottom: 330px;
 }
 }
-.messenger-enter-active, .messenger-leave-active {
+.conversator-enter-active, .conversator-leave-active {
   transition: all 0.3s ease-out;
 }
-.messenger-enter, .messenger-leave-to {
+.conversator-enter, .conversator-leave-to {
   opacity: 0;
   transform: translateX(50px);
 }
-.messenger_container {
+.conversator_container {
   padding: 0.5rem;
   transform: translateY(78.5%);
   width: 200px;
@@ -8238,7 +8374,7 @@ div.about_profile_work__row p {
   color: #efefef;
 }
 @media (max-width: 600px) {
-.messenger_container {
+.conversator_container {
     transform: translateY(100%);
     min-height: 315px;
 }

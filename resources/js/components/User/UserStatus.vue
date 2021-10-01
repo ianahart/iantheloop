@@ -76,7 +76,7 @@
         ]
       ),
 
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'UPDATE_CONTACT_STATUS',
           'UPDATE_UNREAD_MESSAGE_COUNT',

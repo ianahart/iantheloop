@@ -1,13 +1,13 @@
 <template>
-  <div @click="openChatWindow(contact)" class="messenger_contact_list_item">
+  <div @click="openChatWindow(contact)" class="conversator_contact_list_item">
     <ProfilePicture
       :profilePicture="contact.profile.profile_picture"
       :alt="contact.full_name"
       :status="contact.status"
       :userId="contact.id"
     />
-    <div class="messenger_contact_name">
-      <p v-if="contact.unread_messages_count > 0" class="messenger_contact_unread_messages_count">
+    <div class="conversator_contact_name">
+      <p v-if="contact.unread_messages_count > 0" class="conversator_contact_unread_messages_count">
         {{ contact.unread_messages_count }}
       </p>
       <h5>{{ contact.formatted_name }}</h5>
@@ -22,7 +22,7 @@
 
 
   export default {
-    name: 'MessengerContact',
+    name: 'ConversatorContact',
     props: {
       contact: Object,
     },
@@ -37,7 +37,7 @@
       }
     },
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
           'isChatWindowOpen'
         ]
@@ -45,7 +45,7 @@
     },
 
     methods: {
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'OPEN_CHAT_WINDOW',
           'CLOSE_CHAT_WINDOW',
@@ -69,7 +69,7 @@
 
 <style lang="scss">
 
-  .messenger_contact_list_item {
+  .conversator_contact_list_item {
     box-sizing: border-box;
     display: flex;
     padding: 0.1rem;
@@ -98,12 +98,12 @@
     }
   }
 
-  .messenger_contact_name {
+  .conversator_contact_name {
     position: relative;
     flex-grow: 1;
   }
 
-  .messenger_contact_unread_messages_count {
+  .conversator_contact_unread_messages_count {
     position: absolute;
     background-color: $error;
     color: $primaryWhite;

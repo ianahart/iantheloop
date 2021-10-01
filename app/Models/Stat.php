@@ -41,4 +41,9 @@ class Stat extends Model
     {
         return $this->belongsTo(Profile::class);
     }
+
+    public function privacies()
+    {
+        return $this->hasMany(Privacy::class, 'stat_id');
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="messenger_chat_window">
+  <div class="conversator_chat_window">
     <div class="chat_window_header">
       <div class="chat_window_user_indentiy">
         <ProfilePicture
@@ -121,7 +121,7 @@
     },
 
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
           'chatMessage',
           'chatMessages',
@@ -130,7 +130,7 @@
           'loadChatMessagesBtn',
         ]
       ),
-      ...mapGetters('messenger',
+      ...mapGetters('conversator',
         [
           'getChatWindowUser',
         ]
@@ -154,7 +154,7 @@
 
     },
     methods: {
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'CLOSE_CHAT_WINDOW',
           'RECORD_CHAT_MESSAGE',
@@ -165,7 +165,7 @@
           'SET_TOTAL_CHAT_MESSAGES',
         ]
       ),
-      ...mapActions('messenger',
+      ...mapActions('conversator',
         [
           'SEND_CHAT_MESSAGE',
           'GET_CHAT_MESSAGES',
@@ -252,7 +252,7 @@
 
 
 
-  .messenger_chat_window {
+  .conversator_chat_window {
     border-radius: 8px;
     box-sizing: border-box;
     position: absolute;
@@ -364,7 +364,7 @@
   }
 
   @media(max-width:600px) {
-    .messenger_chat_window {
+    .conversator_chat_window {
       right: 0;
       bottom: 330px;
     }

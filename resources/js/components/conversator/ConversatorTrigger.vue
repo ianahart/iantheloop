@@ -1,14 +1,14 @@
 <template>
-  <div @click="toggleMessenger" class="messenger_trigger">
+  <div @click="toggleConversator" class="conversator_trigger">
     <PlusPlainIcon
       className="icon__xsm__light"
-      v-if="!isMessengerOpen"
+      v-if="!isConversatorOpen"
     />
     <CloseIcon
       className="icon__xsm__light"
-      v-if="isMessengerOpen"
+      v-if="isConversatorOpen"
     />
-    <h3>Messenger</h3>
+    <h3>Conversator</h3>
   </div>
 </template>
 
@@ -19,7 +19,7 @@
   import CloseIcon from '../Icons/CloseIcon.vue';
 
   export default {
-    name: 'MessengerTrigger',
+    name: 'ConversatorTrigger',
     props: {
 
     },
@@ -35,9 +35,9 @@
     },
 
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
-          'isMessengerOpen',
+          'isConversatorOpen',
           'contactsCount',
           'contacts',
           'chatWindowUserId'
@@ -47,31 +47,31 @@
     },
 
     methods: {
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
-          'TOGGLE_MESSENGER',
+          'TOGGLE_CONVERSATOR',
           'UPDATE_UNREAD_MESSAGE_COUNT'
         ]
       ),
-     ...mapActions('messenger',
+     ...mapActions('conversator',
         [
-          'GET_MESSENGER_CONTACTS'
+          'GET_CONVERSATOR_CONTACTS'
         ]
       ),
 
-        async toggleMessenger() {
+        async toggleConversator() {
 
           try {
 
-              this.TOGGLE_MESSENGER();
+              this.TOGGLE_CONVERSATOR();
 
-              if (this.isMessengerOpen && this.contactsCount !== this.contacts.length) {
+              if (this.isConversatorOpen && this.contactsCount !== this.contacts.length) {
 
-                await this.GET_MESSENGER_CONTACTS();
+                await this.GET_CONVERSATOR_CONTACTS();
               };
           } catch (err) {
 
-            console.log('MessengerTrigger.vue: ', err);
+            console.log('ConversatorTrigger.vue: ', err);
           }
         },
     }
@@ -79,7 +79,7 @@
 </script>
 
 <style lang="scss">
-  .messenger_trigger {
+  .conversator_trigger {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -107,7 +107,7 @@
   }
 
 @media (max-width:600px) {
-  .messenger_trigger {
+  .conversator_trigger {
     top: 17%;
     left: -45px;
     right:unset;

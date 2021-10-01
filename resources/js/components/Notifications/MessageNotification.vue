@@ -62,9 +62,9 @@
     },
 
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
-          'isMessengerOpen'
+          'isConversatorOpen'
         ]
       ),
 
@@ -81,7 +81,7 @@
         ]
       ),
 
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'CLEAR_NOTIFICATIONS',
         ]
@@ -116,11 +116,11 @@
           }
         );
 
-        this.clearMessengerNotifications(unreadMessage);
+        this.clearConversatorNotifications(unreadMessage);
       },
 
-      clearMessengerNotifications(unreadMessage) {
-           if (this.isMessengerOpen) {
+      clearConversatorNotifications(unreadMessage) {
+           if (this.isConversatorOpen) {
             this.CLEAR_NOTIFICATIONS(
               {
                 sender: parseInt(unreadMessage.sender_user_id),
@@ -138,7 +138,7 @@
             type: 'App/Notifications/UnreadMessage',
           }
         );
-          this.clearMessengerNotifications(unreadMessage);
+          this.clearConversatorNotifications(unreadMessage);
       }
     },
   }

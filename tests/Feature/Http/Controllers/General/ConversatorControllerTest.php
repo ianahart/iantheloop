@@ -16,7 +16,7 @@ use App\Models\Message;
 use App\Models\Conversation;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
-class MessengerControllerTest extends TestCase
+class ConversatorControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
@@ -58,7 +58,7 @@ class MessengerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_contacts_for_the_users_messenger()
+    public function it_gets_contacts_for_the_users_conversator()
     {
 
         $otherUsers = User::factory()
@@ -138,7 +138,7 @@ class MessengerControllerTest extends TestCase
 
         $response = $this
             ->actingAs($this->currentUser, 'api')
-            ->getJson('/api/auth/messenger/' . $this->currentUser->id . '/show', []);
+            ->getJson('/api/auth/conversator/' . $this->currentUser->id . '/show', []);
 
         $response->assertStatus(200);
 

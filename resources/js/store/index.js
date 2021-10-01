@@ -23,10 +23,11 @@ import network from './modules/network.js';
 import posts from './modules/posts.js';
 import profileWallSettings from './modules/profileWallSettings.js';
 import notifications from './modules/notifications.js';
-import messenger from './modules/messenger.js';
+import conversator from './modules/conversator.js';
 import reviews from './modules/reviews.js';
 import stories from './modules/stories.js';
 import userSearch from './modules/userSearch.js';
+import settings from './modules/settings.js';
 
 Vue.use(Vuex);
 export default new Vuex.Store(
@@ -130,10 +131,11 @@ export default new Vuex.Store(
       posts,
       profileWallSettings,
       notifications,
-      messenger,
+      conversator,
       reviews,
       stories,
       userSearch,
+      settings,
     },
   }
 );

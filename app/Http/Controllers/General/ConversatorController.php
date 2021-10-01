@@ -4,12 +4,12 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Helpers\Messenger;
+use App\Helpers\Conversator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
 
 
-class MessengerController extends Controller
+class ConversatorController extends Controller
 {
     /*It retrieves users that are following the current user and
     * those users are followed by the current user
@@ -24,11 +24,11 @@ class MessengerController extends Controller
     {
         try {
 
-            $messenger = new Messenger($userId);
+            $conversator = new Conversator($userId);
 
-            $messenger->aggregateContacts();
+            $conversator->aggregateContacts();
 
-            $exception = $messenger->getError();
+            $exception = $conversator->getError();
 
             if (!is_null($exception)) {
                 throw new Exception($exception);
@@ -38,8 +38,8 @@ class MessengerController extends Controller
                 ->json(
                     [
                         'msg' => 'Contacts retrieved',
-                        'contacts' => $messenger->getContacts(),
-                        'contacts_count' => $messenger->getContacts()->count(),
+                        'contacts' => $conversator->getContacts(),
+                        'contacts_count' => $conversator->getContacts()->count(),
                     ]
                 );
         } catch (Exception $e) {
@@ -65,21 +65,21 @@ class MessengerController extends Controller
 
         try {
 
-            $messenger = new Messenger(JWTAuth::user()->id);
+            $conversator = new Conversator(JWTAuth::user()->id);
 
-            $messenger->setMetaData(
+            $conversator->setMetaData(
                 [
                     'last_message' => $request->query('id'),
                     'created_at' => $request->query('createdAt')
                 ]
             );
 
-            $messenger->aggregateChatMessages($recipientId);
+            $conversator->aggregateChatMessages($recipientId);
 
-            $conversationId = $messenger->getConversationId();
+            $conversationId = $conversator->getConversationId();
 
 
-            $exception = $messenger->getError();
+            $exception = $conversator->getError();
 
             if (!is_null($exception)) {
                 throw new Exception($exception);
@@ -89,9 +89,9 @@ class MessengerController extends Controller
                 ->json(
                     [
                         'msg' => 'success',
-                        'chat_messages' => $messenger->getChatMessages()['chat_messages'],
-                        'total' => $messenger->getChatMessages()['total'],
-                        'notifications_read' => $messenger->getChatMessages()['notifications_read'],
+                        'chat_messages' => $conversator->getChatMessages()['chat_messages'],
+                        'total' => $conversator->getChatMessages()['total'],
+                        'notifications_read' => $conversator->getChatMessages()['notifications_read'],
                         'conversation_id' => $conversationId,
                     ],
                     200
@@ -103,7 +103,7 @@ class MessengerController extends Controller
                     [
                         'msg' => 'something went wrong',
                         'error' => $e->getMessage(),
-                        'conversation_id' => $messenger->getConversationId()
+                        'conversation_id' => $conversator->getConversationId()
                     ],
                     404
                 );
@@ -120,18 +120,18 @@ class MessengerController extends Controller
 
         try {
 
-            $messenger = new Messenger($request->all()['chat_message']['sender']['sender_user_id']);
+            $conversator = new Conversator($request->all()['chat_message']['sender']['sender_user_id']);
 
-            $messenger->setNewMessage($request->all()['chat_message']);
+            $conversator->setNewMessage($request->all()['chat_message']);
 
-            $messenger->storeNewMessage(intval($request->all()['conversation_id']));
+            $conversator->storeNewMessage(intval($request->all()['conversation_id']));
 
 
-            $exception = $messenger->getError();
+            $exception = $conversator->getError();
             if (!is_null($exception)) {
                 throw new Exception($exception);
             }
-            $conversationId = $messenger->getConversationId();
+            $conversationId = $conversator->getConversationId();
             return response()
                 ->json(
                     [

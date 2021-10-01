@@ -7,11 +7,11 @@
       />
       <router-view></router-view>
     </div>
-    <MessengerTrigger
+    <ConversatorTrigger
         v-if="getProfileStatus"
     />
-    <MessengerContainer
-        v-if="getProfileStatus && isMessengerOpen"
+    <ConversatorContainer
+        v-if="getProfileStatus && isConversatorOpen"
     />
     <Footer />
 </div>
@@ -32,8 +32,8 @@ export default {
     components: {
         Navbar: () => import("./components/Navigation/Navbar.vue"),
         ProfileDropdown: () => import('./components/Dropdowns/ProfileDropdown.vue'),
-        MessengerTrigger: () => import('./components/messenger/MessengerTrigger.vue'),
-        MessengerContainer: () => import('./components/messenger/MessengerContainer.vue'),
+        ConversatorTrigger: () => import('./components/conversator/ConversatorTrigger.vue'),
+        ConversatorContainer: () => import('./components/conversator/ConversatorContainer.vue'),
         Footer: () => import('./components/Footer.vue'),
     },
 
@@ -63,9 +63,9 @@ export default {
                 'isProfileDropdownOpen'
             ]
           ),
-        ...mapState('messenger',
+        ...mapState('conversator',
            [
-               'isMessengerOpen',
+               'isConversatorOpen',
            ]
          ),
       ...mapGetters('user',
@@ -79,7 +79,7 @@ export default {
     },
 
     methods: {
-        ...mapMutations('messenger',
+        ...mapMutations('conversator',
             [
                 'UPDATE_CONTACT_STATUS',
                 'UPDATE_UNREAD_MESSAGE_COUNT',

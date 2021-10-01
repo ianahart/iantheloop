@@ -43,9 +43,9 @@
         ]
       ),
 
-      ...mapState('messenger',
+      ...mapState('conversator',
           [
-            'isMessengerOpen',
+            'isConversatorOpen',
           ]
         ),
      ...mapState('navigation',
@@ -77,16 +77,16 @@
           'CLOSE_NOTIFICATIONS'
         ]
       ),
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
           [
-            'CLOSE_MESSENGER'
+            'CLOSE_CONVERSATOR'
           ]
         ),
 
       toggleDropdown () {
 
-        if (this.isMessengerOpen) {
-            this.CLOSE_MESSENGER();
+        if (this.isConversatorOpen) {
+            this.CLOSE_CONVERSATOR();
         }
         if (this.messageNotificationsAreOpen || this.notificationsAreOpen) {
             this.CLOSE_NOTIFICATIONS();

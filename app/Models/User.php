@@ -205,4 +205,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Search::class, 'searched_user_id');
     }
+
+    public function setting()
+    {
+        return $this->hasOne(Setting::class, 'user_id');
+    }
+
+    public function privacies()
+    {
+        return $this->hasMany(Privacy::class, 'blocked_by_user_id');
+    }
 }

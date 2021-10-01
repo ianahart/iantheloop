@@ -5,7 +5,7 @@
       v-else
       className="default_profile_image_rel_sm"
     />
-    <div v-if="status" :class="`messenger_online_indicator ${this.onlineIndicator}`"></div>
+    <div v-if="status" :class="`conversator_online_indicator ${this.onlineIndicator}`"></div>
   </div>
 </template>
 
@@ -41,7 +41,7 @@
     computed: {
       onlineIndicator() {
 
-        return this.status === 'online' ? 'messenger_online_indicator_online' : 'messenger_online_indicator_offline';
+        return this.status === 'online' ? 'conversator_online_indicator_online' : 'conversator_online_indicator_offline';
       }
     },
 
@@ -75,7 +75,7 @@
       color: $themePink;
     }
 
-    .messenger_online_indicator {
+    .conversator_online_indicator {
       width: 6px;
       height: 6px;
       border-radius: 50%;
@@ -85,10 +85,10 @@
       right:0;
     }
 
-    .messenger_online_indicator_online {
+    .conversator_online_indicator_online {
         background-color: limegreen;
     }
-       .messenger_online_indicator_offline {
+       .conversator_online_indicator_offline {
         background-color: gray;
     }
   }

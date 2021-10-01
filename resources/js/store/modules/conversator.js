@@ -13,12 +13,12 @@ const initialState = () => {
     totalChatMessages: 0,
     conversationId: null,
     chatWindowUserId: null,
-    isMessengerOpen: false,
+    isConversatorOpen: false,
     loadChatMessagesBtn: false,
     isChatWindowOpen: false,
     isFilterBoxVisible: false,
     chatMessagesLoaded: false,
-    messengerLoaded: false,
+    conversatorLoaded: false,
     chatMessages: [],
     chatMessage: {
       recipient: { recipient_user_id: '', recipient_name: '' },
@@ -27,7 +27,7 @@ const initialState = () => {
   }
 };
 
-const messenger = {
+const conversator = {
 
   namespaced: true,
 
@@ -61,7 +61,7 @@ const messenger = {
   mutations: {
 
     UPDATE_UNREAD_MESSAGE_COUNT(state, unreadMessage) {
-      if (state.isMessengerOpen) {
+      if (state.isConversatorOpen) {
         const contact = state.contacts.findIndex(contact => contact.id === unreadMessage.sender_user_id);
         state.contacts[contact].unread_messages_count++;
       }
@@ -114,8 +114,8 @@ const messenger = {
       state.chatMessages = [];
     },
 
-    SET_MESSENGER_LOADED(state, payload) {
-      state.messengerLoaded = payload;
+    SET_CONVERSATOR_LOADED(state, payload) {
+      state.conversatorLoaded = payload;
     },
 
     UPDATE_FILTER_BOX_VALUE(state, filter) {
@@ -134,15 +134,15 @@ const messenger = {
       state.isFilterBoxShowing = false;
     },
 
-    TOGGLE_MESSENGER(state) {
-      state.isMessengerOpen = !state.isMessengerOpen;
+    TOGGLE_CONVERSATOR(state) {
+      state.isConversatorOpen = !state.isConversatorOpen;
     },
 
-    CLOSE_MESSENGER(state) {
-      state.isMessengerOpen = false;
+    CLOSE_CONVERSATOR(state) {
+      state.isConversatorOpen = false;
     },
 
-    RESET_MESSENGER_MODULE: (state) => {
+    RESET_CONVERSATOR_MODULE: (state) => {
 
      Object.assign(state, initialState());
     },
@@ -155,7 +155,7 @@ const messenger = {
       state.chatMessages = [];
     },
 
-    SET_MESSENGER_CONTACTS(state, data) {
+    SET_CONVERSATOR_CONTACTS(state, data) {
       state.contacts = [...state.contacts, ...data.contacts];
       state.contactsCount = data.contacts_count;
     },
@@ -187,13 +187,13 @@ const messenger = {
   },
 
   actions: {
-    async GET_MESSENGER_CONTACTS({ state, rootGetters,  commit }) {
+    async GET_CONVERSATOR_CONTACTS({ state, rootGetters,  commit }) {
 
       try {
         const response = await axios(
             {
               method: 'GET',
-              url: `/api/auth/messenger/${rootGetters['user/getUserId']}/show`,
+              url: `/api/auth/conversator/${rootGetters['user/getUserId']}/show`,
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
@@ -202,15 +202,15 @@ const messenger = {
         );
 
         if (response.status === 200) {
-            commit('SET_MESSENGER_CONTACTS', response.data);
-            commit('SET_MESSENGER_LOADED', true);
+            commit('SET_CONVERSATOR_CONTACTS', response.data);
+            commit('SET_CONVERSATOR_LOADED', true);
         }
 
       } catch(e) {
 
         if (e.response.status === 404) {
             commit('SET_ERRORS', { msg: e.response.data.errors, type: 'server'});
-            commit('SET_MESSENGER_LOADED', true);
+            commit('SET_CONVERSATOR_LOADED', true);
         }
 
       }
@@ -274,10 +274,10 @@ const messenger = {
           }
 
       } catch (e) {
-        console.log('@action messenger.js SEND_CHAT_MESSAGE ERROR',e.response);
+        console.log('@action conversator.js SEND_CHAT_MESSAGE ERROR',e.response);
       }
     },
   }
 };
 
-export default messenger;
+export default conversator;

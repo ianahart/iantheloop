@@ -1,6 +1,6 @@
 <template>
-  <div v-if="contacts.length" class="messenger_contacts_list">
-    <MessengerContact
+  <div v-if="contacts.length" class="conversator_contacts_list">
+    <ConversatorContact
       v-for="contact in getContacts"
       :key="contact.id"
       :contact="contact"
@@ -13,16 +13,16 @@
 
   import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
-  import MessengerContact from './MessengerContact.vue';
+  import ConversatorContact from './ConversatorContact.vue';
 
   export default {
 
-    name: 'MessengerContacts',
+    name: 'ConversatorContacts',
     props: {
 
     },
     components: {
-      MessengerContact,
+      ConversatorContact,
     },
 
     data () {
@@ -33,12 +33,12 @@
     },
 
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
           'contacts'
         ]
       ),
-      ...mapGetters('messenger',
+      ...mapGetters('conversator',
         [
           'getContacts'
         ]),
@@ -52,7 +52,7 @@
 
 <style lang="scss">
 
-  .messenger_contacts_list {
+  .conversator_contacts_list {
     box-sizing: border-box;
     min-height: 375px;
     max-height: 400px;
@@ -73,7 +73,7 @@
   }
 
   @media(max-width:600px) {
-    .messenger_contacts_list {
+    .conversator_contacts_list {
           max-height: 275px;
           min-height: 0;
     }

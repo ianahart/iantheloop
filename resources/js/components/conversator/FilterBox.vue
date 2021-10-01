@@ -1,5 +1,5 @@
 <template>
-  <div class="messenger_filter_box">
+  <div class="conversator_filter_box">
     <input
       @keyup="handleFilter"
       :value="filterBoxValue"
@@ -34,14 +34,14 @@
       }
     },
     computed: {
-      ...mapState('messenger',
+      ...mapState('conversator',
         [
           'filterBoxValue'
         ]
       ),
     },
     methods: {
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
         [
           'UPDATE_FILTER_BOX_VALUE'
         ]
@@ -55,7 +55,7 @@
 
 <style lang="scss">
 
-.messenger_filter_box {
+.conversator_filter_box {
   margin: 0.5rem 0;
   box-sizing: border-box;
   display: flex;

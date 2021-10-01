@@ -13,7 +13,7 @@ use DateTime;
 use DateTimeZone;
 
 
-class Messenger
+class Conversator
 {
 
   const MESSAGE_LIMIT = 15;

@@ -209,7 +209,7 @@
           ]
         ),
 
-      ...mapMutations('messenger',
+      ...mapMutations('conversator',
           [
           'UPDATE_CONTACT_STATUS',
           'CHECK_PAGE'
