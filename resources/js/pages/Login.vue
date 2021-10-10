@@ -1,26 +1,29 @@
 <template>
   <div class="login__container">
-    <div class="login__form__container">
-      <form @submit.prevent="submitForm" class="login__form">
-        <Header />
-        <InputFieldLg
-          v-for="(inputField, index) in form"
-          :key="index"
-          :field="inputField.field"
-          :type="inputField.type"
-          :errors="inputField.errors"
-          :label="inputField.label"
-          :value="inputField.value"
-          :nameAttr="inputField.namaeAttr"
-          :commitPath="'login/UPDATE_FIELD'"
-        />
-        <div class="login__button__container">
-          <button class="button__md">Login Now</button>
-          <router-link class="forgot__password__link" :to="{name: 'ForgotPassword'}">Forgot password?</router-link>
-        </div>
-      </form>
+    <div v-if="!isLoginLoaderShowing">
+      <div class="login__form__container">
+        <form @submit.prevent="submitForm" class="login__form">
+          <Header />
+          <InputFieldLg
+            v-for="(inputField, index) in form"
+            :key="index"
+            :field="inputField.field"
+            :type="inputField.type"
+            :errors="inputField.errors"
+            :label="inputField.label"
+            :value="inputField.value"
+            :nameAttr="inputField.namaeAttr"
+            :commitPath="'login/UPDATE_FIELD'"
+          />
+          <div class="login__button__container">
+            <button class="button__md">Login Now</button>
+            <router-link class="forgot__password__link" :to="{name: 'ForgotPassword'}">Forgot password?</router-link>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
+    <Loader v-if="isLoginLoaderShowing" />
+ </div>
 </template>
 
 <script>
@@ -29,46 +32,40 @@
 
   import Header from '../components/Login/Header.vue';
   import InputFieldLg from '../components/forms/inputs/InputFieldLg.vue';
+  import Loader from '../components/Misc/Loader.vue';
 
   export default {
 
     name: 'Login',
 
     components: {
-
       Header,
       InputFieldLg,
+      Loader,
     },
 
 
     created () {
-
       if(this.$route.query.signup) {
-
           this.clearRegistration();
       }
     },
 
 
     beforeDestroy() {
-
       this.RESET_LOGIN_MODULE();
     },
 
     computed: {
-
       ...mapState('login',
         [
           'form',
           'hasErrors',
           'formSubmitted',
+          'isLoginLoaderShowing',
         ]
       ),
-      ...mapState('conversator',
-        [
-          'isConversatorOpen'
-        ]
-      ),
+      ...mapState('conversator',['isConversatorOpen']),
       ...mapGetters('user',
         [
           'getToken',
@@ -90,7 +87,8 @@
         [
           'UPDATE_FIELD',
           'CLEAR_ERROR_MSGS',
-          'RESET_LOGIN_MODULE'
+          'RESET_LOGIN_MODULE',
+          'SET_IS_LOGIN_LOADER_SHOWING'
         ],
       ),
       ...mapMutations('user',
@@ -131,7 +129,6 @@
       },
 
       checkEmptyInputs() {
-
         this.form.forEach(({ field, value }) => {
           if (value.trim().length <= 0) {
             const error = field + ' is required';
@@ -145,6 +142,7 @@
         this.checkEmptyInputs();
 
         if (!this.hasErrors) {
+          this.SET_IS_LOGIN_LOADER_SHOWING(true);
           await this.SUBMIT_FORM();
         }
 
@@ -152,11 +150,12 @@
           this.SET_AUTH_STATUS(true);
           this.trackUserStatus();
           this.initNotificationChannel();
-          this.RESET_LOGIN_MODULE();
 
           if (this.getProfileStatus) {
+              this.RESET_LOGIN_MODULE();
               this.$router.push({ name: 'NewsFeed', params: {slug: this.getUserSlug}});
           } else {
+              this.RESET_LOGIN_MODULE();
               this.$router.push({ name: 'Home' });
           }
           await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: ['App/Notifications/UnreadMessage', 'App/Notifications/Interaction'] });

@@ -13,6 +13,7 @@ const initialState = () => {
     endOfFollowSuggestions: false,
     endOfFollowSuggestionsCounter:0,
     errorMessage: '',
+    isLoaderShowing: false,
   }
 };
 
@@ -26,6 +27,10 @@ const newsFeed = {
   },
 
   mutations: {
+    SET_IS_LOADER_SHOWING(state, isLoaderShowing) {
+      state.isLoaderShowing = isLoaderShowing;
+    },
+
     SET_IS_LOADING_DATA(state, payload) {
       state.isLoadingData = payload;
     },

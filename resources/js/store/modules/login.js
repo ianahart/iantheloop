@@ -12,6 +12,7 @@ const initialState = () => {
     ],
     formSubmitted: false,
     hasErrors: false,
+    isLoginLoaderShowing: false,
   };
 };
 
@@ -31,6 +32,9 @@ const login = {
   },
 
   mutations: {
+    SET_IS_LOGIN_LOADER_SHOWING(state, isLoading) {
+      state.isLoginLoaderShowing = isLoading;
+    },
 
     UPDATE_FIELD: (state, payload) => {
 
@@ -99,16 +103,15 @@ const login = {
         );
 
         if (response.status === 200) {
-
           commit('SUBMIT_FORM', response.data);
           commit('user/SET_TOKEN', response.data.jwt, { root: true });
+          commit('SET_IS_LOGIN_LOADER_SHOWING', false);
         }
 
       } catch (e) {
-
         if (e.response.status === 400) {
-
           commit('SET_ERRORS', e.response.data);
+          commit('SET_IS_LOGIN_LOADER_SHOWING', false);
         }
       }
     }

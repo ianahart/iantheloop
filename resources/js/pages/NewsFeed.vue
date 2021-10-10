@@ -13,8 +13,11 @@
       <Sidebar />
     </div>
     <div v-else class="empty_newsfeed_container">
-      <p>Start following people to get your newsfeed up and running!</p>
-      <FriendsIcon />
+      <Loader v-if="!postsLoaded && !posts.length" />
+      <div class="empty_newsfeed_message" v-else-if="postsLoaded && !posts.length">
+        <FriendsIcon />
+        <p>Start following people to get your newsfeed up and running!</p>
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +32,7 @@
   import Modal from '../components/ProfileWall/Modal.vue';
   import Stories from '../components/Stories/Stories.vue';
   import CreateStoryTrigger from '../components/Stories/CreateStoryTrigger.vue';
-
+  import Loader from '../components/Misc/Loader.vue';
   export default {
 
     name: 'NewsFeed',
@@ -41,10 +44,12 @@
       Modal,
       Stories,
       CreateStoryTrigger,
+      Loader,
     },
 
     created() {
       this.SET_STORIES_LOCATION(this.$route.name);
+      this.SET_IS_LOADER_SHOWING(true);
     },
 
     async mounted() {
@@ -63,10 +68,11 @@
         [
           'posts',
           'morePosts',
-          'postsLoaded'
+          'postsLoaded',
 
         ]
       ),
+      ...mapState('newsFeed', ['isLoaderShowing']),
       ...mapState('stories',
         [
           'stories',
@@ -97,6 +103,7 @@
           'SET_STORIES_LOCATION',
         ]
       ),
+      ...mapMutations('newsFeed', ['SET_IS_LOADER_SHOWING']),
       ...mapActions('posts',
         [
           'NEWSFEED_POSTS'
@@ -111,6 +118,7 @@
 
       async loadNewsfeedPosts () {
         await this.NEWSFEED_POSTS();
+        this.SET_IS_LOADER_SHOWING(false);
       },
 
       async refillNewsfeedPosts() {
@@ -173,6 +181,12 @@
       color: gray;
 
     }
+  }
+
+  .empty_newsfeed_message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   @media (max-width:600px) {

@@ -1,20 +1,23 @@
 <template>
-    <div v-if="dataLoaded" class="profile__container">
-        <Modal />
-        <div ref="profile" class="profile_component__wrapper">
-            <Header />
-            <ProfileStats/>
-            <Dashboard />
-            <ProfileWall
-              :currentUserId="currentUserId"
-              :currUserFollowing="currUserFollowing"
-              :baseProfile="getBaseProfile"
-              :currentUserFirstName="getBaseProfile.current_user_first_name"
-              :viewUserFirstName="getBaseProfile.view_user_first_name"
-              :currentUserProfilePic="getProfilePic"
+   <div class="profile__container">
+        <div v-if="dataLoaded">
+            <Modal />
+            <div ref="profile" class="profile_component__wrapper">
+                <Header />
+                <ProfileStats/>
+                <Dashboard />
+                <ProfileWall
+                :currentUserId="currentUserId"
+                :currUserFollowing="currUserFollowing"
+                :baseProfile="getBaseProfile"
+                :currentUserFirstName="getBaseProfile.current_user_first_name"
+                :viewUserFirstName="getBaseProfile.view_user_first_name"
+                :currentUserProfilePic="getProfilePic"
 
-            />
+                />
+            </div>
         </div>
+        <Loader v-else />
     </div>
 </template>
 
@@ -26,6 +29,7 @@ import Dashboard from "../components/Profile/Dashboard.vue";
 import ProfileStats from "../components/Profile/ProfileStats.vue";
 import ProfileWall from "../components/ProfileWall/ProfileWall.vue";
 import Modal from '../components/ProfileWall/Modal.vue';
+import Loader from '../components/Misc/Loader.vue';
 
 export default {
     name: "Profile",
@@ -36,6 +40,7 @@ export default {
         ProfileStats,
         ProfileWall,
         Modal,
+        Loader,
     },
 
     async created() {
