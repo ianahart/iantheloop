@@ -162,13 +162,17 @@ class Conversator
         )
       )->where(
         function ($query) use ($currentUser) {
-          $query
-            ->whereNotIn(
-              'id',
-              $currentUser->blockedList
-                ->where('blocked_messages', '=', 1)
-                ->pluck('blocked_user_id')
-            );
+          $query->whereNotIn(
+            'id',
+            $currentUser->blockedList
+              ->where('blocked_messages', '=', 1)
+              ->pluck('blocked_user_id')
+          )->whereNotIn(
+            'id',
+            $currentUser->blockedByList
+              ->where('blocked_messages', '=', 1)
+              ->pluck('blocked_by_user_id')
+          );
         }
       )->with(
         [
