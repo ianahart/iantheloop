@@ -154,33 +154,59 @@ class Conversator
         throw new Exception('No contacts available yet');
       }
 
+      // $this->contacts =  User::whereIn(
+      //   'id',
+      //   array_intersect(
+      //     array_keys($currentUser->stat->following),
+      //     array_keys($currentUser->stat->followers)
+      //   )
+      // )
+      //   ->with(
+      //     [
+      //       'stat',
+      //       'profile'
+      //     ]
+      //   )
+      //   ->orderBy('status', 'DESC')
+      //   ->get();
+
       $this->contacts =  User::whereIn(
         'id',
         array_intersect(
           array_keys($currentUser->stat->following),
           array_keys($currentUser->stat->followers)
         )
+      )->where(
+        function ($query) use ($currentUser) {
+          $query
+            ->whereNotIn(
+              'id',
+              $currentUser->blockedList
+                ->where('blocked_messages', '=', 1)
+                ->pluck('blocked_user_id')
+            );
+        }
+      )->with(
+        [
+          'stat',
+          'profile'
+        ]
       )
-        ->with(
-          [
-            'stat',
-            'profile'
-          ]
-        )
+
         ->orderBy('status', 'DESC')
         ->get();
-
 
       $notifications = $this->countNotifications($currentUser);
 
       foreach ($this->contacts as $key => $contact) {
+
         $contact->unread_messages_count = array_key_exists($contact->id, $notifications) ?
           $notifications[$contact->id] : 0;
 
         $this->capitalize($contact);
       }
     } catch (Exception $e) {
-
+      error_log(print_r($e->getMessage(), true));
       $this->error = $e->getMessage();
     }
   }
