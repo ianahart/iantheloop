@@ -154,22 +154,6 @@ class Conversator
         throw new Exception('No contacts available yet');
       }
 
-      // $this->contacts =  User::whereIn(
-      //   'id',
-      //   array_intersect(
-      //     array_keys($currentUser->stat->following),
-      //     array_keys($currentUser->stat->followers)
-      //   )
-      // )
-      //   ->with(
-      //     [
-      //       'stat',
-      //       'profile'
-      //     ]
-      //   )
-      //   ->orderBy('status', 'DESC')
-      //   ->get();
-
       $this->contacts =  User::whereIn(
         'id',
         array_intersect(
@@ -206,7 +190,7 @@ class Conversator
         $this->capitalize($contact);
       }
     } catch (Exception $e) {
-      error_log(print_r($e->getMessage(), true));
+
       $this->error = $e->getMessage();
     }
   }
