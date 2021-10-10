@@ -173,3 +173,18 @@
     display: flex;
     justify-content: center;
 }
+
+.settings_option_title_decoration {
+    height: 3px;
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 1px solid #3d3d3e;
+}
+.settings_option_title {
+    color: $primaryWhite;
+    font-family: "Secular One", sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.2rem;
+    padding-left: 0.5rem;
+}

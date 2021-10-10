@@ -236,6 +236,7 @@ return [
         'Schema' => Illuminate\Support\Facades\Schema::class,
         'Search' => 'App\Helpers\Search::class',
         'Session' => Illuminate\Support\Facades\Session::class,
+        'Setting' => 'App\Helpers\Setting::class',
         'Statistics' => 'App\Helpers\Statistics::class',
         'Status' => 'App\Helpers\Status::class',
         'Storage' => Illuminate\Support\Facades\Storage::class,

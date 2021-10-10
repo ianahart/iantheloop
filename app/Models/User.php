@@ -96,7 +96,8 @@ class User extends Authenticatable implements JWTSubject
             'name' => $this->full_name,
             'status' => 'online',
             'is_logged_in' => true,
-            'slug' => $this->slug
+            'slug' => $this->slug,
+            'user_settings_user_id' => $this->setting->user_id ?? null,
         ];
     }
 
@@ -211,8 +212,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Setting::class, 'user_id');
     }
 
-    public function privacies()
+    public function blockedList()
     {
         return $this->hasMany(Privacy::class, 'blocked_by_user_id');
+    }
+
+    public function blockedByList()
+    {
+        return $this->hasMany(Privacy::class, 'blocked_user_id');
     }
 }

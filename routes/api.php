@@ -25,6 +25,8 @@ use App\Http\Controllers\General\FollowSuggestionController;
 use App\Http\Controllers\General\ReviewController;
 use App\Http\Controllers\General\StoryController;
 use App\Http\Controllers\General\SearchController;
+use App\Http\Controllers\General\SettingController;
+use Hamcrest\Core\Set;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,7 +103,13 @@ Route::get('/auth/stories/{userId}/show', [StoryController::class, 'show'])->mid
 Route::get('/auth/stories/{userId}/count/show', [StoryController::class, 'count'])->middleware('auth:api');
 Route::get('/auth/stories/index', [StoryController::class, 'index'])->middleware('auth:api');
 Route::delete('/auth/stories/{storyId}/delete', [StoryController::class, 'delete'])->middleware('auth:api');
-route::post('/auth/searches/search', [SearchController::class, 'search'])->middleware('auth:api');
-route::post('/auth/searches/store', [SearchController::class, 'store'])->middleware('auth:api');
-route::get('/auth/searches/{userId}/show', [SearchController::class, 'show'])->middleware('auth:api');
-route::delete('/auth/searches/{searchId}/delete', [SearchController::class, 'delete'])->middleware('auth:api');
+Route::post('/auth/searches/search', [SearchController::class, 'search'])->middleware('auth:api');
+Route::post('/auth/searches/store', [SearchController::class, 'store'])->middleware('auth:api');
+Route::get('/auth/searches/{userId}/show', [SearchController::class, 'show'])->middleware('auth:api');
+Route::delete('/auth/searches/{searchId}/delete', [SearchController::class, 'delete'])->middleware('auth:api');
+Route::post('/auth/settings/block/search', [SettingController::class, 'search'])->middleware('auth:api');
+Route::post('/auth/settings/create', [SettingController::class, 'create'])->middleware('auth:api');
+Route::post('/auth/settings/block/store', [SettingController::class, 'store'])->middleware('auth:api');
+Route::get('/auth/settings/block/{userId}/show', [SettingController::class, 'show'])->middleware('auth:api');
+Route::patch('/auth/settings/block/{privacyId}/update', [SettingController::class, 'updateBlockedUser'])->middleware('auth:api');
+Route::delete('/auth/settings/block/{privacyId}/delete', [SettingController::class, 'deleteBlockedUser'])->middleware('auth:api');

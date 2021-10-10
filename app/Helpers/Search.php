@@ -75,14 +75,21 @@ class Search
 
       $userIds = $results->pluck('searched_user_id');
 
-      $currentUserFollowing = $userIds->intersect(
-        array_keys(User::find($this->currentUserId)->stat->following)
-      );
+      $currentUserFollowing = User::find($this->currentUserId)
+        ->stat
+        ->following;
 
-      foreach ($results as $key => $result) {
+      if (!is_null($currentUserFollowing)) {
 
-        $result->cur_user_following = $currentUserFollowing
-          ->contains($result->searched_user_id) ? true : false;
+        $following = $userIds->intersect(
+          array_keys($currentUserFollowing)
+        );
+
+        foreach ($results as $key => $result) {
+
+          $result->cur_user_following = $following
+            ->contains($result->searched_user_id) ? true : false;
+        }
       }
 
       $this->results = $results->toArray();

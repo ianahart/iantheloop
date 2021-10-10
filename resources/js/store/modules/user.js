@@ -29,6 +29,14 @@ const user = {
       }
     },
 
+
+    getUserSettingsId(state) {
+      if (state.jwtToken) {
+        const base64 = decodeToken(state.jwtToken);
+        return JSON.parse(window.atob(base64)).user_settings_user_id;
+      }
+    },
+
     getUserSlug(state) {
       if (state.jwtToken) {
         const base64 = decodeToken(state.jwtToken);

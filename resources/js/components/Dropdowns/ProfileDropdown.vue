@@ -168,6 +168,7 @@
       '$route' () {
 
         this.closeDropdown();
+        this.$store.commit("hamburgerMenu/HIDE_MENU", false);
       },
     },
 
