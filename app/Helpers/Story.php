@@ -202,11 +202,13 @@ class Story
 
     try {
 
-      $currentUserFollowing = array_keys(
-        User::find($this->currentUserId)
-          ->stat
-          ->following
-      );
+      $currentUserFollowing = User::find($this->currentUserId)
+        ->stat
+        ->following;
+      if (is_null($currentUserFollowing)) {
+        throw new Exception('No stories to display');
+      }
+      $currentUserFollowing = array_keys($currentUserFollowing);
 
       $this->stories = User::select(['id', 'full_name'])
         ->orderBy('id', 'DESC')

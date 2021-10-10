@@ -100,10 +100,12 @@ class ProcessStoryPhoto implements ShouldQueue
         $story->save();
         $story->refresh();
 
+        $followers = !is_null($story->user->stat->followers) ? array_keys($story->user->stat->followers) : [];
+
         $followersOnline = collect([]);
         User::whereIn(
             'id',
-            array_keys($story->user->stat->followers)
+            $followers
         )
             ->chunkById(100, function ($users) use ($followersOnline) {
                 foreach ($users as $user) {
