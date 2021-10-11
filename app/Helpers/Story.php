@@ -103,6 +103,13 @@ class Story
   public function specifiedUserStory(Int $userId)
   {
     try {
+      $currentUser = User::find($this->currentUserId);
+
+      $blockedByUserIds = $this->blockedList($currentUser, 'blocked_by_user_id');
+
+      if ($blockedByUserIds->contains($userId)) {
+        throw new Exception('User has been blocked');
+      }
 
       $specifiedUserStories = collect([]);
 
@@ -197,20 +204,50 @@ class Story
     }
   }
 
+  /**
+   * @param User
+   * @param String
+   * @return Collection
+   */
+  private function blockedList(User $currentUser, String $column)
+  {
+    $list = strtolower($column) === 'blocked_by_user_id' ?
+      $currentUser->blockedByList : $currentUser->blockedList;
+
+    return $list->filter(
+      function ($item, $key) {
+        return $item['blocked_stories'];
+      }
+    )
+      ->pluck($column);
+  }
+
+
+
   public function usersStories()
   {
 
     try {
 
-      $currentUserFollowing = User::find($this->currentUserId)
-        ->stat
-        ->following;
-      if (is_null($currentUserFollowing)) {
+      $currentUser = User::find($this->currentUserId);
+
+      if (is_null($currentUser->stat->following)) {
         throw new Exception('No stories to display');
       }
-      $currentUserFollowing = array_keys($currentUserFollowing);
+
+      $currentUserFollowing = array_keys($currentUser->stat->following);
+
+      $currentUser->blockedUserIds = $this->blockedList($currentUser, 'blocked_user_id');
+      $currentUser->blockedByUserIds = $this->blockedList($currentUser, 'blocked_by_user_id');
 
       $this->stories = User::select(['id', 'full_name'])
+        ->where(
+          function ($query) use ($currentUser) {
+            $query
+              ->whereNotIn('id', $currentUser->blockedUserIds)
+              ->whereNotIn('id', $currentUser->blockedByUserIds);
+          }
+        )
         ->orderBy('id', 'DESC')
         ->whereHas(
           'subjectStory',
@@ -240,6 +277,49 @@ class Story
               );
           }]
         )->paginate(self::LIMIT)->toArray();
+
+
+
+
+
+      // $currentUserFollowing = User::find($this->currentUserId)
+      //   ->stat
+      //   ->following;
+      // if (is_null($currentUserFollowing)) {
+      //   throw new Exception('No stories to display');
+      // }
+      // $currentUserFollowing = array_keys($currentUserFollowing);
+
+      // $this->stories = User::select(['id', 'full_name'])
+      //   ->orderBy('id', 'DESC')
+      //   ->whereHas(
+      //     'subjectStory',
+      //     function (Builder $query) use ($currentUserFollowing) {
+      //       $query
+      //         ->whereIn('user_id', $currentUserFollowing)
+      //         ->where('expire_in_unix', '>', now()->timestamp);
+      //     }
+      //   )->with(
+      //     ['subjectStory' => function ($query) {
+      //       $query
+      //         ->select(
+      //           [
+      //             'id',
+      //             'profile_id',
+      //             'user_id'
+      //           ]
+      //         )
+      //         ->with(
+      //           ['profile' => function ($innerQuery) {
+      //             $innerQuery->select(
+      //               [
+      //                 'id', 'profile_picture'
+      //               ]
+      //             );
+      //           }]
+      //         );
+      //     }]
+      //   )->paginate(self::LIMIT)->toArray();
     } catch (ModelNotFoundException $e) {
       $this->error = $e->getMessage();
     }

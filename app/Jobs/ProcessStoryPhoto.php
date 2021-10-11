@@ -49,13 +49,26 @@ class ProcessStoryPhoto implements ShouldQueue
     }
 
     /**
+     * @return array
+     */
+    public function getBlockedList($story, $column)
+    {
+        $list = $column === 'blocked_user_id' ? $story->user->blockedList : $story->user->blockedByList;
+
+        return $list->filter(
+            function ($item, $key) {
+                return $item['blocked_stories'];
+            }
+        )->pluck($column);
+    }
+
+    /**
      * Execute the job.
      *
      * @return void
      */
     public function handle()
     {
-
         $story = new Story();
 
         $story->created_at_unix = time();
@@ -102,11 +115,16 @@ class ProcessStoryPhoto implements ShouldQueue
 
         $followers = !is_null($story->user->stat->followers) ? array_keys($story->user->stat->followers) : [];
 
+        $blockedList = $this->getBlockedList($story, 'blocked_user_id');
+        $blockedByList = $this->getBlockedList($story, 'blocked_by_user_id');
+
         $followersOnline = collect([]);
         User::whereIn(
             'id',
             $followers
         )
+            ->whereNotIn('id', $blockedList)
+            ->whereNotin('id', $blockedByList)
             ->chunkById(100, function ($users) use ($followersOnline) {
                 foreach ($users as $user) {
 

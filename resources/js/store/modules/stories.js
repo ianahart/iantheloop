@@ -267,6 +267,11 @@ const stories = {
       state.lightBoxStory = state.currentUserStories[storyIndex + 1];
       state.currentUserStories.splice(storyIndex,1);
     },
+
+    REMOVE_BLOCKED_STORY(state, userId) {
+      const storyIndex = state.baseStories.findIndex(baseStory => baseStory.id === userId);
+      state.baseStories.splice(storyIndex, 1);
+    }
   },
 
   actions: {
@@ -339,6 +344,9 @@ const stories = {
         }
       } catch(e) {
           console.log('stories.js|RETRIEVE_STORY| Error (404): ', e.response);
+          if (e.response.status === 404 && e.response.data.error.toLowerCase() === 'user has been blocked') {
+            commit('REMOVE_BLOCKED_STORY', userId);
+          }
       }
     },
 
