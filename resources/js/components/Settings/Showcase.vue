@@ -16,7 +16,7 @@
             />
           </div>
           <div v-else>
-            <p>You currently do not have any users blocked.</p>
+            <p class="no_current_blocked_users_message">You currently do not have any users blocked.</p>
           </div>
         </div>
       </div>
@@ -165,7 +165,11 @@
     height: 100%;
     background-color: rgba(225,225,225, 0.6);
     z-index: 1;
+  }
 
+  .no_current_blocked_users_message {
+    text-align: center;
+    color: gray;
   }
 
   .privacy_blocked_user_list_container {

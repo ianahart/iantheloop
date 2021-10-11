@@ -74,6 +74,51 @@ class Conversator
     return $date->format('g:ia m/j/Y');
   }
 
+  /**
+   * @param User $userOne
+   * @param User $userTwo
+   * @return Collection
+   *
+   */
+
+  private function messagesBlocked(User $userOne, User $userTwo)
+  {
+    return $userOne->blockedList
+      ->map(
+        function ($blockedUser) use ($userTwo) {
+
+          if ($blockedUser['blocked_user_id'] === $userTwo->id) {
+            return $blockedUser['blocked_messages'];
+          }
+        }
+      )->filter(
+        fn ($blockedUser) =>  !is_null($blockedUser) && $blockedUser !== false
+      );
+  }
+
+  /**
+   * @param User
+   * @return Bool
+   */
+  private function userBlocked(User $senderUser): bool
+  {
+    try {
+
+      $recipientUser = User::find($this->newMessage['recipient_user_id']);
+
+      if ($recipientUser->blockedList->count() === 0 && $senderUser->blockedByList->count() === 0) {
+        return false;
+      }
+
+      $senderBlockedByRecipient = $this->messagesBlocked($recipientUser, $senderUser);
+      $recipientBlockedBySender = $this->messagesBlocked($senderUser, $recipientUser);
+
+      return $recipientBlockedBySender->values()->count() > 0 || $senderBlockedByRecipient->values()->count() > 0 ? true : false;
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
+  }
+
   /*
   *Stores a new Message and then broadcasts that message
   *@param int $conversationId
@@ -89,9 +134,13 @@ class Conversator
         $this->newMessage['sender']
       );
 
-      $message = new Message();
-
       $currentUser = User::find($this->curUserId);
+
+      if ($this->userBlocked($currentUser)) {
+        throw new Exception('User is blocked from sending messages');
+      }
+
+      $message = new Message();
 
       foreach ($this->newMessage as $key => $value) {
         $message[$key] = $value;

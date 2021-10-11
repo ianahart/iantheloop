@@ -183,6 +183,13 @@ const conversator = {
       if (notificationsRead) {
         state.contacts[contact].unread_messages_count = 0;
       }
+    },
+
+    REMOVE_CONTACT(state, { recipient_name, recipient_user_id }) {
+      const contact = state.contacts.findIndex(contact => contact.id === recipient_user_id);
+      state.contacts.splice(contact, 1);
+      state.isChatWindowOpen = false;
+      state.chatWindowUserId = null;
     }
   },
 
@@ -274,7 +281,9 @@ const conversator = {
           }
 
       } catch (e) {
-        console.log('@action conversator.js SEND_CHAT_MESSAGE ERROR',e.response);
+        if (e.response.status === 400 && e.response.data.error.toLowerCase() === 'user is blocked from sending messages') {
+           commit('REMOVE_CONTACT', state.chatMessage.recipient);
+        }
       }
     },
   }

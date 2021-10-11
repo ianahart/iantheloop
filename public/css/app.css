@@ -8105,6 +8105,10 @@ div.about_profile_work__row p {
   background-color: rgba(225, 225, 225, 0.6);
   z-index: 1;
 }
+.no_current_blocked_users_message {
+  text-align: center;
+  color: gray;
+}
 .privacy_blocked_user_list_container {
   box-sizing: border-box;
   background-color: #1e1e1e;
