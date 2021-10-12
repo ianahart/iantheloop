@@ -3,26 +3,22 @@
 namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\User;
-use App\Models\Profile;
-use App\Helpers\FormattingUtil;
-use App\Helpers\AmazonS3;
-use App\Helpers\Statistics;
-use App\Helpers\FollowRequest;
 use App\Http\Requests\StoreMultipleForm;
 use App\Http\Requests\EditProfileRequest;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Helpers\Profile as ProfileHelper;
+use App\Helpers\AmazonS3;
+use App\Models\User;
+use App\Models\Profile;
 use App\Models\Stat;
 use Exception;
-use stdClass;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class ProfileController extends Controller
 {
 
     private int $userId;
     private array $data;
-    public string $fullName;
     public string $profilePic;
     public array $editedData;
     public bool $isUpdated;
@@ -37,74 +33,26 @@ class ProfileController extends Controller
     {
         try {
 
-            $profileExists = User::where('id', $id)->value('profile_created');
+            $profileHelper = new ProfileHelper(intval($id));
 
-            if (!$profileExists) {
+            $profileHelper->retrieveBaseProfile();
 
-                throw new Exception();
+            $profileError = $profileHelper->getError();
+
+            if (!is_null($profileError)) {
+                throw new Exception($profileError);
             }
 
-            $profile = Profile::where('user_id', '=', $id)
-                ->select(
-                    [
-                        'id',
-                        'user_id',
-                        'company',
-                        'position',
-                        'display_name',
-                        'profile_picture',
-                        'background_picture',
-                    ]
-                )
-                ->first();
+            $baseProfile = $profileHelper->getBaseProfile();
 
-            if (!empty($profile)) {
-
-                $this->fullName = $this->getFullName($id);
-
-                $profile->full_name = $this->fullName;
-
-                $profile = $this->capitalizeColumns($profile->getAttributes(), ['bio']);
-            }
-
-            $stat = Stat::where('user_id', '=', $id)->first();
-
-            $currentUserId = JWTAuth::user()->id;
-            $currentUser = new stdClass();
-            $currentUser->user_id = $currentUserId;
-
-
-            $statisticInst = new Statistics($currentUser, $stat);
-
-            $statisticInst->checkCurrUserFollowing();
-
-            $currUserFollowing = $statisticInst->getUserIsFollowing();
-
-            if (!$currUserFollowing) {
-
-                $currUserFollowing = false;
-            }
-
-            $followRequest = new FollowRequest;
-
-            $followRequest->setRequesterUserId($currentUserId);
-            $followRequest->setReceiverUserId($profile['user_id']);
-
-            $currentUserHasRequested = $followRequest->checkRequestExists();
-
-            $profile['current_user_full_name'] = FormattingUtil::capitalize(JWTAuth::user()->full_name);
-            $profile['current_user_first_name'] = FormattingUtil::capitalize(JWTAuth::user()->first_name);
-
-            $viewingUser = User::find($id);
-            $profile['view_user_first_name'] = FormattingUtil::capitalize(explode(' ', $viewingUser->full_name)[0]);
 
             return response()->json(
                 [
                     'msg' => 'success',
-                    'profile' => $profile,
-                    'stats' => $stat,
-                    'currUserFollowing' => $currUserFollowing,
-                    'currUserHasRequested' => $currentUserHasRequested,
+                    'profile' => $baseProfile['profile'],
+                    'stats' => $baseProfile['stats'],
+                    'currUserFollowing' => $baseProfile['currUserFollowing'],
+                    'currUserHasRequested' => $baseProfile['currUserHasRequested'],
                 ],
                 200
             );
@@ -121,40 +69,6 @@ class ProfileController extends Controller
     }
 
     /*
-     * Capitalize columns that need it
-     * @param array $data
-     * @param array $excludes
-     * @return JsonResponse
-     */
-    private function capitalizeColumns(array $data, array $excludes)
-    {
-
-        $array = [];
-
-        array_walk($data, function ($val, $key) use (&$array, $excludes) {
-
-            if (isset($val)) {
-
-                $array[$key] = preg_match('/^https?:\/\//', $val)
-                    || in_array($key, $excludes) ? $val : ucwords($val);
-            }
-        });
-        return $array;
-    }
-
-    /*
-     * Get user full name
-     * @param string $userId
-     * @return string
-     */
-    private function getFullName(string $userId)
-    {
-        $user = User::where('id', '=', $userId)->first();
-
-        return $user->full_name;
-    }
-
-    /*
      * Get all of profile data
      * @param string $profileId
      * @return JsonResponse
@@ -167,9 +81,11 @@ class ProfileController extends Controller
 
             $profileData = $profileData->getAttributes();
 
-            $profileData['full_name'] = $this->getFullName($profileData['user_id']);
+            $profileHelper = new ProfileHelper(intval($profileData['user_id']));
 
-            $formattedAboutData = $this->formatAboutData($profileData);
+            $profileData['full_name'] = $profileHelper->makeFullName($profileData['user_id']);
+
+            $formattedAboutData = $profileHelper->formatAboutData($profileData);
 
             return response()->json(
                 [
@@ -190,81 +106,6 @@ class ProfileController extends Controller
         }
     }
 
-    /*
-     * Punctuate paragraph text
-     * @param string
-     * @return string
-     */
-    private function punctuateParagraph(string $paragraph)
-    {
-        $words = explode(' ', strtolower(trim($paragraph)));
-
-        $punctuated = [];
-
-        for ($i = 0; $i < count($words); $i++) {
-
-            if (str_ends_with($words[$i], '.')) {
-
-                if ($i === count($words) - 1) {
-
-                    array_push($punctuated, $words[$i]);
-                } else if ($i < count($words)) {
-
-                    $start = strtoupper(
-                        substr($words[$i + 1], 0, 1)
-                    ) . substr($words[$i + 1], 1);
-
-                    array_push($punctuated,  $words[$i], $start);
-                }
-            } else {
-
-                array_push($punctuated,  $words[$i]);
-            }
-        }
-
-        foreach ($punctuated as $key => $word) {
-
-            if ($key < count($punctuated) - 1 && str_ends_with($punctuated[$key], '.')) {
-
-                $firstChar = substr($punctuated[$key + 1], 0, 1);
-
-                if ($firstChar === ucfirst($firstChar)) {
-
-                    array_splice($punctuated, $key + 2, 1);
-                }
-            }
-        }
-
-        $punctuated[0] = ucfirst($punctuated[0]);
-
-        return implode(' ', $punctuated);
-    }
-
-    /*
-     * Format about data
-     * @param array
-     * @return array;
-     */
-    private function formatAboutData(array $data)
-    {
-        $data = $this->capitalizeColumns($data, ['bio', 'description']);
-
-        $data['interests'] = array_map(
-            function ($interest) {
-                $interest['name'] = ucwords($interest['name']);
-                return $interest;
-            },
-            json_decode(json_decode($data['interests'], true), true)
-        );
-
-        $data['links'] = json_decode(json_decode($data['links'], true));
-
-        $data['bio'] = $this->punctuateParagraph($data['bio']);
-
-        $data['description'] = $this->punctuateParagraph($data['description']);
-
-        return $data;
-    }
 
     /*
      * Create user profile
@@ -682,8 +523,6 @@ class ProfileController extends Controller
         $profile->save();
         $this->isUpdated = true;
     }
-
-
 
     /*
     * make updates to columns for the given profile
