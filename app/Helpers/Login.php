@@ -40,7 +40,7 @@ class Login
   public function loginUser()
   {
     try {
-      error_log(print_r($this->credentials, true));
+
       $user = User::where('email', '=', $this->credentials['email'])
         ->first();
       if (!$user) {
@@ -62,7 +62,7 @@ class Login
         throw new Exception('The provided credentials are invalid.');
       }
     } catch (Exception $e) {
-      error_log(print_r($e->getMessage(), true));
+
       $this->exception = $e->getMessage();
     }
   }
