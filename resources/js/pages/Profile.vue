@@ -1,6 +1,6 @@
 <template>
    <div class="profile__container">
-        <div v-if="dataLoaded">
+        <div v-if="dataLoaded && !restrictedProfile.status">
             <Modal />
             <div ref="profile" class="profile_component__wrapper">
                 <Header />
@@ -17,12 +17,28 @@
                 />
             </div>
         </div>
+        <div class="restricted_profile_container" v-else-if="dataLoaded && restrictedProfile.status">
+            <div v-if="restrictedProfile.user === 'current_user'" class="restricted_current_user">
+              <p>You have blocked this user. To un-block, go to privacy inside your settings and remove them from blocked profiles.</p>
+              <div>
+                <router-link :to="{name: 'Settings', params: {slug: `${this.getUserSlug}`}}">Settings</router-link>
+              </div>
+            </div>
+            <div class="restricted_viewing_user" v-if="restrictedProfile.user === 'viewing_user'">
+              <p v-if="restrictedProfile.user === 'viewing_user'">Something went wrong trying to view this user's profile. They may have enabled certain settings to prevent you from seeing their content.</p>
+              <div>
+                <button v-if="!restrictedProfile.current_user_does_not_follow" @click="unfollow">Unfollow</button>
+                <router-link :to="{name: 'Home'}">Return Home</router-link>
+              </div>
+            </div>
+        </div>
         <Loader v-else />
     </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapState, mapActions } from "vuex";
+import { debounce } from '../helpers/moduleHelpers.js';
 
 import Header from "../components/Profile/Header.vue";
 import Dashboard from "../components/Profile/Dashboard.vue";
@@ -44,6 +60,7 @@ export default {
     },
 
     async created() {
+        this.unfollow = debounce(this.unfollow, 250);
         await this.fetchBaseProfileData(this.$route.params.id);
     },
     beforeDestroy() {
@@ -84,6 +101,7 @@ export default {
                 "fetchError",
                 "currentUserId",
                 "currUserFollowing",
+                'restrictedProfile'
             ]
         ),
 
@@ -96,6 +114,8 @@ export default {
         ...mapGetters('user',
             [
               'getProfilePic',
+              'getUserSlug',
+              'getUserId',
               'getToken',
               'userName',
             ]
@@ -122,7 +142,7 @@ export default {
             ]
         ),
 
-        ...mapActions("profile", ["FETCH_BASE_PROFILE_DATA"]),
+        ...mapActions("profile", ["FETCH_BASE_PROFILE_DATA", 'UNFOLLOW']),
 
         clearBaseProfileState() {
             this.RESET_MODULE();
@@ -131,6 +151,14 @@ export default {
         clearProfileWallState() {
 
             this.$store.commit('posts/RESET_MODULE');
+        },
+
+        async unfollow() {
+           try {
+             await this.UNFOLLOW({ currentUserId: this.getUserId, viewingUserId: this.$route.params.id });
+             this.$router.push({ name: 'Home' });
+           } catch(e) {
+           }
         },
 
         async fetchBaseProfileData(profileId) {
@@ -152,7 +180,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .profile_component__wrapper {
     max-width: 960px;
     margin: 0 auto;
@@ -165,6 +193,60 @@ export default {
     position: relative;
     height: 100%;
     min-height: 100vh;
+}
+
+.restricted_current_user, .restricted_viewing_user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    div:first-of-type {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+    }
+}
+
+
+.restricted_profile_container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    width: 300px;
+    border: 1px solid #e7dddd;
+    margin: 0 auto;
+    border-radius: 8px;
+    margin-top: 3rem;
+    a {
+      color: gray;
+      text-decoration-color: #e7dddd;
+      font-size: 0.85rem;
+    }
+    button {
+        background-color: transparent;
+        border: 1px solid darken($primaryGray, 18);
+        cursor: pointer;
+        height: 30px;
+        padding: 0.3rem 0.5rem;
+        border-radius: 8px;
+        color: gray;
+        transition: 0.5s ease-out;
+        &:hover {
+        background-color: darken($primaryWhite, 5);
+        }
+    }
+    p {
+        color: #5a5858;
+        font-size: 0.9rem;
+        font-family: 'Open Sans',sans-serif;
+        text-align: center;
+        line-height: 1.6;
+    }
 }
 
 

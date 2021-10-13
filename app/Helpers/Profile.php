@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Database\Eloquent\Collection;
 use App\Helpers\FormattingUtil;
 use App\Helpers\Statistics;
 use App\Helpers\FollowRequest;
@@ -22,10 +23,22 @@ class Profile
   private String $fullName;
   private array $capitalizedColumns;
   private array $baseProfile = [];
+  private array $restrictedUser;
+  private Bool $currentUserDoesNotFollow;
 
   public function __construct(Int $userId)
   {
     $this->userId = $userId;
+  }
+
+  public function getRestrictedUser()
+  {
+    return $this->restrictedUser;
+  }
+
+  public function getCurrentUserDoesNotFollow()
+  {
+    return $this->currentUserDoesNotFollow;
   }
 
   public function getError()
@@ -48,6 +61,67 @@ class Profile
     return $this->baseProfile;
   }
 
+
+  /**
+   * Check to see if the user's block type is profile
+   * @param User
+   * @param Int
+   */
+  private function checkBlockType(User $user, Int $targetId)
+  {
+
+    $list = $user->blockedList
+      ->filter(
+        function ($blockedUser, $key) use ($targetId) {
+
+          if ($blockedUser['blocked_user_id'] === $targetId) {
+            return $blockedUser['blocked_profile'];
+          }
+        }
+      );
+
+    return $list->count() > 0 ? true : false;
+  }
+
+  /**
+   * Check if the user viewing the profile is blocked from the subject
+   * Or the subject is blocked from the user viewing the profile
+   * @param Collection
+   * @return Array
+   */
+  private function isABlockedProfile(Collection $users): array
+  {
+
+    $users = $users->map(
+      function ($user) {
+        return $user->id === $this->userId ? ['viewing_user' => $user] : ['current_user' => $user];
+      }
+    )->collapse();
+
+    if ($users->count() === 1) {
+      return ['users' => [], 'block_exists' => false];
+    }
+
+    $currentUserHasBlocked = $this->checkBlockType($users['current_user'], $users['viewing_user']->id);
+    $viewingUserHasBlocked = $this->checkBlockType($users['viewing_user'], $users['current_user']->id);
+
+    if (is_null($users['current_user']->stat->following)) {
+      $currentUserDoesNotFollow = true;
+    } else {
+      $currentUserFollowers = array_keys($users['current_user']->stat->following);
+      $currentUserDoesNotFollow = !in_array($users['viewing_user']->id, $currentUserFollowers) ? true : false;
+    }
+
+    return [
+      'users' => [
+        'current_user' =>  $currentUserHasBlocked ? $users['current_user']->id : NULL,
+        'viewing_user' => $viewingUserHasBlocked ? $users['viewing_user']->id : NULL,
+      ],
+      'block_exists' => $currentUserHasBlocked || $viewingUserHasBlocked ? true : false,
+      'current_user_does_not_follow' => $currentUserDoesNotFollow,
+    ];
+  }
+
   /**
    * @param void
    * @return void
@@ -57,11 +131,25 @@ class Profile
 
     try {
 
-      $profileExists = User::where('id', $this->userId)->value('profile_created');
+      $profileExists = User::where('id', $this->userId)
+        ->select(['profile_created', 'full_name'])
+        ->first();
 
-      if (!$profileExists) {
-
+      if (!$profileExists['profile_created']) {
         throw new Exception();
+      }
+
+      $results = User::whereIn('id', [$this->userId, JWTAuth::user()->id])
+        ->get();
+
+
+      $blocks = $this->isABlockedProfile($results);
+
+      if ($blocks['block_exists']) {
+        $this->restrictedUser = $blocks['users'];
+        $this->currentUserDoesNotFollow = $blocks['current_user_does_not_follow'];
+
+        throw new Exception('Blocked profile');
       }
 
       $profile = ProfileModel::where('user_id', '=', $this->userId)
@@ -115,8 +203,7 @@ class Profile
       $profile['current_user_full_name'] = FormattingUtil::capitalize(JWTAuth::user()->full_name);
       $profile['current_user_first_name'] = FormattingUtil::capitalize(JWTAuth::user()->first_name);
 
-      $viewingUser = User::find($this->userId);
-      $profile['view_user_first_name'] = FormattingUtil::capitalize(explode(' ', $viewingUser->full_name)[0]);
+      $profile['view_user_first_name'] = FormattingUtil::capitalize(explode(' ', $profileExists['full_name'])[0]);
 
       $this->baseProfile = [
         'profile' => $profile,
@@ -169,7 +256,7 @@ class Profile
    */
   public function formatAboutData(array $data)
   {
-    error_log(print_r($data, true));
+
     $data = $this->capitalizeColumns($data, ['bio', 'description']);
 
     $data['interests'] = array_map(

@@ -61,6 +61,8 @@ class ProfileController extends Controller
             return response()->json(
                 [
                     'msg' => 'Profile for user not found',
+                    'restricted_user' => $profileHelper->getRestrictedUser() ?? NULL,
+                    'current_user_does_not_follow' => $profileHelper->getCurrentUserDoesNotFollow() ?? NULL,
                     'error' => $e->getMessage()
                 ],
                 404

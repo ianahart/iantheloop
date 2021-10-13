@@ -7,6 +7,7 @@ const initialState = () => {
 
     baseProfileData: {},
     fetchError: '',
+    restrictedProfile: { status: false, user: null, current_user_does_not_follow: null },
     dataLoaded: false,
     profileNavigation: [],
     currentUserId: null,
@@ -108,7 +109,6 @@ const profile = {
     },
 
     SET_PARTY(state, payload) {
-      console.log('profile.js|SET_PARTY: ', payload);
       state.currentUserId = payload.currentUserId;
       state.viewingUserId = payload.viewingUserId;
     },
@@ -124,6 +124,13 @@ const profile = {
 
       state.followStatus = payload.follow_status;
     },
+
+    SET_RESTRICTED_PROFILE(state, payload) {
+      state.restrictedProfile.status = payload.status;
+      state.restrictedProfile.user = payload.user;
+      state.restrictedProfile.current_user_does_not_follow = payload.current_user_does_not_follow;
+      state.dataLoaded = true;
+    }
   },
 
   actions: {
@@ -148,7 +155,6 @@ const profile = {
         );
         commit('SET_FOLLOW_STATUS', response.data);
       } catch (e) {
-
         console.log('store/profile.js @SEND_FOLLOW_REQUEST Error: ', e.response);
       }
     },
@@ -176,11 +182,14 @@ const profile = {
               currentUserId: rootGetters['user/getUserId'],
             });
         }
-
-
       } catch (e) {
-
-        // commit('SET_FETCH_ERROR', e.response.data.msg);
+        if (e.response.status === 404 && e.response.data.error.toLowerCase() === 'blocked profile') {
+           commit('SET_RESTRICTED_PROFILE', {
+            status: true,
+            user: Object.values(e.response.data.restricted_user).includes(rootGetters['user/getUserId']) ? 'current_user' : 'viewing_user',
+            current_user_does_not_follow: e.response.data.current_user_does_not_follow,
+           });
+        }
       }
     },
 
@@ -200,32 +209,28 @@ const profile = {
             data,
           }
         );
-
-
-
-
         commit('SET_PROFILE_STATS', response.data);
-
-
       } catch (e) {
-
         console.log(e.response);
       }
     },
 
-    async UNFOLLOW({ state, commit }) {
+    async UNFOLLOW({ state, commit }, { currentUserId = null, viewingUserId = null } = {}) {
 
       try {
+
+        let viewingUser = !state.restrictedProfile.status && state.viewingUserId !== null ? state.viewingUserId : viewingUserId;
+        let currentUser = !state.restrictedProfile.status && state.currentUserId !== null ? state.currentUserId : currentUserId;
 
         const response = await axios(
           {
             method: 'PATCH',
-            url: `/api/auth/stats/unfollow/${state.currentUserId}/update`,
+            url: `/api/auth/stats/unfollow/${currentUser}/update`,
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            data: { viewingUserId: state.viewingUserId },
+            data: { viewingUserId: viewingUser },
           }
         );
 
