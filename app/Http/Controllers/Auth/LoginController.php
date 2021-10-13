@@ -2,26 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Models\User;
-use App\Models\Profile;
-use App\Events\UserStatusChanged;
-use App\Helpers\Status;
+use App\Helpers\Login;
 use App\Helpers\LoginThrottle;
 use Exception;
 
 class LoginController extends Controller
 {
-
-
-    public bool $authStatus;
-    public string $userStatus;
-
-    /*
+    /**
      * Login user and return a token
      * @param Request $request
      * @return JsonResponse
@@ -52,36 +41,27 @@ class LoginController extends Controller
                 throw new Exception('You have been locked out for 15 minutes for too many login attempts');
             }
 
+            $login = new Login;
 
-            $user = User::where('email', '=', $email)->first();
+            $login->setCredentials(['email' => $email, 'password' => $password]);
+            $login->loginUser();
 
-            if (!$user) {
-                throw new Exception('Sorry, we couldn\'t find an account with that email.');
+            $exception = $login->getException();
+
+            if (!is_null($exception)) {
+                throw new Exception($exception);
             }
 
-            if (Hash::check($password, $user->password)) {
+            $token = $login->getToken();
 
-                $TLL = 60;
-
-                $payload = JWTAuth::attempt($request->form);
-
-                $this->updateStatus();
-
-                $jwt = $this->createNewToken($payload, $TLL, $user);
-
-                broadcast(new UserStatusChanged($user));
-
-                return response()->json(
-                    [
-                        'formSubmitted' => true,
-                        'userLoggedIn' => true,
-                        'jwt' => $jwt,
-                    ],
-                    200
-                );
-            } else {
-                throw new Exception('The provided credentials are invalid.');
-            }
+            return response()->json(
+                [
+                    'formSubmitted' => true,
+                    'userLoggedIn' => true,
+                    'jwt' => $token,
+                ],
+                200
+            );
         } catch (Exception $e) {
 
             if (!$maxLoginAttempts) {
@@ -100,62 +80,5 @@ class LoginController extends Controller
                 400
             );
         }
-    }
-
-    // /*
-    //  * update authentication column
-    //  * @param void
-    //  * @return void
-    //  */
-
-    private function updateStatus()
-    {
-
-        $userStatus = new Status(JWTAuth::user()->id);
-
-        $userStatus->updateStatus(true, 'online');
-
-        $exception = $userStatus->getException();
-
-        if (!$exception) {
-
-            $this->userStatus = 'online';
-            $this->authStatus = true;
-        }
-    }
-
-    /*
-     * retrieve user's profile picture
-     * @param void
-     * @return string
-     */
-
-    private function getProfilePic()
-    {
-        if (JWTAuth::user()->profile_created) {
-
-            $profile = Profile::where('user_id', '=', JWTAuth::user()->id)->first();
-
-            return $profile->profile_picture;
-        }
-    }
-
-
-    /*
-     * create new token with payload
-     * @param String
-     * @param int
-     * @param object
-     * @return string
-     */
-    protected function createNewToken(string $payload, int $TLL, object $user)
-    {
-        $profile_pic = $this->getProfilePic();
-        return json_encode([
-            'access_token' => $payload,
-            'profile_pic' => $profile_pic ?? '',
-            'profile_created' => JWTAuth::user()->profile_created,
-            'status' => 'online',
-        ]);
     }
 }

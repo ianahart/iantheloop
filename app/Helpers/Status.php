@@ -52,15 +52,16 @@ class Status
   {
 
     try {
-      User::where('id', '=', $this->currentUserId)
-        ->update(
-          [
-            'is_logged_in' => $authStatus,
-            'status' => $userStatus
-          ]
-        );
 
-      $user = User::find($this->currentUserId);
+      $user =  User::where('id', '=', $this->currentUserId)
+        ->first();
+
+      $user->is_logged_in = $authStatus;
+      $user->status = $userStatus;
+
+      $user->save();
+      $user->refresh();
+
       broadcast(new UserStatusChanged($user));
 
       $this->userStatus = $userStatus;
