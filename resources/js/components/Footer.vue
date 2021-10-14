@@ -51,7 +51,7 @@
 
     .footer {
       flex-direction: column;
-      height: 17.5%;
+      height: 20.5%;
     }
   }
 

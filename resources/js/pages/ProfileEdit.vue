@@ -1,31 +1,39 @@
 <template>
-  <div v-if="dataLoaded" class="profile_edit__container">
-    <PreviousRoute
-      routeName="Profile"
-    />
-    <h3 class="profile_edit__title">Edit Profile</h3>
-    <FormControls />
-    <div class="profile_edit__section__container">
-     <SectionNav />
-     <div class="profile_edit__forms">
-      <div v-if="currentWindow === 'General'" class="profile_edit__section">
-        <General />
+    <div>
+      <div v-if="loader" class="create_update_profile_loader">
+        <div>
+          <Loader />
+          <p>Updating your profile, please wait...</p>
+        </div>
       </div>
-      <div v-if="currentWindow === 'Identity'" class="profile_edit__section">
-        <Identity />
+      <div v-if="dataLoaded && !loader" class="profile_edit__container">
+        <PreviousRoute
+          routeName="Profile"
+        />
+        <h3 class="profile_edit__title">Edit Profile</h3>
+        <FormControls />
+        <div class="profile_edit__section__container">
+        <SectionNav />
+        <div class="profile_edit__forms">
+          <div v-if="currentWindow === 'General'" class="profile_edit__section">
+            <General />
+          </div>
+          <div v-if="currentWindow === 'Identity'" class="profile_edit__section">
+            <Identity />
+          </div>
+            <div v-if="currentWindow === 'About'" class="profile_edit__section">
+              <About />
+          </div>
+          <div v-if="currentWindow === 'Work'" class="profile_edit__section">
+              <Work />
+          </div>
+          <div v-if="currentWindow === 'Pictures'" class="profile_edit__section">
+            <Pictures />
+          </div>
+        </div>
+        <div class="profile_edit__section__container_bg"></div>
+        </div>
       </div>
-        <div v-if="currentWindow === 'About'" class="profile_edit__section">
-          <About />
-      </div>
-      <div v-if="currentWindow === 'Work'" class="profile_edit__section">
-          <Work />
-      </div>
-      <div v-if="currentWindow === 'Pictures'" class="profile_edit__section">
-        <Pictures />
-      </div>
-     </div>
-    <div class="profile_edit__section__container_bg"></div>
-    </div>
   </div>
 </template>
 
@@ -42,11 +50,10 @@
   import Pictures from '../components/EditProfile/Pictures.vue';
   import SectionNav from '../components/EditProfile/SectionNav.vue';
   import Work from '../components/EditProfile/Work.vue';
+  import Loader from '../components/Misc/Loader.vue';
 
   export default {
-
     name: 'ProfileEdit',
-
     components: {
       About,
       FormControls,
@@ -56,7 +63,10 @@
       PreviousRoute,
       SectionNav,
       Work,
+      Loader,
     },
+
+
 
     async created () {
 
@@ -71,7 +81,6 @@
     },
 
     beforeDestroy () {
-
       this.RESET_MODULE();
     },
 
@@ -82,7 +91,8 @@
           'dataLoaded',
           'fetchError',
           'currentWindow',
-          'allWindow'
+          'allWindow',
+          'loader',
         ]
       ),
     },
@@ -102,12 +112,10 @@
       ),
 
       clearBeforeRedirect() {
-
         this.RESET_MODULE();
       },
 
       async fetchEditData(profileId) {
-
         await this.FETCH_EDIT_DATA(profileId);
       }
 
@@ -154,7 +162,6 @@
 }
 
 .profile_edit__section {
-  // border: 1px solid blue;
   margin: 2rem auto 3rem auto;
   height: 100%;
 }

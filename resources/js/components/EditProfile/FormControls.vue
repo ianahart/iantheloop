@@ -29,10 +29,10 @@
         ),
     },
 
-    beforeDestroy() {
+    // beforeDestroy() {
 
-        this.RESET_MODULE();
-    },
+    //     this.RESET_MODULE();
+    // },
 
     methods: {
 
@@ -41,6 +41,7 @@
           'CLEAR_ERRORS',
           'CLEAR_FORM',
           'RESET_MODULE',
+          'SET_LOADER',
         ]
       ),
 
@@ -54,22 +55,21 @@
 
         try {
           this.CLEAR_ERRORS();
-
+          this.SET_LOADER(true);
           await this.UPDATE_PROFILE();
 
           if (this.isUpdated) {
             this.$router.push(`/profile/${this.userId}`);
+            this.SET_LOADER(false);
+            this.RESET_MODULE();
           }
 
         } catch (e) {
-
-
         }
       },
 
       clearProfile () {
         this.CLEAR_FORM();
-
       },
     }
   }
@@ -126,6 +126,7 @@
   .edit_profile_form_control__container  {
     display: flex;
     justify-content: space-evenly;
+    width: 100%;
   }
 
   .edit_profile_form__controls {

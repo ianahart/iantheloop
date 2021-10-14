@@ -6,6 +6,7 @@ const initialState = () => {
   return {
 
     currentForm: 'identity',
+    loader: false,
   }
 };
 
@@ -30,6 +31,9 @@ const createProfile = {
   },
 
   mutations: {
+    SET_LOADER(state, isLoading) {
+      state.loader = isLoading;
+    },
 
     SET_CURRENT_FORM: (state, payload) => {
 
@@ -106,7 +110,7 @@ const createProfile = {
           generalDetails: [],
           workDetails: [],
         }
-
+        commit('SET_LOADER', false);
         const fields = e.response.data.errors;
 
         for (let field in fields) {

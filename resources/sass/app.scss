@@ -188,3 +188,23 @@
     margin-bottom: 0.2rem;
     padding-left: 0.5rem;
 }
+
+.create_update_profile_loader {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    div:first-of-type {
+        display: flex;
+        flex-direction: column;
+        height: 100px;
+    }
+    p {
+        text-align: center;
+        color: #5c5b5b;
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.15rem;
+        font-weight: bold;
+    }
+}

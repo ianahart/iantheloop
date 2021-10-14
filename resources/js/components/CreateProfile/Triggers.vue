@@ -28,7 +28,8 @@
 
       ...mapMutations('createProfile',
         [
-          'RESET_MODULE'
+          'RESET_MODULE',
+          'SET_LOADER',
         ]
       ),
       ...mapActions('createProfile',
@@ -38,13 +39,13 @@
       ),
 
     async createProfile() {
-
         this.$store.commit('generalDetails/CLEAR_ERROR_MSGS');
         this.$store.commit('aboutDetails/CLEAR_ERROR_MSGS');
         this.$store.commit('workDetails/CLEAR_ERROR_MSGS');
         this.$store.commit('identity/CLEAR_ERROR_MSGS');
         this.$store.commit('customize/CLEAR_ERROR_MSGS');
 
+        this.SET_LOADER(true);
         await this.CREATE_PROFILE();
 
 
@@ -52,6 +53,7 @@
         if (this.getProfileStatus) {
 
           this.$router.push('/');
+          this.SET_LOADER(false);
         }
     },
 

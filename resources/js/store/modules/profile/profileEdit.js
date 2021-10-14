@@ -16,6 +16,7 @@ const initialState = () => {
 
     editData: [],
     fetchError: '',
+    loader: false,
     userId: null,
     formErrors: false,
     dataLoaded: false,
@@ -82,8 +83,6 @@ const profileEdit = {
         return {[field.field]:val};
       });
 
-      // remove these fields because they are packaged separately and not part of form
-      // for validation
       const exclude = ['background_picture', 'profile_picture'];
       data = data.filter((item) => {
 
@@ -155,6 +154,10 @@ const profileEdit = {
   },
 
   mutations: {
+
+        SET_LOADER(state, isLoading) {
+          state.loader = isLoading;
+        },
 
         RESET_MODULE: (state) => {
 
@@ -321,8 +324,6 @@ const profileEdit = {
     SET_EDIT_DATA: (state, { data }) => {
 
       state.form.forEach((field, index) => {
-
-
 
           if (field.field === 'interests') {
 
@@ -502,7 +503,7 @@ const profileEdit = {
         commit('SET_IS_UPDATED', {isUpdated:response.data.isUpdated, user_id: rootGetters['user/getUserId']});
       } catch (e) {
         if (e.response.status === 422) {
-
+          commit('SET_LOADER', false);
           const { errors } = e.response.data;
 
           commit('SET_VALIDATION_ERRORS', errors);
