@@ -32,6 +32,7 @@ const login = {
   },
 
   mutations: {
+
     SET_IS_LOGIN_LOADER_SHOWING(state, isLoading) {
       state.isLoginLoaderShowing = isLoading;
     },
@@ -82,12 +83,9 @@ const login = {
   actions: {
 
     async SUBMIT_FORM ({ getters, state, commit }) {
-
       try {
-        let response;
         const form = getters.formData;
-
-        response = await axios(
+        const response = await axios(
           {
             method: 'POST',
             url: '/api/auth/login',
@@ -96,7 +94,6 @@ const login = {
               'Content-Type': 'application/json',
             },
             data: {
-
               form,
             },
           }

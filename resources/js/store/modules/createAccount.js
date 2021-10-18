@@ -16,6 +16,7 @@ const initialState = () => {
     isSubmitted: false,
     isChecked: false,
     checkboxError: '',
+    userId: null,
     // isPasswordShowing: false,
     emailExistsError: '',
   }
@@ -73,6 +74,9 @@ const createAccount = {
   },
 
   mutations: {
+    SET_USER_ID(state, userId) {
+      state.userId = userId;
+    },
 
     TOGGLE_PASSWORD_VISIBILITY: (state, payload) => {
 
@@ -195,7 +199,7 @@ const createAccount = {
           );
 
           if (response.status === 201) {
-
+            commit('SET_USER_ID', response.data.user_id);
             commit('SUBMIT_FORM', response.data.isSubmitted);
           }
 

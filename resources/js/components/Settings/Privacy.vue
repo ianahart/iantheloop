@@ -2,6 +2,10 @@
   <div :style="isBlockListOpen ? { filter: 'blur(5px)' } : ''" class="privacy_container">
     <h2 class="settings_option_title">Manage Privacy</h2>
     <div class="settings_option_title_decoration"></div>
+    <div v-if="!getProfileStatus" class="no_profile_access_msg">
+      <p>These settings will be available to you when you create your profile.</p>
+    </div>
+    <div v-if="getProfileStatus">
     <p @click="emitBlockListOpen" class="blocked_user_list_modal_trigger">Edit List...</p>
     <div class="privacy_settings_option">
       <div class="privacy_settings_content">
@@ -64,6 +68,7 @@
       />
      </div>
     </div>
+    </div>
   </div>
 </template>
 
@@ -89,6 +94,7 @@
         'searchPagination'
       ]),
       ...mapGetters('settings', ['getActiveInput']),
+      ...mapGetters('user', ['getProfileStatus']),
     },
 
     beforeDestroy() {
@@ -149,6 +155,16 @@
       font-size: 0.9rem;
       line-height: 1.6;
       margin-top: 1.3rem;
+    }
+  }
+
+  .no_profile_access_msg {
+    box-sizing: border-box;
+    p {
+      color: darken($primaryWhite,5);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      text-align: center;
     }
   }
 

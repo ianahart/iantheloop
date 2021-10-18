@@ -72,7 +72,8 @@
           'form',
           'hasErrors',
           'isChecked',
-          'isSubmitted'
+          'isSubmitted',
+          'userId',
         ]
       ),
 
@@ -87,17 +88,9 @@
 
     methods: {
 
-      ...mapMutations('createAccount',
-        [
-          'CHECKBOX_ERROR',
-        ]
-      ),
-
-      ...mapActions('createAccount',
-        [
-          'SUBMIT_FORM',
-        ]
-      ),
+      ...mapMutations('createAccount',['CHECKBOX_ERROR']),
+      ...mapActions('createAccount',['SUBMIT_FORM',]),
+      ...mapActions('settings', ['CREATE_USER_SETTINGS']),
 
       validateForm () {
 
@@ -137,7 +130,7 @@
           await this.SUBMIT_FORM();
 
           if (this.isSubmitted) {
-
+            await this.CREATE_USER_SETTINGS(this.userId);
             this.$router.push({ name: 'Login' , query: {signup: 'success'} });
           }
         }

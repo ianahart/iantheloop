@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\Login;
+// use App\Helpers\Setting;
 use App\Helpers\LoginThrottle;
 use Exception;
 
@@ -44,7 +45,7 @@ class LoginController extends Controller
             $login = new Login;
 
             $login->setCredentials(['email' => $email, 'password' => $password]);
-            $login->loginUser();
+            $settingId = $login->loginUser();
 
             $exception = $login->getException();
 

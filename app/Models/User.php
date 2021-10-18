@@ -98,6 +98,7 @@ class User extends Authenticatable implements JWTSubject
             'is_logged_in' => true,
             'slug' => $this->slug,
             'user_settings_user_id' => $this->setting->user_id ?? null,
+            'settings_id' => $this->setting->id ?? null,
         ];
     }
 

@@ -26,7 +26,6 @@ use App\Http\Controllers\General\ReviewController;
 use App\Http\Controllers\General\StoryController;
 use App\Http\Controllers\General\SearchController;
 use App\Http\Controllers\General\SettingController;
-use Hamcrest\Core\Set;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +43,7 @@ Route::get('/auth/users/count', [UserController::class, 'count']);
 Route::post('/auth/register', [RegisterController::class, 'store']);
 Route::post('/auth/login', [LoginController::class, 'store']);
 Route::post('/auth/token/refresh', [refreshTokenController::class, 'store']);
+Route::post('/auth/settings/create', [SettingController::class, 'create']);
 Route::post('/auth/recovery', [ForgotPasswordController::class, 'store']);
 Route::post('/auth/reset-password/', [ResetPasswordController::class, 'store']);
 Route::get('/auth/reviews/index', [ReviewController::class, 'index']);
@@ -108,8 +108,10 @@ Route::post('/auth/searches/store', [SearchController::class, 'store'])->middlew
 Route::get('/auth/searches/{userId}/show', [SearchController::class, 'show'])->middleware('auth:api');
 Route::delete('/auth/searches/{searchId}/delete', [SearchController::class, 'delete'])->middleware('auth:api');
 Route::post('/auth/settings/block/search', [SettingController::class, 'search'])->middleware('auth:api');
-Route::post('/auth/settings/create', [SettingController::class, 'create'])->middleware('auth:api');
 Route::post('/auth/settings/block/store', [SettingController::class, 'store'])->middleware('auth:api');
 Route::get('/auth/settings/block/{userId}/show', [SettingController::class, 'show'])->middleware('auth:api');
 Route::patch('/auth/settings/block/{privacyId}/update', [SettingController::class, 'updateBlockedUser'])->middleware('auth:api');
 Route::delete('/auth/settings/block/{privacyId}/delete', [SettingController::class, 'deleteBlockedUser'])->middleware('auth:api');
+Route::patch('/auth/settings/remember-me/{settingId}/update', [SettingController::class, 'updateRememberMe'])->middleware('auth:api');
+Route::get('/auth/settings/remember-me/{settingId}/show', [SettingController::class, 'retrieveRememberMe'])->middleware('auth:api');
+Route::post('/auth/settings/remember-me', [SettingController::class, 'validateRememberMe'])->middleware('auth:api');

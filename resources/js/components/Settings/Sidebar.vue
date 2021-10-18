@@ -68,15 +68,18 @@ import { mapMutations, mapState } from 'vuex';
     background-color: #3a3a3a;
     flex-grow: 1;
     height: 100%;
+    width: 350px;
     max-width: 350px;
     min-width: 350px;
     header {
       h1 {
         color: $primaryWhite;
         margin: 0.17rem 0;
+        margin-top: 2rem;
         font-family: 'Secular One',sans-serif;
         text-align: left;
         padding-left: 0.5rem;
+        font-size: 1.3rem;
       }
     }
     svg {
@@ -140,12 +143,22 @@ import { mapMutations, mapState } from 'vuex';
       }
     }
   }
-  @media(max-width:900px) {
-    .settings_sidebar_container {
+  @media(max-width:900px) and (min-width: 601px) {
+    .settings_sidebar_container{
       max-width: 95%;
+      min-width: 95%;
       width: 95%;
       margin: 0 auto;
       flex-grow: 0;
+    }
+  }
+
+  @media(max-width: 600px) {
+    .settings_sidebar_container {
+      box-sizing: border-box;
+      max-width: 100%;
+      min-width: 100%;
+      width:100%;
     }
   }
 </style>

@@ -58,7 +58,7 @@
     height: 15px;
     width: 15px;
     border-radius: 50%;
-    background-color: #656768;
+    background-color: #4c4c4a;
     box-shadow: rgb(0 0 0 / 10%) 0px 20px 25px -5px,
         rgb(0 0 0 / 4%) 0px 10px 10px -5px;
   }
@@ -81,6 +81,6 @@
     background-color: rgb(30, 158, 30);
   }
   .toggle_unblocked {
-    background-color: lighten($error, 4);
+    background-color: #838182
   }
 </style>

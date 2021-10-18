@@ -24,7 +24,9 @@ const cleanUpAndLogout = (store) => {
       store.commit('notifications/RESET_NOTIFICATIONS_MODULE');
       store.commit('user/RESET_USER_MODULE');
       store.commit('user/REMOVE_TOKEN');
-      router.push('/login');
+      if (router.history.current.name !== 'Login') {
+         router.push('/login');
+      }
 }
 
 
@@ -41,13 +43,14 @@ const UNAUTHORIZED_URLS = [
 ];
 
 export default function setup(store) {
-  axios.interceptors.request.use(
+ axios.interceptors.request.use(
     (config) => {
 
       if (!UNAUTHORIZED_URLS.includes(config.url)) {
           const token = store.getters['user/getToken'];
           if(token) {
             config.headers.common['Authorization'] = `Bearer ${token}`;
+
           }
       }
       return config;
@@ -62,15 +65,7 @@ export default function setup(store) {
 
   const originalRequest = error.config;
 
-
-  if (error.response.status === 403 || error.response.status === 429) {
-      cleanUpAndLogout(store);
-      userLoggedOut = true;
-  }
-
-  if (error.response.status === 401 && !originalRequest._retry && !userLoggedOut) {
-
-
+  if (error.response.status === 401 && !originalRequest._retry) {
       if (!originalRequest.url.includes('/api/auth/reset-password')) {
 
         if (isRefreshing) {
@@ -112,9 +107,13 @@ export default function setup(store) {
 
       })
         .catch((err) => {
-
+          if (err.response.status === 403) {
+            cleanUpAndLogout(store);
+            reject(err);
+          } else {
             processQueue(err, null);
             reject(err);
+          }
         })
         .then(() => {
            isRefreshing = false

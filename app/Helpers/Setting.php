@@ -2,12 +2,13 @@
 
 namespace App\Helpers;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Cookie;
 use App\Models\User;
 use App\Models\Privacy;
 use App\Models\Setting as SettingModel;
-use DateTime;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
+use DateTime;
 
 class Setting
 {
@@ -17,14 +18,14 @@ class Setting
   private array $searches = [];
   private array $users = [];
 
-  public function __construct(int $currentUserId)
-  {
-    $this->currentUserId = $currentUserId;
-  }
-
   public function getError()
   {
     return isset($this->error) ? $this->error : NULL;
+  }
+
+  public function setCurrentUserId($currentUserId)
+  {
+    $this->currentUserId = $currentUserId;
   }
 
   public function getException()
@@ -59,17 +60,6 @@ class Setting
       $newUserSettings->block_stories_on = false;
 
       $newUserSettings->save();
-
-      $currentUser->refresh();
-
-      $token = JWTAuth::fromUser($currentUser, $currentUser->getJWTCustomClaims());
-
-      return json_encode([
-        'access_token' => $token,
-        'profile_pic' => $currentUser->profile->profile_picture ?? '',
-        'profile_created' => JWTAuth::user()->profile_created,
-        'status' => 'online',
-      ]);
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }
@@ -405,6 +395,162 @@ class Setting
       } else {
         $this->exception = ['msg' => 'Something went wrong deleting the blocked user', 'code' => 500];
       }
+    }
+  }
+
+  /**
+   * @param Array
+   * @return Array
+   */
+  public function updateRememberMe(array $data): array
+  {
+    try {
+
+      $authUser = JWTAuth::user()->id;
+      $setting = SettingModel::find($data['setting_id']);
+      $cookie = [];
+
+      if ($authUser !== $this->currentUserId || $setting->user_id !== $authUser) {
+        throw new Exception('Unauthorized Action', 403);
+      }
+
+      if ($data['remember_me'] === false) {
+        $setting->lookup = NULL;
+        $setting->remember_me = 0;
+        $setting->validator = NULL;
+        $setting->expire_in = NULL;
+        $setting->ip_address = NULL;
+        $setting->user_agent = NULL;
+
+        $setting->save();
+
+        return [];
+      }
+
+      $lookup = base64_encode(random_bytes(9));
+      $storedNonce = base64_encode(random_bytes(18));
+      $thirtyDays = 86400 * 30;
+
+      $validator = hash_hmac('sha256', $setting->user->full_name, $data['ip_address'], $storedNonce);
+
+      $setting->lookup = $lookup;
+      $setting->remember_me = 1;
+      $setting->validator = $validator;
+      $setting->expire_in = $thirtyDays;
+      $setting->ip_address = $data['ip_address'];
+      $setting->user_agent = $data['user_agent'];
+
+      $setting->save();
+      $setting->refresh();
+
+      $cookie = [
+        'name' => 'remember_me',
+        'value' => $lookup . ' ' . $validator,
+        'exp' => $thirtyDays
+      ];
+
+      return count($cookie) ? $cookie : [];
+    } catch (Exception $e) {
+
+      if ($e->getCode() === 403) {
+        $this->exception = ['msg' => $e->getMessage(), 'code' => $e->getCode()];
+      }
+    }
+  }
+
+  /**
+   * @param String
+   * @return bool
+   */
+  public function retrieveRememberMe(String $settingId): bool
+  {
+    try {
+
+      $setting = SettingModel::where('id', '=', $settingId)
+        ->select('remember_me')
+        ->first();
+
+      if (is_null($setting)) {
+        throw new Exception('Something went wrong loading your settings.');
+      }
+
+      return $setting->remember_me;
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+      return false;
+    }
+  }
+
+  /**
+   *@param String
+   *@return array
+   */
+  public function validateRememberMe(String $userAgent)
+  {
+    try {
+      $clientCookie = Cookie::get('remember_me');
+
+      if (is_null($clientCookie)) {
+        throw new Exception('No cookie on request');
+      }
+
+      [$lookup, $validator] = explode(' ', $clientCookie);
+
+      $match = SettingModel::where('lookup', '=', $lookup)->first();
+
+      if (is_null($match)) {
+        throw new Exception('Cookie does not exist');
+      }
+
+      $validation = [
+        'validator_matched' => hash_equals($match->validator, $validator),
+        'user_agent' => $match->user_agent === $userAgent,
+        'is_not_expired' => now()->timestamp - $match->updated_at->timestamp < $match->expire_in ? true : false,
+      ];
+
+      $requestValidated = true;
+
+      foreach ($validation as $check) {
+        if (!$check) {
+          $requestValidated = false;
+        }
+      }
+
+      if (!$requestValidated) {
+        throw new Exception('Remember me cookie expired');
+      }
+
+      return ['validated' => $requestValidated, 'user_id' => $match->user_id];
+    } catch (Exception $e) {
+
+      $this->error = $e->getMessage();
+      $this->removeCookie($match->user_id);
+
+      return ['validated' => false, 'user_id' => null];
+    }
+  }
+
+  /**
+   * Remove remember_me cookie
+   * @param Int
+   * @return void
+   */
+  private function removeCookie(Int $userId)
+  {
+    try {
+      $userSetting = SettingModel::where('user_id', '=', $userId)
+        ->first();
+
+      $userSetting->remember_me = 0;
+      $userSetting->lookup = NULL;
+      $userSetting->validator = NULL;
+      $userSetting->ip_address = NULL;
+      $userSetting->user_agent = NULL;
+      $userSetting->expire_in = NULL;
+
+      $userSetting->save();
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
     }
   }
 }

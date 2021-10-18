@@ -15,6 +15,9 @@ const initialState = () => {
     blockedUsers: [],
     userToBlock: null,
     blockedUserURL: '',
+    security: {
+      remember_me: false,
+    },
     searchPagination: {
       path: null,
       current_page: null,
@@ -29,6 +32,7 @@ const settings = {
   state: initialState(),
 
   getters: {
+
     getActiveInput(state) {
        return Object.entries(state.inputs).map(input => input[1]).find(input => input.active);
     },
@@ -42,6 +46,17 @@ const settings = {
   },
 
   mutations: {
+    SET_REMEMBER_ME(state, payload) {
+      state.security.remember_me = payload;
+    },
+
+    UPDATE_SECURITY_PROP(state, { prop, value }) {
+      for (let stateProp in state.security) {
+        if (stateProp === prop) {
+            state.security[prop] = value;
+        }
+      }
+    },
 
     SET_BLOCKED_USERS_LOADING(state, isLoading) {
       state.blockedUsersLoading = isLoading;
@@ -146,16 +161,14 @@ const settings = {
   },
 
   actions: {
-    async CREATE_USER_SETTINGS({ state, rootGetters, commit }) {
+    async CREATE_USER_SETTINGS({ state, rootGetters, commit }, userId = null) {
       try {
+          const currentUserId = !rootGetters['user/getUserId'] || rootGetters['user/getUserId'] === null ? userId : rootGetters['user/getUserId'];
           const response = await axios({
             method: 'POST',
             url: '/api/auth/settings/create',
-            data: { current_user_id: rootGetters['user/getUserId'] },
+            data: { current_user_id: currentUserId },
           });
-        if (response.status === 201) {
-           commit('user/SET_TOKEN', response.data.updated_token, { root: true });
-        }
       } catch(e) {
         commit('SET_SERVER_ERROR', e.response.data.error);
       }
@@ -281,6 +294,50 @@ const settings = {
         commit('SET_SERVER_ERROR', e.response.data.error);
       }
     },
+    async UPDATE_REMEMBER_ME({ state, rootGetters, commit }, data) {
+      try {
+
+       const response = await axios({
+         method: 'PATCH',
+         url: `/api/auth/settings/remember-me/${rootGetters['user/getSettingsId']}/update`,
+         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+         data: { current_user_id: rootGetters['user/getUserId'], 'remember_me': state.security.remember_me },
+       });
+        if (response.status === 200) {
+          commit('UPDATE_SECURITY_PROP', { prop: data.prop, value:  response.data.remember_me });
+        }
+      } catch(e) {
+        console.log('UPDATE_REMEMBER_ME, ', e);
+        commit('SET_SERVER_ERROR', e.response.data.error);
+      }
+    },
+    async RETRIEVE_SECURITY_SETTINGS({ state,rootGetters, commit }) {
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: `/api/auth/settings/remember-me/${rootGetters['user/getSettingsId']}/show`,
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        });
+        if (response.status === 200) {
+          commit('SET_REMEMBER_ME',  response.data.remember_me);
+        }
+      } catch(e) {
+        if (e.response.status === 400) {
+          commit('SET_SERVER_ERROR', e.response.data.msg);
+        }
+      }
+    },
+    async VALIDATE_REMEMBER_ME({ state, commit }) {
+      try {
+        await axios({
+          method: 'POST',
+          url: `/api/auth/settings/remember-me/`,
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        });
+      } catch(e) {
+          commit('SET_SERVER_ERROR', e.response.data.msg);
+      }
+    }
   }
 }
 export default settings;

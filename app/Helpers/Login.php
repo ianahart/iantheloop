@@ -35,7 +35,7 @@ class Login
   /**
    * Login user if they are authenticated with valid credentials
    * @param void
-   * @return void
+   * @return Int
    */
   public function loginUser()
   {
@@ -47,17 +47,19 @@ class Login
         throw new Exception('Sorry, we couldn\'t find an account with that email.');
       }
 
-      if (Hash::check($this->credentials['password'], $user->password)) {
+      if (Hash::check($this->credentials['password'], $user->password) && JWTAuth::attempt($this->credentials)) {
 
         $TLL = 60;
 
-        $payload = JWTAuth::attempt($this->credentials);
+        $payload = JWTAuth::fromUser($user, $user->getJWTCustomClaims());
 
         $this->updateStatus();
 
         $this->token = $this->createNewToken($payload, $TLL, $user);
 
         broadcast(new UserStatusChanged($user));
+
+        return $user->setting->id;
       } else {
         throw new Exception('The provided credentials are invalid.');
       }

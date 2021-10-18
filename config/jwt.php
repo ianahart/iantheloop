@@ -100,13 +100,11 @@ return [
     | Notice: If you set this to null you should remove 'exp' element from 'required_claims' list.
     |
     */
-    /**USE 1 FOR TESTING*/
-    //'ttl' => env('JWT_TTL', 1),
-    // 1 hour
-    // 'ttl' => env('JWT_TTL', 60),
-    // 2 days
+    /**USE 1 FOR TESTING */
+    // 'ttl' => env('JWT_TLL', 1),
     'ttl' => env('JWT_TTL', 2880),
     /*
+
     |--------------------------------------------------------------------------
     | Refresh time to live
     |--------------------------------------------------------------------------
@@ -123,7 +121,7 @@ return [
     |
     */
     /** USE 2 FOR TESTING */
-    // 'refresh_ttl' => env('JWT_REFRESH_TTL', 2),
+    //  'refresh_ttl' => env('JWT_REFRESH_TTL', 2),
     'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
 
 

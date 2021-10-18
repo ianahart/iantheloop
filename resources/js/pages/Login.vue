@@ -15,6 +15,11 @@
             :nameAttr="inputField.namaeAttr"
             :commitPath="'login/UPDATE_FIELD'"
           />
+          <CheckBox
+           text="Remember Me"
+           :checked="rememberMeChecked"
+           @checkbox="handleRememberMe"
+          />
           <div class="login__button__container">
             <button class="button__md">Login Now</button>
             <router-link class="forgot__password__link" :to="{name: 'ForgotPassword'}">Forgot password?</router-link>
@@ -31,6 +36,7 @@
   import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 
   import Header from '../components/Login/Header.vue';
+  import CheckBox from '../components/forms/checkboxes/CheckBox.vue';
   import InputFieldLg from '../components/forms/inputs/InputFieldLg.vue';
   import Loader from '../components/Misc/Loader.vue';
 
@@ -40,8 +46,15 @@
 
     components: {
       Header,
+      CheckBox,
       InputFieldLg,
       Loader,
+    },
+
+    data () {
+      return {
+        rememberMeChecked: false,
+      }
     },
 
 
@@ -78,24 +91,17 @@
 
     methods: {
 
-      ...mapMutations('createAccount',
-        [
-          'RESET_MODULE',
-        ]
-      ),
+      ...mapMutations('createAccount',['RESET_MODULE']),
+      ...mapMutations('settings',['SET_REMEMBER_ME']),
       ...mapMutations('login',
         [
           'UPDATE_FIELD',
           'CLEAR_ERROR_MSGS',
           'RESET_LOGIN_MODULE',
-          'SET_IS_LOGIN_LOADER_SHOWING'
+          'SET_IS_LOGIN_LOADER_SHOWING',
         ],
       ),
-      ...mapMutations('user',
-          [
-            'SET_AUTH_STATUS',
-          ]
-        ),
+      ...mapMutations('user',['SET_AUTH_STATUS']),
       ...mapMutations('conversator',
         [
           'UPDATE_CONTACT_STATUS',
@@ -109,21 +115,13 @@
           'PROCESS_ENQUEUE',
         ]
       ),
-      ...mapActions('login',
-        [
-          'SUBMIT_FORM',
-        ]
-      ),
-      ...mapActions('notifications',
-        [
-          'FETCH_NAV_NOTIFICATION_ALERTS'
-        ]
-      ),
+
+      ...mapActions('login',['SUBMIT_FORM']),
+      ...mapActions('notifications',['FETCH_NAV_NOTIFICATION_ALERTS']),
+      ...mapActions('settings', ['UPDATE_REMEMBER_ME']),
 
       clearRegistration() {
-
         if (this.$route.query.signup) {
-
             this.RESET_MODULE();
         }
       },
@@ -159,6 +157,11 @@
               this.$router.push({ name: 'Home' });
           }
           await this.FETCH_NAV_NOTIFICATION_ALERTS({ userId: this.getUserId, type: ['App/Notifications/UnreadMessage', 'App/Notifications/Interaction'] });
+          if (this.rememberMeChecked) {
+            this.SET_REMEMBER_ME(this.rememberMeChecked);
+            await this.UPDATE_REMEMBER_ME({ prop: 'remember_me' });
+          }
+          this.SET_IS_LOGIN_LOADER_SHOWING(false);
         }
       },
 
@@ -193,6 +196,9 @@
         });
       },
 
+      handleRememberMe() {
+        this.rememberMeChecked = !this.rememberMeChecked;
+      }
     },
   }
 

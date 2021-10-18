@@ -20,11 +20,6 @@
      Sidebar,
      Showcase,
    },
-    async created() {
-     if (this.getUserSettingsId === undefined || this.getUserSettingsId === null) {
-        await this.CREATE_USER_SETTINGS();
-     }
-   },
 
    beforeDestroy() {
       this.RESET_SETTINGS_MODULE();
@@ -32,7 +27,6 @@
 
    methods: {
      ...mapMutations('settings',['RESET_SETTINGS_MODULE']),
-     ...mapActions('settings', ['CREATE_USER_SETTINGS']),
    },
    computed: {
      ...mapGetters('user', ['getUserSettingsId']),

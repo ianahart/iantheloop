@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -75,6 +74,7 @@ class RegisterController extends Controller
                     'message' => 'success',
                     'status', 201,
                     'isSubmitted' => true,
+                    'user_id' => $user->id,
                 ],
                 201
             );

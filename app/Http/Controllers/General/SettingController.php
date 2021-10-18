@@ -4,8 +4,9 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlockSearchRequest;
-use App\Helpers\Setting;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Helpers\Setting;
 use Exception;
 
 class SettingController extends Controller
@@ -18,9 +19,10 @@ class SettingController extends Controller
     {
         try {
 
-            $setting = new Setting(intval($request->all()['current_user_id']));
+            $setting = new Setting;
+            $setting->setCurrentUserId(intval($request->all()['current_user_id']));
 
-            $updatedToken = $setting->makeUserSettings();
+            $setting->makeUserSettings();
 
             $error = $setting->getError();
 
@@ -32,7 +34,6 @@ class SettingController extends Controller
                 ->json(
                     [
                         'msg' => 'Success',
-                        'updated_token' => $updatedToken,
                     ],
                     201
                 );
@@ -61,7 +62,8 @@ class SettingController extends Controller
 
             [$currentUserId, $type, $value] = array_values($request->all());
 
-            $setting = new Setting(intval($currentUserId));
+            $setting = new Setting;
+            $setting->setCurrentUserId(intval($currentUserId));
 
             $setting->incrementalSearch($type, $value);
 
@@ -101,7 +103,8 @@ class SettingController extends Controller
     {
         try {
 
-            $setting = new Setting(intval($request->all()['current_user_id']));
+            $setting = new Setting;
+            $setting->setCurrentUserId(intval($request->all()['current_user_id']));
 
             $setting->blockUser($request->all());
 
@@ -138,7 +141,8 @@ class SettingController extends Controller
     public function show(Request $request, String $userId)
     {
         try {
-            $setting = new Setting(intval($userId));
+            $setting = new Setting;
+            $setting->setCurrentUserId(intval($userId));
 
             $setting->retrieveBlockedUsers();
 
@@ -180,7 +184,8 @@ class SettingController extends Controller
 
         try {
 
-            $setting = new Setting(intval($request->all()['current_user_id']));
+            $setting = new Setting;
+            $setting->setCurrentUserId(intval($request->all()['current_user_id']));
 
             $typesBlocked = $setting->updateBlockedUser($request->all());
 
@@ -220,7 +225,8 @@ class SettingController extends Controller
     {
         try {
 
-            $setting = new Setting(intval($request->query('userId')));
+            $setting = new Setting;
+            $setting->setCurrentUserId(intval($request->query('userId')));
 
             $setting->deleteBlockedUser($privacyId);
 
@@ -246,6 +252,136 @@ class SettingController extends Controller
                         'error' => $e->getMessage()
                     ],
                     $exception['code'] ?? 500
+                );
+        }
+    }
+
+    /**
+     * Turn on/off the remember me feature
+     * @param Request
+     * @param String
+     * @return JsonResponse
+     */
+    public function updateRememberMe(Request $request, String $settingId)
+    {
+
+        try {
+
+            $data = array_merge(
+                $request->all(),
+                [
+                    'setting_id' => $settingId,
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ]
+            );
+
+            $setting = new Setting;
+            $setting->setCurrentUserId(intval($data['current_user_id']));
+
+            $cookie = $setting->updateRememberMe($data);
+
+            $hasCookie = count($cookie) > 0 ? true : false;
+
+            $exception = $setting->getException();
+
+            if (count(array_values($exception)) > 0) {
+                throw new Exception($exception['msg'], $exception['code']);
+            }
+
+            $response = response()
+                ->json(
+                    [
+                        'msg' => 'Success',
+                        'remember_me' => $hasCookie ? true : false,
+                    ],
+                    200
+                );
+
+            return $hasCookie ? $response
+                ->withCookie($cookie['name'], $cookie['value'], $cookie['exp']) :
+                $response->withCookie('remember_me');
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to turn on/off remember me feature. Please try again soon.',
+                        'error' => $e->getMessage()
+                    ],
+                    $exception['code'] ?? 500
+                );
+        }
+    }
+
+    /**
+     * return the current state (on/off) of the remember me feature
+     * @param Request
+     * @param String
+     * @return JsonResponse
+     */
+    public function retrieveRememberMe(Request $request, String $settingId)
+    {
+        try {
+
+            $setting = new Setting;
+            $setting->setCurrentUserId(JWTAuth::user()->id);
+
+            $rememberMe = $setting->retrieveRememberMe($settingId);
+
+            $error = $setting->getError();
+            if (!is_null($error)) {
+                throw new Exception($error);
+            }
+
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Success',
+                        'remember_me' => $rememberMe,
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to load the state of your remember me status.',
+                        'error' => $e->getMessage()
+                    ],
+                    400
+                );
+        }
+    }
+
+    /**
+     * Check to see if the remember me cookie is still valid
+     * @param Request
+     * @return JsonResponse
+     */
+    public function validateRememberMe(Request $request)
+    {
+        try {
+
+            $setting = new Setting;
+
+            $isUserValidated = $setting->validateRememberMe($request->userAgent());
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Success', 'user_validated' => $isUserValidated,
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Your session has ended. Please login again...',
+                        'error' => $e->getMessage()
+                    ],
+                    400
                 );
         }
     }
