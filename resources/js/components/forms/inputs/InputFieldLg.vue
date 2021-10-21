@@ -101,6 +101,10 @@
     methods: {
 
       updateFieldValue(e) {
+        if (this.form === 'security') {
+          this.$emit('inputchange', { prop: this.field, field: this.field, value: e.target.value, error: null, });
+          return;
+        }
 
         this
         .$store

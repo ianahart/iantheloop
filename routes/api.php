@@ -113,5 +113,6 @@ Route::get('/auth/settings/block/{userId}/show', [SettingController::class, 'sho
 Route::patch('/auth/settings/block/{privacyId}/update', [SettingController::class, 'updateBlockedUser'])->middleware('auth:api');
 Route::delete('/auth/settings/block/{privacyId}/delete', [SettingController::class, 'deleteBlockedUser'])->middleware('auth:api');
 Route::patch('/auth/settings/remember-me/{settingId}/update', [SettingController::class, 'updateRememberMe'])->middleware('auth:api');
-Route::get('/auth/settings/remember-me/{settingId}/show', [SettingController::class, 'retrieveRememberMe'])->middleware('auth:api');
+Route::get('/auth/settings/security/{settingId}/show', [SettingController::class, 'retrieveSecuritySettings'])->middleware('auth:api');
 Route::post('/auth/settings/remember-me', [SettingController::class, 'validateRememberMe'])->middleware('auth:api');
+Route::patch('/auth/settings/password/{settingId}/update', [SettingController::class, 'updatePassword'])->middleware('auth:api');

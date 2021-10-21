@@ -4,11 +4,13 @@ namespace App\Helpers;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Privacy;
 use App\Models\Setting as SettingModel;
 use Exception;
 use DateTime;
+use DateTimeZone;
 
 class Setting
 {
@@ -47,8 +49,6 @@ class Setting
   {
     try {
 
-      $currentUser = User::find($this->currentUserId);
-
       $newUserSettings = new SettingModel();
 
       $newUserSettings->user_id = $this->currentUserId;
@@ -58,6 +58,9 @@ class Setting
       $newUserSettings->block_profile_on = false;
       $newUserSettings->block_messages_on = false;
       $newUserSettings->block_stories_on = false;
+
+      $newUserSettings->password_updated = false;
+      $newUserSettings->password_updated_on = NULL;
 
       $newUserSettings->save();
     } catch (Exception $e) {
@@ -460,21 +463,35 @@ class Setting
 
   /**
    * @param String
-   * @return bool
+   * @return array
    */
-  public function retrieveRememberMe(String $settingId): bool
+  public function retrieveSecuritySettings(String $settingId): array
   {
     try {
 
       $setting = SettingModel::where('id', '=', $settingId)
-        ->select('remember_me')
+        ->select('remember_me', 'password_updated', 'password_updated_on')
         ->first();
 
       if (is_null($setting)) {
         throw new Exception('Something went wrong loading your settings.');
       }
+      $data = $setting->ToArray();
 
-      return $setting->remember_me;
+      if (!is_null($data['password_updated_on'])) {
+        $time = new DateTime;
+        $timezone = new DateTimeZone('America/New_York');
+
+        $time->setTimestamp($data['password_updated_on']);
+        $time->setTimezone($timezone);
+
+        $passwordUpdatedOn = $time->format('h:ia, M d Y');
+
+        unset($data['password_updated_on']);
+        $data['password_updated_on'] = $passwordUpdatedOn;
+      }
+
+      return $data;
     } catch (Exception $e) {
       $this->error = $e->getMessage();
       return false;
@@ -551,6 +568,41 @@ class Setting
       $userSetting->save();
     } catch (Exception $e) {
       $this->error = $e->getMessage();
+    }
+  }
+
+  /**
+   * @param array
+   * @param string
+   */
+  public function updatePassword(array $data, String $settingId)
+  {
+    try {
+
+      $setting = SettingModel::find($settingId);
+
+
+      if (!Hash::check($data['form']['old_password'], $setting->user->password)) {
+        throw new Exception('Forbidden action, cannot change settings', 403);
+      }
+
+      $setting->user->password = Hash::make($data['form']['password']);
+      $setting->user->save();
+
+      $setting->password_updated = true;
+      $setting->password_updated_on = now()->timestamp;
+
+      $setting->save();
+      $setting->refresh();
+    } catch (Exception $e) {
+
+      if ($e->getCode() === 403) {
+        $this->exception = ['msg' => $e->getMessage(), 'code' => $e->getCode()];
+      } else if ($e->getCode() === 404) {
+        $this->exception = ['msg' => $e->getMessage(), 'code' => $e->getCode()];
+      } else {
+        $this->exception = ['msg' => 'Something went wrong updating your password, please try again soon.', 'code' => 500];
+      }
     }
   }
 }

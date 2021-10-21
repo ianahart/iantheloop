@@ -1,14 +1,14 @@
 <template>
   <div ref="settings" class="settings_page_container">
     <Sidebar />
-    <div class="settings_showcase_container">
+    <div :class="`settings_showcase_container ${this.showcaseBGColor}`">
       <Showcase />
     </div>
   </div>
 </template>
 
 <script>
-  import { mapMutations, mapActions, mapGetters } from 'vuex';
+  import { mapState, mapMutations } from 'vuex';
 
   import Sidebar from '../components/Settings/Sidebar.vue';
   import Showcase from '../components/Settings/Showcase.vue';
@@ -29,7 +29,10 @@
      ...mapMutations('settings',['RESET_SETTINGS_MODULE']),
    },
    computed: {
-     ...mapGetters('user', ['getUserSettingsId']),
+     ...mapState('settings', ['isBlockListOpen', 'security']),
+     showcaseBGColor() {
+       return this.isBlockListOpen || this.security.is_proceed_modal_open ? 'settings_showcase_modal_color' : 'settings_showcase_default_color';
+     }
    },
 
 }
@@ -45,9 +48,15 @@
   }
   .settings_showcase_container {
     box-sizing: border-box;
-    background-color: #000;
     flex-grow: 2;
     height: 100%;
+  }
+
+  .settings_showcase_default_color {
+    background-color: #000;
+  }
+  .settings_showcase_modal_color {
+    background-color: rgba(225, 225, 225, 0.6);
   }
 
   @media(max-width:900px) {

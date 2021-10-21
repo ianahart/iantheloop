@@ -4,6 +4,7 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlockSearchRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Helpers\Setting;
@@ -319,14 +320,14 @@ class SettingController extends Controller
      * @param String
      * @return JsonResponse
      */
-    public function retrieveRememberMe(Request $request, String $settingId)
+    public function retrieveSecuritySettings(Request $request, String $settingId)
     {
         try {
 
             $setting = new Setting;
             $setting->setCurrentUserId(JWTAuth::user()->id);
 
-            $rememberMe = $setting->retrieveRememberMe($settingId);
+            $securitySettings = $setting->retrieveSecuritySettings($settingId);
 
             $error = $setting->getError();
             if (!is_null($error)) {
@@ -338,7 +339,7 @@ class SettingController extends Controller
                 ->json(
                     [
                         'msg' => 'Success',
-                        'remember_me' => $rememberMe,
+                        'security_settings' => $securitySettings,
                     ],
                     200
                 );
@@ -379,6 +380,53 @@ class SettingController extends Controller
                 ->json(
                     [
                         'msg' => 'Your session has ended. Please login again...',
+                        'error' => $e->getMessage()
+                    ],
+                    400
+                );
+        }
+    }
+
+    /**
+     * @param Request
+     * @param String
+     */
+    public function updatePassword(UpdatePasswordRequest $request, String $settingId)
+    {
+
+        try {
+
+            $request->validated();
+
+            $setting = new Setting;
+
+            $header = $request->header('Authorization');
+
+            $token = str_replace('Bearer ', '', $header);
+
+            $setting->updatePassword($request->all(), $settingId);
+
+            $exception = $setting->getException();
+
+            if (count(array_values($exception)) > 0) {
+                throw new Exception($exception['msg'], $exception['code']);
+            }
+
+            JWTAuth::setToken($token)->invalidate();
+
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Success',
+                        'data' => 'password updated'
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to update password.',
                         'error' => $e->getMessage()
                     ],
                     400

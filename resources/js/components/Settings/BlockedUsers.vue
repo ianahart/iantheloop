@@ -90,11 +90,15 @@
    created () {
      this.handleToggle = debounce(this.handleToggle, 300);
    },
+
+   beforeDestroy() {
+     this.SET_BLOCKED_USERS({ blocked_users: [], action: 'clear' });
+   },
    computed: {
      ...mapState('settings', [ 'blockedUsers', 'blockedUserURL' ]),
    },
    methods: {
-     ...mapMutations('settings',['UPDATE_BLOCKED_TYPE',]),
+     ...mapMutations('settings',['UPDATE_BLOCKED_TYPE', 'SET_BLOCKED_USERS']),
      ...mapActions('settings',['UPDATE_BLOCKED_USER', 'UNBLOCK_USER']),
 
      emitLoad() {

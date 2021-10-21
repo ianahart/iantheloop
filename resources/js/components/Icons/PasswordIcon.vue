@@ -43,6 +43,9 @@
 
         switch(this.$route.name) {
 
+          case 'Settings':
+            this.$store.commit('settings/TOGGLE_PASSWORD_VISIBILITY', this.isPasswordShowing);
+
           case 'ResetPassword':
             this.$store.dispatch('passwordRecovery/TOGGLE_PASSWORD_VISIBILITY');
             break;
