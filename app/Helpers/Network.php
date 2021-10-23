@@ -3,92 +3,43 @@
 
 namespace App\Helpers;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\User;
 use DateTime;
 use Exception;
-use Illuminate\Support\Facades\Date;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Network
 {
-  public object $stat;
-  public object $profile;
-  public object $user;
-  public array $userProfiles;
-  public array $followingMetaData;
-  public int $page;
-  public int $curIndex;
-  public mixed $exception;
-  private string $userId;
-  public int $lastCollectionItem;
-  public string $ownerProfilePic;
-  private array $queryFields;
 
-  public function __construct(object $stat, object $profile, object $user)
-  {
-    $this->stat = $stat;
-    $this->profile = $profile;
-    $this->user = $user;
-  }
+  private ?string $error;
+  private int $currentUserId;
+  private int $ownerUserId;
+  private LengthAwarePaginator $network;
+  private array $owner;
 
-  public function setUserId(string $userId)
+
+  public function __construct(int $currentUserId, $ownerUserId)
   {
-    $this->userId = $userId;
+    $this->currentUserId = $currentUserId;
+    $this->ownerUserId = $ownerUserId;
   }
 
 
-  public function getProfiles()
+  public function getError()
   {
 
-    return $this->userProfiles;
+    return isset($this->error) ? $this->error : NULL;
   }
 
-  public function getListCount()
+  public function getNetwork()
   {
-    return $this->listCount;
+    return $this->network;
   }
 
-  public function setUserProfiles($userProfiles)
+  public function getOwner()
   {
-
-    $this->userProfiles = $userProfiles;
+    return $this->owner;
   }
-
-  public function getException()
-  {
-
-    return isset($this->exception) ? $this->exception : NULL;
-  }
-
-  public function setPage($page)
-  {
-
-    $this->page = $page;
-  }
-
-  public function setCurIndex($curIndex)
-  {
-
-    $this->curIndex = $curIndex;
-  }
-
-  public function getLastCollectionItem()
-  {
-
-    return $this->lastCollectionItem;
-  }
-
-  public function getOwnerProfilePic()
-  {
-
-    return $this->ownerProfilePic;
-  }
-
-  public function  setQueryFields($fields)
-  {
-
-    $this->queryFields = $fields;
-  }
-
 
   /*
   * Check if the supplied userId belongs to a user
@@ -109,165 +60,148 @@ class Network
     }
   }
 
-  /*
-  * Get the profile picture of the user for the current page
-  * @param void
-  * @return void
-  */
-  public function queryOwnerProfilePic()
-  {
-    try {
-
-      $this->ownerProfilePic = $this->profile::where('user_id', '=', intval($this->userId))
-        ->select(
-          [
-            'profile_picture'
-          ]
-        )->first();
 
 
-      $this->ownerProfilePic = json_decode(
-        $this->ownerProfilePic,
-        true
-      )['profile_picture'];
-    } catch (Exception $e) {
-
-      $this->exception = $e->getMessage();
-    }
-  }
-
-  /*
-  * Get the id's of users in the current user's following list
-  * @param void
-  * @return void
-  */
-  public function pluckFollowingMetaData()
+  /**
+   * Get the id's of users in the current user's following list
+   * @param String
+   * @return void
+   */
+  public function aggregateUserList(String $type)
   {
 
     try {
 
+      $currentUser = User::find($this->currentUserId);
+      $ownerUser = User::find($this->ownerUserId);
 
-      $perPage = 3;
+      $this->owner = [
+        'id' => $ownerUser->id,
+        'owner_full_name' => $ownerUser->full_name,
+        'profile_id' => $ownerUser->profile->id,
+        'owner_profile_picture' => $ownerUser->profile->profile_picture,
+      ];
 
-      $followingIDs = NULL;
+      $list = $type === 'following' ? $ownerUser->stat->following : $ownerUser->stat->followers;
 
-      $currentUserId = JWTAuth::user()->id;
-
-      $stats = $this->stat::where('user_id', '=', $this->userId)
-        ->select($this->queryFields[0], $this->queryFields[1])
-        ->first();
-
-      $this->listCount = $stats->{$this->queryFields[1]};
-
-      if ($this->listCount <= 0) {
-        $msg = $this->queryFields[0] === 'following' ? 'This user does not have anyone following them yet' : 'This user does not have any followers yet';
-        throw new Exception($msg);
+      if (is_null($list)) {
+        throw new Exception('This user appears not to be following anyone yet.');
       }
-
-      $networkList = $stats->{$this->queryFields[0]};
-
-      $this->lastCollectionItem = array_key_last($networkList);
-
-      if ($currentUserId !== $this->userId) {
-
-        $currentUserFollowList = $this->stat::where('user_id', '=', JWTAuth::user()->id)
-          ->select('following')
-          ->first();
-      }
-
-      $followingIDs = array_keys($networkList);
-
-      if (intval($this->curIndex) === 0) {
-        $followingIDs = array_slice($followingIDs, $this->curIndex, $perPage);
-      } else {
-
-        $index = array_search(strval($this->curIndex), $followingIDs);
-
-        $followingIDs = array_slice($followingIDs, $index + 1, $perPage);
-      }
+      $actualUserList = array_keys($list);
 
 
-      foreach ($followingIDs as $key => $value) {
 
+      $users = User::whereIn(
+        'id',
+        $actualUserList
+      )
+        ->select(['id', 'full_name'])
+        ->with(
+          ['profile' => function ($query) {
+            $query->select(
+              [
+                'company',
+                'position',
+                'user_id',
+                'profile_picture',
+                'display_name'
+              ]
+            );
+          }]
+        )->paginate(3);
 
-        $this->followingMetaData[] = $networkList[$value];
+      $this->cleanUpStats($actualUserList, $type, $ownerUser);
+
+      if ($this->currentUserId !== $this->ownerUserId) {
+        $currentUserFollowList = $currentUser->stat->following;
       }
 
       if (isset($currentUserFollowList)) {
 
-        $this->showCurrentUserIsFollowing($currentUserFollowList, $currentUserId);
+        $this->makeUserList($users, $currentUserFollowList);
+      } else {
+        $this->network = $users;
       }
     } catch (Exception $e) {
+
 
       $this->exception = $e->getMessage();
     }
   }
 
-  /*
-  * Get the profiles associated with the users in the following list and construct array of data
-  * @param void
-  * @return void
-  */
-  public function makeUserList()
+  /**
+   * Get the profiles associated with the users in the following list and construct array of data
+   * @param Illuminate\Pagination\LengthAwarePaginator
+   * @param Array
+   * @param Int
+   *
+   */
+  public function makeUserList(LengthAwarePaginator $users, array $currentUserFollowList)
   {
+    foreach ($users as $user) {
 
-    for ($i = 0; $i < count($this->followingMetaData); $i++) {
-      $data = $this->user::find(intval($this->followingMetaData[$i]['id']))
-        ->profile;
+      $currentUserFollowIDs = array_keys($currentUserFollowList);
+      if (is_null($currentUserFollowIDs)) {
+        $user->curUserFollowing = false;
+        return;
+      }
 
-      $this->userProfiles[] = $this->selectedColumns($data->toArray());
-    }
+      if (in_array($user->id, $currentUserFollowIDs)) {
+        $user->curUserFollowing = true;
 
-    for ($i = 0; $i < count($this->followingMetaData); $i++) {
-
-      if ($this->userProfiles[$i]['user_id'] === intval($this->followingMetaData[$i]['id'])) {
-
-        $this->userProfiles[$i]['name'] = $this->followingMetaData[$i]['name'];
-
-        $followTime = $this->followingMetaData[$i]['timestamp'];
-
-        $this->userProfiles[$i]['follow_time'] = $this->formatFollowTime($followTime);
-
-        $this->userProfiles[$i]['curUserFollowing'] = isset($this->followingMetaData[$i]['curUserFollowing']) ? true : false;
+        $user->follow_time = $this->formatFollowTime($currentUserFollowList[$user->id]['timestamp']);
+      } else {
+        $user->curUserFollowing = false;
       }
     }
+
+    $this->network = $users;
   }
 
-  /*
-  * Only include specified columns of the profile
-  * @param array $profile
-  * @return array;
-  */
-  private function selectedColumns(array $profile)
+  /**
+   * Remove old follow/followers left behind from a deactivated/removed account
+   * @param Array
+   * @param String
+   * @param User
+   * @return void
+   */
+
+  private function cleanUpStats(array $actualUserList, String $type, User $ownerUser): void
   {
+    try {
 
-    $selectedColumns = [
-      'profile_picture',
-      'display_name',
-      'company',
-      'position',
-      'user_id'
-    ];
+      $expectedUserList = User::whereIn('id', $actualUserList)->pluck('id')
+        ->toArray();
 
-    return array_filter(
-      $profile,
-      function ($val, $key) use ($selectedColumns) {
+      $toCleanUp = array_values(array_diff($actualUserList, $expectedUserList));
 
-        if (in_array($key, $selectedColumns)) {
-
-          return $val;
+      $cleanedList = collect($ownerUser->stat->{$type})->filter(function ($item, $key) use ($toCleanUp) {
+        if (!in_array($key, $toCleanUp)) {
+          return $item;
         }
-      },
-      ARRAY_FILTER_USE_BOTH
-    );
+      });
+
+      $count = $type === 'following' ? 'following_count' : 'followers_count';
+
+      $subtractCount = count($actualUserList) - count($expectedUserList);
+
+      $ownerUser->stat->update(
+        [
+          $type => $cleanedList,
+          $count => count($actualUserList) - $subtractCount,
+        ]
+      );
+    } catch (Exception $e) {
+      $this->error = $e->getMessage();
+    }
   }
 
-  /*
-  * Format the follow time into a readable date;
-  * @param int $timestamp;
-  * @return string;
-  */
-  private function formatFollowTime(int $timestamp)
+  /**
+   * Format the follow time into a readable date;
+   * @param int $timestamp;
+   * @return string;
+   */
+  private function formatFollowTime(int $timestamp): string
   {
     $followTime = new DateTime();
 
@@ -276,48 +210,5 @@ class Network
     $followTimeDate = $followTime->format('F jS Y');
 
     return $followTimeDate;
-  }
-
-  /*
-  * On the users follow list add a following field to the listed following if the current user is following
-  * @param object $list
-  * @return int $currentUserId
-  */
-
-  private function showCurrentUserIsFollowing(object $list, int $currentUserId)
-  {
-
-    for ($i = 0; $i < count($this->followingMetaData); $i++) {
-
-      $userOnPageKey = $this->followingMetaData[$i]['id'];
-
-      $match = array_key_exists(
-        $userOnPageKey,
-        !is_null($list->following) ? $list->following : []
-      );
-
-      if ($match && $list->following[$userOnPageKey]['id']) {
-
-        if ($this->followingMetaData[$i]['id'] === $list->following[$userOnPageKey]['id']) {
-
-
-          if (intval($currentUserId) !== intval($this->userId)) {
-
-            $this->followingMetaData[$i]['curUserFollowing'] = 'following';
-          }
-        }
-      }
-    }
-
-    for ($i = 0; $i < count($this->followingMetaData); $i++) {
-
-      $found = array_search(strval($currentUserId), $this->followingMetaData[$i]);
-
-      if ($found) {
-
-        $this->followingMetaData[$i]['curUserFollowing'] = 'following';
-        break;
-      }
-    }
   }
 }

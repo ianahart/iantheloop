@@ -1,12 +1,12 @@
 <template>
   <transition name="network-item-fade" appear>
-  <div @click="goToUserProfile(networkListItem.user_id)" class="network_list_item__container">
+  <div @click="goToUserProfile(networkListItem.id)" class="network_list_item__container">
     <div class="network_list_item__image">
       <img
         class="profile_image_rel_md"
-        v-if="networkListItem.profile_picture"
-        :src="networkListItem.profile_picture"
-        :alt="networkListItem.name"
+        v-if="networkListItem.profile.profile_picture"
+        :src="networkListItem.profile.profile_picture"
+        :alt="networkListItem.full_name"
       />
       <DefaultProfileIcon
         v-else
@@ -15,25 +15,25 @@
     </div>
     <div class="network_list_item__main_info">
       <div class="network_list_item__main_info_names">
-        <p>{{ networkListItem.name }}</p>
-        <p>{{ networkListItem.display_name }}</p>
+        <p>{{ networkListItem.full_name }}</p>
+        <p>{{ networkListItem.profile_display_name }}</p>
       </div>
-      <div class="network_list_item__time">
+      <div v-if="networkListItem.follow_time && networkListItem.curUserFollowing" class="network_list_item__time">
         <p>{{ network }} since: <span>{{ networkListItem.follow_time }}</span></p>
       </div>
       <div class="network_list_item__work_info">
-        <div v-if="networkListItem.company" class="network_list_item__work">
+        <div v-if="networkListItem.profile.company" class="network_list_item__work">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
           </svg>
-          <p>{{ networkListItem.company }}</p>
+          <p>{{ networkListItem.profile.company }}</p>
         </div>
-        <div  v-if="networkListItem.position" class="network_list_item__work">
+        <div  v-if="networkListItem.profile.position" class="network_list_item__work">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
             <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
           </svg>
-         <p>{{ networkListItem.position }}</p>
+         <p>{{ networkListItem.profile.position }}</p>
         </div>
       </div>
     </div>

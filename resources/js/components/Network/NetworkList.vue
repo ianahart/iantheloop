@@ -2,7 +2,7 @@
   <div class="network_list__container">
       <NetworkListItem
         v-for="networkListItem in networkList"
-        :key="networkListItem.user_id"
+        :key="networkListItem.id"
         :networkListItem="networkListItem"
         :userId="userId"
         :network="network"
@@ -28,10 +28,6 @@
     components: {
 
       NetworkListItem,
-    },
-
-    methods: {
-
     },
   }
 

@@ -1,9 +1,9 @@
 <template>
   <div v-if="isDataLoaded" class="followers_page__container">
     <Header
-      :src="ownerProfilePic"
+      :src="ownerUser.owner_profile_picture"
       :count="listCount"
-      :ownerFullName="ownerFullName"
+      :ownerFullName="ownerUser.owner_full_name"
       network="Followers"
     />
     <p v-if="userError.length" class="no_followers_msg">{{ userError }}</p>
@@ -15,7 +15,7 @@
         network="Following"
       />
       <div class="followers_main_content_load_more">
-        <button v-if="!endOfList" @click="loadMore">Load more</button>
+        <button v-if="pagination.next_page_url !== null" @click="loadMore">Load more</button>
       </div>
     </section>
   </div>
@@ -65,17 +65,14 @@ export default {
 
   computed: {
     ...mapState("network", [
-      "isDataLoaded",
-      "ownerProfilePic",
-      "error",
-      "listCount",
-      "ownerFullName",
+       "isDataLoaded",
       "networkList",
+      'listCount',
       "userId",
+      'pagination',
+      'ownerUser',
       "userError",
     ]),
-
-    ...mapGetters("network", ["endOfList"]),
   },
 
   methods: {

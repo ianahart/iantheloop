@@ -7,14 +7,10 @@ const initialState = () => {
 
     userId: null,
     isDataLoaded: false,
-    page: 1,
-    lastIndex: 0,
-    listCount: 0,
-    lastPageItem: null,
     networkList: [],
-    lastCollectionItem: null,
-    ownerProfilePic: '',
-    ownerFullName: '',
+    listCount: 0,
+    pagination: null,
+    ownerUser: null,
     userError: '',
     error: false,
   }
@@ -25,13 +21,6 @@ const network = {
   namespaced: true,
 
   state: initialState(),
-
-  getters: {
-
-    endOfList(state) {
-      return state.lastCollectionItem === state.lastPageItem.user_id ? true : false;
-    },
-  },
 
   mutations: {
 
@@ -51,18 +40,26 @@ const network = {
       state.isDataLoaded = true;
     },
 
-    SET_NETWORK_LIST: (state, payload) => {
+    SET_OWNER_USER(state, ownerUser) {
+      state. ownerUser = ownerUser;
+    },
 
-      state.networkList.push(...payload.profiles);
-      state.lastCollectionItem = payload.last_collection_item;
-      state.ownerProfilePic = payload.owner_profile_pic;
-      state.ownerFullName = payload.owner_name;
-      state.listCount = payload.list_count;
+    SET_NETWORK_LIST: (state, network) => {
 
-      state.lastIndex = state.networkList.length;
-      state.lastPageItem = state.networkList[state.networkList.length - 1];
+      state.networkList = [...state.networkList, ...network];
+    },
 
-      state.page = state.page + 1;
+    SET_PAGINATION(state, pagination) {
+       state.listCount = pagination.total;
+       const paginationObj = {
+         first_page_url: pagination.first_page_url,
+         from: pagination.from,
+         last_page: pagination.last_page,
+         last_page_url: pagination.last_page_url,
+         next_page_url: pagination.next_page_url,
+         path: pagination.path,
+       };
+       state.pagination = paginationObj;
     },
 
     SET_ERROR: (state, payload) => {
@@ -81,13 +78,10 @@ const network = {
     async GET_FOLLOWING({ state, commit, getters, rootGetters }) {
 
       try {
-
-        let response;
-        const index = state.lastPageItem === null ? 0 : state.lastPageItem.user_id;
-
-        response = await axios(
+       const url = state.pagination !== null ? state.pagination.next_page_url : `/api/auth/network/following/show/${state.userId}`;
+       const response = await axios(
           {
-            url: `/api/auth/network/following/show/${state.userId}?page=${state.page}&index=${index}`,
+            url,
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -95,12 +89,16 @@ const network = {
             },
           }
         );
+        if (response.status === 200) {
+          const { users, owner_user } = response.data;
 
-        commit('SET_NETWORK_LIST', response.data);
-        commit('SET_DATA_LOADED');
+          commit('SET_NETWORK_LIST', users.data);
+          commit('SET_OWNER_USER', owner_user);
+          commit('SET_PAGINATION', users);
+          commit('SET_DATA_LOADED');
+        }
 
       } catch (e) {
-
         if (e.response.status !== 403 || e.response.status !== 429) {
           commit('SET_ERROR', e.response);
           commit('SET_DATA_LOADED');
@@ -112,12 +110,10 @@ const network = {
 
       try {
 
-        let response;
-        const index = state.lastPageItem === null ? 0 : state.lastPageItem.user_id;
-
-        response = await axios(
+        const url = state.pagination !== null ? state.pagination.next_page_url : `/api/auth/network/followers/show/${state.userId}`;
+        const response = await axios(
           {
-            url: `/api/auth/network/followers/show/${state.userId}?page=${state.page}&index=${index}`,
+            url,
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -125,12 +121,15 @@ const network = {
             },
           }
         );
-
-        commit('SET_NETWORK_LIST', response.data);
-        commit('SET_DATA_LOADED');
+       if (response.status === 200) {
+          const { users, owner_user } = response.data;
+          commit('SET_NETWORK_LIST', users.data);
+          commit('SET_OWNER_USER', owner_user);
+          commit('SET_PAGINATION', users);
+          commit('SET_DATA_LOADED');
+        }
 
       } catch (e) {
-
         if (e.response.status !== 403 || e.response.status !== 429) {
           commit('SET_ERROR', e.response);
           commit('SET_DATA_LOADED');
