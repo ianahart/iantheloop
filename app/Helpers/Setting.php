@@ -605,4 +605,50 @@ class Setting
       }
     }
   }
+
+  /**
+   * @param String
+   * @param String
+   * @return void
+   */
+  public function deleteAccount(String $settingId, String $token)
+  {
+    try {
+      $currentUser = User::find(JWTAuth::user()->id);
+
+      if ($currentUser->setting->id !== intval($settingId)) {
+        throw new Exception('Forbidden action', 403);
+      }
+
+      $fileNames = [];
+
+      if (!is_null($currentUser->profile->profile_filename)) {
+        $fileNames[] = $currentUser->profile->profile_filename;
+      }
+
+      if (!is_null($currentUser->profile->background_filename)) {
+        $fileNames[] = $currentUser->profile->background_filename;
+      }
+
+      if (count($fileNames)) {
+
+        foreach ($fileNames as $fileName) {
+
+          $bucket = new AmazonS3($fileName, null);
+          $bucket->deleteFromBucket();
+        }
+      }
+      JWTAuth::setToken($token)->invalidate();
+
+      $currentUser->delete();
+    } catch (Exception $e) {
+      if ($e->getCode() === 403) {
+        $this->exception = ['msg' => $e->getMessage(), 'code' => $e->getCode()];
+      } else if ($e->getCode() === 404) {
+        $this->exception = ['msg' => $e->getMessage(), 'code' => $e->getCode()];
+      } else {
+        $this->exception = ['msg' => 'Something went wrong Deleting Account.', 'code' => 500];
+      }
+    }
+  }
 }

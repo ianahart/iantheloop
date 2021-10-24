@@ -433,4 +433,46 @@ class SettingController extends Controller
                 );
         }
     }
+
+    /**
+     * Delete User's Account
+     * @param Request
+     * @param String
+     */
+    public function deleteAccount(Request $request, String $settingId)
+    {
+        try {
+
+            $setting = new Setting;
+
+            $header = $request->header('Authorization');
+
+            $token = str_replace('Bearer ', '', $header);
+
+
+            $setting->deleteAccount($settingId, $token);
+
+            $exception = $setting->getException();
+
+            if (count(array_values($exception)) > 0) {
+                throw new Exception($exception['msg'], $exception['code']);
+            }
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Account deleted'
+                    ],
+                    200
+                );
+        } catch (Exception $e) {
+            return response()
+                ->json(
+                    [
+                        'msg' => 'Unable to remove your account at this moment.',
+                        'error' => $e->getMessage()
+                    ],
+                    $exception['code'] ?? 500
+                );
+        }
+    }
 }

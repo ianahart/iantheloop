@@ -17,6 +17,13 @@ const initialState = () => {
     blockedUsers: [],
     userToBlock: null,
     blockedUserURL: '',
+    general: {
+      type_test: '',
+      answer: '',
+      success: false,
+
+
+    },
     security: {
          remember_me: false,
          is_form_submitted: false,
@@ -64,6 +71,18 @@ const settings = {
   },
 
   mutations: {
+
+    SET_TYPE_TEST_SUCCESS(state, payload) {
+      state.general.success = payload;
+    },
+
+    SET_TYPE_TEST_ANSWER(state, answer) {
+     state.general.answer = answer;
+    },
+
+    SET_TYPE_TEST(state, input) {
+      state.general.type_test = input;
+    },
 
     TOGGLE_PASSWORD_VISIBILITY (state, isPasswordShowing) {
       state.security.password_form = updateVisibility(state.security, 'password_form', isPasswordShowing);
@@ -419,6 +438,24 @@ const settings = {
         if (e.response.status === 422) {
            commit('SET_SERVER_PASSWORD_VALIDATOR_ERRORS', e.response.data.errors);
         }
+      }
+    },
+
+    async DELETE_USER_ACCOUNT({ state, rootGetters, commit }) {
+      try {
+
+        if (state.general.type_test !== state.general.answer) {
+
+          return;
+        }
+
+         const response = await axios({
+           method: 'DELETE',
+           url: `/api/auth/settings/account/${rootGetters['user/getSettingsId']}/delete`,
+           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+         })
+         commit('SET_TYPE_TEST_SUCCESS', true);
+      } catch(e) {
       }
     }
   }

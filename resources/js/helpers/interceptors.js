@@ -64,6 +64,9 @@ export default function setup(store) {
 }, async function (error) {
 
   const originalRequest = error.config;
+  if (error.response.status === 403) {
+    cleanUpAndLogout(store);
+  }
 
   if (error.response.status === 401 && !originalRequest._retry) {
       if (!originalRequest.url.includes('/api/auth/reset-password')) {
@@ -107,6 +110,7 @@ export default function setup(store) {
 
       })
         .catch((err) => {
+
           if (err.response.status === 403) {
             cleanUpAndLogout(store);
             reject(err);

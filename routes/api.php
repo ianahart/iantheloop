@@ -116,3 +116,4 @@ Route::patch('/auth/settings/remember-me/{settingId}/update', [SettingController
 Route::get('/auth/settings/security/{settingId}/show', [SettingController::class, 'retrieveSecuritySettings'])->middleware('auth:api');
 Route::post('/auth/settings/remember-me', [SettingController::class, 'validateRememberMe'])->middleware('auth:api');
 Route::patch('/auth/settings/password/{settingId}/update', [SettingController::class, 'updatePassword'])->middleware('auth:api');
+Route::delete('/auth/settings/account/{settingId}/delete', [SettingController::class, 'deleteAccount'])->middleware('auth:api');
