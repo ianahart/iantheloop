@@ -54,9 +54,7 @@ class Privacy extends Model
         'blocked_stories_duration' => 'string',
         'created_in_unix' => 'integer',
         'stat_id' => 'integer',
-        'stat_id' => 'integer',
-        'stat_id' => 'integer',
-        'stat_id' => 'integer',
+
     ];
 
     public function user()
