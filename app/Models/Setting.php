@@ -24,6 +24,15 @@ class Setting extends Model
         'block_profile_on',
         'block_messages_on',
         'block_stories_on',
+        'validator',
+        'ip_address',
+        'lookup',
+        'validator',
+        'ip_address',
+        'user_agent',
+        'expire_in',
+        'password_updated',
+        'password_updated_on',
     ];
 
     /**

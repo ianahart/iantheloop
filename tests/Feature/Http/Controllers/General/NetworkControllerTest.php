@@ -101,7 +101,8 @@ class NetworkControllerTest extends TestCase
         $lastFollower = $this->subjectUser->stat->followers[count($this->subjectUser->stat->followers) + 1];
         $page = 1;
         $index = 0;
-        $responses = [];
+        $actualFollowers = [];
+
 
         while ($index < $lastFollower['id']) {
             $response = $this
@@ -113,27 +114,27 @@ class NetworkControllerTest extends TestCase
                     []
                 );
 
-            $index = $response->getData()->profiles[count($response->getData()->profiles) - 1];
-            $index = $index->user_id;
-            $page++;
+            if ($page === 1) {
+                $response->assertJsonStructure([
+                    'users' => ['data', 'next_page_url', 'last_page', 'current_page']
+                ]);
+            }
 
-            $response->assertStatus(200);
-            $responses[] = $response->getData()->profiles;
+            $results = json_decode(json_encode($response->getData()->users), true);
+
+            $index = $results['data'][count($results['data']) - 1];
+            $index = $index['profile']['user_id'];
+
+            array_push($actualFollowers, ...array_map(fn ($result) => $result['profile']['user_id'], $results['data']));
+
+            $page++;
         }
 
-        $this->subjectUser->refresh();
-        $profiles = array_merge([], ...$responses);
-        $this->assertCount(10, $profiles);
 
-        $actualFollowers = array_map(fn ($follower) => $follower->user_id, $profiles);
-
-        $expectedFollowers = array_combine(
-            range(0, count($this->subjectUser->stat->followers) - 1),
-            array_map(fn ($follower) => $follower['id'], $this->subjectUser->stat->followers)
-        );
-
+        $expectedFollowers = array_keys($this->subjectUser->stat->followers);
         $this->assertSame($expectedFollowers, $actualFollowers);
     }
+
 
     /** @test */
     public function it_returns_the_user_being_viewed_on_page_following_list()
@@ -143,7 +144,7 @@ class NetworkControllerTest extends TestCase
 
         $page = 1;
         $index = 0;
-        $responses = [];
+        $actualFollowing = [];
 
         while ($index < $lastFollowing['id']) {
             $response = $this
@@ -155,19 +156,25 @@ class NetworkControllerTest extends TestCase
                     []
                 );
 
-            $index = $response->getData()->profiles[count($response->getData()->profiles) - 1];
-            $index = $index->user_id;
-            $page++;
 
-            $response->assertStatus(200);
-            $responses[] = $response->getData()->profiles;
+            if ($page === 1) {
+                $response->assertJsonStructure([
+                    'users' => ['data', 'next_page_url', 'last_page', 'current_page']
+                ]);
+            }
+
+            $results = json_decode(json_encode($response->getData()->users), true);
+
+            $index = $results['data'][count($results['data']) - 1];
+            $index = $index['profile']['user_id'];
+
+            array_push($actualFollowing, ...array_map(fn ($result) => $result['profile']['user_id'], $results['data']));
+
+            $page++;
         }
 
-        $actualFollowing = array_map(fn ($user) => $user->user_id,  array_merge([], ...$responses));
-        $this->assertCount(5, $actualFollowing);
 
-        $expectedFollowing = array_values(array_map(fn ($user) => $user['id'], $this->subjectUser->stat->following));
-
+        $expectedFollowing = array_keys($this->subjectUser->stat->following);
         $this->assertSame($expectedFollowing, $actualFollowing);
     }
 }

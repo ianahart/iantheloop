@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Setting;
 use App\Events\UserStatusChanged;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,6 +26,7 @@ class LoginControllerTest extends TestCase
         Event::fake();
 
         User::factory()
+            ->has(Setting::factory())
             ->count(3)
             ->create(
                 [
