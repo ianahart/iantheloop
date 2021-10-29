@@ -1,62 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+![iaNtheLoop logo](/resources/assets/iantheloop_README_logo.png)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Description
+***
 
-## About Laravel
+This is a social network single page web application that I built mainly to advance my knowledge and understanding of creating an application that incorporates a frontend and a backend.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+iaNtheLoop encompasses many of the features of a traditional social network application. After a user has created an account and logged in, they will be able to take advantage of the features that this application provides **including:**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+ ✅ Follow/Following system </br>
+ ✅ Profiles</br>
+ ✅ Profile Walls</br>
+ - Posts (text, picture, video)
+ - Comments
+ - Reply comments
+ - Likes
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+ ✅ Newsfeed </br>
+ ✅ Follow Suggestions </br>
+ ✅ Customizable User Settings</br>
+ - Delete Account
+ - Change Password
+ - Block certain users from seeing (profile, stories, messages)
 
-## Learning Laravel
+ ✅ User Search </br>
+ ✅ Notifications </br>
+ ✅ Realtime Messaging </br>
+ ✅ Stories </br>
+ ✅ Reviews</br>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+ The technologies that are currently used in this application are [**Laravel**](https://laravel.com/)  for the API and the JWT authentication mechanism, [**Vue JS**](https://vuejs.org/) (couples nicely with Laravel) and [**Sass**](https://sass-lang.com/) for the frontend , and [**mySQL**](https://www.mysql.com/) as the database. [**Vuex**](https://vuex.vuejs.org/) is being used to manage state on the front end because there was too much shared state that was needed in different parts of the application.
 
-## Laravel Sponsors
+ So far the most challenging thing to implement was the **Follow/Follower** system. I initially over complicated things by not making a dedicated table to hold **following/followers**, instead stuffing them in a JSON column. While this worked, it did make for more work and complicated logic to keep everything in sync. Eventually I would like to refactor it because it will eventually introduce scaling problems.
+<br>
+<br>
+ ### 🔮 Future features and implementations:
+<br>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+✏️ *Migrate Vue 2 to Vue 3* <br>
+✏️ *Find a more maintained up-to-date JSON Web Token library* <br>
+✏️ *Add User Insights* <br>
+✏️ *Add User Groups/Events with invitations* <br>
+✏️ *Video Stories* <br>
+✏️ *Emoji reactions to posts and comments* <br>
+✏️ *Two Factor Authentication Setting* <br>
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+## Installation
+***
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Clone the repo
+   ````sh
+   git clone https://github.com/ianahart/iantheloop.git
+   ````
+2. Install NPM packages
+    ````sh
+    cd repo
+    ````
+    ````sh
+    npm install
+    ````
+3. Install Composer packages
+    ````sh
+    composer install
+    ````
+
+4. Run database migrations
+     ````sh
+       php artisan migrate
+     ````
+5. Start up Laravel in root of directory
+   - Server
+      ````sh
+      php artisan serve
+      ````
+    - Websockets
+      ````sh
+      php artisan websockets:serve
+      ````
+    - Queue
+      ````sh
+      php artisan queue:work database --queue=default,interactions,stories
+      ````
+    - Queue
+      ````sh
+      php artisan schedule:work
+      ````
+6. Start the dev server
+    ````sh
+    npm run watch
+    ````
+
+## How To Use
+***
+
+1. Create an account
+2. Login with account credentials
+3. Create Profile
+4. Follow other users
+
+### (Demo)
+<br>
+
+Login with Demo User:
+<br>
+email: millie@gmail.com
+<br>
+password: Test12345%
+
 
 ## License
+***
+MIT License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Copyright 2021 Ian Hart
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
