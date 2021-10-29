@@ -1,7 +1,7 @@
 ![iaNtheLoop logo](/resources/assets/iantheloop_README_logo.png)
 
 ## Description
-***
+
 
 This is a social network single page web application that I built mainly to advance my knowledge and understanding of creating an application that incorporates a frontend and a backend.
 
@@ -52,7 +52,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 
 
 ## Installation
-***
+
 
 1. Clone the repo
    ````sh
@@ -87,7 +87,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
       ````sh
       php artisan queue:work database --queue=default,interactions,stories
       ````
-    - Queue
+    - Scheduling
       ````sh
       php artisan schedule:work
       ````
@@ -97,7 +97,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
     ````
 
 ## How To Use
-***
+
 
 1. Create an account
 2. Login with account credentials
@@ -115,7 +115,7 @@ password: Test12345%
 
 
 ## License
-***
+
 MIT License
 
 Copyright 2021 Ian Hart
