@@ -65,6 +65,15 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
     docker-compose up -d
    ````
 
+- Install PHP dependencies
+   ````sh
+    docker-compose exec app composer install
+   ````
+- Install JavaScript dependencies
+   ````sh
+    docker-compose exec app npm install
+   ````
+
 - Generate App Key
     ````sh
      docker-compose exec app php artisan key:generate
@@ -103,16 +112,6 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 2. Login with account credentials
 3. Create Profile
 4. Follow other users
-
-### (Demo)
-<br>
-
-Login with Demo User:
-<br>
-email: millie@gmail.com
-<br>
-password: Test12345%
-
 
 ## License
 
