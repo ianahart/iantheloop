@@ -18,6 +18,9 @@ use App\Http\Controllers\SpaController;
 |
 */
 
+// Route::get('phpmyinfo', function () {
+//   phpinfo();
+// })->name('phpmyinfo');
 /*
  *
  * General Routes

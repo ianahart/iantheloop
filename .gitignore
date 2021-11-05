@@ -11,6 +11,8 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+looped.sql
+
 
 /public/mix-manifest.json
 /public/js

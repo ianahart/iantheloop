@@ -1,7 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+    "/images/.DS_Store": "/images/.DS_Store",
     "/images/about_activity.svg": "/images/about_activity.svg",
+    "/images/about_main.jpeg": "/images/about_main.jpeg",
+    "/images/about_secondary.jpeg": "/images/about_secondary.jpeg",
     "/images/about_stars.svg": "/images/about_stars.svg",
     "/images/create_account.svg": "/images/create_account.svg",
     "/images/create_profile_bg.svg": "/images/create_profile_bg.svg",
@@ -13,6 +16,7 @@
     "/images/home_main_1.svg": "/images/home_main_1.svg",
     "/images/home_offers.svg": "/images/home_offers.svg",
     "/images/iantheloop.png": "/images/iantheloop.png",
+    "/images/iantheloop_README_logo.png": "/images/iantheloop_README_logo.png",
     "/images/login.svg": "/images/login.svg",
     "/images/network.svg": "/images/network.svg",
     "/images/not_found.jpg": "/images/not_found.jpg",

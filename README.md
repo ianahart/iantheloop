@@ -51,51 +51,51 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 
 
 
-## Installation
+## Installation with Docker
 
 
-1. Clone the repo
+- Clone the repo
    ````sh
    git clone https://github.com/ianahart/iantheloop.git
    ````
-2. Install NPM packages
-    ````sh
-    cd repo
-    ````
-    ````sh
-    npm install
-    ````
-3. Install Composer packages
-    ````sh
-    composer install
-    ````
+- Create a ````.env```` file in the root directory. Follow directions in ````.env.        example```` file located in the root directory
 
-4. Run database migrations
-     ````sh
-       php artisan migrate
-     ````
-5. Start up Laravel in root of directory
-   - Server
-      ````sh
-      php artisan serve
-      ````
-    - Websockets
-      ````sh
-      php artisan websockets:serve
-      ````
-    - Queue
-      ````sh
-      php artisan queue:work database --queue=default,interactions,stories
-      ````
-    - Scheduling
-      ````sh
-      php artisan schedule:work
-      ````
-6. Start the dev server
-    ````sh
-    npm run watch
-    ````
+- Start docker up
+   ````sh
+    docker-compose up -d
+   ````
 
+- Generate App Key
+    ````sh
+     docker-compose exec app php artisan key:generate
+   ````
+- Generate JWT secret
+  ````sh
+  docker-compose exec app php artisan jwt:secret --force
+  ````
+- Migrate database tables
+  ````sh
+   docker-compose exec  app php artisan migrate
+  ````
+- Start up Laravel
+  ````sh
+  docker-compose exec app php artisan serve
+  ````
+- Run the Dev server for [HMR]
+  ````sh
+   docker-compose exec app npm run hot
+  ````
+- Start the websockets server
+  ````sh
+   docker-compose exec app php artisan websockets:serve
+  ````
+- Start the queue
+  ````sh
+  docker-compose exec app php artisan queue:work database --queue=default,interactions,stories
+  ````
+- Start the scheduler
+  ````sh
+  docker-compose exec app php artisan schedule:work
 ## How To Use
 
 
