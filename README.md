@@ -51,7 +51,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 
 
 
-## Installation
+## Docker Installation
 
 - Clone the repo
    ````sh
@@ -59,13 +59,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
    ````
 - Create a ````.env```` file in the root directory. Follow directions in ````.env.        example```` file located in the root directory
 
-- Create database (Normal installation)
-   - To proceed with a normal install run all the commands below without ````docker-compose exec app````
-
-   ````sh
-    php artisan db:create
-   ````
-- Start docker up (Docker installation)
+- Start docker up
    ````sh
     docker-compose up -d
    ````
@@ -89,7 +83,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
   ````
 - Migrate database tables
   ````sh
-   docker-compose exec  app php artisan migrate
+   docker-compose exec app php artisan migrate
   ````
 - Start up Laravel
   ````sh
@@ -110,6 +104,25 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 - Start the scheduler
   ````sh
   docker-compose exec app php artisan schedule:work
+<br>
+<br>
+
+## Normal Installation
+- Follow directions starting AFTER ``docker-compose up -d``
+- To execute commands you will use e.g.
+   ````sh
+     php artisan serve
+   ````
+   Instead of
+   ````sh
+    docker-compose exec app php artisan serve
+   ````
+- Before you run the ````php artisan migrate```` command you will need to create a database.
+   ````sh
+    php artisan db:create
+   ````
+
+
 ## How To Use
 
 
