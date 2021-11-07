@@ -51,8 +51,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 
 
 
-## Installation with Docker
-
+## Installation
 
 - Clone the repo
    ````sh
@@ -60,7 +59,13 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
    ````
 - Create a ````.env```` file in the root directory. Follow directions in ````.env.        example```` file located in the root directory
 
-- Start docker up
+- Create database (Normal installation)
+   - To proceed with a normal install run all the commands below without ````docker-compose exec app````
+
+   ````sh
+    php artisan db:create
+   ````
+- Start docker up (Docker installation)
    ````sh
     docker-compose up -d
    ````
