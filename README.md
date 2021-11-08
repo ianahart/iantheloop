@@ -87,11 +87,11 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
   ````
 - Start up Laravel
   ````sh
-  docker-compose exec app php artisan serve
+   docker-compose exec app php artisan serve
   ````
 - Run the Dev server for [HMR]
   ````sh
-   docker-compose exec app npm run hot
+   docker-compose exec app npm run watch-poll
   ````
 - Start the websockets server
   ````sh
