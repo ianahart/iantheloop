@@ -4,7 +4,7 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use App\Helpers\Posts;
 use App\Models\User;
 use App\Models\Post;
@@ -32,7 +32,7 @@ class NewsFeedController extends Controller
     public function show(Request $request, string $slug)
     {
         try {
-            if (intval($request->query('subjectId')) !== intval(JWTAuth::user()->id)) {
+            if (intval($request->query('subjectId')) !== intval(Auth::guard('sanctum')->user()->id)) {
 
                 return response()->json(['msg' => 'forbidden'], 403);
             }

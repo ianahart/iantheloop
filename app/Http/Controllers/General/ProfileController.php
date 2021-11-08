@@ -5,7 +5,7 @@ namespace App\Http\Controllers\General;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMultipleForm;
 use App\Http\Requests\EditProfileRequest;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use App\Helpers\Profile as ProfileHelper;
 use App\Helpers\AmazonS3;
 use App\Models\User;
@@ -344,7 +344,7 @@ class ProfileController extends Controller
 
             $profile = Profile::where('id', '=', $profileId)->first();
 
-            if (intval($profile->user_id) !== intval(JWTAuth::user()->id)) {
+            if (intval($profile->user_id) !== intval(Auth::guard('sanctum')->user()->id)) {
 
                 throw new Exception('User not allowed to edit another user\'s profile');
             }

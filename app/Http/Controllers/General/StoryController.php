@@ -4,10 +4,11 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoryPostRequest;
 use App\Helpers\Story;
 use Exception;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class StoryController extends Controller
 {
@@ -22,7 +23,7 @@ class StoryController extends Controller
     {
         try {
 
-            $story = new Story(JWTAuth::user()->id);
+            $story = new Story(Auth::guard('sanctum')->user()->id);
 
             $userStoriesCount = $story->userHasStories(intval($userId));
 
@@ -110,7 +111,7 @@ class StoryController extends Controller
     {
         try {
 
-            $story = new Story(JWTAuth::user()->id);
+            $story = new Story(Auth::guard('sanctum')->user()->id);
 
             $story->removeExpiredUserStories(intval($userId));
 
@@ -156,7 +157,7 @@ class StoryController extends Controller
     public function index(Request $request)
     {
         try {
-            $story = new Story(JWTAuth::user()->id);
+            $story = new Story(Auth::guard('sanctum')->user()->id);
 
             $story->usersStories();
 
@@ -198,7 +199,7 @@ class StoryController extends Controller
     {
         try {
 
-            $story = new Story(JWTAuth::user()->id);
+            $story = new Story(Auth::guard('sanctum')->user()->id);
 
             $story->deleteSpecifiedStory($storyId, $request->query('userId'));
 

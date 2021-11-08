@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Helpers\Status;
+use Illuminate\Support\Facades\Auth;
 
 class LogoutController extends Controller
 {
@@ -26,7 +26,7 @@ class LogoutController extends Controller
         $header = $request->header('Authorization');
         $token = str_replace('Bearer ', '', $header);
 
-        $currentUser = User::find(JWTAuth::user()->id);
+        $currentUser = User::find(Auth::guard('sanctum')->user()->id);
 
         if (Cookie::has('remember_me')) {
 
@@ -42,7 +42,8 @@ class LogoutController extends Controller
 
         $this->updateIsLoggedIn($currentUser->id);
 
-        JWTAuth::setToken($token)->invalidate();
+        $currentUser->tokens()->delete();
+
 
         $cookie = Cookie::forget('remember_me');
 

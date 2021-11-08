@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BlockSearchRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use App\Helpers\Setting;
+use App\Models\User;
 use Exception;
 
 class SettingController extends Controller
@@ -325,7 +326,7 @@ class SettingController extends Controller
         try {
 
             $setting = new Setting;
-            $setting->setCurrentUserId(JWTAuth::user()->id);
+            $setting->setCurrentUserId(Auth::guard('sanctum')->user()->id);
 
             $securitySettings = $setting->retrieveSecuritySettings($settingId);
 
@@ -411,8 +412,8 @@ class SettingController extends Controller
             if (count(array_values($exception)) > 0) {
                 throw new Exception($exception['msg'], $exception['code']);
             }
-
-            JWTAuth::setToken($token)->invalidate();
+            $currentUser = User::find(Auth::guard('sanctum')->user()->id);
+            $currentUser->tokens()->delete();
 
             return response()
                 ->json(

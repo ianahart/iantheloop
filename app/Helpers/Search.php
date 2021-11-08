@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Pagination\Paginator;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Search as SearchModel;
 use App\Models\User;
 use Exception;
@@ -109,7 +109,7 @@ class Search
   {
     try {
 
-      if (JWTAuth::user()->id !== intval($data['user_id'])) {
+      if (Auth::guard('sanctum')->user()->id !== intval($data['user_id'])) {
 
         throw new Exception('Unauthorized action', 403);
       }
@@ -225,7 +225,7 @@ class Search
   {
     try {
 
-      if (JWTAuth::user()->id !== $this->currentUserId) {
+      if (Auth::guard('sanctum')->user()->id !== $this->currentUserId) {
         throw new Exception('Unauthorized action', 403);
       }
 

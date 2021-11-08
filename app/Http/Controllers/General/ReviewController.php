@@ -4,6 +4,7 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreReviewRequest;
 use App\Helpers\Review;
 use App\Helpers\Status;
@@ -73,11 +74,9 @@ class ReviewController extends Controller
 
             $authenticationStatus = false;
 
-            if (null !== $request->header('authorization')) {
-                $token = explode(' ', $request->header('authorization'));
-                if ($token) {
-                    $authenticationStatus = $user->checkToken($token[1]);
-                }
+            if (null !== $request->header('authorization') && null !== Auth::guard('sanctum')->user()->id) {
+
+                $authenticationStatus = true;
             }
 
             $review = new Review;

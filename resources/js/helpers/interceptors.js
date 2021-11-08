@@ -49,6 +49,7 @@ export default function setup(store) {
       if (!UNAUTHORIZED_URLS.includes(config.url)) {
           const token = store.getters['user/getToken'];
           if(token) {
+
             config.headers.common['Authorization'] = `Bearer ${token}`;
 
           }
@@ -68,7 +69,7 @@ export default function setup(store) {
     cleanUpAndLogout(store);
   }
 
-  if (error.response.status === 401 && !originalRequest._retry) {
+  if (error.response.status === 401 || error.response.status === 403) {
       if (!originalRequest.url.includes('/api/auth/reset-password')) {
 
         if (isRefreshing) {

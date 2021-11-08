@@ -4,9 +4,9 @@ namespace App\Http\Controllers\General;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Helpers\Status;
 use Exception;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Review;
 
@@ -24,7 +24,7 @@ class UserController extends Controller
         try {
 
 
-            if (JWTAuth::user()->id !== intval($userId)) {
+            if (Auth::user()->id !== intval($userId)) {
 
                 throw new Exception('User is forbidden from making this request');
             }

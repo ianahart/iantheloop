@@ -5,7 +5,7 @@ namespace App\Http\Controllers\General;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\Conversator;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 
@@ -23,7 +23,6 @@ class ConversatorController extends Controller
     public function show(Request $request, string $userId)
     {
         try {
-
             $conversator = new Conversator($userId);
 
             $conversator->aggregateContacts();
@@ -65,7 +64,7 @@ class ConversatorController extends Controller
 
         try {
 
-            $conversator = new Conversator(JWTAuth::user()->id);
+            $conversator = new Conversator(Auth::guard('sanctum')->user()->id);
 
             $conversator->setMetaData(
                 [

@@ -9,7 +9,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Models\User;
 use App\Models\Post;
 use App\Helpers\Posts;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 
 class PostController extends Controller
@@ -110,7 +110,7 @@ class PostController extends Controller
 
             $post->setSubjectUserId(intval($subjectUserId));
             $post->setLastPostItem(intval($lastPostItem));
-            $post->setCurrentUserId(JWTAuth::user()->id);
+            $post->setCurrentUserId(Auth::guard('sanctum')->user()->id);
 
             $post->findPosts($request->query('filters'));
 

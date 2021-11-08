@@ -145,6 +145,7 @@
         }
 
         if (this.formSubmitted) {
+
           this.SET_AUTH_STATUS(true);
           this.trackUserStatus();
           this.initNotificationChannel();

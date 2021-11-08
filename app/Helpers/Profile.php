@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Helpers\FormattingUtil;
 use App\Helpers\Statistics;
@@ -139,7 +139,7 @@ class Profile
         throw new Exception();
       }
 
-      $results = User::whereIn('id', [$this->userId, JWTAuth::user()->id])
+      $results = User::whereIn('id', [$this->userId, Auth::guard('sanctum')->user()->id])
         ->get();
 
 
@@ -177,7 +177,7 @@ class Profile
 
       $stat = Stat::where('user_id', '=', $this->userId)->first();
 
-      $currentUserId = JWTAuth::user()->id;
+      $currentUserId = Auth::guard('sanctum')->user()->id;
       $currentUser = new stdClass();
       $currentUser->user_id = $currentUserId;
 
@@ -200,8 +200,8 @@ class Profile
 
       $currentUserHasRequested = $followRequest->checkRequestExists();
 
-      $profile['current_user_full_name'] = FormattingUtil::capitalize(JWTAuth::user()->full_name);
-      $profile['current_user_first_name'] = FormattingUtil::capitalize(JWTAuth::user()->first_name);
+      $profile['current_user_full_name'] = FormattingUtil::capitalize(Auth::guard('sanctum')->user()->full_name);
+      $profile['current_user_first_name'] = FormattingUtil::capitalize(Auth::guard('sanctum')->user()->first_name);
 
       $profile['view_user_first_name'] = FormattingUtil::capitalize(explode(' ', $profileExists['full_name'])[0]);
 

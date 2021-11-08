@@ -20,7 +20,7 @@ import Echo from 'laravel-echo';
 
 window.Pusher = require('pusher-js');
 
-const token = localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user'))['access_token'] : '';
+const token = localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')).access_token : '';
 
 window.Echo = new Echo({
     broadcaster: 'pusher',

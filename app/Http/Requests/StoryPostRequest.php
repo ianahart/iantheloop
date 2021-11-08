@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class StoryPostRequest extends FormRequest
 {
@@ -14,7 +14,7 @@ class StoryPostRequest extends FormRequest
      */
     public function authorize()
     {
-        return JWTAuth::user()->id === intval($this->user_id);
+        return Auth::guard('sanctum')->user()->id === intval($this->user_id);
     }
 
     /**

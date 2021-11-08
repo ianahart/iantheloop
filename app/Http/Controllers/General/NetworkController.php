@@ -6,7 +6,7 @@ use App\Helpers\Network;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class NetworkController extends Controller
 {
@@ -22,7 +22,7 @@ class NetworkController extends Controller
 
         try {
 
-            $network = new Network(JWTAuth::user()->id, intval($userId));
+            $network = new Network(Auth::guard('sanctum')->user()->id, intval($userId));
 
             $network->aggregateUserList('following');
 
@@ -68,7 +68,7 @@ class NetworkController extends Controller
 
         try {
 
-            $network = new Network(JWTAuth::user()->id, intval($userId));
+            $network = new Network(Auth::guard('sanctum')->user()->id, intval($userId));
 
             $network->aggregateUserList('followers');
 

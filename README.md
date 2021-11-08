@@ -77,10 +77,6 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
     ````sh
      docker-compose exec app php artisan key:generate
    ````
-- Generate JWT secret
-  ````sh
-  docker-compose exec app php artisan jwt:secret --force
-  ````
 - Migrate database tables
   ````sh
    docker-compose exec app php artisan migrate

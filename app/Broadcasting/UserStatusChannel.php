@@ -25,7 +25,7 @@ class UserStatusChannel
     public function join(User $user)
     {
 
-        if (auth('api')->check()) {
+        if (auth('sanctum')->check()) {
             return [
                 'user' => collect(
                     $user->toArray()

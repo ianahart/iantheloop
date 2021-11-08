@@ -3,7 +3,6 @@
 
 namespace App\Helpers;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Events\UserStatusChanged;
 use App\Models\User;
 use Exception;
@@ -24,16 +23,6 @@ class Status
     return $this->userStatus;
   }
 
-  public function checkToken(string $token): bool
-  {
-    if (isset($token)) {
-      $userId = JWTAuth::setToken($token)->getPayload()['user_id'];
-    }
-
-    if (JWTAuth::user()->id) {
-      return intval($userId) === intval(JWTAuth::user()->id) ? true : false;
-    }
-  }
 
   public function getException()
   {

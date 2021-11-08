@@ -1,6 +1,4 @@
 import axios from "axios";
-import { decodeToken } from "../../helpers/moduleHelpers";
-
 
 const initialState = () => {
 
@@ -10,7 +8,7 @@ const initialState = () => {
     statusToggledBtn: null,
     statusError: '',
     status: 'offline',
-    status: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).status : 'online',
+    status: localStorage.getItem('user') ? JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).status : 'online',
     isUserLoggedIn: false,
   }
 };
@@ -25,6 +23,7 @@ const user = {
 
     getToken (state)  {
       if (state.jwtToken) {
+
         return JSON.parse(state.jwtToken).access_token;
       }
     },
@@ -32,50 +31,44 @@ const user = {
 
     getUserSettingsId(state) {
       if (state.jwtToken) {
-        const base64 = decodeToken(state.jwtToken);
-        return JSON.parse(window.atob(base64)).user_settings_user_id;
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).settings_user_id;
       }
     },
 
     getSettingsId(state) {
       if (state.jwtToken) {
-        const base64 = decodeToken(state.jwtToken);
-        return JSON.parse(window.atob(base64)).settings_id;
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).settings_id;
       }
     },
 
     getUserSlug(state) {
       if (state.jwtToken) {
-        const base64 = decodeToken(state.jwtToken);
-        return JSON.parse(window.atob(base64)).slug;
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).slug;
       }
     },
 
     getProfileStatus (state) {
 
       if (state.jwtToken) {
-        return JSON.parse(state.jwtToken).profile_created;
-
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).profile_created;
       }
     },
-       getUserId (state) {
 
+    getUserId (state) {
       if (state.jwtToken) {
-        const base64 = decodeToken(state.jwtToken);
-        return JSON.parse(window.atob(base64)).user_id;
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).user_id;
       }
     },
 
     getProfilePic (state) {
       if (state.jwtToken) {
-        return JSON.parse(state.jwtToken).profile_pic;
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).profile_pic;
       }
     },
 
     userName (state) {
       if (state.jwtToken) {
-        const base64 = decodeToken(state.jwtToken);
-        return JSON.parse(window.atob(base64)).name;
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).name;
       }
     },
 
@@ -109,28 +102,26 @@ const user = {
     },
 
     SET_TOKEN(state,payload) {
-      state.jwtToken = payload;
-
-      localStorage.setItem('user', payload);
-      state.status = JSON.parse(payload).status;
+      state.jwtToken = JSON.stringify(payload);
+      localStorage.setItem('user', JSON.stringify(payload));
+      state.status = JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).status;
     },
 
     REMOVE_TOKEN(state) {
-
       localStorage.removeItem('user');
-
       state.jwtToken = '';
     },
 
     SET_INITIAL_TOGGLE_VALUE: (state, payload) => {
-
       state.statusToggledBtn = payload;
     },
 
     SYNC_NEW_STATUS: (state, payload) => {
 
-      const user = JSON.parse(localStorage.getItem('user'));
 
+ ///     EHRERE HNERXT
+
+      const user = JSON.parse(localStorage.getItem('user'));
       user.status = payload.new_user_status;
       state.status = payload.new_user_status;
 
@@ -197,6 +188,7 @@ const user = {
             data: {
 
               token,
+              user_id: getters.getUserId,
             },
           }
         );

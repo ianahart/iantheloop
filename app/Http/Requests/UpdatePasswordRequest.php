@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -16,7 +16,7 @@ class UpdatePasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return JWTAuth::user()->id === intval($this->current_user_id);
+        return Auth::guard('sanctum')->user()->id === intval($this->current_user_id);
     }
 
     /**
@@ -26,7 +26,7 @@ class UpdatePasswordRequest extends FormRequest
      */
     public function rules()
     {
-        $currentUser = JWTAuth::user();
+        $currentUser = Auth::guard('sanctum')->user();
 
         return [
             'form.old_password' => [

@@ -101,11 +101,12 @@ const login = {
 
         if (response.status === 200) {
           commit('SUBMIT_FORM', response.data);
-          commit('user/SET_TOKEN', response.data.jwt, { root: true });
+          commit('user/SET_TOKEN', response.data.token, { root: true });
           commit('SET_IS_LOGIN_LOADER_SHOWING', false);
         }
 
       } catch (e) {
+        console.log(e);
         if (e.response.status === 400) {
           commit('SET_ERRORS', e.response.data);
           commit('SET_IS_LOGIN_LOADER_SHOWING', false);

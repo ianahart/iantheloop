@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -171,7 +171,7 @@ class Setting
   {
     try {
 
-      if (JWTAuth::user()->id !== $this->currentUserId) {
+      if (Auth::guard('sanctum')->user()->id !== $this->currentUserId) {
         throw new Exception('unAuthorized', 403);
       }
 
@@ -306,7 +306,7 @@ class Setting
         throw new Exception('UnAuthorized action, user does not exist or is not authorized.', 403);
       }
 
-      if (JWTAuth::user()->id !== $currentUser->id) {
+      if (Auth::guard('sanctum')->user()->id !== $currentUser->id) {
         throw new Exception('UnAuthorized action', 403);
       }
 
@@ -369,7 +369,7 @@ class Setting
   public function deleteBlockedUser(Int $privacyId)
   {
     try {
-      if (JWTAuth::user()->id !== $this->currentUserId) {
+      if (Auth::guard('sanctum')->user()->id !== $this->currentUserId) {
         throw new Exception('Unauthorized action', 403);
       }
 
@@ -409,7 +409,7 @@ class Setting
   {
     try {
 
-      $authUser = JWTAuth::user()->id;
+      $authUser = Auth::guard('sanctum')->user()->id;
       $setting = SettingModel::find($data['setting_id']);
       $cookie = [];
 
@@ -614,7 +614,7 @@ class Setting
   public function deleteAccount(String $settingId, String $token)
   {
     try {
-      $currentUser = User::find(JWTAuth::user()->id);
+      $currentUser = User::find(Auth::guard('sanctum')->user()->id);
 
       if ($currentUser->setting->id !== intval($settingId)) {
         throw new Exception('Forbidden action', 403);
@@ -638,8 +638,8 @@ class Setting
           $bucket->deleteFromBucket();
         }
       }
-      JWTAuth::setToken($token)->invalidate();
 
+      $currentUser->tokens()->delete();
       $currentUser->delete();
     } catch (Exception $e) {
       if ($e->getCode() === 403) {

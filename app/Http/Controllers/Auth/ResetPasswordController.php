@@ -8,7 +8,7 @@ use App\Models\PasswordReset;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 
 class ResetPasswordController extends Controller
@@ -105,27 +105,17 @@ class ResetPasswordController extends Controller
         }
     }
 
-    /*
+    /**
      * get user out of token
      * @param token string;
-     * @return int
+     * @return string
      */
 
     private function getUser(string $token)
-
     {
+        $user = PasswordReset::where('token', '=', $token)->first();
 
-        $tokenParts = explode(".", $token);
-
-        $tokenHeader = base64_decode($tokenParts[0]);
-
-        $tokenPayload = base64_decode($tokenParts[1]);
-
-        $jwtHeader = json_decode($tokenHeader);
-
-        $jwtPayload = json_decode($tokenPayload);
-
-        return $jwtPayload->user_id;
+        return $user->email;
     }
     /*
      * check if token has expired
@@ -165,16 +155,17 @@ class ResetPasswordController extends Controller
         return $passwordReset;
     }
 
-    /*
+    /**
      * update password
-     * @param int $userId
+     * @param string $email
      * @param string $newPassword
      * @return int
      */
-    private function  updatePassword(int $userId, string $newPassword)
+    private function  updatePassword(string $email, string $newPassword)
     {
 
-        $user = User::find($userId);
+        $user = User::where('email', '=', $email)->first();
+
 
         if (Hash::check($newPassword, $user->password)) {
 
@@ -184,6 +175,8 @@ class ResetPasswordController extends Controller
         $user->password = Hash::make($newPassword);
 
         $user->save();
+
+        PasswordReset::where('email', '=', $user->email)->delete();
 
         return 200;
     }

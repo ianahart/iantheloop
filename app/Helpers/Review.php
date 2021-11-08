@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Review as ReviewModel;
 use App\Models\User;
 use Exception;
@@ -45,7 +45,7 @@ class Review
   {
     try {
 
-      if (JWTAuth::user()->id !== $this->userId) {
+      if (Auth::user()->id !== $this->userId) {
         throw new Exception('User is not authorized to commit this action', 403);
       }
 
@@ -74,7 +74,7 @@ class Review
   {
     try {
 
-      $user = User::find(JWTAuth::user()->id);
+      $user = User::find(Auth::guard('sanctum')->user()->id);
 
       return is_null($user->review) ? false : true;
     } catch (Exception $e) {
@@ -137,7 +137,7 @@ class Review
   {
     try {
 
-      if (JWTAuth::user()->id !== $this->userId) {
+      if (Auth::user()->id !== $this->userId) {
         throw new Exception('User is not authorized', 401);
       }
 
@@ -181,7 +181,7 @@ class Review
 
     try {
 
-      if (JWTAuth::user()->id !== intval($this->userId)) {
+      if (Auth::user()->id !== intval($this->userId)) {
         throw new Exception('Not authorized to make this transaction', 401);
       }
 
@@ -206,7 +206,7 @@ class Review
   {
     try {
 
-      if (intval(JWTAuth::user()->id) !== intval($this->userId)) {
+      if (intval(Auth::user()->id) !== intval($this->userId)) {
         throw new Exception('Not authorized to make this transaction', 401);
       }
 

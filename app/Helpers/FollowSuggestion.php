@@ -6,7 +6,7 @@ use App\Models\FollowSuggestion as FollowSuggestionModel;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -250,8 +250,8 @@ class FollowSuggestion
   public function updateFollowSuggestion(array $data, string $suggestionId = NULL): void
   {
     try {
-
-      if ($data['current_user_id'] !== JWTAuth::user()->id) {
+      $authUser = Auth::guard('sanctum')->user()->id;
+      if (intval($data['current_user_id']) !== $authUser) {
         throw new Exception('Unauthorized to make this action');
       }
 

@@ -45,7 +45,7 @@ class LoginController extends Controller
             $login = new Login;
 
             $login->setCredentials(['email' => $email, 'password' => $password]);
-            $settingId = $login->loginUser();
+            $login->loginUser();
 
             $exception = $login->getException();
 
@@ -55,11 +55,14 @@ class LoginController extends Controller
 
             $token = $login->getToken();
 
+
             return response()->json(
                 [
                     'formSubmitted' => true,
                     'userLoggedIn' => true,
-                    'jwt' => $token,
+                    'token' => $token,
+
+
                 ],
                 200
             );

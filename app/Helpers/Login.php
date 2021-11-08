@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Profile;
 use App\Models\User;
 use App\Helpers\Status;
@@ -15,7 +15,7 @@ use Exception;
 class Login
 {
   private array $credentials;
-  private string $token;
+  private array $token;
   private ?string $exception;
 
   public function setCredentials(array $credentials)
@@ -43,19 +43,19 @@ class Login
 
       $user = User::where('email', '=', $this->credentials['email'])
         ->first();
+
       if (!$user) {
         throw new Exception('Sorry, we couldn\'t find an account with that email.');
       }
 
-      if (Hash::check($this->credentials['password'], $user->password) && JWTAuth::attempt($this->credentials)) {
-
-        $TLL = 60;
-
-        $payload = JWTAuth::fromUser($user, $user->getJWTCustomClaims());
+      if (Hash::check($this->credentials['password'], $user->password) && Auth::attempt($this->credentials)) {
+        $this->token = [
+          'access_token' => $user->createToken('auth_token')->plainTextToken,
+          'token_type' => 'Bearer',
+          'user_info' => json_encode($user->getUserInfo()),
+        ];
 
         $this->updateStatus();
-
-        $this->token = $this->createNewToken($payload, $TLL, $user);
 
         broadcast(new UserStatusChanged($user));
 
@@ -75,7 +75,7 @@ class Login
    */
   private function updateStatus()
   {
-    $userStatus = new Status(JWTAuth::user()->id);
+    $userStatus = new Status(Auth::user()->id);
 
     $userStatus->updateStatus(true, 'online');
   }
@@ -88,27 +88,11 @@ class Login
    */
   private function getProfilePic()
   {
-    if (JWTAuth::user()->profile_created) {
+    if (Auth::user()->profile_created) {
 
-      $profile = Profile::where('user_id', '=', JWTAuth::user()->id)->first();
+      $profile = Profile::where('user_id', '=', Auth::user()->id)->first();
 
       return $profile->profile_picture;
     }
-  }
-
-  /**
-   * create new token with payload
-   * @param string
-   * @return string
-   */
-  private function createNewToken(string $payload)
-  {
-    $profile_pic = $this->getProfilePic();
-    return json_encode([
-      'access_token' => $payload,
-      'profile_pic' => $profile_pic ?? '',
-      'profile_created' => JWTAuth::user()->profile_created,
-      'status' => 'online',
-    ]);
   }
 }

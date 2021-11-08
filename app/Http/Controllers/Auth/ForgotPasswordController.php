@@ -8,10 +8,10 @@ use App\Models\User;
 use App\Models\PasswordReset;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
+
 
 
 
@@ -100,7 +100,6 @@ class ForgotPasswordController extends Controller
 
             $token = $this->generateToken($user->id);
 
-            /**Change $URL later for Production**/
             $URL = '/reset-password/create?token=' . $token;
 
             $details = [
@@ -137,13 +136,8 @@ class ForgotPasswordController extends Controller
         $data = [
             'user_id' => $id,
         ];
-        $customClaims = JWTFactory::customClaims($data);
 
-        $payload = JWTFactory::make($data);
-
-        $token = JWTAuth::encode($payload);
-
-        return $token;
+        return Hash::make($data['user_id']);
     }
 
     /*
