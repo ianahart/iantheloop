@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use JMac\Testing\Traits\AdditionalAssertions;
 
 use App\Models\User;
@@ -148,7 +148,7 @@ class SettingControllerTest extends TestCase
     {
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->postJson('/api/auth/settings/create', ['current_user_id' => $this->currentUser->id]);
 
         $response->assertStatus(201);
@@ -176,7 +176,7 @@ class SettingControllerTest extends TestCase
         }
 
 
-        $response = $this->actingAs($this->currentUser, 'api')->postJson('/api/auth/settings/block/search', [
+        $response = $this->actingAs($this->currentUser, 'sanctum')->postJson('/api/auth/settings/block/search', [
             'current_user_id' => $this->currentUser->id,
             'type' => 'blocked_profile',
             'value' => 'all'
@@ -215,7 +215,7 @@ class SettingControllerTest extends TestCase
         $userBlockedFromStories = $this->currentUserNetwork[4];
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->postJson(
                 '/api/auth/settings/block/store',
                 [
@@ -271,7 +271,7 @@ class SettingControllerTest extends TestCase
         while ($currentRequest < $numOfRequests) {
 
             $response = $this
-                ->actingAs($this->currentUser, 'api')
+                ->actingAs($this->currentUser, 'sanctum')
                 ->getJson($url, []);
 
             $url = $response->getData()->blocked_users->next_page_url;
@@ -332,7 +332,7 @@ class SettingControllerTest extends TestCase
         ];
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->patchJson(
                 '/api/auth/settings/block/' . $this->currentUser->blockedList->first()->id . ' /update',
                 $data
@@ -365,7 +365,7 @@ class SettingControllerTest extends TestCase
                 ]
             );
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson('/api/auth/settings/block/' .
                 $this->currentUser->blockedList->first()->id .
                 '/delete?userId=' .
@@ -382,7 +382,7 @@ class SettingControllerTest extends TestCase
     {
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->patchJson(
                 '/api/auth/settings/remember-me/' . $this->currentUser->setting->id . '/update',
                 [
@@ -401,7 +401,7 @@ class SettingControllerTest extends TestCase
     public function it_returns_the_current_state_of_the_remember_me_setting_for_current_user()
     {
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->getJson(
                 '/api/auth/settings/security/' .
                     $this->currentUser->setting->id . '/show',
@@ -440,10 +440,11 @@ class SettingControllerTest extends TestCase
             'current_user_id' => $user->id,
         ];
 
-        $token = JWTAuth::fromUser($user);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
 
         /**@var mixed $user */
-        $response = $this->actingAs($user, 'api')->withHeaders(
+        $response = $this->actingAs($user, 'sanctum')->withHeaders(
             [
                 'Authorization' => 'Bearer ' . $token,
             ]
@@ -475,10 +476,9 @@ class SettingControllerTest extends TestCase
                 ]
             );
 
-        $token = JWTAuth::fromUser($user);
+        $token = $user->createToken('auth_token')->plainTextToken;
         /**@var mixed $user */
-
-        $response = $this->actingAs($user)->withHeaders(
+        $response = $this->actingAs($user, 'sanctum')->withHeaders(
             [
                 'Authorization' => 'Bearer ' . $token,
             ]

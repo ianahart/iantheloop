@@ -89,7 +89,7 @@ class StatsControllerTest extends TestCase
     {
 
         $response = $this
-            ->actingAs($this->viewingUser, 'api')
+            ->actingAs($this->viewingUser, 'sanctum')
             ->patchJson(
                 '/api/auth/stats/follow/' . $this->currentUser->id .  '/update',
 
@@ -121,7 +121,7 @@ class StatsControllerTest extends TestCase
     {
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->patchJson(
                 '/api/auth/stats/unfollow/' . $this->currentUser->id . '/update',
                 [

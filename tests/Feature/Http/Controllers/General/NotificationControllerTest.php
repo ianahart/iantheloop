@@ -108,7 +108,7 @@ class NotificationControllerTest extends TestCase
         $actualNotifications = collect([]);
 
         while ($incrementer <= $pages) :
-            $response = $this->actingAs($this->currentUser, 'api')
+            $response = $this->actingAs($this->currentUser, 'sanctum')
                 ->getJson(
                     is_null($cursor) ? $initialEndpoint : $cursor . '&type=App/Notifications/Interaction',
                     []
@@ -188,7 +188,7 @@ class NotificationControllerTest extends TestCase
 
         while ($currentPage <= $lastPage) :
 
-            $response = $this->actingAs($this->currentUser, 'api')
+            $response = $this->actingAs($this->currentUser, 'sanctum')
                 ->getJson(
                     '/api/auth/user/notifications/messages/' .
                         $this->currentUser->id .
@@ -242,7 +242,7 @@ class NotificationControllerTest extends TestCase
             ],
         ]);
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->patchJson(
                 '/api/auth/user/notifications/messages/' . $this->currentUser->id . '/update',
                 [
@@ -272,7 +272,7 @@ class NotificationControllerTest extends TestCase
             ],
         ]);
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/user/notifications/messages/' .
                     $this->currentUser->id .
@@ -308,7 +308,7 @@ class NotificationControllerTest extends TestCase
             ],
         ]);
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/user/notifications/interactions/' .
                     $this->currentUser->notifications[0]->id .
@@ -350,7 +350,7 @@ class NotificationControllerTest extends TestCase
             )
         );
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->getJson('/api/auth/user/notifications/alerts/' .
                 $this->currentUser->id .
                 '/show?type=' .
@@ -361,8 +361,9 @@ class NotificationControllerTest extends TestCase
 
         $this->assertEquals(
             $this->currentUser->notifications
-            ->where('type', '=', "App\Notifications\Interaction")->count(),
-            $response->getData()->nav_interaction_alerts);
+                ->where('type', '=', "App\Notifications\Interaction")->count(),
+            $response->getData()->nav_interaction_alerts
+        );
 
         $this->assertTrue($response->getData()->nav_message_alerts);
     }

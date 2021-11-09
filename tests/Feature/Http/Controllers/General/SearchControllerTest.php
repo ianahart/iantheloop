@@ -124,7 +124,7 @@ class SearchControllerTest extends TestCase
             );
 
         $searchValue = 'en';
-        $response = $this->actingAs($this->currentUser, 'api')->postJson(
+        $response = $this->actingAs($this->currentUser, 'sanctum')->postJson(
             '/api/auth/searches/search',
             [
 
@@ -219,7 +219,7 @@ class SearchControllerTest extends TestCase
                 ]
             );
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->postJson(
                 '/api/auth/searches/store',
                 [
@@ -272,7 +272,7 @@ class SearchControllerTest extends TestCase
                 ]
             );
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->postJson(
                 '/api/auth/searches/store',
                 [
@@ -333,7 +333,7 @@ class SearchControllerTest extends TestCase
         while ($incrementer < 2) {
             $url = $incrementer > 0 ? $paginatedURL :   '/api/auth/searches/' . $this->currentUser->id . '/show';
 
-            $response = $this->actingAs($this->currentUser, 'api')
+            $response = $this->actingAs($this->currentUser, 'sanctum')
                 ->getJson(
                     $url,
                     []
@@ -414,7 +414,7 @@ class SearchControllerTest extends TestCase
                 'searcher_user_id' => $this->currentUser->id,
             ]
         ));
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/searches/' . $this->currentUser->searchers[0]->id . '/delete?ids=' . $qsPayload,
                 []
@@ -460,7 +460,7 @@ class SearchControllerTest extends TestCase
             'searcher_user_id' => $this->currentUser->id,
         ]));
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/searches/null/delete?ids=' . $qsPayload,
                 []

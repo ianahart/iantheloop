@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use JMac\Testing\Traits\AdditionalAssertions;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Profile;
@@ -46,9 +45,6 @@ class ProfileControllerTest extends TestCase
             );
 
         $this->assertActionUsesFormRequest(ProfileController::class, 'store', StoreMultipleForm::class);
-
-        $token = JWTAuth::fromUser($user);
-        JWTAuth::setToken($token);
 
         $formData =
             [
@@ -102,9 +98,11 @@ class ProfileControllerTest extends TestCase
             'backgroundfile' => $this->backgroundFile,
             'profilefile' => $this->profileFile,
         ];
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         Storage::fake('s3');
-        $response = $this
+        /** @var mixed $user */
+        $response = $this->actingAs($user, 'sanctum')
             ->withHeaders(
                 [
                     'HTTP_AUTHORIZATION' => 'Bearer ' . $token
@@ -116,7 +114,7 @@ class ProfileControllerTest extends TestCase
             );
 
         $response->assertStatus(200);
-        $this->assertTrue($response->getData()->profileCreated);
+        $this->assertTrue($response->getData()->profile_created);
 
         $updatedUser = User::find($user->id);
         $this->assertSame($user->id, intval($updatedUser->profile->user_id));
@@ -164,7 +162,7 @@ class ProfileControllerTest extends TestCase
 
         /**@var mixed $user */
         $response = $this
-            ->actingAs($user, 'api')
+            ->actingAs($user, 'sanctum')
             ->patchJson(
                 '/api/auth/profile/' . $profile->id . '/update',
                 [
@@ -201,12 +199,8 @@ class ProfileControllerTest extends TestCase
             ))
             ->create();
 
-        JWTAuth::attempt(['email' => $users[1]->email, 'password' => 'Password123$']);
-        $token = JWTAuth::fromUser($users[1]);
-        JWTAuth::setToken($token);
-
         $response = $this
-            ->actingAs($users[1], 'api')
+            ->actingAs($users[1], 'sanctum')
             ->getJson(
                 '/api/auth/profile/' . strval($users[1]->profile->id) . '/edit',
                 []
@@ -244,16 +238,7 @@ class ProfileControllerTest extends TestCase
                 ]
             );
 
-        JWTAuth::attempt(
-            [
-                'email' => $users[0]->email,
-                'password' => 'Password123$'
-            ]
-        );
-        $token = JWTAuth::fromUser($users[0]);
-        JWTAuth::setToken($token);
-
-        $response = $this->actingAs($users[0], 'api')->getJson('/api/auth/profile/' . $users[1]->profile->id . '/edit', []);
+        $response = $this->actingAs($users[0], 'sanctum')->getJson('/api/auth/profile/' . $users[1]->profile->id . '/edit', []);
 
         $response->assertStatus(403);
         $this->assertEquals('User not allowed to edit another user\'s profile', $response->getData()->error);
@@ -272,7 +257,7 @@ class ProfileControllerTest extends TestCase
 
         /**@var mixed $user */
         $response = $this
-            ->actingAs($user, 'api')
+            ->actingAs($user, 'sanctum')
             ->getJson(
                 '/api/auth/profile/' . $user->profile->id . '/about',
                 []
@@ -298,7 +283,7 @@ class ProfileControllerTest extends TestCase
 
         /**@var mixed $user */
         $response = $this
-            ->actingAs($user, 'api')
+            ->actingAs($user, 'sanctum')
             ->getJson(
                 '/api/auth/profile/' . strval(6) . '/about',
                 []
@@ -366,7 +351,7 @@ class ProfileControllerTest extends TestCase
             );
 
         $response = $this
-            ->actingAs($subjectUser, 'api')
+            ->actingAs($subjectUser, 'sanctum')
             ->getJson(
                 '/api/auth/profile/' . $subjectUser->id,
                 []

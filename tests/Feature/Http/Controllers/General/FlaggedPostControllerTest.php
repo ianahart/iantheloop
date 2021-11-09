@@ -46,7 +46,7 @@ class FlaggedPostControllerTest extends TestCase
 
         for ($i = 0; $i < 2; $i++) {
             $response = $this
-                ->actingAs($this->userFlagging, 'api')
+                ->actingAs($this->userFlagging, 'sanctum')
                 ->postJson(
                     '/api/auth/flagged-posts/store',
                     [

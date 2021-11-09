@@ -49,29 +49,15 @@ class LoginControllerTest extends TestCase
             [
                 'formSubmitted',
                 'userLoggedIn',
-                "jwt" => [
+                "token" => [
                     'access_token',
-                    'profile_created',
-                    'profile_pic',
-                    'status',
+                    'token_type',
+                    'user_info',
                 ]
             ]
         );
 
-
-        $JWT = json_decode($response->getData()->jwt, true);
-
-        $assertions = [];
-        foreach ($JWT as $key => $value) {
-
-            $keep = ['iss', 'status', 'is_logged_in'];
-
-            if (in_array($key, $keep)) {
-                $assertions[$key] = $value;
-            }
-        }
-        $this->assertAuthenticated('api');
-        $this->assertSame('online', $assertions['status']);
+        $this->assertAuthenticated('sanctum');
     }
 
     /** @test */

@@ -137,7 +137,7 @@ class ConversatorControllerTest extends TestCase
             );
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->getJson('/api/auth/conversator/' . $this->currentUser->id . '/show', []);
 
         $response->assertStatus(200);
@@ -160,7 +160,7 @@ class ConversatorControllerTest extends TestCase
                 ['participants' => $this->currentUser->id . ' ' . $this->recipientUser->id]
             );
 
-        $response = $this->actingAs($this->currentUser, 'api')->postJson(
+        $response = $this->actingAs($this->currentUser, 'sanctum')->postJson(
             '/api/auth/messages',
             [
                 'chat_message' => [
@@ -209,7 +209,7 @@ class ConversatorControllerTest extends TestCase
                 ['participants' => $this->currentUser->id . ' ' . $this->offlineUser->id]
             );
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->postJson(
                 '/api/auth/messages',
                 [
@@ -280,7 +280,7 @@ class ConversatorControllerTest extends TestCase
                 $pagMessage = $messages[count($messages) - 1];
             }
 
-            $response = $this->actingAs($this->currentUser, 'api')
+            $response = $this->actingAs($this->currentUser, 'sanctum')
                 ->getJson('/api/auth/messages/' .
                     $this->currentUser->cur_chat_window_user_id .
                     '/show?id=' . $pagMessage->id .

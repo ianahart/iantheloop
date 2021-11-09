@@ -84,7 +84,7 @@ class CommentLikeControllerTest extends TestCase
             $comment['action'] = 'like';
 
             $response = $this
-                ->actingAs($this->currentUser, 'api')
+                ->actingAs($this->currentUser, 'sanctum')
                 ->postJson(
                     '/api/auth/comment-likes/store',
                     $comment
@@ -116,7 +116,7 @@ class CommentLikeControllerTest extends TestCase
             $comment['action'] = 'unlike';
             foreach ($comment->commentLikes as $cLIndex => $commentLike) {
                 $response = $this
-                    ->actingAs($this->currentUser, 'api')
+                    ->actingAs($this->currentUser, 'sanctum')
                     ->deleteJson(
                         '/api/auth/comment-likes/' .
                             $commentLike->id .

@@ -5,8 +5,7 @@ namespace Tests\Feature\Http\Controllers\Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use Tymon\JWTAuth\Facades\JWTFactory;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\PasswordReset;
 use Illuminate\Support\Facades\Hash;
@@ -46,20 +45,11 @@ class ResetPasswordControllerTest extends TestCase
     /** @test */
     public function it_fails_when_reset_token_is_invalid()
     {
-        PasswordReset::factory()->create();
-
-        $data = [
-            'user_id' => 1,
-            'exp' => time() + 86400,
-            'iat' => time(),
-            'nbf' => time(),
-        ];
-        $customClaims = JWTFactory::customClaims($data);
-        $payload = JWTFactory::make($data);
-        $token = JWTAuth::encode($payload);
+        $validToken = PasswordReset::factory()->create(['token' => Hash::Make(1)]);
 
         $password = 'Password1234$';
         $passwordConfirmation = 'Password1234$';
+        $invalidToken = '4l2434dskj3d';
 
         $response = $this->postJson(
             '/api/auth/reset-password/',
@@ -69,11 +59,12 @@ class ResetPasswordControllerTest extends TestCase
                     'password_confirmation' => $passwordConfirmation
                 ],
                 'formName' => 'resetForm',
-                'resetToken' => $token->get(),
+                'resetToken' => $invalidToken,
             ]
         );
 
         $response->assertStatus(404);
+        $this->assertNotEquals($validToken, $invalidToken);
         $this->assertSame('Please try again. Something went wrong, click the link below.', $response->getData()->error);
     }
 
@@ -82,28 +73,18 @@ class ResetPasswordControllerTest extends TestCase
     public function it_fails_if_the_reset_token_has_expired()
     {
 
-        $data = [
-            'user_id' => 1,
-            'exp' => time() + 86400,
-            'iat' => time(),
-            'nbf' => time(),
-        ];
-
-        $customClaims = JWTFactory::customClaims($data);
-        $payload = JWTFactory::make($data);
-        $token = JWTAuth::encode($payload);
-
         $oneDayAgo = time() - 86420;
         $date = new DateTime();
         $date->setTimestamp($oneDayAgo);
 
+        $expiredToken = Str::random(60);
+
         PasswordReset::factory()
-            ->create(
-                [
-                    'token' => $token->get(),
-                    'created_at' =>  $date->format('Y-m-d H:i:s'),
-                ]
-            );
+            ->create([
+                'token' => $expiredToken,
+                'created_at' =>  $date->format('Y-m-d H:i:s'),
+                'email' => 'bill@gmail.com',
+            ]);
 
         $password = 'Password1234$';
         $passwordConfirmation = 'Password1234$';
@@ -116,10 +97,9 @@ class ResetPasswordControllerTest extends TestCase
                     'password_confirmation' => $passwordConfirmation
                 ],
                 'formName' => 'resetForm',
-                'resetToken' => $token->get(),
+                'resetToken' => $expiredToken,
             ]
         );
-
         $response->assertStatus(404);
         $this->assertSame('The link has expired please return to forgot password page', $response->getData()->error);
     }
@@ -137,23 +117,14 @@ class ResetPasswordControllerTest extends TestCase
                 ]
             );
 
-        $data = [
-            'user_id' => $user->id,
-            'exp' => time() + 86400,
-            'iat' => time(),
-            'nbf' => time(),
-        ];
-        $customClaims = JWTFactory::customClaims($data);
-        $payload = JWTFactory::make($data);
+        $token = Str::random(60);
 
-        $token = JWTAuth::encode($payload);
+        PasswordReset::factory()
+            ->create([
+                'token' => $token,
+                'email' => 'betsy.rippey@gmail.com',
+            ]);
 
-        $resetToken = PasswordReset::factory()
-            ->create(
-                [
-                    'token' => $token->get(),
-                ]
-            );
 
         $response = $this->postJson(
             '/api/auth/reset-password/',
@@ -163,7 +134,7 @@ class ResetPasswordControllerTest extends TestCase
                     'password_confirmation' => $oldPassword,
                 ],
                 'formName' => 'resetForm',
-                'resetToken' => $resetToken->token,
+                'resetToken' => $token,
             ]
         );
         $response->assertStatus(400);
@@ -184,25 +155,15 @@ class ResetPasswordControllerTest extends TestCase
                 ]
             );
 
-        $data = [
-            'user_id' => $user->id,
-            'exp' => time() + 86400,
-            'iat' => time(),
-            'nbf' => time(),
-        ];
-        $customClaims = JWTFactory::customClaims($data);
-        $payload = JWTFactory::make($data);
 
-        $token = JWTAuth::encode($payload);
+        $token = Str::random(60);
 
-        PasswordReset::factory()->count(2)->create();
+        PasswordReset::factory()
+            ->create([
+                'token' => $token,
+                'email' => 'betsy.rippey@gmail.com',
+            ]);
 
-        $resetToken = PasswordReset::factory()
-            ->create(
-                [
-                    'token' => $token->get(),
-                ]
-            );
 
         $password = 'Password1234$';
         $passwordConfirmation = 'Password1234$';
@@ -215,9 +176,10 @@ class ResetPasswordControllerTest extends TestCase
                     'password_confirmation' => $passwordConfirmation
                 ],
                 'formName' => 'resetForm',
-                'resetToken' => $resetToken->token,
+                'resetToken' => $token,
             ]
         );
+
 
         $updatedUser = User::find($user->id);
 

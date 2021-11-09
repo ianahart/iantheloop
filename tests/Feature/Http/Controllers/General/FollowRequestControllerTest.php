@@ -46,7 +46,7 @@ class FollowRequestControllerTest extends TestCase
     public function it_retrieves_all_follow_requests_for_the_current_user()
     {
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->getJson('/api/auth/follow-requests/index?userId=' . $this->currentUser->id, []);
 
         $response->assertStatus(200);
@@ -59,7 +59,7 @@ class FollowRequestControllerTest extends TestCase
     public function it_stores_a_users_follow_request()
     {
 
-        $response = $this->actingAs($this->currentUser, 'api')->postJson(
+        $response = $this->actingAs($this->currentUser, 'sanctum')->postJson(
             '/api/auth/follow-requests/store',
             [
                 'requester_user_id' => $this->currentUser->id,
@@ -79,7 +79,7 @@ class FollowRequestControllerTest extends TestCase
     {
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/follow-requests/' .
                     $this->currentUser->followReceives[0]->id .

@@ -102,7 +102,7 @@ class StoryControllerTest extends TestCase
 
         Event::dispatch(StoryPhotoProcessed::class);
 
-        $response = $this->actingAs($this->currentUser, 'api')->postJson(
+        $response = $this->actingAs($this->currentUser, 'sanctum')->postJson(
             '/api/auth/stories/create',
             $body,
         );
@@ -263,7 +263,7 @@ class StoryControllerTest extends TestCase
         $actualBaseStoryIDS = collect([]);
         $actualPages = collect([]);
         while ($page <= $numOfPages) {
-            $response = $this->actingAs($this->currentUser, 'api')
+            $response = $this->actingAs($this->currentUser, 'sanctum')
                 ->getJson(
                     '/api/auth/stories/index?page=' . $page,
                     []
@@ -286,7 +286,7 @@ class StoryControllerTest extends TestCase
     public function get_the_count_of_stories_posted_by_user_in_the_past_day()
     {
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->getJson(
                 '/api/auth/stories/' . $this->currentUser->id . '/count/show',
                 []
@@ -346,7 +346,7 @@ class StoryControllerTest extends TestCase
 
         Storage::fake('s3');
         /** @var mixed $user */
-        $response = $this->actingAs($user, 'api')
+        $response = $this->actingAs($user, 'sanctum')
             ->getJson(
                 '/api/auth/stories/' .
                     $user->id . '/show',
@@ -369,7 +369,7 @@ class StoryControllerTest extends TestCase
     {
         Storage::fake('s3');
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/stories/' .
                     $this->currentUser->subjectStory->id .
@@ -417,7 +417,7 @@ class StoryControllerTest extends TestCase
                 ]
             );
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/stories/' .
                     $otherUser->subjectStory->id .

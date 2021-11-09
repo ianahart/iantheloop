@@ -4,11 +4,9 @@ namespace Tests\Feature\Http\Controllers\General;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use App\Models\Review;
 use App\Models\Profile;
-use Database\Factories\ReviewFactory;
 use Tests\TestCase;
 
 class ReviewControllerTest extends TestCase
@@ -53,7 +51,7 @@ class ReviewControllerTest extends TestCase
 
         $this->currentUser->review->delete();
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->postJson(
                 '/api/auth/reviews/create',
                 [
@@ -77,7 +75,7 @@ class ReviewControllerTest extends TestCase
     {
 
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->postJson(
                 '/api/auth/reviews/create',
                 [
@@ -169,7 +167,7 @@ class ReviewControllerTest extends TestCase
     public function it_retrieves_the_current_users_review()
     {
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->getJson(
                 '/api/auth/reviews/' . $this->currentUser->id . '/show',
                 []
@@ -186,7 +184,7 @@ class ReviewControllerTest extends TestCase
     public function it_updates_a_users_review()
     {
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->patchJson(
                 '/api/auth/reviews/' . $this->currentUser->review->id . '/update',
                 [
@@ -207,7 +205,7 @@ class ReviewControllerTest extends TestCase
     {
 
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/reviews/' .
                     $this->currentUser->review->id .
@@ -225,7 +223,7 @@ class ReviewControllerTest extends TestCase
     public function it_does_not_delete_a_review_if_unauthorized()
     {
         $response = $this
-            ->actingAs($this->currentUser, 'api')
+            ->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/reviews/' . $this->currentUser->review->id . '/delete?userId=999',
                 []

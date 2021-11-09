@@ -55,7 +55,7 @@ class PostControllerTest extends TestCase
 
         /**@var mixed $authorUser */
         $response = $this
-            ->actingAs($authorUser, 'api')
+            ->actingAs($authorUser, 'sanctum')
             ->postJson(
                 '/api/auth/posts/store',
                 [
@@ -122,7 +122,7 @@ class PostControllerTest extends TestCase
 
             /**@var mixed $authorizedUser */
             $response = $this
-                ->actingAs($authorizedUser, 'api')
+                ->actingAs($authorizedUser, 'sanctum')
                 ->deleteJson(
                     '/api/auth/posts/' . $subjectUser->posts[$key]->id . '/delete?user=' . $authorizedUser->id,
                     []
@@ -159,7 +159,7 @@ class PostControllerTest extends TestCase
 
         /**@var mixed $currentUser */
         $response = $this
-            ->actingAs($currentUser, 'api')
+            ->actingAs($currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/posts/' . $subjectUser->posts[0]->id . '/delete?user=' . $currentUser->id,
                 []
@@ -187,7 +187,7 @@ class PostControllerTest extends TestCase
 
         /**@var mixed $subjectUser */
         $response = $this
-            ->actingAs($subjectUser, 'api')
+            ->actingAs($subjectUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/posts/' . $nonExistentPostId . '/delete?user=' . $subjectUser->id,
                 []
@@ -254,7 +254,7 @@ class PostControllerTest extends TestCase
 
             /**@var mixed $subjectUser */
             $response = $this
-                ->actingAs($subjectUser, 'api')
+                ->actingAs($subjectUser, 'sanctum')
                 ->getJson(
                     '/api/auth/posts?subjectId=' .
                         $subjectUser->id .

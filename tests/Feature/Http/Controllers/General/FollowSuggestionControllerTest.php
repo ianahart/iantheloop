@@ -176,7 +176,7 @@ class FollowSuggestionControllerTest extends TestCase
         $actualProspectUserIDs = collect([]);
 
         while ($currentPage < $numOfPages) {
-            $response = $this->actingAs($this->currentUser, 'api')
+            $response = $this->actingAs($this->currentUser, 'sanctum')
                 ->getJson(
                     '/api/auth/follow-suggestions/' .
                         $this->currentUser->id .
@@ -245,7 +245,7 @@ class FollowSuggestionControllerTest extends TestCase
 
         $last = NULL;
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->getJson(
                 '/api/auth/follow-suggestions/' .
                     $this->currentUser->id .
@@ -398,7 +398,7 @@ class FollowSuggestionControllerTest extends TestCase
 
         $last = $this->currentUser->recipientFollowSuggestion->first()->id;
 
-        $response = $this->actingAs($this->currentUser, 'api')->getJson(
+        $response = $this->actingAs($this->currentUser, 'sanctum')->getJson(
             '/api/auth/follow-suggestions/' .
                 $this->currentUser->id .
                 '/show?last=' .
@@ -545,7 +545,7 @@ class FollowSuggestionControllerTest extends TestCase
             );
 
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->getJson(
                 '/api/auth/follow-suggestions/' .
                     $this->currentUser->id .

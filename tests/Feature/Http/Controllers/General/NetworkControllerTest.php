@@ -106,7 +106,7 @@ class NetworkControllerTest extends TestCase
 
         while ($index < $lastFollower['id']) {
             $response = $this
-                ->actingAs($this->currentUser, 'api')
+                ->actingAs($this->currentUser, 'sanctum')
                 ->getJson(
                     '/api/auth/network/followers/show/' .
                         $this->subjectUser->id .
@@ -148,7 +148,7 @@ class NetworkControllerTest extends TestCase
 
         while ($index < $lastFollowing['id']) {
             $response = $this
-                ->actingAs($this->currentUser, 'api')
+                ->actingAs($this->currentUser, 'sanctum')
                 ->getJson(
                     '/api/auth/network/following/show/' .
                         $this->subjectUser->id .

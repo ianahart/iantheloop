@@ -41,7 +41,7 @@ class CommentControllerTest extends TestCase
 
         /**@var mixed $user */
         $response = $this
-            ->actingAs($user, 'api')
+            ->actingAs($user, 'sanctum')
             ->postJson(
                 '/api/auth/comments/store',
                 [
@@ -108,7 +108,7 @@ class CommentControllerTest extends TestCase
             );
 
         /**@var mixed $user */
-        $response = $this->actingAs($user, 'api')->postJson(
+        $response = $this->actingAs($user, 'sanctum')->postJson(
             '/api/auth/comments/store',
             [
                 'input' => $this->faker->text(30),
@@ -158,7 +158,7 @@ class CommentControllerTest extends TestCase
 
             /**@var mixed $authorized */
             $response = $this
-                ->actingAs($authorized[$i], 'api')
+                ->actingAs($authorized[$i], 'sanctum')
                 ->deleteJson(
                     '/api/auth/comments/' .
                         $subjectUser->posts[0]->comments[$i]->id .
@@ -196,7 +196,7 @@ class CommentControllerTest extends TestCase
         Comment::factory()->for($post)->create(['post_id' => $post->id]);
 
         $response = $this
-            ->actingAs($users[0], 'api')
+            ->actingAs($users[0], 'sanctum')
             ->deleteJson(
                 '/api/auth/comments/' .
                     $post->comments[0]->id .
@@ -249,7 +249,7 @@ class CommentControllerTest extends TestCase
                 $lastCommentId = $lastCommentId - 3;
             }
             $response = $this
-                ->actingAs($users[0], 'api')
+                ->actingAs($users[0], 'sanctum')
                 ->getJson(
                     '/api/auth/posts/' . $post->id . '/comments/show?last=' . $lastCommentId,
                     []
@@ -287,7 +287,7 @@ class CommentControllerTest extends TestCase
 
         /**@var mixed $user */
         $response = $this
-            ->actingAs($user, 'api')
+            ->actingAs($user, 'sanctum')
             ->getJson(
                 '/api/auth/posts/' .
                     $post->id .
@@ -344,7 +344,7 @@ class CommentControllerTest extends TestCase
                 $lastReplyCommentId = $lastReplyCommentId - 3;
             }
             $response = $this
-                ->actingAs($users[0], 'api')
+                ->actingAs($users[0], 'sanctum')
                 ->getJson(
                     '/api/auth/posts/' .
                         $post->id .
@@ -406,7 +406,7 @@ class CommentControllerTest extends TestCase
 
         /**@var mixed $user */
         $response = $this
-            ->actingAs($user, 'api')
+            ->actingAs($user, 'sanctum')
             ->getJson(
                 '/api/auth/posts/' .
                     $post->id .
@@ -456,7 +456,7 @@ class CommentControllerTest extends TestCase
 
         /**@var mixed $user */
         $response = $this
-            ->actingAs($user, 'api')
+            ->actingAs($user, 'sanctum')
             ->postJson(
                 '/api/auth/comments/reply/store',
                 [
@@ -534,7 +534,7 @@ class CommentControllerTest extends TestCase
 
             /**@var mixed $user */
             $response = $this
-                ->actingAs($user, 'api')
+                ->actingAs($user, 'sanctum')
                 ->deleteJson(
                     '/api/auth/comments/reply/' .
                         $subjectUser
@@ -584,7 +584,7 @@ class CommentControllerTest extends TestCase
             );
 
         $response = $this
-            ->actingAs($unAuthorizedUser, 'api')
+            ->actingAs($unAuthorizedUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/comments/reply/' .
                     $subjectUser

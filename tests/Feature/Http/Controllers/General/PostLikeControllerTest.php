@@ -59,7 +59,7 @@ class PostLikeControllerTest extends TestCase
     {
         Bus::fake();
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->postJson(
                 '/api/auth/post-likes/store',
                 [
@@ -87,7 +87,7 @@ class PostLikeControllerTest extends TestCase
                 ]
             );
 
-        $response = $this->actingAs($this->currentUser, 'api')
+        $response = $this->actingAs($this->currentUser, 'sanctum')
             ->deleteJson(
                 '/api/auth/post-likes/' .
                     $this->subjectUser->posts[0]->postLikes[0]->id .

@@ -4,7 +4,7 @@ namespace Tests\Feature\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -18,7 +18,8 @@ class LogoutControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $token = JWTAuth::fromUser($user);
+        $token = $user->createToken('auth_token')->plainTextToken;
+
 
         $response = $this
             ->withHeaders(

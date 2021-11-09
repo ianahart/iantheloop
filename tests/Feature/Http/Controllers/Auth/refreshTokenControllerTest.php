@@ -5,16 +5,8 @@ namespace Tests\Feature\Http\Controllers\Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
-use Tymon\JWTAuth\JWTGuard;
-use Tymon\JWTAuth\Claims\Expiration;
-use Tymon\JWTAuth\Claims\IssuedAt;
-use Tymon\JWTAuth\Claims\Issuer;
-use Tymon\JWTAuth\Claims\JwtId;
-use Tymon\JWTAuth\Claims\NotBefore;
-use Tymon\JWTAuth\Claims\Subject;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Tymon\JWTAuth\Facades\JWTFactory;
-use DateTime;
+use App\Models\Setting;
+
 
 use function PHPUnit\Framework\assertEquals;
 
@@ -31,52 +23,34 @@ class refreshTokenControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_disallows_a_non_authenticated_user_from_trying_refresh()
-    {
-
-        $date = new DateTime();
-        $now = $date->getTimestamp();
-
-        $customClaims = JWTFactory::customClaims(
-            [
-                'iss' => new Issuer('http://iantheloop.com'),
-                'exp' => new Expiration($now + 1),
-                'nbf' => new NotBefore($now),
-                'iat' => new IssuedAt($now),
-                'jti' => new JwtId('bar'),
-                'sub' => new Subject(12345),
-            ]
-        );
-
-        $payload = JWTFactory::make($customClaims);
-        $token = JWTAuth::encode($payload);
-
-        $response = $this
-            ->postJson(
-                '/api/auth/token/refresh',
-                [
-                    'token' => $token->get(),
-                ]
-            );
-
-        $response->assertStatus(400);
-
-        $this->assertNull($response->getData()->data);
-        $this->assertEquals('User not found', $response->getData()->message);
-    }
-
-    /** @test */
     public function it_rejects_an_expired_token()
     {
-        JWTAuth::factory()->setTTL(1);
-        JWTAuth::factory()->setRefreshTTL(0);
-
-        $token = JWTAuth::fromUser($this->user);
-        JWTAuth::setToken($token);
 
 
+        $user = User::factory()->has(Setting::factory())->create([]);
 
-        $this->travel(3)->minutes();
+        $lookup = base64_encode(random_bytes(9));
+        $storedNonce = base64_encode(random_bytes(18));
+
+
+        $user->setting->lookup = $lookup;
+        $user->setting->remember_me = 1;
+        $user->setting->expire_in = 86400 * 30;
+
+        $user->setting->save();
+        $user->setting->refresh();
+
+        $validator = hash_hmac('sha256', $user->setting->user->full_name, $user->setting->ip_address, $storedNonce);
+        $user->setting->validator = $validator;
+
+        $user->setting->save();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+
+
+        $this->travel(3)->weeks();
+
         $response = $this
             ->postJson(
                 '/api/auth/token/refresh',
@@ -85,71 +59,15 @@ class refreshTokenControllerTest extends TestCase
                 ]
             );
 
-        $refreshedToken = json_decode(
-            $response
-                ->getData()
-                ->access_token,
-            true
-        )['access_token'];
-
-        $this->travel(2)->weeks();
         $response = $this
             ->postJson(
                 '/api/auth/token/refresh',
                 [
-                    'token' => $refreshedToken,
+                    'token' => $token,
                 ]
             );
 
         $response->assertStatus(403);
         assertEquals('Token Expired', $response->getData()->message);
-    }
-
-    /** @test */
-    public function it_refreshes_a_token()
-    {
-
-        $date = new DateTime();
-        $now = $date->getTimestamp();
-
-        $customClaims = JWTFactory::customClaims(
-            [
-                'iss' => new Issuer('http://example.com'),
-                'exp' => new Expiration($now + 50),
-                'nbf' => new NotBefore($now),
-                'iat' => new IssuedAt($now),
-                'jti' => new JwtId('foo'),
-                'sub' => new Subject($this->user->id),
-            ]
-        );
-
-        $payload = JWTFactory::make($customClaims);
-        $token = JWTAuth::encode($payload);
-
-
-
-        $this->travel(1)->minutes();
-
-        $response = $this
-            ->postJson(
-                '/api/auth/token/refresh',
-                [
-                    'token' => $token->get(),
-                ]
-            );
-
-        $this->travelBack();
-        $response->assertStatus(200);
-        $response->assertJsonStructure(['access_token', 'message']);
-
-        list('access_token' => $accessToken, 'message' => $message) = json_decode(
-            json_encode($response->getData()),
-            true
-        );
-
-        $this->assertSame('Token refreshed', $message);
-
-        $this->assertIsString(json_decode($accessToken, true)['access_token']);
-        $this->assertNotEquals($token, json_decode($accessToken, true)['access_token']);
     }
 }

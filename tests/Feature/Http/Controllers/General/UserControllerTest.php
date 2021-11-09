@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\Review;
 use App\Events\UserStatusChanged;
 use Database\Factories\ReviewFactory;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class UserControllerTest extends TestCase
 {
@@ -28,7 +28,7 @@ class UserControllerTest extends TestCase
             ->create(
                 ['status' => 'offline', 'id' => 40]
             );
-        $this->token = JWTAuth::fromUser($this->user);
+        $this->token = $this->user->createToken('auth_token')->plainTextToken;
     }
 
 
