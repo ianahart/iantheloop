@@ -135,9 +135,11 @@ const profile = {
 
   actions: {
 
-    async SEND_FOLLOW_REQUEST({ state, commit }) {
+    async SEND_FOLLOW_REQUEST({ state, rootGetters, commit }, viewingUser = null) {
 
       try {
+
+        let receiver = state.viewingUserId === rootGetters['user/getUserId'] ? parseInt(viewingUser) : state.viewingUserId;
 
         const response = await axios(
           {
@@ -148,8 +150,8 @@ const profile = {
               'Content-Type': 'application/json',
             },
             data: {
-              requester_user_id: state.currentUserId,
-              receiver_user_id: state.viewingUserId,
+              requester_user_id: rootGetters['user/getUserId'],
+              receiver_user_id: receiver,
             },
           }
         );
@@ -183,6 +185,7 @@ const profile = {
             });
         }
       } catch (e) {
+
         if (e.response.status === 404 && e.response.data.error.toLowerCase() === 'blocked profile') {
            commit('SET_RESTRICTED_PROFILE', {
             status: true,
@@ -194,7 +197,7 @@ const profile = {
     },
 
 
-    async UPDATE_FOLLOW_STATS({ state, commit }, data) {
+    async UPDATE_FOLLOW_STATS({ state,rootGetters, commit }, data) {
 
       try {
 
@@ -209,7 +212,11 @@ const profile = {
             data,
           }
         );
-        commit('SET_PROFILE_STATS', response.data);
+
+        if (data.profilePage === rootGetters['user/getUserId']) {
+          commit('SET_PROFILE_STATS', response.data);
+        }
+
       } catch (e) {
         console.log(e.response);
       }

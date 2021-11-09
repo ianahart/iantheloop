@@ -32,9 +32,12 @@ class NetworkController extends Controller
                 throw new Exception($error);
             }
 
+            $ownerUser = $network->getOwner();
+
+
+
             $users = $network->getNetwork();
 
-            $ownerUser = $network->getOwner();
 
             return response()
                 ->json(

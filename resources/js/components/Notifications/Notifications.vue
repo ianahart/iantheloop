@@ -91,6 +91,7 @@ export default {
     },
 
     async handleAcceptRequest(payload) {
+
       await this.UPDATE_FOLLOW_STATS(payload);
       this.$store.commit("notifications/SET_REMOVE_REQUEST", payload);
     },

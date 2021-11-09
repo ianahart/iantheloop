@@ -77,9 +77,9 @@ class ResetPasswordController extends Controller
                 );
             }
 
-            $userId = $this->getUser($request->resetToken);
+            $email = $this->getUser($request->resetToken);
 
-            $status = $this->updatePassword($userId, $request->formData['password']);
+            $status = $this->updatePassword($email, $request->formData['password']);
 
             if ($status !== 200) {
 
@@ -131,7 +131,7 @@ class ResetPasswordController extends Controller
 
         $passwordReset  = PasswordReset::where('token', '=', $token)->first();
 
-        $timestamp = date_timestamp_get($passwordReset->created_at);
+        $timestamp = $passwordReset->created_at->timestamp;
 
         $timeElapsed = time() - $timestamp;
 

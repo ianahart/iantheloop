@@ -25,7 +25,6 @@ class refreshTokenController extends Controller
             $currentUser = User::find($request->all()['user_id']);
 
             if (Cookie::has('remember_me')) {
-
                 $setting = new Setting;
                 $validRememberMe = $setting->validateRememberMe($request->userAgent());
 
@@ -63,10 +62,11 @@ class refreshTokenController extends Controller
                 ],
                 403
             )->withCookie($cookie);
-        } catch (Exception) {
+        } catch (Exception $e) {
             return response()->json(
                 [
-                    'message' => 'Token Expired'
+                    'message' => 'Token Expired',
+                    'error' => $e->getMessage(),
                 ],
                 403
             );

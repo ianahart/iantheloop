@@ -54,9 +54,9 @@
 
     async mounted() {
       await this.loadNewsfeedPosts();
-      if (this.checkExistingStoryConnection() === -1) {
-            this.initStoryChannel();
-      }
+      // if (this.checkExistingStoryConnection() === -1) {
+      //       this.initStoryChannel();
+      // }
     },
 
     beforeDestroy() {
@@ -126,6 +126,7 @@
       },
 
       initStoryChannel() {
+
         Echo.connector.pusher.config.auth.headers['Authorization'] = `Bearer ${this.getToken}`;
          Echo.private(`stories.${this.getUserId}`)
             .listen('StoryPhotoProcessed', (event) => {
@@ -202,5 +203,8 @@
     }
   }
 </style>
+
+
+
 
 

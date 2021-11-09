@@ -125,7 +125,7 @@ class ProfileController extends Controller
 
                 $token = $request->header('Authorization');
 
-                $this->getUserIdFromToken($token);
+                $this->getUserId($token);
 
                 $this->storeProfile();
 
@@ -145,9 +145,9 @@ class ProfileController extends Controller
 
                 return response()->json(
                     [
-                        'profileCreated' => $status,
-                        'msg' => 'success',
+                        'profile_created' => $status,
                         'profile_pic' => $this->profilePic,
+                        'status' => 'online',
                     ],
                     200
                 );
@@ -168,13 +168,15 @@ class ProfileController extends Controller
      * @param string $token
      * @return void
      */
-    private function getUserIdFromToken(string $token)
+    private function getUserId(string $token)
     {
-        $payload = explode('.', $token)[1];
+        $currentUser = User::find(Auth::guard('sanctum')->user()->id);
 
-        $decoded = json_decode(base64_decode($payload));
+        $currentUser->tokens()->where('token', '=', $token)->first();
 
-        $this->userId = $decoded->sub;
+        if (!is_null($currentUser)) {
+            $this->userId = $currentUser->id;
+        }
     }
 
     /*

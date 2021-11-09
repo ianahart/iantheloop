@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\PasswordReset;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 
@@ -132,12 +132,7 @@ class ForgotPasswordController extends Controller
      */
     private function generateToken(int $id)
     {
-
-        $data = [
-            'user_id' => $id,
-        ];
-
-        return Hash::make($data['user_id']);
+        return Str::random(60);
     }
 
     /*

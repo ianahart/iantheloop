@@ -21,7 +21,8 @@ export default {
     ...mapActions("profile", ["SEND_FOLLOW_REQUEST"]),
 
     async sendFollowRequest() {
-      await this.SEND_FOLLOW_REQUEST();
+      const id = this.$route.params.id;
+      await this.SEND_FOLLOW_REQUEST(id);
     },
   },
 };

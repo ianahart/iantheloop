@@ -48,7 +48,7 @@ const createProfile = {
 
   actions: {
 
-    async CREATE_PROFILE ({ commit, getters, rootGetters }) {
+    async CREATE_PROFILE ({ commit, rootState, getters, rootGetters }) {
 
       try {
 
@@ -88,18 +88,16 @@ const createProfile = {
             data: formData,
           }
         );
+          let user = JSON.parse(localStorage.getItem('user'));
+          let updatedUserInfo = JSON.parse(user.user_info);
 
+          for (let prop in response.data) {
+             updatedUserInfo[prop] = response.data[prop];
+          }
 
-
-          let stringifiedUser = localStorage.getItem('user');
-
-          const parsedUser = JSON.parse(stringifiedUser);
-
-          parsedUser.profile_created = response.data.profileCreated;
-          parsedUser.profile_pic = response.data.profile_pic;
-
-
-          commit('user/SET_TOKEN', JSON.stringify(parsedUser), { root: true });
+          user.user_info = JSON.stringify(updatedUserInfo);
+          rootState.user.jwtToken = JSON.stringify(user);
+          localStorage.setItem('user', JSON.stringify(user));
 
       } catch (e) {
 
@@ -129,7 +127,6 @@ const createProfile = {
                 });
           }
         }
-        // console.log('---------Create Profile Errors: ------', e.response);
 
           for (let form in forms) {
 

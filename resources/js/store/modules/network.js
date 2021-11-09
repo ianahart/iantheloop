@@ -99,6 +99,7 @@ const network = {
         }
 
       } catch (e) {
+        console.log(e.response);
         if (e.response.status !== 403 || e.response.status !== 429) {
           commit('SET_ERROR', e.response);
           commit('SET_DATA_LOADED');

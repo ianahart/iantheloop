@@ -64,7 +64,9 @@ export default function setup(store) {
   return response;
 }, async function (error) {
 
+
   const originalRequest = error.config;
+
   if (error.response.status === 403) {
     cleanUpAndLogout(store);
   }

@@ -31,7 +31,7 @@ const user = {
 
     getUserSettingsId(state) {
       if (state.jwtToken) {
-        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).settings_user_id;
+        return JSON.parse(JSON.parse(localStorage.getItem('user')).user_info).user_settings_user_id;
       }
     },
 
@@ -72,7 +72,7 @@ const user = {
       }
     },
 
-    isLoggedIn (state) {1
+    isLoggedIn (state) {
       return !!state.jwtToken;
     },
 
@@ -112,19 +112,20 @@ const user = {
       state.jwtToken = '';
     },
 
+    UPDATE_USER_INFO(state, payload) {
+       console.log('user.js: UPDATE_USER_INFO() line 115: ', payload);
+    },
+
     SET_INITIAL_TOGGLE_VALUE: (state, payload) => {
       state.statusToggledBtn = payload;
     },
 
     SYNC_NEW_STATUS: (state, payload) => {
-
-
- ///     EHRERE HNERXT
-
-      const user = JSON.parse(localStorage.getItem('user'));
-      user.status = payload.new_user_status;
+       let user = JSON.parse(localStorage.getItem('user'));
+       let updatedUserInfo = JSON.parse(user.user_info);
+       updatedUserInfo.status = payload.new_user_status;
+       user.user_info = JSON.stringify(updatedUserInfo);
       state.status = payload.new_user_status;
-
       localStorage.setItem('user', JSON.stringify(user));
     },
 

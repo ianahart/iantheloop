@@ -53,6 +53,7 @@ export default {
         viewingUserId: request.receiver_user_id,
         currentUserId: request.requester_user_id,
         requestId: request.id,
+        profilePage: parseInt(this.$route.params.id),
       };
 
       this.$emit("acceptrequest", data);

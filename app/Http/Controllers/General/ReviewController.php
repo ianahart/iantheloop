@@ -115,7 +115,7 @@ class ReviewController extends Controller
                         'msg' => 'Unable to retrieve reviews',
                         'error' => $e->getMessage()
                     ],
-                    $e->getCode() ? $e->getCode() : 404
+                    404,
                 );
         }
     }

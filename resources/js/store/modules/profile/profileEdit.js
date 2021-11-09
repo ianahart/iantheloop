@@ -448,7 +448,7 @@ const profileEdit = {
       }
     },
 
-    async UPDATE_PROFILE ({commit, rootGetters, state, getters }) {
+    async UPDATE_PROFILE ({commit, rootState, rootGetters, state, getters }) {
 
       try {
 
@@ -495,12 +495,13 @@ const profileEdit = {
             }
           );
 
-        let stringifiedUser = localStorage.getItem('user');
-        const parsedUser = JSON.parse(stringifiedUser);
-        parsedUser.profile_pic = response.data.profile_pic;
-        commit('user/SET_TOKEN', JSON.stringify(parsedUser), { root: true });
+          let user = JSON.parse(localStorage.getItem('user'));
+          let updatedUserInfo = JSON.parse(user.user_info);
+          updatedUserInfo.profile_pic = response.data.profile_pic;
+          user.user_info = JSON.stringify(updatedUserInfo);
+          commit('user/SET_TOKEN', user, { root: true });
 
-        commit('SET_IS_UPDATED', {isUpdated:response.data.isUpdated, user_id: rootGetters['user/getUserId']});
+          commit('SET_IS_UPDATED', {isUpdated:response.data.isUpdated, user_id: rootGetters['user/getUserId']});
       } catch (e) {
         if (e.response.status === 422) {
           commit('SET_LOADER', false);

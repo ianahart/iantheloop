@@ -103,8 +103,10 @@ export default new Vuex.Store(
                commit('SET_TESTIMONIALS', response.data.reviews.slice(0,3));
              }
            } catch(e) {
-            console.log('index.js GET_TESTIMONIALS | 400', e.response);
+             if (e) {
+               console.log(e);
            }
+          }
       }
     },
 
@@ -139,4 +141,3 @@ export default new Vuex.Store(
     },
   }
 );
-

@@ -16,6 +16,7 @@ class Network
   private int $ownerUserId;
   private LengthAwarePaginator $network;
   private array $owner;
+  private bool $hasNetwork;
 
 
   public function __construct(int $currentUserId, $ownerUserId)
@@ -34,6 +35,11 @@ class Network
   public function getNetwork()
   {
     return $this->network;
+  }
+
+  public function getHasNetwork()
+  {
+    return $this->hasNetwork;
   }
 
   public function getOwner()
@@ -72,6 +78,7 @@ class Network
 
     try {
 
+
       $currentUser = User::find($this->currentUserId);
       $ownerUser = User::find($this->ownerUserId);
 
@@ -79,17 +86,14 @@ class Network
         'id' => $ownerUser->id,
         'owner_full_name' => $ownerUser->full_name,
         'profile_id' => $ownerUser->profile->id,
-        'owner_profile_picture' => $ownerUser->profile->profile_picture,
+        'owner_profile_picture' => $ownerUser->profile->profile_picture ?? '',
       ];
+
 
       $list = $type === 'following' ? $ownerUser->stat->following : $ownerUser->stat->followers;
 
-      if (is_null($list)) {
-        throw new Exception('This user appears not to be following anyone yet.');
-      }
-      $actualUserList = array_keys($list);
 
-
+      $actualUserList = is_null($list) ? [] : array_keys($list);
 
       $users = User::whereIn(
         'id',
@@ -120,10 +124,11 @@ class Network
 
         $this->makeUserList($users, $currentUserFollowList);
       } else {
+
         $this->network = $users;
       }
     } catch (Exception $e) {
-
+      error_log(print_r($e->getLine(), true));
 
       $this->exception = $e->getMessage();
     }
@@ -142,6 +147,7 @@ class Network
 
       $currentUserFollowIDs = array_keys($currentUserFollowList);
       if (is_null($currentUserFollowIDs)) {
+
         $user->curUserFollowing = false;
         return;
       }
