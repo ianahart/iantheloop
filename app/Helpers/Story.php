@@ -277,49 +277,6 @@ class Story
               );
           }]
         )->paginate(self::LIMIT)->toArray();
-
-
-
-
-
-      // $currentUserFollowing = User::find($this->currentUserId)
-      //   ->stat
-      //   ->following;
-      // if (is_null($currentUserFollowing)) {
-      //   throw new Exception('No stories to display');
-      // }
-      // $currentUserFollowing = array_keys($currentUserFollowing);
-
-      // $this->stories = User::select(['id', 'full_name'])
-      //   ->orderBy('id', 'DESC')
-      //   ->whereHas(
-      //     'subjectStory',
-      //     function (Builder $query) use ($currentUserFollowing) {
-      //       $query
-      //         ->whereIn('user_id', $currentUserFollowing)
-      //         ->where('expire_in_unix', '>', now()->timestamp);
-      //     }
-      //   )->with(
-      //     ['subjectStory' => function ($query) {
-      //       $query
-      //         ->select(
-      //           [
-      //             'id',
-      //             'profile_id',
-      //             'user_id'
-      //           ]
-      //         )
-      //         ->with(
-      //           ['profile' => function ($innerQuery) {
-      //             $innerQuery->select(
-      //               [
-      //                 'id', 'profile_picture'
-      //               ]
-      //             );
-      //           }]
-      //         );
-      //     }]
-      //   )->paginate(self::LIMIT)->toArray();
     } catch (ModelNotFoundException $e) {
       $this->error = $e->getMessage();
     }
