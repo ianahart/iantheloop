@@ -120,12 +120,17 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 
 
 ## How To Use
-
+   Visit this link in the browser:
+   ````sh
+    http://localhost:8000
+   ````
 
 1. Create an account
 2. Login with account credentials
 3. Create Profile
 4. Follow other users
+
+
 
 ## License
 
