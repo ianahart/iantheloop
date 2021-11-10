@@ -36,9 +36,11 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
-        resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
 
-        parent::boot();
+        if (env('APP_ENV') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
 
 
         $this->routes(function () {
