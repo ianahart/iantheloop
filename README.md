@@ -38,7 +38,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 <br>
 
 ✏️ *Migrate Vue 2 to Vue 3* <br>
-✏️ *Find a more maintained up-to-date JSON Web Token library* <br>
+✅ *Migrate to a more maintained up-to-date JWT library* <br>
 ✏️ *Add User Insights* <br>
 ✏️ *Add User Groups/Events with invitations* <br>
 ✏️ *Video Stories* <br>
