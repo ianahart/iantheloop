@@ -6,7 +6,7 @@ services:
         user: guest
         uid: 1000
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: iantheloop
     container_name: iantheloop-app
     restart: unless-stopped
