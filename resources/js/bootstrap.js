@@ -28,6 +28,7 @@ window.Echo = new Echo({
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     encrypted: true,
     // forceTLS: true, --- for production
+    forceTLS: !process.env.MIX_APP_URL.includes('localhost') ? true : false,
     authEndpoint: '/broadcasting/auth',
     forceTLS: false,
     wsHost: window.location.hostname,
