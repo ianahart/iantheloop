@@ -131,8 +131,13 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 4. Follow other users
 
 ## Live Application:
+<<<<<<< HEAD
  Currently hosted on a Digital Ocean Droplet.
 
+=======
+ Currently hosted on a Digital Ocean Droplet. Visit [**iaNtheLoop**](https://iaNtheLoop.com/)
+ <br>
+>>>>>>> origin/main
  Test User:
  email: millie@gmail.com <br>
  password: Test12345%
