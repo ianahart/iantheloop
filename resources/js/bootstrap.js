@@ -27,14 +27,12 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     encrypted: true,
-    // forceTLS: true, --- for production
-    forceTLS: !process.env.MIX_APP_URL.includes('localhost') ? true : false,
-    authEndpoint: '/broadcasting/auth',
     forceTLS: false,
+    authEndpoint: '/broadcasting/auth',
     wsHost: window.location.hostname,
     wsPort: 6001,
     disableStats: true,
-    enabledTransports: ['ws', 'wss'],
+    enabledTransports: ['ws'],
     auth: {
       headers: {
         Authorization: `Bearer ${token}`,

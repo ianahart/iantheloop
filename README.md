@@ -130,7 +130,12 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 3. Create Profile
 4. Follow other users
 
+## Live Application:
+ Currently hosted on a Digital Ocean Droplet.
 
+ Test User:
+ email: millie@gmail.com <br>
+ password: Test12345%
 
 ## License
 

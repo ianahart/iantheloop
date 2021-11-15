@@ -146,10 +146,12 @@ const posts = {
     },
 
     SET_POST_ERROR: (state, payload) => {
+
        state.postErrors.push(payload);
     },
 
     SET_POST_ERRORS: (state, payload) => {
+
       for (let error in payload) {
         state.postErrors.push(...payload[error]);
       }
@@ -414,7 +416,7 @@ const posts = {
 
       } catch (e) {
 
-        commit('SET_POST_ERROR', e.response.data.errors);
+        commit('SET_POST_ERRORS', e.response.data.errors);
       }
     },
 

@@ -26,7 +26,7 @@ class StorePostRequest extends FormRequest
         return [
             'photofile' => ['nullable', 'mimes:jpg,bmp,png', 'max:2001'],
             'videofile' => ['nullable', 'mimes:mp4,x-flv,x-mpegURL,MP2T,3gpp,qt,x-msvideo,x-ms-wmv', 'max:4100'],
-            'post_text' => ['max:500'],
+            'post_text' => ['max:500', 'regex:/^[\.a-zA-Z0-9,!?\' ]*$/'],
         ];
     }
 
@@ -43,6 +43,7 @@ class StorePostRequest extends FormRequest
             'videofile.mimes' => 'video format is unsupported, please try a different format',
             'videofile.max' => 'Video must not exceed 4MB (megabytes)',
             'post_text.max' => 'Post body must not exceed 500 characters',
+            'post_text.regex' => 'Please use only letters, numbers, and [ . ? ! ]'
         ];
     }
 

@@ -256,55 +256,11 @@
    }
  }
 
-</style>
-
-  .login__container {
-    box-sizing: border-box;
-    background-image: url('../../assets/login.svg');
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-  }
-
-  .login__form__container {
-    width: 448px;
-    margin-bottom: 3rem;
-    box-sizing: border-box;
-    margin-top: 6rem;
-  }
-
-  .login__form {
-    width: 100%;
-    height: auto;
-    box-sizing: border-box;
-    padding: 1rem;
-    background-color: $primaryWhite;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.2);
-    border-radius: 8px;
-  }
-
- .login__button__container {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   margin: 3rem auto;
-
-   button {
-     width: 150px;
-   }
- }
-
- .forgot__password__link {
-   font-size: 0.8rem;
-   text-decoration: none;
-   color: darken($themeDarkGreen, 20);
-
-   &:hover {
-     opacity: 0.7;
+ @media(max-width:600px) {
+   .login__form__container {
+     width: 100%;
    }
  }
 
 </style>
+

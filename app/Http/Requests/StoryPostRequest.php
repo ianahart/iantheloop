@@ -26,7 +26,7 @@ class StoryPostRequest extends FormRequest
     {
         return [
             'file' => ['nullable', 'mimes:jpg,bmp,png', 'max:2300'],
-            'text' => ['max:150'],
+            'text' => ['max:150', 'regex:/^[\.a-zA-Z0-9,!?\' ]*$/'],
         ];
     }
 
@@ -41,7 +41,8 @@ class StoryPostRequest extends FormRequest
             [
                 'file.mimes' => 'Your story photo must be an image of type (jpg, png).',
                 'file.max' => 'Your story photo must be under 2MB.',
-                'text.max' => 'Your story text must be under 150 characters.'
+                'text.max' => 'Your story text must be under 150 characters.',
+                'text.regex' => 'Please use only letters, numbers, and [ . ? ! ]'
             ];
     }
 
