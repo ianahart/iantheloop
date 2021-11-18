@@ -11,7 +11,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\General\CommentController;
 use App\Http\Controllers\General\ProfileController;
-use App\Http\Controllers\general\StatsController;
+use App\Http\Controllers\General\StatsController;
 use App\Http\Controllers\General\NetworkController;
 use App\Http\Controllers\General\UserController;
 use App\Http\Controllers\General\PostController;
