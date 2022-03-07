@@ -10,7 +10,7 @@ use App\Models\Setting;
 
 use function PHPUnit\Framework\assertEquals;
 
-class refreshTokenControllerTest extends TestCase
+class RefreshTokenControllerTest extends TestCase
 {
 
     use RefreshDatabase;

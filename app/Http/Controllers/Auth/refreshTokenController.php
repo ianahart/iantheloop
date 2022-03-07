@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
 
-class refreshTokenController extends Controller
+class RefreshTokenController extends Controller
 {
     /*
      * Refresh Token

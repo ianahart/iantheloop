@@ -38,6 +38,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 <br>
 
 ✏️ *Migrate Vue 2 to Vue 3* <br>
+✅ *Migrate From Laravel 8 to Laravel 9 when released<br>
 ✅ *Migrate to a more maintained up-to-date JWT library* <br>
 ✏️ *Add User Insights* <br>
 ✏️ *Add User Groups/Events with invitations* <br>

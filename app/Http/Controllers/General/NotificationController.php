@@ -32,16 +32,19 @@ class NotificationController extends Controller
             }
 
             $notifications = $notification->getNotifications();
+            $nextPageURL = $notification->getNextPageURL();
+
 
             return response()
                 ->json(
                     [
                         'msg' => 'success',
                         'notifications' => $notifications,
-                        'next_page_url' => $notifications->pop($notifications['next_page_url']),
+                        'next_page_url' => $nextPageURL,
                     ]
                 );
         } catch (Exception $e) {
+            error_log(print_r($e->getMessage(), true));
             return response()
                 ->json(
                     [

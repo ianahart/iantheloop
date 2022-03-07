@@ -79,7 +79,7 @@ class StoryControllerTest extends TestCase
         $textData = json_encode([
             'user_id' => $this->currentUser->id,
             'story_type' => 'photo',
-            'text' => NULL,
+            'text' => 're',
             'alignment' => 'center',
             'color' => 'black',
             'duration' => [

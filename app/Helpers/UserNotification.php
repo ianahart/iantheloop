@@ -15,6 +15,7 @@ class UserNotification
   private string $type;
   private int $user;
   private string $error;
+  private string|null $nextPageURL;
   private array|object $notifications;
   private int|string $currentPage;
 
@@ -43,6 +44,10 @@ class UserNotification
   {
     return $this->notifications;
   }
+  public function getNextPageURL()
+  {
+    return $this->nextPageURL;
+  }
 
   public function interactionNotifications()
   {
@@ -69,7 +74,8 @@ class UserNotification
       }
 
       $this->notifications = $arrayNotifications;
-      $this->notifications['next_page_url'] = $results->nextPageUrl();
+
+      $this->nextPageURL = $results->nextPageUrl();
     } catch (Exception $e) {
       $this->error = $e->getMessage();
     }

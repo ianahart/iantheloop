@@ -113,7 +113,7 @@ class NotificationControllerTest extends TestCase
                     is_null($cursor) ? $initialEndpoint : $cursor . '&type=App/Notifications/Interaction',
                     []
                 );
-
+            error_log(print_r($response->getData(), true));
             $cursor = $response->getData()->next_page_url;
 
             $actualNotifications->push(...array_map(function ($notification) {
