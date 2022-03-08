@@ -1,59 +1,54 @@
 <template>
-  <div :class="`${footerStyles} footer`">
-    <p>All Rights Reserved &#169;</p>
-    <p>iaNtheLoop 2021</p>
-    <div class="footer_policies">
-      <a href="https://www.freeprivacypolicy.com/live/644bb30b-ae07-4de5-a9e1-c8230ad37f58">Privacy Policy</a>
+    <div :class="`${footerStyles} footer`">
+        <p>All Rights Reserved &#169;</p>
+        <p>iaNtheLoop 2022</p>
+        <div class="footer_policies">
+            <a
+                href="https://www.freeprivacypolicy.com/live/644bb30b-ae07-4de5-a9e1-c8230ad37f58"
+                >Privacy Policy</a
+            >
+        </div>
     </div>
-  </div>
 </template>
 
-
 <script>
-
-  export default {
-
-    name: 'Footer',
+export default {
+    name: "Footer",
 
     props: {
-      footerStyles: String,
+        footerStyles: String
     }
-
-  }
+};
 </script>
 
 <style lang="scss">
-
-  .footer {
-    background-color:#3b3b44;
+.footer {
+    background-color: #3b3b44;
     flex-shrink: 0;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height:50px;
+    height: 50px;
 
     p {
-      color: $primaryWhite;
-      font-size: 0.8rem;
-      &:first-of-type {
-        color: #fff;
-      }
+        color: $primaryWhite;
+        font-size: 0.8rem;
+        &:first-of-type {
+            color: #fff;
+        }
     }
 
     a {
-      color: #fff;
-      font-size: 0.8rem;
-      display: block;
-      margin-bottom: 0.5rem;
+        color: #fff;
+        font-size: 0.8rem;
+        display: block;
+        margin-bottom: 0.5rem;
     }
-  }
-  @media(max-width: 600px) {
-
+}
+@media (max-width: 600px) {
     .footer {
-      flex-direction: column;
-      height: 20.5%;
+        flex-direction: column;
+        height: 20.5%;
     }
-  }
-
+}
 </style>
-

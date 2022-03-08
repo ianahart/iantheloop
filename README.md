@@ -142,7 +142,7 @@ iaNtheLoop encompasses many of the features of a traditional social network appl
 
 MIT License
 
-Copyright 2021 Ian Hart
+Copyright 2022 Ian Hart
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
